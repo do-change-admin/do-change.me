@@ -27,6 +27,7 @@
         "dotenv": "^17.2.1",
         "embla-carousel-autoplay": "^8.6.0",
         "framer-motion": "^12.23.12",
+        "jose": "^6.1.0",
         "jsonwebtoken": "^9.0.2",
         "next": "15.4.4",
         "next-auth": "^4.24.11",
