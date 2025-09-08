@@ -1,0 +1,42 @@
+
+.app {
+    display: flex;
+    height: 100vh;
+    background-color: #f9fafb;
+    font-family: "Inter", sans-serif;
+}
+
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.main {
+    height: 100vh;
+    margin-left: 5rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.main::-webkit-scrollbar {
+    display: none;
+}
+
+.header {
+    margin-left: 5rem;
+    border-bottom: 1px solid rgba(239, 238, 238, 0.61);
+}
+
+
+@media (max-width: 700px) {
+    .main {
+        margin: 0;
+        padding: 0 0.3rem 5rem;
+    }
+
+    .header {
+        margin: 0;
+    }
+}

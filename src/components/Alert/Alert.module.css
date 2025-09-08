@@ -1,0 +1,25 @@
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 500;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+.alert.error {
+  background: linear-gradient(to right, #f87171, #ef4444);
+}
+
+.alert.success {
+  background: linear-gradient(to right, #34d399, #10b981);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

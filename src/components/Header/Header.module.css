@@ -1,0 +1,23 @@
+.header {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-texas-blue);
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.isAuction {
+    display: none;
+}

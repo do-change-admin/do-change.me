@@ -1,0 +1,29 @@
+.title {
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    margin-top: 1rem;
+    text-align: center;
+    color: var(--cl-h3);
+}
+
+.chartContainer {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 1rem;
+}
+
+.chartWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width: 700px) {
+    .chartContainer{
+        display: none;
+    }
+}
+

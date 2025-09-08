@@ -1,0 +1,55 @@
+.container {
+    width: 100%;
+}
+
+.label {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 2px solid #e5e7eb; /* светло-серый */
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 1.5rem;
+    letter-spacing: 0.05em;
+    font-size: 1rem;
+}
+
+.inputWrapper input {
+    width: 100%;
+    font-weight: 700;
+    height: 2rem;
+    border: none;
+    outline: none;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.inputButtons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+@media (max-width: 700px) {
+    .label {
+        font-size: 0.9rem;
+    }
+
+    .inputWrapper {
+        padding: 0.5rem;
+    }
+
+    .inputWrapper input::placeholder {
+        font-size: 0.75rem;
+    }
+}

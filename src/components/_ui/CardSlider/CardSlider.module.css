@@ -1,0 +1,31 @@
+.wrapper {
+    height: 330px;
+    cursor: pointer;
+
+    @media (max-width: 1000px) {
+        height: 200px;
+        padding: 0.1rem;
+    }
+}
+
+.carouselRoot {
+    height: 100%;
+}
+
+.indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.indicator {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    border: 1px solid white;
+    transition: background-color 0.3s ease;
+}
+
+.indicator[data-active] {
+    background-color: #000;
+}

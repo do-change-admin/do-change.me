@@ -1,0 +1,79 @@
+.subMenu {
+    padding-left: 5rem;
+    position: fixed;
+    border-right: 1px solid rgba(193, 191, 192, 0.69);
+    width: 0;
+    transition: width 0.2s;
+    z-index: 99;
+    background: white;
+    height: 100vh;
+}
+
+.subMenuOpen {
+    width: 400px;
+    margin-right: -5rem;
+}
+
+
+.closeButton {
+    display: none;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #d1d5db;
+    background: white;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 99;
+}
+.header {
+    height: 3rem;
+    width: 100%;
+    display: none;
+    justify-content: right;
+}
+
+.toggle {
+    position: absolute;
+    top: 1rem;
+    right: -0.75rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #d1d5db;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 99;
+}
+.toggle:hover {
+    background: #f9fafb;
+}
+
+
+@media (max-width: 700px) {
+    .header {
+        display: flex;
+    }
+    .subMenu {
+        padding: 0;
+    }
+
+    .subMenuOpen {
+        width: 100%;
+    }
+
+    .closeButton {
+        display: flex;
+    }
+
+    .toggle {
+        display: none;
+    }
+}

@@ -1,0 +1,59 @@
+'use client'
+
+import React from "react";
+import styles from "./SearchSection.module.css";
+import { SearchHistory } from "./SearchHistory/SearchHistory";
+import { SampleResults } from "./SampleResults/SampleResults";
+import { LoadingMinute, Salvage } from "@/components";
+import { useSearchParams } from "next/navigation";
+import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useCachedInfo } from "@/hooks";
+import { VinSearch } from "./VinSearch/VinSearch";
+import cn from "classnames";
+
+export const SearchSection = () => {
+    const searchParams = useSearchParams();
+    const vin = searchParams.get("vin") || '1C6RD6FT1CS310366';
+
+    const actionsHistoryResponse = useActionsHistory({ skip: 0, take: 10 })
+
+    const { data: cachedInfo, isLoading: isLoadingCarInfo } = useCachedInfo(vin)
+    const { data: refetchedBaseInfo, isLoading } = useBaseInfoByVIN(vin, cachedInfo?.cachedDataStatus);
+    const { data: refetchedHasSalvage, isLoading: salvageIsLoading } = useSalvageCheck(vin, cachedInfo?.cachedDataStatus);
+
+    const hasSalvage = cachedInfo?.cachedDataStatus.salvageInfoWasFound ? !!cachedInfo.salvage : !!refetchedHasSalvage
+    const baseInfo = cachedInfo?.baseInfo ?? refetchedBaseInfo
+
+    return (
+        <section className={styles.searchSection}>
+            <div className={styles.container}>
+                <div className={cn(styles.glass, {
+                    [styles.bgClean]: !hasSalvage,
+                    [styles.bgSalvage]: hasSalvage,
+                })}>
+
+                    <Salvage hasSalvage={hasSalvage} isPending={salvageIsLoading}/>
+                    {(isLoading || salvageIsLoading || isLoadingCarInfo) &&  <LoadingMinute label="We’re compiling the Vehicle History Report"/>}
+                    <div className={styles.searchSectionHeader}>
+                        <div className={styles.header}>
+                            <div className={styles.headerFlex}>
+                                <div>
+                                    <h1 className={styles.title}>{baseInfo?.Make} {baseInfo?.Model} {baseInfo?.Trim}</h1>
+                                    <p className={styles.subtitle}>{baseInfo?.BodyClass} {baseInfo?.ModelYear}</p>
+                                </div>
+                                <div className={styles.textRight}>
+                                    <div className={styles.vin}>VIN: {baseInfo?.VIN}</div>
+                                    <div className={styles.country}>Made in {baseInfo?.PlantCountry}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <VinSearch />
+                </div>
+                <SampleResults baseInfo={cachedInfo?.baseInfo} vin={vin} cacheStatus={cachedInfo?.cachedDataStatus}
+                    cachedPricesInfo={cachedInfo?.marketAnalysis ?? []} />
+                <SearchHistory searches={actionsHistoryResponse.data} isLoading={actionsHistoryResponse.isFetching || actionsHistoryResponse.isLoading} />
+            </div>
+        </section>
+    );
+}
+

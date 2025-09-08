@@ -1,0 +1,176 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0 1.5rem;
+    position: relative;
+}
+
+.ctaSection {
+    text-align: center;
+    position: relative;
+}
+
+.getAccessBtn {
+    background: linear-gradient(to right, #3b82f6, #8b5cf6);
+    color: white;
+    font-weight: 600;
+    padding: 1.5rem 3rem;
+    border-radius: 1rem;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.getAccessBtn:hover {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.7);
+}
+
+
+
+.buttonIcon {
+    margin-right: 0.5rem;
+}
+
+.featuresAroundButton {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Feature positions */
+.feature {
+    position: absolute;
+    text-align: center;
+}
+
+.top {
+    top: -10rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.right {
+    top: 50%;
+    right: -10rem;
+    transform: translateY(-50%);
+}
+
+.bottom {
+    bottom: -10rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.left {
+    top: 50%;
+    left: -10rem;
+    transform: translateY(-50%);
+}
+
+.iconWrapper {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem auto;
+}
+
+/* Background colors */
+.topBg {
+    background-color: rgba(59, 130, 246, 0.2);
+}
+.rightBg {
+    background-color: rgba(16, 185, 129, 0.2);
+}
+.bottomBg {
+    background-color: rgba(249, 115, 22, 0.2);
+}
+.leftBg {
+    background-color: rgba(139, 92, 246, 0.2);
+}
+
+/* Icon colors */
+.iconColorTop {
+    color: #fbbf24;
+}
+.iconColorRight {
+    color: #10b981;
+}
+.iconColorBottom {
+    color: #f97316;
+}
+.iconColorLeft {
+    color: #8b5cf6;
+}
+
+.featureTitle {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.featureDesc {
+    font-size: 0.625rem;
+    color: #4b5563;
+}
+
+@media (max-width: 700px) {
+    .getAccessBtn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+
+    .top {
+        top: -5rem;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .right {
+        top: 50%;
+        right: -5rem;
+        transform: translateY(-50%);
+    }
+
+    .bottom {
+        bottom: -5rem;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .left {
+        top: 50%;
+        left: -5rem;
+        transform: translateY(-50%);
+    }
+
+    .iconWrapper {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.5rem;
+    }
+
+    .featureTitle {
+        font-size: 0.5rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .featureDesc {
+        font-size: 0.4rem;
+    }
+}

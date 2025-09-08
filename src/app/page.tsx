@@ -1,10 +1,11 @@
-import UserManager from "@/components/UserManager/UserManager";
+import React from "react";
+import styles from "./page.module.css";
+import { SearchSection} from "@/components";
 
-export default function Home() {
-  return (
-      <div>
-        <h1>Test Users DB</h1>
-        <UserManager />
-      </div>
-  );
-}
+export default function Reports() {
+    return (
+        <main id="main-content" className={styles.main}>
+            <SearchSection />
+        </main>
+    );
+};

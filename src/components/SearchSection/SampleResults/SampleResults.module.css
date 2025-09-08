@@ -1,0 +1,253 @@
+.sampleResults {
+    margin-top: 1rem;
+}
+
+.card {
+    position: relative;
+    border-radius: 2rem;
+}
+
+.carShortInfo {
+    background-color: #ededed;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.carShortInfo span {
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.2rem;
+    font-weight: 600;
+    color: var(--texas-blue);
+}
+
+
+.grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+
+    border-radius: 2rem 2rem 0 0;
+    background: #ffffff;
+    padding: 2rem;
+}
+
+.infoCard {
+    padding: 2rem;
+    text-align: center;
+}
+
+.infoCard h3 {
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--cl-h3);
+}
+
+.infoList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.infoRow {
+    display: flex;
+    justify-content: space-between;
+    color: var(--texas-blue);
+    font-weight: 500;
+}
+
+.infoRow span:last-child {
+    font-weight: 600;
+    color: var(--texas-blue);
+}
+
+.valuationContent {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 0.3rem;
+}
+
+.estimatedValue {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    background-color: var(--text-texas-blue);
+    border-radius: 1rem 1rem 0 0;
+}
+
+.estimatedValue div:first-child {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: white;
+}
+
+.estimatedValue div:last-child {
+    font-size: 0.875rem;
+    color: white;
+}
+
+.rangeGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem;
+    font-size: 0.875rem;
+}
+
+.rangeBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #e6e7e8;
+}
+
+.rangeBox:first-child {
+    border-radius: 0 0 0 1rem;
+}
+
+.rangeBox:last-child {
+    border-radius: 0 0 1rem 0;
+}
+
+.rangeBox div:first-child {
+    font-weight: 600;
+    color: var(--texas-blue);
+}
+
+.rangeBox div:last-child {
+    color: #6b7280;
+}
+
+.analyzeBtn {
+    background: var(--text-texas-blue);
+    color: white;
+    padding: 0.625rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.infoCardContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+
+
+.skeleton {
+    width: 80px;
+    height: 2rem;
+    margin: 0 auto 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #e0e0e0 25%, #f4f4f4 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeletonText {
+    font-size: 14px;
+    color: #999;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.filters {
+    display: flex;
+    color: var(--texas-blue);
+    justify-content: space-between;
+    align-items: end;
+    margin: 1rem 0;
+}
+
+@media (max-width: 700px) {
+    .sampleResults {
+        margin-top: 1rem;
+    }
+
+    .card {
+        border-radius: 1rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding: 0;
+        background: white;
+    }
+
+    .infoCardContent {
+        grid-template-columns: 1fr;
+    }
+
+
+    .carShortInfo span {
+        padding: 0.3rem;
+        margin-right: 0.1rem;
+        font-weight: 500;
+        font-size: 0.8rem;
+    }
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .analyzeBtn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        border-radius: 0.5rem;
+        padding: 0.4rem 1rem;
+    }
+
+
+    .infoCard {
+        border-radius: 1rem;
+        padding: 1rem;
+        height: auto;
+    }
+
+    .infoCard h3 {
+        font-weight: 500;
+        margin-bottom: 0.6rem;
+    }
+
+    .estimatedValue div:first-child {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .valuationContent,
+    .rangeGrid {
+        gap: 0.5rem;
+    }
+
+    .vehicleInfo {
+        margin-top: 1rem;
+    }
+
+    .filters {
+        margin: 0.5rem 0 0;
+    }
+}

@@ -1,0 +1,29 @@
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.avatarWrapper {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    object-fit: cover;
+}
+.avatar {
+    background-color: #444;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1rem;
+    user-select: none;
+}
+
+.userName {
+    color: var(--text-texas-blue);
+}

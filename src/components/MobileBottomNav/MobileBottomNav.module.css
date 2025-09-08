@@ -1,0 +1,83 @@
+.footer {
+    position: fixed;
+    display: none;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+}
+
+.container {
+    padding: 8px 16px;
+    position: relative;
+}
+
+.buttonsWrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.button:hover {
+    background-color: #f9fafb;
+}
+
+.button svg {
+    color: #6b7280;
+    font-size: 1.2rem;
+}
+
+.label {
+    font-size: 0.75rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+/* Center scanner button */
+.scannerButton {
+    position: relative;
+    top: -16px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #3b82f6, #f59e0b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.scannerButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.scannerIcon {
+    color: #ffffff;
+    font-size: 1.25rem;
+}
+
+@media (max-width: 700px) {
+    .footer {
+        display: block;
+    }
+}

@@ -3,12 +3,262 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URI")
+}
+
+enum ReportSource {
+  CARFAX
+  AUTOCHECK
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  name  String
-  email String  @unique
+  id              String    @id @default(uuid())
+  firstName       String?
+  lastName        String?
+  email           String    @unique
+  password        String?
+  image           String?
+  emailVerifiedAt DateTime?
+  phone           String?
+  bio             String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  emailVerificationTokens EmailVerificationToken[]
+  passwordResetTokens     PasswordResetToken[]
+  accounts                Account[]
+  usageAggregates         UsageAggregate[]
+}
+
+model Account {
+  id                Int    @id @default(autoincrement())
+  provider          String
+  providerAccountId String
+  userId            String
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Action {
+  id           String   @id @default(uuid())
+  userMail     String
+  target       String
+  payload      String
+  registeredAt DateTime
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+}
+
+model UsageAggregate {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  featureKey  String
+  periodStart DateTime
+  periodEnd   DateTime
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, featureKey, periodStart, periodEnd])
+  @@map("usage_aggregate")
+}
+
+model MarketPriceAnalysisResult {
+  id           Int    @id @default(autoincrement())
+  average      Int
+  below        Int
+  above        Int
+  mileage      Int
+  vin          String
+  distribution Json
+}
+
+model CarReport {
+  id          Int          @id @default(autoincrement())
+  data        String
+  type        String
+  vin         String
+  source      ReportSource
+  generatedAt DateTime
+}
+
+model SalvageInfo {
+  id              Int     @id @default(autoincrement())
+  vin             String
+  salvageWasFound Boolean
+}
+
+model VinCheckResult {
+  id                                  Int     @id @default(autoincrement())
+  ABS                                 String?
+  ActiveSafetySysNote                 String?
+  AdaptiveCruiseControl               String?
+  AdaptiveDrivingBeam                 String?
+  AdaptiveHeadlights                  String?
+  AdditionalErrorText                 String?
+  AirBagLocCurtain                    String?
+  AirBagLocFront                      String?
+  AirBagLocKnee                       String?
+  AirBagLocSeatCushion                String?
+  AirBagLocSide                       String?
+  AutoReverseSystem                   String?
+  AutomaticPedestrianAlertingSound    String?
+  AxleConfiguration                   String?
+  Axles                               String?
+  BasePrice                           String?
+  BatteryA                            String?
+  BatteryA_to                         String?
+  BatteryCells                        String?
+  BatteryInfo                         String?
+  BatteryKWh                          String?
+  BatteryKWh_to                       String?
+  BatteryModules                      String?
+  BatteryPacks                        String?
+  BatteryType                         String?
+  BatteryV                            String?
+  BatteryV_to                         String?
+  BedLengthIN                         String?
+  BedType                             String?
+  BlindSpotIntervention               String?
+  BlindSpotMon                        String?
+  BodyCabType                         String?
+  BodyClass                           String?
+  BrakeSystemDesc                     String?
+  BrakeSystemType                     String?
+  BusFloorConfigType                  String?
+  BusLength                           String?
+  BusType                             String?
+  CAN_AACN                            String?
+  CIB                                 String?
+  CashForClunkers                     String?
+  ChargerLevel                        String?
+  ChargerPowerKW                      String?
+  CombinedBrakingSystem               String?
+  CoolingType                         String?
+  CurbWeightLB                        String?
+  CustomMotorcycleType                String?
+  DaytimeRunningLight                 String?
+  DestinationMarket                   String?
+  DisplacementCC                      String?
+  DisplacementCI                      String?
+  DisplacementL                       String?
+  Doors                               String?
+  DriveType                           String?
+  DriverAssist                        String?
+  DynamicBrakeSupport                 String?
+  EDR                                 String?
+  ESC                                 String?
+  EVDriveUnit                         String?
+  ElectrificationLevel                String?
+  EngineConfiguration                 String?
+  EngineCycles                        String?
+  EngineCylinders                     String?
+  EngineHP                            String?
+  EngineHP_to                         String?
+  EngineKW                            String?
+  EngineManufacturer                  String?
+  EngineModel                         String?
+  EntertainmentSystem                 String?
+  ErrorCode                           String?
+  ErrorText                           String?
+  ForwardCollisionWarning             String?
+  FuelInjectionType                   String?
+  FuelTankMaterial                    String?
+  FuelTankType                        String?
+  FuelTypePrimary                     String?
+  FuelTypeSecondary                   String?
+  GCWR                                String?
+  GCWR_to                             String?
+  GVWR                                String?
+  GVWR_to                             String?
+  KeylessIgnition                     String?
+  LaneCenteringAssistance             String?
+  LaneDepartureWarning                String?
+  LaneKeepSystem                      String?
+  LowerBeamHeadlampLightSource        String?
+  Make                                String?
+  MakeID                              String?
+  Manufacturer                        String?
+  ManufacturerId                      String?
+  Model                               String?
+  ModelID                             String?
+  ModelYear                           String?
+  MotorcycleChassisType               String?
+  MotorcycleSuspensionType            String?
+  NCSABodyType                        String?
+  NCSAMake                            String?
+  NCSAMapExcApprovedBy                String?
+  NCSAMapExcApprovedOn                String?
+  NCSAMappingException                String?
+  NCSAModel                           String?
+  NCSANote                            String?
+  NonLandUse                          String?
+  Note                                String?
+  OtherBusInfo                        String?
+  OtherEngineInfo                     String?
+  OtherMotorcycleInfo                 String?
+  OtherRestraintSystemInfo            String?
+  OtherTrailerInfo                    String?
+  ParkAssist                          String?
+  PedestrianAutomaticEmergencyBraking String?
+  PlantCity                           String?
+  PlantCompanyName                    String?
+  PlantCountry                        String?
+  PlantState                          String?
+  PossibleValues                      String?
+  Pretensioner                        String?
+  RearAutomaticEmergencyBraking       String?
+  RearCrossTrafficAlert               String?
+  RearVisibilitySystem                String?
+  SAEAutomationLevel                  String?
+  SAEAutomationLevel_to               String?
+  SeatBeltsAll                        String?
+  SeatRows                            String?
+  Seats                               String?
+  SemiautomaticHeadlampBeamSwitching  String?
+  Series                              String?
+  Series2                             String?
+  SteeringLocation                    String?
+  SuggestedVIN                        String?
+  TPMS                                String?
+  TopSpeedMPH                         String?
+  TrackWidth                          String?
+  TractionControl                     String?
+  TrailerBodyType                     String?
+  TrailerLength                       String?
+  TrailerType                         String?
+  TransmissionSpeeds                  String?
+  TransmissionStyle                   String?
+  Trim                                String?
+  Trim2                               String?
+  Turbo                               String?
+  VIN                                 String?
+  ValveTrainDesign                    String?
+  VehicleDescriptor                   String?
+  VehicleType                         String?
+  WheelBaseLong                       String?
+  WheelBaseShort                      String?
+  WheelBaseType                       String?
+  WheelSizeFront                      String?
+  WheelSizeRear                       String?
+  WheelieMitigation                   String?
+  Wheels                              String?
+  Windows                             String?
 }

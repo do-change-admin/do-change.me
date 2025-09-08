@@ -1,0 +1,323 @@
+.wrapper {
+    background: linear-gradient(to bottom right, #ebf8ff, #cce3ff);
+    min-height: 100vh;
+}
+
+.authContainer {
+    display: flex;
+    height: 100vh;
+}
+
+.registerSection {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(to bottom right, #ebf8ff, #dbeafe);
+    position: relative;
+}
+
+/* Logo */
+.logoSection {
+    position: absolute;
+    cursor: pointer;
+    top: 2rem;
+    left: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.logoWrapper {
+    width: 2rem;
+    height: 2rem;
+    background: linear-gradient(to right, #60a5fa, #3b82f6);
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.75rem;
+}
+
+.logoIcon {
+    color: white;
+    font-size: 1rem;
+}
+
+.logoText {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1f2937;
+}
+
+.formWrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.formCard {
+    width: 100%;
+    max-width: 35rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+.welcomeSection {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.welcomeSection h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.welcomeSection p {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.nameGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.form label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: #374151;
+}
+
+.form input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.form input:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px #bae6fd;
+}
+
+.form .checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    width: 1rem;
+    height: 1rem;
+    padding: 0;
+    accent-color: #3b82f6;
+    border-radius: 0.25rem;
+    border: 1px solid #d1d5db;
+    outline-offset: 2px;
+    outline-color: #3b82f6;
+    background-color: white;
+
+    position: relative;
+    display: inline-block;
+}
+
+.checkbox:checked::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 0px;
+    width: 5px;
+    height: 9px;
+    border: solid #3b82f6;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.terms {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: left;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.link {
+    color: #0ea5e9;
+    cursor: pointer;
+}
+
+.registerButton {
+    background: linear-gradient(to right, #38bdf8, #0ea5e9);
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: background 0.3s;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.registerButton:hover {
+    background: linear-gradient(to right, #0ea5e9, #0284c7);
+}
+
+.registerButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.divider div {
+    flex: 1;
+    border-top: 1px solid #d1d5db;
+}
+
+.divider span {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.socialButtons {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.socialButtons button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    gap: 0.25rem;
+    color: #374151;
+    background: white;
+    transition: background 0.2s;
+}
+
+.socialButtons button:hover {
+    background: #f9fafb;
+}
+
+.icon {
+    font-size: 1rem;
+}
+
+.signinLink {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.imageSection {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: zoomFade 10s ease-in-out infinite;
+}
+
+@keyframes zoomFade {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.95;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.imageOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom right, rgba(147, 51, 234, 0.2), rgba(30, 64, 175, 0.3));
+    z-index: 10;
+}
+
+.imageContent {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    text-align: center;
+    color: white;
+    pointer-events: none;
+}
+
+.imageText h3 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.imageText p {
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    color: #bfdbfe;
+}
+
+.iconRow {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.validationError {
+    color: red;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 640px) {
+    .imageSection {
+        display: none;
+    }
+    .registerSection {
+        width: initial;
+    }
+}

@@ -1,24 +1,102 @@
-@import "tailwindcss";
-
 :root {
-  --background: #ffffff;
+  --background: #f6f6f6;
   --foreground: #171717;
+
+  --cl-gray-light: #ccc8c8;
+  --cl-text: #525252;
+  --texas-blue: #003366;
+  --text-texas-blue: rgb(59, 130, 246);
+  --texas-red: #c8102e;
+
+  --cl-h3: black;
+  --cl-insurance: linear-gradient(to bottom right, #10b981, #0d9488);
+  --cl-dealers: linear-gradient(to bottom right, #2563eb, #7c3aed);
+  --cl-clean-title: linear-gradient(
+          to bottom right,
+          #6ee7b7,  /* светло-зелёный */
+          #34d399,  /* насыщенный зелёный */
+          #059669   /* тёмно-зелёный */
+  );
+
+  --cl-salvage: linear-gradient(
+          to bottom right,
+          #fca5a5,  /* светло-красный */
+          #f87171,  /* яркий красный */
+          #dc2626,  /* насыщенный красный */
+          #991b1b   /* глубокий бордовый */
+  );
+
+  --cl-primary: hsl(353, 100%, 65%);
+  --cl-secondary: hsl(43, 100%, 68%);
+  --cl-fio: #6c6ce5;
+
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+  --bg: #ffffff;
+  --muted: #6b7280;
+  --text: #111827;
+  --subtext: #374151;
+  --blue: #2563eb;
+  --blue-50: #eff6ff;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --green-100: #dcfce7;
+  --green-600: #16a34a;
+  --red: #dc2626;
+  --shadow: 0 6px 18px rgba(0, 0, 0, .06);
+  --radius: 2rem;
+
+
+  --fs-h3: 1.125rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@media (max-width: 700px) {
+  :root {
+    --fs-h3: 0.9rem;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #c1c1c1;
     --foreground: #ededed;
   }
 }
 
+html,
 body {
-  background: var(--background);
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #fafafa;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input,
+textarea,
+select {
+  background-color: white;
+  color: black;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
 }
