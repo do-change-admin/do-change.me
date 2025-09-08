@@ -15,7 +15,7 @@ const runtimeEnvSchema = z.object({
   TOKEN_TTL_MS: z.coerce.number().min(60000, "Must be at least 60,000 ms (1 min)"),
   RESEND_API_KEY: z.string().min(1, "Cannot be empty"),
   NEXTAUTH_URL: z.url(),
-  DATABASE_URI: z.string()
+  DATABASE_URL: z.string()
 })
 
 function validateBuildEnv() {
