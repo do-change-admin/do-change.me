@@ -8,7 +8,8 @@
         "start": "node ./scripts/start.prod.js",
         "lint": "next lint",
         "prisma:generate": "prisma generate",
-        "prisma:migrate": "prisma migrate dev"
+        "prisma:migrate:dev": "prisma migrate dev",
+        "prisma:migrate:prod": "prisma migrate deploy"
     },
     "dependencies": {
         "@cardog/corgi": "^1.2.1",
