@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URI")
+  url      = env("DATABASE_URL")
 }
 
 enum ReportSource {
@@ -254,7 +254,7 @@ model VinCheckResult {
   VehicleDescriptor                   String?
   VehicleType                         String?
   WheelBaseLong                       String?
-  WheelBaseShort                      String?
+  WheelBaseShort                       String?
   WheelBaseType                       String?
   WheelSizeFront                      String?
   WheelSizeRear                       String?
