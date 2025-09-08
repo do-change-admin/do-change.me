@@ -28,15 +28,13 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-
-  console.log(token)
-
-  if (!token) {
-    if (!authPaths.includes(pathname)) {
-      return NextResponse.redirect(new URL("/auth/login", req.url));
-    }
-    return NextResponse.next();
-  }
+ //TODO: исправить авторизацию
+  // if (!token) {
+  //   if (!authPaths.includes(pathname)) {
+  //     return NextResponse.redirect(new URL("/auth/login", req.url));
+  //   }
+  //   return NextResponse.next();
+  // }
 
   if (authPaths.includes(pathname)) {
     return NextResponse.redirect(new URL("/", req.url));
