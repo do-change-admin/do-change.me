@@ -1,0 +1,36 @@
+.checkEmailWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #ebf8ff, #cce3ff);
+  padding: 1rem;
+}
+
+.checkEmailCard {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 28rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.checkEmailIcon {
+  font-size: 3rem;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.checkEmailTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.checkEmailText {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.5;
+}

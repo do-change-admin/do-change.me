@@ -11,13 +11,14 @@ export async function middleware(req: NextRequest) {
     "/favicon.ico",
     "/api/auth",
     "/auth/reset-password",
+    "/terms",
   ];
 
   if (publicPaths.some((path) => pathname.startsWith(path))) {
     return NextResponse.next();
   }
 
-  const authPaths = ["/auth/login", "/auth/register"];
+  const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
 
   // Забираем токен из cookie (NextAuth хранит в `next-auth.session-token`)
   let token = '';

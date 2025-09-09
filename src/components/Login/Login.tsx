@@ -4,13 +4,13 @@ import React, { FormEvent, useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import {
   FaEye,
-  FaGoogle,
 } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { LoginModal } from "../LoginModal/LoginModal";
 import Alert from "@/components/Alert/Alert";
+import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 import { AppError, isBusinessError } from "@/lib/errors";
 import { handleApiError } from "@/lib/handleApiError";
 
@@ -101,10 +101,6 @@ export const Login = () => {
         setAlertVisible(true);
       }
     }
-  };
-
-  const handleGoogleLogin = async () => {
-    await signIn("google");
   };
 
   const handleClickLogo = () => router.push("/");
@@ -219,13 +215,7 @@ export const Login = () => {
             </div>
 
             <div className={styles.socialLogin}>
-              <button
-                className={styles.socialBtn}
-                onClick={handleGoogleLogin}
-              >
-                <FaGoogle className={styles.googleIcon} />
-                <span>Google</span>
-              </button>
+              <GoogleButton text="Continue with Google" />
             </div>
 
             <div className={styles.signupLink}>
