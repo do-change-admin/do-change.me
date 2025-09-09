@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const authPaths = ["/auth/login", "/auth/register"];
+  const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
 
   // Забираем токен из cookie (NextAuth хранит в `next-auth.session-token`)
   let token = '';

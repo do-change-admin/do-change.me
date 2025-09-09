@@ -1,15 +1,14 @@
 "use client";
 
 import styles from "./Register.module.css";
-import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import Alert from "@/components/Alert/Alert";
 import { AppError } from "@/lib/errors";
 import { apiFetch } from "@/lib/apiFetch";
 import { handleApiError } from "@/lib/handleApiError";
+import {GoogleButton} from "@/components/GoogleButton/GoogleButton";
 
 export const Register = () => {
     const router = useRouter();
@@ -28,12 +27,15 @@ export const Register = () => {
     const passwordsMatch = password === confirmPassword;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isEmailValid = emailRegex.test(email);
+    const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
+    const isPasswordValid = passwordRegex.test(password);
 
     const isFormValid =
       firstName.trim() &&
       lastName.trim() &&
       isEmailValid &&
       password.trim() &&
+      isPasswordValid &&
       confirmPassword.trim() &&
       passwordsMatch &&
       agree;
@@ -54,16 +56,7 @@ export const Register = () => {
                 }),
             });
 
-            setAlertMessage("Registration successful! Please check your email to confirm your account.");
-            setAlertType("success");
-            setAlertVisible(true);
-
-            setFirstName("");
-            setLastName("");
-            setEmail("");
-            setPassword("");
-            setConfirmPassword("");
-            setAgree(false);
+            router.push("/auth/check-email")
 
         } catch (err) {
             if ((err as AppError).error) {
@@ -77,10 +70,6 @@ export const Register = () => {
                 setAlertVisible(true);
             }
         }
-    };
-
-    const handleGoogleRegister = async () => {
-        await signIn("google");
     };
 
     return (
@@ -105,27 +94,24 @@ export const Register = () => {
                       </div>
 
                       <form className={styles.form} onSubmit={handleSubmit}>
-                          <div className={styles.nameGrid}>
-                              <div>
-                                  <label>First Name</label>
-                                  <input
-                                    type="text"
-                                    placeholder="John"
-                                    value={firstName}
-                                    onChange={(e) => setFirstName(e.target.value)}
-                                  />
-                              </div>
-                              <div>
-                                  <label>Last Name</label>
-                                  <input
-                                    type="text"
-                                    placeholder="Doe"
-                                    value={lastName}
-                                    onChange={(e) => setLastName(e.target.value)}
-                                  />
-                              </div>
+                          <div>
+                              <label>First Name</label>
+                              <input
+                                type="text"
+                                placeholder="John"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                              />
                           </div>
-
+                          <div>
+                              <label>Last Name</label>
+                              <input
+                                type="text"
+                                placeholder="Doe"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                              />
+                          </div>
                           <div>
                               <label>Email</label>
                               <input
@@ -149,6 +135,11 @@ export const Register = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                               />
+                              {password.length > 0 && !isPasswordValid && (
+                                <span className={styles.validationError}>
+                                    Password must be at least 8 characters and contain an uppercase letter
+                                </span>
+                              )}
                           </div>
 
                           <div>
@@ -196,10 +187,7 @@ export const Register = () => {
                       </div>
 
                       <div className={styles.socialButtons}>
-                          <button onClick={handleGoogleRegister}>
-                              <FaGoogle className={styles.icon} />
-                              <span>Google</span>
-                          </button>
+                          <GoogleButton text="Continue with Google" />
                       </div>
 
                       <div className={styles.signinLink}>

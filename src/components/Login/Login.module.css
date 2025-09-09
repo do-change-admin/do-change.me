@@ -63,8 +63,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .formCard {
@@ -188,13 +188,13 @@
 .checkbox:checked::after {
     content: "";
     position: absolute;
-    left: 3px;
-    top: 0px;
+    top: 50%;
+    left: 50%;
     width: 5px;
     height: 9px;
     border: solid #3b82f6;
     border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+    transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .rememberMeText {

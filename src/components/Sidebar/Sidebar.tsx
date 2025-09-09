@@ -2,6 +2,7 @@
 
 import React from "react";
 import cn from "classnames";
+import { signOut } from "next-auth/react";
 import styles from "./Sidebar.module.css";
 import {FaSignOutAlt} from "react-icons/fa";
 import {usePathname} from "next/navigation";
@@ -60,7 +61,10 @@ export const Sidebar = () => {
 
                 {/* Footer */}
                 <div className={styles.footer}>
-                    <button className={styles.logout}>
+                    <button
+                      className={styles.logout}
+                      onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                    >
                         <FaSignOutAlt/>
                     </button>
                 </div>

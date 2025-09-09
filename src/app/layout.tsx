@@ -1,6 +1,6 @@
 import React, {Suspense} from 'react';
 import styles from './layout.module.css';
-import {MobileBottomNav, Scanner, Sidebar, Header, SlideMenu} from "@/components";
+import {Layout} from "@/components/Layout/Layout";
 import {Providers} from "./providers";
 import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
@@ -40,20 +40,9 @@ export default function SpaceLayout({children}: { children: React.ReactNode }) {
         >
         <Suspense>
             <Providers>
-                <SlideMenu />
-                <Scanner/>
-                <div className={styles.app}>
-                    <Sidebar />
-                    <div className={styles.mainContent}>
-                        <header className={styles.header}>
-                            <Header />
-                        </header>
-                        <main className={styles.main}>
-                            {children}
-                        </main>
-                        <MobileBottomNav/>
-                    </div>
-                </div>
+                <Layout>
+                    {children}
+                </Layout>
             </Providers>
         </Suspense>
         </body>
