@@ -8,8 +8,9 @@ import React from "react";
 export function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAuthPage = pathname.startsWith("/auth");
+  const isTermsPage = pathname.includes("/terms");
 
-  if (isAuthPage) {
+  if (isAuthPage || isTermsPage) {
     return <>{children}</>;
   }
 

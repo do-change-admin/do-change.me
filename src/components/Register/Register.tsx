@@ -165,10 +165,11 @@ export const Register = () => {
                                 onChange={(e) => setAgree(e.target.checked)}
                               />
                               <span>
-                                    I agree to{" "}
-                                  <span className={styles.link}>Terms</span> and{" "}
-                                  <span className={styles.link}>Privacy</span>
-                                  </span>
+                                  I agree to{" "}
+                              <Link href="/terms" className={styles.link}>
+                                  Terms and Privacy
+                              </Link>
+                              </span>
                           </div>
 
                           <button

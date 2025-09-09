@@ -11,6 +11,7 @@ export async function middleware(req: NextRequest) {
     "/favicon.ico",
     "/api/auth",
     "/auth/reset-password",
+    "/terms",
   ];
 
   if (publicPaths.some((path) => pathname.startsWith(path))) {
