@@ -48,8 +48,8 @@ export const GET = async (req: NextRequest) => {
         carfaxReportData: carfaxReport ? mapReportFromPrismaToReportData(carfaxReport) : null,
         cachedDataStatus: {
             baseInfoWasFound: !!cachedBaseInfoData,
-            marketPricesWereFound: !!marketPriceInfoData,
-            salvageInfoWasFound: marketPriceInfoData?.map(x => x.mileage),
+            marketPricesWereFound: marketPriceInfoData?.map((mil) => mil.mileage),
+            salvageInfoWasFound: typeof salvageData?.salvageWasFound === "boolean",
             reports: {
                 autocheckWasDownloaded: !!autoCheckReport,
                 carfaxWasDownloaded: !!carfaxReport,

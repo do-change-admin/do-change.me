@@ -77,7 +77,7 @@ export const useMileagePriceQuery = (
                 return false
             }
 
-            return !cacheStatus.salvageInfoWasFound.includes(mileage)
+            return !cacheStatus.marketPricesWereFound.includes(mileage)
         },
         staleTime: 5 * 60 * 1000
     });
@@ -133,7 +133,7 @@ export function usePhotoHook(vin: string) {
     });
 }
 
-export const useSalvageCheck = (vin: string | null, cacheStatus: CacheStatus | undefined) => {
+export const useSalvageCheck = (vin: string | null, cacheStatus?: CacheStatus) => {
     return useQuery<boolean>({
         queryKey: ["salvage", vin],
         queryFn: async () => {

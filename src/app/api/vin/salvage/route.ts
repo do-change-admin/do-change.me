@@ -10,7 +10,7 @@ export async function GET(req: Request) {
             return NextResponse.json({ error: "VIN не указан" }, { status: 400 });
         }
 
-        const response = await fetch(`${process.env.SALVAGE_ENDPOINT}/?vin=${vin}`, {
+        const response = await fetch(`${process.env.SALVAGE_ENDPOINT!}?vin=${vin}`, {
             method: "GET",
             headers: {
                 "Referer": "rapidAPI",

@@ -17,8 +17,8 @@ export const mapReportFromPrismaToReportData = (prismaData: CarReport): ReportDa
 
 export type CacheStatus = {
     baseInfoWasFound: boolean,
-    marketPricesWereFound: boolean,
-    salvageInfoWasFound: number[],
+    marketPricesWereFound: number[],
+    salvageInfoWasFound: boolean,
     reports: {
         carfaxWasDownloaded: boolean,
         autocheckWasDownloaded: boolean

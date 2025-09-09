@@ -28,7 +28,7 @@ export const VinSearch = () => {
                     type="text"
                     placeholder={initVin || 'Enter VIN (e.g. 1C6RD6FT1CS310366)'}
                     maxLength={17}
-                    value={vin || ''}
+                    value={vin || ""}
                     icon={<>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
