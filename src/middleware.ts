@@ -21,9 +21,10 @@ export async function middleware(req: NextRequest) {
 
   // Забираем токен из cookie (NextAuth хранит в `next-auth.session-token`)
   let token = '';
+  const authSessionTokens = ['__Secure-next-auth.session-token', 'next-auth.session-token']
 
   for (const [key, value] of req.cookies) {
-    if (key === "next-auth.session-token") {
+    if (authSessionTokens.includes(key)) {
       token = value.value;
     }
   }
