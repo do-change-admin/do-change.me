@@ -1,0 +1,169 @@
+.header {
+    position: relative;
+    height: 500px;
+    overflow: hidden;
+}
+
+/* Background Image */
+.background {
+    position: absolute;
+    inset: 0;
+}
+.bgImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--text-texas-blue);
+}
+
+/* Decorative Shapes */
+.shapeTopRight {
+    position: absolute;
+    top: -12rem;
+    right: 12rem;
+    width: 24rem;
+    height: 24rem;
+    border-radius: 50%;
+    background: linear-gradient(to bottom left, rgba(255,255,255,0.1), transparent);
+}
+.shapeBottomLeft {
+    position: absolute;
+    bottom: 10rem;
+    left: -10rem;
+    width: 20rem;
+    height: 20rem;
+    border-radius: 50%;
+    background: linear-gradient(to top right, rgba(59,130,246,0.2), transparent);
+}
+.shapeMiddle {
+    position: absolute;
+    top: 50%;
+    right: 25%;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background-color: rgba(253, 224, 71, 0.2);
+}
+
+/* Geometric Shapes */
+.geoTop {
+    position: absolute;
+    top: 5rem;
+    left: 25%;
+    width: 4rem;
+    height: 4rem;
+    border: 2px solid rgba(255,255,255,0.3);
+    transform: rotate(45deg);
+}
+.geoBottom {
+    position: absolute;
+    bottom: 8rem;
+    right: 33%;
+    width: 3rem;
+    height: 3rem;
+    background: linear-gradient(to right, rgba(59,130,246,0.4), rgba(139,92,246,0.4));
+    transform: rotate(12deg);
+}
+
+/* Header Content */
+.contentWrapper {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+}
+.content {
+    text-align: center;
+    max-width: 72rem;
+}
+.title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+.gradientText {
+    background: linear-gradient(to right, #facc15, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.description {
+    font-size: 1.25rem;
+    color: #bfdbfe;
+    max-width: 64rem;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+}
+.highlight {
+    font-weight: 700;
+    color: #facc15;
+}
+.whiteText {
+    font-weight: 700;
+    color: white;
+}
+
+/* Filter Button */
+.filterButton {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    font-weight: 700;
+    font-size: 1.125rem;
+    border-radius: 1rem;
+    background: linear-gradient(to right, #2563eb, #7c3aed);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+.filterButton:hover {
+    transform: scale(1.05);
+    background: linear-gradient(to right, #1d4ed8, #6d28d9);
+}
+.filterIcon {
+    margin-right: 0.75rem;
+    font-size: 1.25rem;
+}
+
+
+/* Floating Elements */
+.floating1 {
+    position: absolute;
+    top: 25%;
+    left: 2rem;
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    animation: bounce 2s infinite;
+}
+.floating2 {
+    position: absolute;
+    top: 75%;
+    right: 3rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: rgba(253, 224, 71, 0.4);
+    transform: rotate(45deg);
+    animation: pulse 2s infinite;
+}
+
+/* Animations */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1rem); }
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}

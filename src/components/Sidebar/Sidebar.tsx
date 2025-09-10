@@ -8,11 +8,13 @@ import {FaSignOutAlt} from "react-icons/fa";
 import {usePathname} from "next/navigation";
 import {AuctionServicesCards} from "@/components/AuctionsServicesCards/AuctionsServicesCards";
 import {useSlideMenu} from "@/contexts";
-import {useNavMenu} from "@/hooks";
+import {useNavMenu, useProfile} from "@/hooks";
+import {Avatar} from "@mantine/core";
 
 
 export const Sidebar = () => {
     const { openMenu } = useSlideMenu();
+    const { data: profileData } = useProfile()
 
     const handleOpenMenu = () => {
         openMenu(<AuctionServicesCards/>);
@@ -29,15 +31,16 @@ export const Sidebar = () => {
                 {/* Header */}
                 <div className={styles.header}>
                     <div className={styles.avatarWrapper}>
-                        <img
-                            src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg"
+                        <Avatar
+                            src=''
                             alt="User Avatar"
-                            className={styles.avatar}
+                            radius="xl"
+                            size={48}
                         />
                         <div className={styles.onlineDot}></div>
                     </div>
                     <h3 className={styles.userNameCollapsed}>
-                        Razmik
+                        {profileData?.firstName}
                     </h3>
                 </div>
 

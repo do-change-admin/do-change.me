@@ -13,8 +13,10 @@
     },
     "dependencies": {
         "@cardog/corgi": "^1.2.1",
-        "@mantine/carousel": "^8.2.8",
-        "@mantine/core": "^8.2.8",
+        "@mantine/carousel": "^8.3.1",
+        "@mantine/core": "^8.3.1",
+        "@mantine/hooks": "^8.3.1",
+        "@mantine/notifications": "^8.3.1",
         "@prisma/client": "^6.15.0",
         "@prisma/extension-accelerate": "^2.0.2",
         "@react-pdf/renderer": "^4.3.0",

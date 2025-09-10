@@ -1,5 +1,4 @@
 import React, {Suspense} from 'react';
-import styles from './layout.module.css';
 import {Layout} from "@/components/Layout/Layout";
 import {Providers} from "./providers";
 import type {Metadata} from "next";
@@ -8,6 +7,7 @@ import {Inter} from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
+import '@mantine/notifications/styles.css';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

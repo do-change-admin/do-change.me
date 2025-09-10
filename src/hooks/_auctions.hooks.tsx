@@ -2,13 +2,13 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-const API_URL = "https://api.marketcheck.com/v2/search/car/auction/active?radius=20";
-const API_KEY = process.env.NEXT_PUBLIC_MARKETCHECK_API_KEY;
+const API_URL = "https://api.marketcheck.com/v2/search/car/auction/active";
+const API_KEY = "P1LO1SzW2FHOmhOCx8AaRVWViMcYL5Wp";
 
 export interface AuctionParams {
     city?: string;
-    state?: string;
-    make?: string;
+    state?: string | null;
+    make?: string | null;
     model?: string;
     price_range?: string;
     stats?: string;

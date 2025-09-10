@@ -1,114 +1,134 @@
-"use client";
+'use client';
 
-import { FC } from "react";
-import { Card, Badge, Text } from "@mantine/core";
-import {FaCar} from "react-icons/fa";
-import styles from "./CarCard.module.css";
-import { CardSlider } from "@/components";
+import {Card, Badge, Button, Text, Group, Anchor} from '@mantine/core';
+import {
+    FaBarcode,
+} from 'react-icons/fa';
+import styles from './CarCard.module.css';
+import {FC} from "react";
+import {CardSlider} from "@/components";
 import Link from "next/link";
 
-export interface IDealer {
-    id: number;
-    website: string;
+interface SellerInfo {
     name: string;
-    street: string;
-    city: string;
-    state: string;
-    country: string;
-    latitude: string;
-    longitude: string;
-    zip: string;
-    msa_code: string;
     phone: string;
     seller_email: string;
+    street: string;
+    state: string;
+    zip: string;
+    website: string;
 }
 
-export interface CarCardProps {
-    car: {
-        heading: string;
-        build: { year: number; make: string; model: string };
-        miles: number;
-        price?: number;
-        media: { photo_links: string[] };
-        vdp_url: string;
-        carfax_1_owner: boolean;
-        carfax_clean_title: boolean;
-        dealer: IDealer;
-        vin: string;
-    }
+interface CarCardProps {
+    title: string;
+    price: string;
+    description: string;
+    images: string[];
+    power: string;
+    url: string;
+    range: string;
+    year: string;
+    vin: string;
+    seller: SellerInfo
 }
 
-export const CarCard: FC<CarCardProps> = ({
-
-                                              car,
-                                          }) => {
-    const { heading, build, miles, media, price, vdp_url } = car;
-    const carfax1OwnerText = car.carfax_1_owner
-        ? "Single Owner"
-        : "Multiple Owners";
-
-    const carfaxCleanTitleText = car.carfax_clean_title
-        ? "Clean Title"
-        : "Title Issues";
-
-    const carfax1OwnerColor = car.carfax_1_owner ? "green" : "red";
-    const carfaxCleanTitleColor = car.carfax_clean_title ? "green" : "red";
+export const CarCard:FC<CarCardProps> = ({
+                                    title,
+                                    price,
+                                    seller,
+                                    images,
+                                    power,
+                                    range,
+                                             vin,
+    url,
+                                    year,
+                                }) =>  {
     return (
-        <Card withBorder radius="lg" className={styles.container} target="_blank" component="a" href={car.vdp_url}>
-            <Card.Section className={styles.imgWrapper}>
-                <div className={styles.img}>
-                    <CardSlider images={media?.photo_links} />
-                </div>
-
-                <div className={styles.badges}>
-                    <Badge color="gray">
-                        {car.dealer.state} / {car.dealer.city}
-                    </Badge>
-                    <Badge color="red">
-                        {car.dealer.website}
-                    </Badge>
-                    <Badge color="yellow">
-                        {car.dealer.phone}
-                    </Badge>
-                </div>
-
-                {/*<ActionIcon*/}
-                {/*    variant="filled"*/}
-                {/*    color={isFavorited ? "red" : "gray"}*/}
-                {/*    radius="lg"*/}
-                {/*    size="md"*/}
-                {/*    className={styles.like}*/}
-                {/*>*/}
-                {/*    <FaHeart color={isSelected ? "red" : "white"} />*/}
-                {/*</ActionIcon>*/}
+        <Card radius="md" className={styles.card} component={Link} href={url}  target="_blank">
+            <Card.Section className={styles.imageWrapper}>
+                <CardSlider images={images}/>
             </Card.Section>
-
-            {/*<div className={styles.price}>*/}
-            {/*    <Badge color={carfax1OwnerColor} variant="filled">*/}
-            {/*        {carfax1OwnerText}*/}
-            {/*    </Badge>*/}
-            {/*    <Badge color={carfaxCleanTitleColor} variant="filled">*/}
-            {/*        {carfaxCleanTitleText}*/}
-            {/*    </Badge>*/}
-            {/*</div>*/}
-
-            <p className={styles.name}>
-                {build.year} {build.make} {build.model}
-            </p>
-
-            <div className={styles.footer}>
-                <div className={styles.review}>
-                    <Badge
-                        color="blue"
-                        component={Link}
-                        href={`/?vin=${car.vin}`}
-                        leftSection={<FaCar size={14} />}
-                        className={styles.checkVehicleHistory}
-                    >
-                        Check Vehicle History
-                    </Badge>
+            {seller.website && (
+                <Badge color="pink" className={styles.badgeWeb}>
+                    <Anchor c="white" href={`https://${seller.website}`} target="_blank" size="xs" className={styles.badgeLink}>
+                        {seller.website}
+                    </Anchor>
+                </Badge>
+            )}
+            <div className={styles.content}>
+                <div className={styles.header} >
+                    <Text fw={700}  className={styles.title}>
+                        {title}
+                    </Text>
+                    {/*<Text fw={700} size="lg" className={styles.price} c="blue">*/}
+                    {/*    {price}*/}
+                    {/*</Text>*/}
                 </div>
+
+                <div className={styles.description}>
+                    <div className={styles.badgeGroup}>
+                        {seller.phone && (
+                            <Badge color="blue" variant="light" className={styles.badge}>
+                                {seller.phone}
+                            </Badge>
+                        )}
+                        {seller.seller_email && (
+                            <Badge color="green" variant="light" className={styles.badge}>
+                                {seller.seller_email}
+                            </Badge>
+                        )}
+                        {(seller.street || seller.state || seller.zip) && (
+                            <Badge color="gray" variant="light" className={styles.badge}>
+                                {`${seller.street}, ${seller.state}, ${seller.zip}`}
+                            </Badge>
+                        )}
+                    </div>
+                </div>
+
+                {/*<div className={styles.stats}>*/}
+                {/*    <div className={styles.stat}>*/}
+                {/*        <FaBolt className={styles.icon} />*/}
+                {/*        <Text size="xs" c="dimmed">*/}
+                {/*            Power*/}
+                {/*        </Text>*/}
+                {/*        <Text fw={600} size="sm">*/}
+                {/*            {power}*/}
+                {/*        </Text>*/}
+                {/*    </div>*/}
+                {/*    <div className={styles.stat}>*/}
+                {/*        <FaBatteryFull className={styles.icon} />*/}
+                {/*        <Text size="xs" c="dimmed">*/}
+                {/*            Range*/}
+                {/*        </Text>*/}
+                {/*        <Text fw={600} size="sm">*/}
+                {/*            {range}*/}
+                {/*        </Text>*/}
+                {/*    </div>*/}
+                {/*    <div className={styles.stat}>*/}
+                {/*        <FaCalendar className={styles.icon} />*/}
+                {/*        <Text size="xs" c="dimmed">*/}
+                {/*            Year*/}
+                {/*        </Text>*/}
+                {/*        <Text fw={600} size="sm">*/}
+                {/*            {year}*/}
+                {/*        </Text>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+
+                <Group grow className={styles.buttons}>
+                    <Button
+                        component={Link}
+                        href={`/?vin=${vin}`}
+                        variant="light"
+                        color="pink"
+                        radius="md"
+                        fullWidth
+                        leftSection={<FaBarcode size={18} />}
+                    >
+                        Check Vin: {vin}
+                    </Button>
+                </Group>
             </div>
         </Card>
     );
-};
+}

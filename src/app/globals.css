@@ -5,7 +5,7 @@
   --cl-gray-light: #ccc8c8;
   --cl-text: #525252;
   --texas-blue: #003366;
-  --text-texas-blue: rgb(59, 130, 246);
+  --text-texas-blue: rgba(59, 130, 246, 0.94);
   --texas-red: #c8102e;
 
   --cl-h3: black;

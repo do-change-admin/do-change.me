@@ -1,0 +1,27 @@
+.sidebar {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.header p {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
