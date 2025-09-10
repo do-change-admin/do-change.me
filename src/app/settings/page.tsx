@@ -1,8 +1,10 @@
 "use client";
 
 import styles from "./page.module.css";
-import { FaCheck } from "react-icons/fa";
+import {FaCheck, FaSignOutAlt} from "react-icons/fa";
 import {ProfileForm} from "./(ProfileForm)/ProfileForm";
+import {ActionIcon, Button, Group} from "@mantine/core";
+import {signOut} from "next-auth/react";
 
 export default function SettingsContent() {
 
@@ -11,7 +13,7 @@ export default function SettingsContent() {
         <div className={styles.settings}>
             <ProfileForm/>
 
-             {/*Subscription*/}
+            {/*Subscription*/}
             {/*<section className={styles.card}>*/}
             {/*    <h2 className={styles.cardTitle}>Subscription & Billing</h2>*/}
 
@@ -66,15 +68,27 @@ export default function SettingsContent() {
             {/*        </div>*/}
             {/*    </div>*/}
             {/*</section>*/}
+
+            <Group gap="xs" justify="right">
+                <Button
+                    leftSection={ <FaSignOutAlt/>}
+                    color="red"
+                    variant="light"
+                    radius="lg"
+                    onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                >
+                    Logout
+                </Button>
+            </Group>
         </div>
     );
 }
 
 function HistoryItem({
-    title,
-    date,
-    amount,
-}: {
+                         title,
+                         date,
+                         amount,
+                     }: {
     title: string;
     date: string;
     amount: string;
@@ -83,7 +97,7 @@ function HistoryItem({
         <div className={styles.historyItem}>
             <div className={styles.historyLeft}>
                 <div className={styles.historyIcon}>
-                    <FaCheck />
+                    <FaCheck/>
                 </div>
                 <div>
                     <p className={styles.historyTitle}>{title}</p>
