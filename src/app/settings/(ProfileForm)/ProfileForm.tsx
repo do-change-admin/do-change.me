@@ -1,10 +1,10 @@
-import React, {FormEvent, useEffect, useState} from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import styles from "./ProfileForm.module.css";
-import {Button, Loader} from "@mantine/core";
-import {FaCamera} from "react-icons/fa";
-import {useProfile, useProfileModifying} from "@/hooks";
-import {notifications} from "@mantine/notifications";
-import {ProfileFormSkeleton} from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
+import { Button, Loader } from "@mantine/core";
+import { FaCamera } from "react-icons/fa";
+import { useProfile, useProfileModifying } from "@/hooks";
+import { notifications } from "@mantine/notifications";
+import { ProfileFormSkeleton } from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
 
 export const ProfileForm = () => {
 
@@ -29,7 +29,7 @@ export const ProfileForm = () => {
     const handleSave = (e: FormEvent) => {
         e.preventDefault();
         modifyProfile(
-            { bio, firstName, lastName, phone },
+            { body: { bio, firstName, lastName, phone } },
             {
                 onSuccess: () => {
                     notifications.show({
@@ -41,7 +41,7 @@ export const ProfileForm = () => {
                 onError: (e) => {
                     notifications.show({
                         title: 'Error',
-                        message: `Error while saving - ${e.message}`,
+                        message: `Error while saving - ${e.error.message} (${e.stage})`,
                         color: 'red',
                     });
                 },
@@ -50,7 +50,7 @@ export const ProfileForm = () => {
     };
 
     if (profileIsLoading) {
-        return <ProfileFormSkeleton/>
+        return <ProfileFormSkeleton />
     }
 
     return (
