@@ -13,7 +13,7 @@ export const InsuranceHeader:FC<InsuranceHeaderProps> = ({openFilters}) => {
             {/* Background Image */}
             <div className={styles.background}>
                 <img
-                    src="https://storage.googleapis.com/uxpilot-auth.appspot.com/612aa5f5e9-0d470d46ff801fce0c94.png"
+                    src='/bg.png'
                     alt="luxury car auction warehouse with rows of premium vehicles, dramatic lighting, wide angle photography"
                     className={styles.bgImage}
                 />

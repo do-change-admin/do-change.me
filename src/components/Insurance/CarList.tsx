@@ -8,9 +8,10 @@ import { AuctionParams, useAuctionListings } from "@/hooks";
 export const CarList = () => {
     const [params, setParams] = useState<AuctionParams>({
         city: '',
-        state: 'CA',
-        make: 'bmw',
+        state: '',
+        make: 'volkswagen',
         model: '',
+        rows: 50
     });
 
     const { data } = useAuctionListings(params);

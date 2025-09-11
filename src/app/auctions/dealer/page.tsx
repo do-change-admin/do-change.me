@@ -9,7 +9,7 @@ export default function AuctionAccessPage() {
     const router = useRouter();
 
     const handleClick = () => {
-        router.push("auctions/form");
+        router.push("dealer/form");
     };
 
     return (
