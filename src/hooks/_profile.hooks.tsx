@@ -5,14 +5,18 @@ export const useProfile = () => {
     return useQuery<Profile_GET_Response>({
         queryKey: ['profile'],
         queryFn: async () => {
-            const data = await fetch('/api/profile')
-            if (!data.ok) {
-                throw await data.json()
+            const res = await fetch('/api/profile');
+            if (!res.ok) {
+                throw await res.json();
             }
-            return await data.json()
-        }
-    })
-}
+            return await res.json();
+        },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        staleTime: 5 * 60 * 1000,
+    });
+};
+
 
 export const useProfileModifying = () => {
     const client = useQueryClient()
