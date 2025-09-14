@@ -5,6 +5,8 @@ import { VehicleBaseInfoDTO } from '@/app/api/vin/base-info/models';
 import { ActionsHistoryService } from '@/services';
 import { PaginationSchemaType, VinSchema } from '@/schemas';
 import { CachedData_GET_Response, CacheStatus } from '@/app/api/vin/cached-data/models';
+import { VinSalvageAPI } from '@/app/api/vin/salvage/route';
+import { apiRequest } from '@/lib/apiFetch';
 
 const VIN_LENGTH = 17;
 
@@ -137,15 +139,10 @@ export function usePhotoHook(vin: string) {
 }
 
 export const useSalvageCheck = (vin: string | null, cacheStatus?: CacheStatus) => {
-    return useQuery<boolean>({
+    return useQuery<VinSalvageAPI['GET']['response'], VinSalvageAPI['GET']['error']>({
         queryKey: ["salvage", vin],
         queryFn: async () => {
-            const res = await fetch(`/api/vin/salvage?vin=${vin}`);
-            if (!res.ok) {
-                const errorData = await res.json().catch(() => ({}));
-                throw new Error(errorData?.message || "error VIN");
-            }
-            return res.json();
+            return apiRequest('/api/vin/salvage', 'GET')({ query: { vin } })
         },
         enabled: () => {
             if (!cacheStatus || cacheStatus.salvageInfoWasFound) {

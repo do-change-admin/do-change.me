@@ -20,7 +20,7 @@ export const SearchSection = () => {
     const { data: refetchedBaseInfo, isLoading } = useBaseInfoByVIN(vin, cachedInfo?.cachedDataStatus);
     const { data: refetchedHasSalvage, isLoading: salvageIsLoading } = useSalvageCheck(vin, cachedInfo?.cachedDataStatus);
 
-    const hasSalvage = cachedInfo?.cachedDataStatus.salvageInfoWasFound ? !!cachedInfo.salvage : !!refetchedHasSalvage
+    const hasSalvage = cachedInfo?.cachedDataStatus.salvageInfoWasFound ? !!cachedInfo.salvage : !!refetchedHasSalvage?.salvageWasFound
     const baseInfo = cachedInfo?.baseInfo ?? refetchedBaseInfo
 
     return (
@@ -31,8 +31,8 @@ export const SearchSection = () => {
                     [styles.bgSalvage]: hasSalvage,
                 })}>
 
-                    <Salvage hasSalvage={hasSalvage} isPending={salvageIsLoading}/>
-                    {(isLoading || salvageIsLoading || isLoadingCarInfo) &&  <LoadingMinute label="We’re compiling the Vehicle History Report"/>}
+                    <Salvage hasSalvage={hasSalvage} isPending={salvageIsLoading} />
+                    {(isLoading || salvageIsLoading || isLoadingCarInfo) && <LoadingMinute label="We’re compiling the Vehicle History Report" />}
                     <div className={styles.searchSectionHeader}>
                         <div className={styles.header}>
                             <div className={styles.headerFlex}>
