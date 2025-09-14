@@ -5,4 +5,3 @@ export const GET = Get.handler
 export const PATCH = Patch.handler
 
 export type ProfileAPI = { GET: Get.Method, PATCH: Patch.Method }
-export const profileAPIEndpoint = '/api/profile'
