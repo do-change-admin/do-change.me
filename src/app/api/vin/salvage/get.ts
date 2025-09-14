@@ -25,15 +25,16 @@ export const handler = zodApiMethod(queryParamsSchema, undefined, resultSchema, 
         },
     });
 
-    let salvageWasFound = true
+    let salvageWasFound: boolean | undefined = undefined
 
     try {
         const result = await response.json();
-        if (typeof result === 'boolean') {
-            salvageWasFound = result
-        }
+        salvageWasFound = !!result
     }
     catch {
+        // We arrive here when undefined is returned from 3rd party API and 
+        // it can't be used as JSO. We assume it's salvage or total loss case.
+        salvageWasFound = true
     }
 
     await prismaClient.salvageInfo.deleteMany({ where: { vin: payload.vin } })
