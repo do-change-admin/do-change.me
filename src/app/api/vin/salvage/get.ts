@@ -33,7 +33,7 @@ export const handler = zodApiMethod(queryParamsSchema, undefined, resultSchema, 
     }
     catch {
         // We arrive here when undefined is returned from 3rd party API and 
-        // it can't be used as JSO. We assume it's salvage or total loss case.
+        // it can't be used as JSON. We assume it's salvage or total loss case.
         salvageWasFound = true
     }
 
