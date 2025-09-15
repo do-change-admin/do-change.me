@@ -4,7 +4,6 @@
 }
 
 .sidebar {
-    background: linear-gradient(to bottom right, #eff6ff, #eff6ff);
     border-right: 1px solid rgba(251, 207, 232, 0.3);
     height: 100vh;
     display: flex;

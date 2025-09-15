@@ -1,114 +1,72 @@
-'use client';
+"use client";
 
 import { useState } from "react";
-import { FaCloudUploadAlt, FaPaperPlane } from "react-icons/fa";
+import { Box, Stepper } from "@mantine/core";
+import { motion } from "framer-motion";
 import styles from "./page.module.css";
+import {CallSchedule} from "@/app/auctions/dealer/form/CallSchedule/CallSchedule";
+import {ApplicationForm} from "@/app/auctions/dealer/form/ApplicationForm/ApplicationForm";
 
-export default function RequestAccessPage() {
-    const [charCount, setCharCount] = useState(0);
+const stepsData = [
+    { label: "Application", description: "Complete preliminary information", completed: false },
+    { label: "Call Scheduled", description: "Wait for the scheduled call", completed: false },
+    { label: "Document Upload", description: "Upload necessary documents", completed: false },
+    { label: "Final Decision", description: "Receive final approval", completed: false },
+];
+
+export default function Page() {
+    const [activeStep, setActiveStep] = useState(1);
+
+    const [steps, setSteps] = useState(stepsData);
+
+    const handleNext = () => {
+        const newSteps = [...steps];
+        newSteps[activeStep].completed = true;
+        setSteps(newSteps);
+        setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
+    };
+
+    const handleStepClick = (index: number) => {
+        // Разрешаем переход только на текущий шаг или уже выполненные
+        if (index <= activeStep && steps[index].completed) {
+            setActiveStep(index);
+        }
+    };
+
+
 
     return (
-        <div className={styles.mainContainer}>
-            <div className={styles.accessFormCard}>
-                <div className={styles.formHeader}>
-                    <h1 className={styles.title}>Auction Access</h1>
-                    <p className={styles.subtitle}>
-                        Fill out the form below to get access to our platform
-                    </p>
-                </div>
-
-                <form className={styles.accessForm}>
-                    {/* Photo Upload */}
-                    <div className={styles.photoUploadSection}>
-                        <label className={styles.label}>Upload Photo</label>
-                        <div className={styles.photoWrapper}>
-                            <input type="file" id="photo-upload" accept="image/*" className={styles.fileInput} />
-                            <label htmlFor="photo-upload" className={styles.photoLabel}>
-                                <FaCloudUploadAlt className={styles.uploadIcon} />
-                                <span className={styles.uploadText}>Click to upload photo</span>
-                                <span className={styles.uploadNote}>PNG, JPG up to 10MB</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    {/* Form Grid */}
-                    <div className={styles.formGrid}>
-                        <div className={styles.leftColumn}>
-                            <div className={styles.nameFields}>
-                                <div className={styles.nameField}>
-                                    <label htmlFor="first-name" className={styles.label}>First Name</label>
-                                    <input
-                                        type="text"
-                                        id="first-name"
-                                        name="first-name"
-                                        placeholder="John"
-                                        required
-                                        className={styles.inputField}
-                                    />
-                                </div>
-                                <div className={styles.nameField}>
-                                    <label htmlFor="last-name" className={styles.label}>Last Name</label>
-                                    <input
-                                        type="text"
-                                        id="last-name"
-                                        name="last-name"
-                                        placeholder="Doe"
-                                        required
-                                        className={styles.inputField}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={styles.ageField}>
-                                <label htmlFor="age" className={styles.label}>Age</label>
-                                <input
-                                    type="number"
-                                    id="age"
-                                    name="age"
-                                    min={18}
-                                    max={99}
-                                    placeholder="25"
-                                    required
-                                    className={styles.inputField}
-                                />
-                            </div>
-                        </div>
-
-                        <div className={styles.rightColumn}>
-                            <div className={styles.descriptionField}>
-                                <label htmlFor="description" className={styles.label}>Brief Description</label>
-                                <textarea
-                                    id="description"
-                                    name="description"
-                                    rows={6}
-                                    maxLength={500}
-                                    placeholder="Tell us a bit about yourself and why you'd like access..."
-                                    required
-                                    className={styles.textareaField}
-                                    onChange={(e) => setCharCount(e.target.value.length)}
-                                />
-                                <div className={styles.charCount}>{charCount}/500 characters</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Submit */}
-                    <div className={styles.submitSection}>
-                        <button type="submit" className={styles.submitBtn}>
-                            <FaPaperPlane className={styles.submitIcon} />
-                            Submit Request
-                        </button>
-                    </div>
-                </form>
-
-                <div className={styles.formFooter}>
-                    <p>
-                        By submitting this form, you agree to our{" "}
-                        <span className={styles.link}>Terms of Service</span> and{" "}
-                        <span className={styles.link}>Privacy Policy</span>
-                    </p>
+        <Box
+            className={styles.container}
+            component={motion.div}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <Stepper
+                active={activeStep}
+                onStepClick={handleStepClick}
+                color="blue"
+                size="sm"
+                orientation="horizontal"
+            >
+                {steps.map((step, idx) => (
+                    <Stepper.Step
+                        key={idx}
+                        label={step.label}
+                        description={step.description}
+                        // allowStepSelect={step.completed || idx === activeStep} // блокировка
+                    />
+                ))}
+            </Stepper>
+            <div className={styles.content}>
+                <div className={styles.card}>
+                    {activeStep === 0 && <ApplicationForm/>}
+                    {activeStep === 1 && <CallSchedule/>}
                 </div>
             </div>
-        </div>
+
+
+        </Box>
     );
 }
