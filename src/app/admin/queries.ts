@@ -6,7 +6,7 @@ export const useAuctionAccessRequests = (query: AuctionAccessRequestsAPI['GET'][
     return useQuery<AuctionAccessRequestsAPI['GET']['response'], AuctionAccessRequestsAPI['GET']['error']>({
         queryKey: ['auction-access-requests', query.status, query.skip, query.take],
         queryFn: () => {
-            return apiRequest('/admin/', 'GET')({ query })
+            return apiRequest('/api/admin/auction-access-requests', 'GET')({ query })
         }
     })
 }
