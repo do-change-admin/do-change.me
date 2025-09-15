@@ -2,7 +2,7 @@
 
 import styles from "./UserTable.module.css";
 import { FiSearch, FiEdit, FiTrash2, FiFilter } from "react-icons/fi";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const users = [
     {
@@ -47,7 +47,7 @@ const users = [
     },
 ];
 
-export const UserTable = ()=> {
+export const UserTable = () => {
     const router = useRouter();
     return (
         <section className={styles.section}>
@@ -55,27 +55,27 @@ export const UserTable = ()=> {
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead className={styles.thead}>
-                        <tr>
-                            <th className={styles.th}>Photo</th>
-                            <th className={styles.th}>Name</th>
-                            <th className={styles.th}>Date of Birth</th>
-                            <th className={styles.th}>Date</th>
-                        </tr>
+                            <tr>
+                                <th className={styles.th}>Photo</th>
+                                <th className={styles.th}>Name</th>
+                                <th className={styles.th}>Date of Birth</th>
+                                <th className={styles.th}>Date</th>
+                            </tr>
                         </thead>
                         <tbody className={styles.tbody}>
-                        {users.map(user => (
-                            <tr key={user.id} onClick={() => router.push(`/admin/${user.id}`)}>
-                                <td className={styles.td}>
-                                    <img src={user.avatar} alt={user.name} className={styles.avatar} />
-                                </td>
-                                <td className={styles.td}>
-                                    <div>{user.name}</div>
-                                    <div className={styles.email}>{user.email}</div>
-                                </td>
-                                <td className={styles.td}>{user.date}</td>
-                                <td className={styles.td}>{user.dob}</td>
-                            </tr>
-                        ))}
+                            {users.map(user => (
+                                <tr key={user.id} onClick={() => router.push(`/admin/${user.id}`)}>
+                                    <td className={styles.td}>
+                                        <img src={user.avatar} alt={user.name} className={styles.avatar} />
+                                    </td>
+                                    <td className={styles.td}>
+                                        <div>{user.name}</div>
+                                        <div className={styles.email}>{user.email}</div>
+                                    </td>
+                                    <td className={styles.td}>{user.date}</td>
+                                    <td className={styles.td}>{user.dob}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
