@@ -4,7 +4,7 @@ import { prismaClient } from "@/infrastructure/prisma/client";
 import { CreateCheckoutRequest } from "./models";
 import { businessError, serverError, validationError } from "@/lib/errors";
 import z from "zod";
-import { getCurrentUser } from "@/lib/getCyrrentUser";
+import { getCurrentUser } from "@/lib/getCurrentUser";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
