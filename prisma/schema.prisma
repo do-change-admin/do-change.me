@@ -29,6 +29,7 @@ model User {
   passwordResetTokens     PasswordResetToken[]
   accounts                Account[]
   usageAggregates         UsageAggregate[]
+  stripeCustomer          StripeCustomer?
 }
 
 model Account {
@@ -254,11 +255,53 @@ model VinCheckResult {
   VehicleDescriptor                   String?
   VehicleType                         String?
   WheelBaseLong                       String?
-  WheelBaseShort                       String?
+  WheelBaseShort                      String?
   WheelBaseType                       String?
   WheelSizeFront                      String?
   WheelSizeRear                       String?
   WheelieMitigation                   String?
   Wheels                              String?
   Windows                             String?
+}
+
+model StripeCustomer {
+  id               Int      @id @default(autoincrement())
+  userId           String   @unique
+  stripeCustomerId String   @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user          User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptions StripeSubscription[]
+}
+
+model StripeSubscription {
+  id                   Int       @id @default(autoincrement())
+  stripeSubscriptionId String    @unique
+  customerId           Int
+  status               String
+  cancelAtPeriodEnd    Boolean   @default(false)
+  canceledAt           DateTime?
+  trialEnd             DateTime?
+  metadata             Json?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  customer StripeCustomer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items    StripeSubscriptionItem[]
+}
+
+model StripeSubscriptionItem {
+  id                 Int      @id @default(autoincrement())
+  stripeItemId       String   @unique
+  subscriptionId     Int
+  priceId            String
+  productId          String
+  quantity           Int
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  subscription StripeSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 }
