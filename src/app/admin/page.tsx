@@ -29,7 +29,6 @@ const subOnboardingTabs = [
     "Documents Under Review",
     "Corrections Required",
     "Ready for Auction Access",
-    "Access Granted"
 ];
 
 
