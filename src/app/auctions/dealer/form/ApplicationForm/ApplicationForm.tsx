@@ -14,8 +14,10 @@ import {
     FaKey,
 } from "react-icons/fa";
 import styles from "./ApplicationForm.module.css";
+import {ApplicationSuccesses} from "./ApplicationSuccesses";
 
 export const  ApplicationForm = ()=> {
+    const [showStub, setShowStub] = useState(false);
     const [formData, setFormData] = useState({
         photo: null as File | null,
         firstName: "",
@@ -37,8 +39,12 @@ export const  ApplicationForm = ()=> {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         console.log("Form Submitted:", formData);
+        setShowStub(true);
     };
 
+    if (showStub) {
+        return <ApplicationSuccesses/>
+    }
     return (
         <div className={styles.mainContainer}>
             {/* Left Section - Form */}

@@ -15,7 +15,7 @@ const stepsData = [
 ];
 
 export default function Page() {
-    const [activeStep, setActiveStep] = useState(1);
+    const [activeStep, setActiveStep] = useState(0);
 
     const [steps, setSteps] = useState(stepsData);
 

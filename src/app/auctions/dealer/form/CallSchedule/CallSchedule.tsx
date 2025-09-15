@@ -46,9 +46,7 @@ export const  CallSchedule = () => {
                                 </div>
                                 <h1 className={styles.title}>Schedule Your Online Interview</h1>
                                 <p className={styles.description}>
-                                    Book a required video call interview to gain access to our
-                                    exclusive auction platform. Our verification process ensures a
-                                    secure and premium experience.
+                                    Choose a convenient time slot to connect with our manager for your video interview.
                                 </p>
 
                                 <div className={styles.infoItems}>
@@ -58,7 +56,7 @@ export const  CallSchedule = () => {
                                         </div>
                                         <div>
                                             <h3 className={styles.infoTitle}>Duration: 15-20 minutes</h3>
-                                            <p className={styles.infoText}>Quick verification process</p>
+                                            <p className={styles.infoText}>Preliminary interview before submitting documents</p>
                                         </div>
                                     </div>
 
@@ -67,8 +65,8 @@ export const  CallSchedule = () => {
                                             <FaShieldAlt className={styles.iconWhite} />
                                         </div>
                                         <div>
-                                            <h3 className={styles.infoTitle}>Identity Verification</h3>
-                                            <p className={styles.infoText}>Secure platform access</p>
+                                            <h3 className={styles.infoTitle}>Background Check</h3>
+                                            <p className={styles.infoText}>Ensures secure access and compliance</p>
                                         </div>
                                     </div>
 
@@ -78,7 +76,7 @@ export const  CallSchedule = () => {
                                         </div>
                                         <div>
                                             <h3 className={styles.infoTitle}>Auction Access</h3>
-                                            <p className={styles.infoText}>Unlock premium features</p>
+                                            <p className={styles.infoText}>Gain access to live auctions after verification</p>
                                         </div>
                                     </div>
                                 </div>
