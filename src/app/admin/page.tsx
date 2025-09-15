@@ -4,23 +4,21 @@ import { useState } from "react";
 import { Tabs, Button, Group, Badge } from "@mantine/core";
 import styles from "./layout.module.css";
 import { UserTable } from "@/components";
+import { useAuctionAccessRequests } from "./queries";
+import type { AuctionAccessRequestStatus } from '@/services/auction-access-requests'
 
-interface User {
-    id: number;
-    photo: string;
-    name: string;
-    dob: string;
-    date: string;
-    email: string;
+type MainTab = {
+    label: string;
+    count: number;
+    status: AuctionAccessRequestStatus
 }
 
-// Основные табы
-const mainTabs = [
-    { label: "Review", count: 12 },
-    { label: "Scheduling", count: 5 },
-    { label: "Onboarding", count: 3 },
-    { label: "Approved", count: 0 },
-    { label: "Rejected", count: 0 },
+const mainTabs: MainTab[] = [
+    { label: "Review", count: 12, status: 'review' },
+    { label: "Scheduling", count: 5, status: 'scheduling' },
+    { label: "Onboarding", count: 3, status: 'onboarding' },
+    { label: "Approved", count: 0, status: 'approved' },
+    { label: "Rejected", count: 0, status: 'rejected' },
 ];
 
 const subTabs = ["Awaiting User Confirmation", "Scheduled", "Call Completed - Awaiting Decision"];
@@ -33,21 +31,25 @@ const subOnboardingTabs = [
 
 
 export default function AuctionAccessPage() {
-    const [activeMainTab, setActiveMainTab] = useState<string | null>(mainTabs[0].label);
+    const [activeStatus, setActiveStatus] = useState<AuctionAccessRequestStatus>(mainTabs[0].status);
     const [activeSubTab, setActiveSubTab] = useState<string>(subTabs[0]);
     const [activeOnboardingTab, setActiveOnboardingTabsTab] = useState<string>(subOnboardingTabs[0]);
+
+    const { data: auctionAccessRequests } = useAuctionAccessRequests({ skip: 0, take: 100, status: activeStatus })
+
+    console.log(auctionAccessRequests)
 
     return (
         <div className={styles.container}>
             {/* Main Tabs */}
             <Tabs
-                value={activeMainTab}
-                onChange={(val) => val && setActiveMainTab(val)}
+                value={activeStatus}
+                onChange={(val) => val && setActiveStatus(val as AuctionAccessRequestStatus)}
                 variant="outline"
             >
                 <Tabs.List>
                     {mainTabs.map((tab) => (
-                        <Tabs.Tab value={tab.label} key={tab.label} className={styles.tabWithBadge}>
+                        <Tabs.Tab value={tab.status} key={tab.label} className={styles.tabWithBadge}>
                             {tab.label}
                             {!!tab.count && (
                                 <Badge color="pink" size="sm" className={styles.tabBadge}>
