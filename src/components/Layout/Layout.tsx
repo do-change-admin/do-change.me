@@ -9,8 +9,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAuthPage = pathname.startsWith("/auth");
   const isTermsPage = pathname.includes("/terms");
+  const isAdminPage = pathname.includes("/admin");
 
-  if (isAuthPage || isTermsPage) {
+  if (isAuthPage || isTermsPage || isAdminPage) {
     return <>{children}</>;
   }
 

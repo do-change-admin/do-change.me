@@ -1,4 +1,5 @@
 export * from './_ui'
+export * from './_admin';
 export * from './Header/Header'
 export * from './Login/Login'
 export * from './Register/Register'

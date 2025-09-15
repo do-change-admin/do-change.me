@@ -3,7 +3,7 @@
 import styles from "./page.module.css";
 import {FaCheck, FaSignOutAlt} from "react-icons/fa";
 import {ProfileForm} from "./(ProfileForm)/ProfileForm";
-import {ActionIcon, Button, Group} from "@mantine/core";
+import { Button, Group} from "@mantine/core";
 import {signOut} from "next-auth/react";
 
 export default function SettingsContent() {
