@@ -23,7 +23,7 @@ export const handler = zodApiMethod(
     responseSchema,
     async ({ skip, status, take }) => {
         const service = new AuctionAccessRequestsService()
-        const items = await service.findRequests({ skip, status, take })
+        const items = await service.findRequestsForAdmin({ skip, status, take })
         return { items }
     }
 )

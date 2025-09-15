@@ -3,51 +3,14 @@
 import styles from "./UserTable.module.css";
 import { FiSearch, FiEdit, FiTrash2, FiFilter } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import type { AuctionAccessRequestListItem } from '@/services'
+import { FC } from "react";
 
-const users = [
-    {
-        id: 1,
-        name: "Sarah Johnson",
-        email: "sarah.johnson@email.com",
-        dob: "March 15, 1990",
-        date: "April 17, 1991",
-        avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg"
-    },
-    {
-        id: 2,
-        name: "Michael Chen",
-        email: "michael.chen@email.com",
-        dob: "July 22, 1985",
-        date: "April 17, 1991",
-        avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg"
-    },
-    {
-        id: 3,
-        name: "Emily Rodriguez",
-        email: "emily.rodriguez@email.com",
-        dob: "December 8, 1992",
-        date: "April 17, 1991",
-        avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg"
-    },
-    {
-        id: 4,
-        name: "David Wilson",
-        email: "david.wilson@email.com",
-        dob: "September 3, 1988",
-        date: "April 17, 1991",
-        avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg"
-    },
-    {
-        id: 5,
-        name: "Lisa Thompson",
-        email: "lisa.thompson@email.com",
-        dob: "April 17, 1991",
-        date: "April 17, 1991",
-        avatar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-6.jpg"
-    },
-];
+export type UserTableProps = {
+    requests: AuctionAccessRequestListItem[]
+}
 
-export const UserTable = () => {
+export const UserTable: FC<UserTableProps> = ({ requests }) => {
     const router = useRouter();
     return (
         <section className={styles.section}>
@@ -63,17 +26,17 @@ export const UserTable = () => {
                             </tr>
                         </thead>
                         <tbody className={styles.tbody}>
-                            {users.map(user => (
-                                <tr key={user.id} onClick={() => router.push(`/admin/${user.id}`)}>
+                            {requests.map(request => (
+                                <tr key={request.id} onClick={() => router.push(`/admin/${request.id}`)}>
                                     <td className={styles.td}>
-                                        <img src={user.avatar} alt={user.name} className={styles.avatar} />
+                                        <img src={request.photoLink} alt={request.firstName} className={styles.avatar} />
                                     </td>
                                     <td className={styles.td}>
-                                        <div>{user.name}</div>
-                                        <div className={styles.email}>{user.email}</div>
+                                        <div>{request.firstName} {request.lastName}</div>
+                                        <div className={styles.email}>{request.email}</div>
                                     </td>
-                                    <td className={styles.td}>{user.date}</td>
-                                    <td className={styles.td}>{user.dob}</td>
+                                    <td className={styles.td}>{new Date(request.applicationDate).toDateString()}</td>
+                                    <td className={styles.td}>{new Date(request.birthDate).toDateString()}</td>
                                 </tr>
                             ))}
                         </tbody>
