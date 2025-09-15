@@ -7,9 +7,15 @@ export const auctionAccessRequestStatusSchema = z.enum([
     'review',
     'approved',
     'rejected',
-    'scheduling',
-    'onboarding'
+    'awaiting user confirmation',
+    'call scheduling',
+    'call completed',
+    'awaiting documents upload',
+    'documents under review',
+    'corrections required',
+    'ready for auction access'
 ])
+
 
 /**
  * Auction access request without detailed information.
@@ -17,29 +23,10 @@ export const auctionAccessRequestStatusSchema = z.enum([
 export const auctionAccessRequestListSchema = z.object({
     id: z.string(),
     firstName: z.string(),
+    email: z.email(),
+    applicationDate: z.date(),
     lastName: z.string(),
     birthDate: z.date(),
     photoLink: z.url(),
-    status: z.union([
-        z.object({
-            status: z.intersection(auctionAccessRequestStatusSchema, z.enum(['review', 'approved', 'rejected']))
-        }),
-        z.object({
-            status: z.intersection(auctionAccessRequestStatusSchema, z.enum(['scheduling'])),
-            substatus: z.enum([
-                'awaiting user confirmation',
-                'call scheduling',
-                'call completed'
-            ])
-        }),
-        z.object({
-            status: z.intersection(auctionAccessRequestStatusSchema, z.enum(['onboarding'])),
-            substatus: z.enum([
-                'awaiting documents upload',
-                'documents under review',
-                'corrections required',
-                'ready for auction access'
-            ])
-        })
-    ])
+    status: auctionAccessRequestStatusSchema
 })
