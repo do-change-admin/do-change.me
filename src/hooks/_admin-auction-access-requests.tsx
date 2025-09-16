@@ -1,6 +1,7 @@
+import { AuctionAccessRequestsDetailsAdminAPI } from "@/app/api/admin/auction-access-requests/details/route"
 import { AuctionAccessRequestsAdminAPI } from "@/app/api/admin/auction-access-requests/route"
 import { apiRequest } from "@/lib/apiFetch"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export const useAdminAuctionAccessRequests = (query: AuctionAccessRequestsAdminAPI['GET']['payload']['query']) => {
     return useQuery<AuctionAccessRequestsAdminAPI['GET']['response'], AuctionAccessRequestsAdminAPI['GET']['error']>({
@@ -11,8 +12,22 @@ export const useAdminAuctionAccessRequests = (query: AuctionAccessRequestsAdminA
     })
 }
 
+export const useAdminAuctionAccessRequest = (query: AuctionAccessRequestsDetailsAdminAPI['GET']['payload']['query']) => {
+    return useQuery<AuctionAccessRequestsDetailsAdminAPI['GET']['response'], AuctionAccessRequestsDetailsAdminAPI['GET']['error']>({
+        queryKey: ['auction-access-requests', 'full', query.id],
+        queryFn: () => {
+            return apiRequest('/api/admin/auction-access-requests/details', 'GET')({ query })
+        }
+    })
+}
+
 export const useAdminAuctionAccessRequestUpdate = () => {
+    const client = useQueryClient()
+
     return useMutation<AuctionAccessRequestsAdminAPI['PATCH']['response'], AuctionAccessRequestsAdminAPI['PATCH']['error'], AuctionAccessRequestsAdminAPI['PATCH']['payload']>({
-        mutationFn: apiRequest('/api/admin/auction-access-requests', 'PATCH')
+        mutationFn: apiRequest('/api/admin/auction-access-requests', 'PATCH'),
+        onSuccess: (s, { body: { id } }) => {
+            client.invalidateQueries({ queryKey: ['auction-access-requests', 'full', id] })
+        }
     })
 }

@@ -1,5 +1,5 @@
 import { PaginationSchemaType } from "@/schemas";
-import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestListItem, AuctionAccessRequestStatus, UpdateAuctionAccessRequest } from './types'
+import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestFullItem, AuctionAccessRequestListItem, AuctionAccessRequestStatus, UpdateAuctionAccessRequest } from './types'
 import { prismaClient } from "@/infrastructure";
 import { ProfileService } from "../profile";
 import { EmailAddress } from "@/value-objects/email-address.vo";
@@ -8,6 +8,30 @@ import { businessError } from "@/lib/errors";
 type FindListQueryData = PaginationSchemaType & { status: AuctionAccessRequestStatus }
 
 export class AuctionAccessRequestsService {
+    detailedItemForAdmin = async (id: string): Promise<AuctionAccessRequestFullItem> => {
+        const result = await prismaClient.auctionAccessRequest.findUnique({
+            where: { id },
+            include: { activeSlot: true, timeSlots: true }
+        })
+
+        if (!result) {
+            throw businessError('No request was found with according id')
+        }
+
+        return {
+            applicationDate: result.applicationDate,
+            birthDate: result.birthDate,
+            email: result.email,
+            firstName: result.firstName,
+            id: result.id,
+            lastName: result.lastName,
+            photoLink: result.photoLink,
+            status: result.status as AuctionAccessRequestStatus,
+            timeSlots: result.timeSlots,
+            activeTimeSlot: result.activeSlot || null
+        }
+    }
+
     findRequestsForAdmin = async (query: FindListQueryData): Promise<AuctionAccessRequestListItem[]> => {
         const result = await prismaClient.auctionAccessRequest.findMany({
             skip: query.skip,
@@ -16,7 +40,19 @@ export class AuctionAccessRequestsService {
                 status: query.status
             }
         })
-        return result as AuctionAccessRequestListItem[]
+
+        return result.map((dbItem) => {
+            return {
+                applicationDate: dbItem.applicationDate,
+                birthDate: dbItem.birthDate,
+                email: dbItem.email,
+                firstName: dbItem.firstName,
+                id: dbItem.id,
+                lastName: dbItem.lastName,
+                photoLink: dbItem.photoLink,
+                status: dbItem.status as AuctionAccessRequestStatus,
+            }
+        })
     }
 
     create = async (rawEmail: string) => {

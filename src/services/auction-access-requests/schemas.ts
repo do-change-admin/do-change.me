@@ -31,6 +31,30 @@ export const auctionAccessRequestListSchema = z.object({
 })
 
 /**
+ * Auction access request with detailed information.
+ */
+export const auctionAccessRequestFullSchema = z.object({
+    id: z.string(),
+    firstName: z.string(),
+    email: z.email(),
+    applicationDate: z.date(),
+    lastName: z.string(),
+    birthDate: z.date(),
+    photoLink: z.url(),
+    status: auctionAccessRequestStatusSchema,
+    timeSlots: z.array(
+        z.object({
+            id: z.string(),
+            date: z.date()
+        })
+    ),
+    activeTimeSlot: z.object({
+        id: z.string(),
+        date: z.date()
+    }).nullable()
+})
+
+/**
  * Payload for admin's updates for auction access.
  */
 export const adminUpdateAuctionAccessRequestSchema = z.object({

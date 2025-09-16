@@ -1,9 +1,15 @@
-import React from 'react';
-import {ApplicationDetails} from "@/components";
+import React, { FC } from 'react';
+import { ApplicationDetails } from "@/components";
 
-const Page = () => {
+type PageProps = {
+    params: {
+        userId: string;
+    }
+}
+const Page: FC<PageProps> = ({ params }) => {
+    const requestId = params.userId
     return (
-        <ApplicationDetails/>
+        <ApplicationDetails applicationId={requestId} />
     );
 };
 
