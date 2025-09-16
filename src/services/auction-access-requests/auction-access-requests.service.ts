@@ -84,6 +84,7 @@ export class AuctionAccessRequestsService {
             'review': 'awaiting user confirmation',
             'awaiting user confirmation': 'call scheduling',
             'call scheduling': 'call completed',
+            'call completed': 'awaiting documents upload',
             'awaiting documents upload': 'documents under review',
             'documents under review': 'corrections required',
             'corrections required': 'ready for auction access',

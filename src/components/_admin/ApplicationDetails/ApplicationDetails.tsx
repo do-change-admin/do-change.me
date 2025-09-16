@@ -25,8 +25,6 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
     const { mutate: update } = useAdminAuctionAccessRequestUpdate()
     const router = useRouter();
 
-    console.log(schedule)
-
     useEffect(() => {
         const slots = requestInfo?.timeSlots
         if (!slots) {
