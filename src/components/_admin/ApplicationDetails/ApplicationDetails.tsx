@@ -1,12 +1,12 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./ApplicationDetails.module.css";
 import { FiX, FiCheck } from "react-icons/fi";
 import dayjs from "dayjs";
 import { Button } from "@mantine/core";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { SchedulePicker } from "@/components/_admin/SchedulePicker/SchedulePicker";
+import { Schedule, SchedulePicker } from "@/components/_admin/SchedulePicker/SchedulePicker";
 import { useRouter } from "next/navigation";
 import { useAdminAuctionAccessRequest, useAdminAuctionAccessRequestUpdate } from "@/hooks";
 
@@ -20,22 +20,34 @@ interface SelectedDateTime {
 }
 
 export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId }) => {
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    const [selectedTime, setSelectedTime] = useState<Date | null>(null);
-    const [schedule, setSchedule] = useState<SelectedDateTime[]>([]);
+    const [schedule, setSchedule] = useState<Schedule>({})
     const { data: requestInfo } = useAdminAuctionAccessRequest({ id: applicationId })
     const { mutate: update } = useAdminAuctionAccessRequestUpdate()
     const router = useRouter();
 
-    const handleAddToSchedule = () => {
-        if (selectedDate && selectedTime) {
-            const dateStr = dayjs(selectedDate).format("YYYY-MM-DD");
-            const timeStr = dayjs(selectedTime).format("HH:mm");
-            setSchedule((prev) => [...prev, { date: dateStr, time: timeStr }]);
-            setSelectedDate(null);
-            setSelectedTime(null);
+    console.log(schedule)
+
+    useEffect(() => {
+        const slots = requestInfo?.timeSlots
+        if (!slots) {
+            return
         }
-    };
+        const newData: Record<string, string[]> = {}
+        slots.forEach(x => {
+            const currentDate = dayjs(x.date)
+            const day = currentDate.get('D')
+            const month = currentDate.get('M')
+            const year = currentDate.get('y')
+            const hour = currentDate.get('h')
+            const date = new Date(year, month, day)
+            const dateAsString = dayjs(date).format('YYYY-MM-DD')
+            if (!newData[dateAsString]) {
+                newData[dateAsString] = []
+            }
+            newData[dateAsString] = [...newData[dateAsString], hour <= 12 ? `${hour}:00 AM` : `${hour - 12}:00 PM`]
+        })
+        setSchedule(newData)
+    }, [requestInfo?.timeSlots])
 
     if (!requestInfo) {
         return <>404</>
@@ -90,14 +102,23 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                                         <FiX size={20} />
                                         <span>Reject</span>
                                     </Button>
-                                    <Button onClick={() => { update({ body: { id: applicationId, progress: 'next approve step' } }) }} className={`${styles.actionBtn} ${styles.continue}`}>
+                                    <Button onClick={() => {
+                                        const dates = Object.entries(schedule).flatMap(([dateAsString, times]) => {
+                                            const rootDate = dayjs(dateAsString)
+                                            const withTime = times.map(time => {
+                                                return rootDate.set('h', time.split(' ')[1].toLowerCase() === 'am' ? +time.split(' ')[0].split(':')[0] : +time.split(' ')[0].split(':')[0] + 12)
+                                            })
+                                            return withTime
+                                        })
+                                        update({ body: { id: applicationId, progress: 'next approve step', availableTimeSlots: dates.length ? dates.map(x => ({ date: x.toDate() })) : undefined } })
+                                    }} className={`${styles.actionBtn} ${styles.continue}`}>
                                         <FiCheck size={20} />
                                         <span>Continue</span>
                                     </Button>
                                 </div>
                             </div>
 
-                            <SchedulePicker />
+                            <SchedulePicker scheduleState={[schedule, setSchedule]} />
 
                         </div>
                     </div>
