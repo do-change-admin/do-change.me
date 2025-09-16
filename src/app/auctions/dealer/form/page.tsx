@@ -7,6 +7,7 @@ import { FaFileAlt, FaPhone, FaUpload, FaCheckCircle } from "react-icons/fa";
 import styles from "./page.module.css";
 import { CallSchedule } from "@/app/auctions/dealer/form/CallSchedule/CallSchedule";
 import { ApplicationForm } from "@/app/auctions/dealer/form/ApplicationForm/ApplicationForm";
+import {RegistrationSteps} from "@/app/auctions/dealer/form/RegistrationAuctionAcceess/RegistrationAuctionAcceess";
 
 const stepsData = [
     { label: "Application", description: "Fill out info", icon: <FaFileAlt /> },
@@ -16,7 +17,7 @@ const stepsData = [
 ];
 
 export default function Page() {
-    const [activeStep, setActiveStep] = useState(0);
+    const [activeStep, setActiveStep] = useState(2);
 
     const handleStepClick = (index: number) => {
         if (index <= activeStep) setActiveStep(index);
@@ -52,7 +53,7 @@ export default function Page() {
                 <div className={styles.card}>
                     {activeStep === 0 && <ApplicationForm />}
                     {activeStep === 1 && <CallSchedule />}
-                    {activeStep === 2 && <div>Upload docs form here</div>}
+                    {activeStep === 2 && <RegistrationSteps/>}
                     {activeStep === 3 && <div>Final decision stage</div>}
                 </div>
             </div>
