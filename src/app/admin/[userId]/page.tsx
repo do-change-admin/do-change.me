@@ -1,15 +1,14 @@
-import React, { FC } from 'react';
-import { ApplicationDetails } from "@/components";
+'use client'
 
-type PageProps = {
-    params: {
-        userId: string;
-    }
-}
-const Page: FC<PageProps> = ({ params }) => {
+import React from 'react';
+import { ApplicationDetails } from "@/components";
+import { useParams } from 'next/navigation';
+
+const Page = () => {
+    const params = useParams()
     const requestId = params.userId
     return (
-        <ApplicationDetails applicationId={requestId} />
+        <ApplicationDetails applicationId={requestId as string} />
     );
 };
 
