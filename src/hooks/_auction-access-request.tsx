@@ -4,6 +4,6 @@ import { useMutation } from "@tanstack/react-query"
 
 export const useAuctionAccessRequestCreation = () => {
     return useMutation<AuctionAccessRequestsAPI['POST']['response'], AuctionAccessRequestsAPI['POST']['error'], AuctionAccessRequestsAPI['POST']['payload']>({
-        mutationFn: apiRequest('/auction-access-requests', 'POST')
+        mutationFn: apiRequest('/api/auction-access-requests', 'POST')
     })
 }

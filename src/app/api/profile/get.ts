@@ -3,6 +3,7 @@ import { profileSchema, ProfileService } from "@/services";
 import { EmailAddress } from "@/value-objects/email-address.vo";
 
 const responseSchema = profileSchema
+
 export type Method = ZodAPIMethod<undefined, undefined, typeof responseSchema>
 
 export const handler = zodApiMethod(undefined, undefined, responseSchema, async (payload) => {

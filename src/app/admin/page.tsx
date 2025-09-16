@@ -60,16 +60,16 @@ export default function AuctionAccessPage() {
     const [activeOnboardingTab, setActiveOnboardingTabsTab] = useState<AuctionAccessRequestStatus>(subOnboardingTabs[0].status);
 
     useEffect(() => {
-        setStatus(activeStatus)
-    }, [activeStatus])
-
-    useEffect(() => {
         setStatus(activeSubTab)
     }, [activeSubTab])
 
     useEffect(() => {
         setStatus(activeOnboardingTab)
     }, [activeOnboardingTab])
+
+    useEffect(() => {
+        setStatus(activeStatus)
+    }, [activeStatus])
 
 
     const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({ skip: 0, take: 100, status })

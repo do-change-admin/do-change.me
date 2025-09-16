@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
     FaUser,
@@ -14,18 +14,40 @@ import {
     FaKey,
 } from "react-icons/fa";
 import styles from "./ApplicationForm.module.css";
-import {ApplicationSuccesses} from "./ApplicationSuccesses";
+import { ApplicationSuccesses } from "./ApplicationSuccesses";
+import { useAuctionAccessRequestCreation, useProfile, useProfileModifying } from "@/hooks";
+import type { ProfileData, UpdateProfilePayload } from "@/services";
 
-export const  ApplicationForm = ()=> {
+export const ApplicationForm = () => {
+    const { data: profileData } = useProfile()
+    const { mutateAsync: updateProfile } = useProfileModifying()
+    const { mutate: createAuctionAccessRequest } = useAuctionAccessRequestCreation()
     const [showStub, setShowStub] = useState(false);
-    const [formData, setFormData] = useState({
-        photo: null as File | null,
+    const [formData, setFormData] = useState<ProfileData>({
+        // photo: null as File | null,
         firstName: "",
         lastName: "",
         email: "",
         phone: "",
-        about: "",
+        bio: "",
     });
+
+    const emptyFields = profileData
+        ? Object.keys(profileData).filter(field => !profileData[field as keyof ProfileData])
+        : []
+
+    useEffect(() => {
+        if (profileData) {
+            setFormData({
+                bio: profileData.bio,
+                email: profileData.email,
+                firstName: profileData.firstName,
+                lastName: profileData.lastName,
+                phone: profileData.phone,
+                // photo: null
+            })
+        }
+    }, [profileData])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, files } = e.target as any;
@@ -36,20 +58,29 @@ export const  ApplicationForm = ()=> {
         }
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log("Form Submitted:", formData);
-        setShowStub(true);
+        const emptyFieldsData = emptyFields.map(x => ({ field: x, value: formData[x as keyof ProfileData] }))
+        const notFilledFields = emptyFieldsData.filter(x => !x.value).map(x => x.field)
+        if (notFilledFields.length) {
+            alert(`Some fields are left not filled: ${notFilledFields.join(', ')}, fill them to request auction access`)
+            return
+        }
+        if (emptyFieldsData.length) {
+            const dataToUpdateProfile = Object.fromEntries(emptyFieldsData.map(x => [x.field, x.value] as const)) as UpdateProfilePayload
+            await updateProfile({ body: dataToUpdateProfile })
+        }
+        await createAuctionAccessRequest({})
     };
 
     if (showStub) {
-        return <ApplicationSuccesses/>
+        return <ApplicationSuccesses />
     }
     return (
-        <motion.div   initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6 }}
-                      className={styles.mainContainer}>
+        <motion.div initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className={styles.mainContainer}>
             {/* Left Section - Form */}
             <div className={styles.formSection}>
                 <div className={styles.formContent}>
@@ -81,7 +112,7 @@ export const  ApplicationForm = ()=> {
                         {/* Name Fields */}
                         <div className={styles.row}>
                             <div>
-                                <label  className={styles.label}>First Name</label>
+                                <label className={styles.label}>First Name</label>
                                 <div className={styles.inputWrapper}>
                                     <FaUser className={styles.icon} />
                                     <input
@@ -91,12 +122,13 @@ export const  ApplicationForm = ()=> {
                                         value={formData.firstName}
                                         onChange={handleChange}
                                         className={styles.input}
+                                        disabled={!!profileData?.firstName}
                                         required
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label  className={styles.label}>Last Name</label>
+                                <label className={styles.label}>Last Name</label>
                                 <div className={styles.inputWrapper}>
                                     <FaUser className={styles.icon} />
                                     <input
@@ -106,6 +138,7 @@ export const  ApplicationForm = ()=> {
                                         value={formData.lastName}
                                         onChange={handleChange}
                                         required
+                                        disabled={!!profileData?.lastName}
                                         className={styles.input}
                                     />
                                 </div>
@@ -114,7 +147,7 @@ export const  ApplicationForm = ()=> {
 
                         {/* Email */}
                         <div>
-                            <label  className={styles.label}>Email Address</label>
+                            <label className={styles.label}>Email Address</label>
                             <div className={styles.inputWrapper}>
                                 <FaEnvelope className={styles.icon} />
                                 <input
@@ -124,6 +157,7 @@ export const  ApplicationForm = ()=> {
                                     value={formData.email}
                                     onChange={handleChange}
                                     className={styles.input}
+                                    disabled
                                     required
                                 />
                             </div>
@@ -141,6 +175,7 @@ export const  ApplicationForm = ()=> {
                                     value={formData.phone}
                                     onChange={handleChange}
                                     className={styles.input}
+                                    disabled={!!profileData?.phone}
                                     required
                                 />
                             </div>
@@ -150,12 +185,13 @@ export const  ApplicationForm = ()=> {
                         <div>
                             <label>Tell us about yourself</label>
                             <textarea
-                                name="about"
+                                name="bio"
                                 rows={4}
                                 placeholder="Share your experience with cars, auction interests..."
-                                value={formData.about}
+                                value={formData.bio}
                                 onChange={handleChange}
                                 className={styles.textarea}
+                                disabled={!!profileData?.bio}
                             />
                         </div>
 
@@ -206,6 +242,6 @@ export const  ApplicationForm = ()=> {
                 <FaCar className={styles.decorCar} />
                 <FaKey className={styles.decorKey} />
             </div>
-    </motion.div>
+        </motion.div>
     );
 }
