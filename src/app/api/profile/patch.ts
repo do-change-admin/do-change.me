@@ -1,20 +1,19 @@
-import z from "zod";
+import { EmailAddress } from "@/value-objects/email-address.vo";
 import { zodApiMethod, ZodAPIMethod } from "../zod-api-methods";
-import { prismaClient } from "@/infrastructure";
+import { updateProfileSchema, ProfileService } from '@/services'
 
-const bodySchema = z.object({
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    phone: z.string().optional(),
-    bio: z.string().optional(),
-})
+const bodySchema = updateProfileSchema
 
 export type Method = ZodAPIMethod<undefined, typeof bodySchema, undefined>
 
 export const handler = zodApiMethod(undefined, bodySchema, undefined, async (payload) => {
-    const { bio, firstName, lastName, phone } = payload
-    await prismaClient.user.update({
-        where: { email: payload.activeUser.email },
-        data: { bio, firstName, lastName, phone },
+    const { email } = payload.activeUser
+    const emailValueObject = EmailAddress.create(email)
+    const service = new ProfileService(emailValueObject)
+    await service.update({
+        bio: payload.bio,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        phone: payload.phone
     })
 })

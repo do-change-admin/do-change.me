@@ -1,29 +1,15 @@
-import z from "zod";
 import { zodApiMethod, ZodAPIMethod } from "../zod-api-methods";
-import { prismaClient } from "@/infrastructure";
+import { profileSchema, ProfileService } from "@/services";
+import { EmailAddress } from "@/value-objects/email-address.vo";
 
-const responseSchema = z.object({
-    firstName: z.string(),
-    lastName: z.string(),
-    phone: z.string(),
-    email: z.string(),
-    bio: z.string(),
-})
-
+const responseSchema = profileSchema
 export type Method = ZodAPIMethod<undefined, undefined, typeof responseSchema>
 
 export const handler = zodApiMethod(undefined, undefined, responseSchema, async (payload) => {
     const { email } = payload.activeUser
-    let profile = await prismaClient?.user.findUnique({ where: { email } })
-    if (!profile) {
-        // TODO - насколько вообще норм, что его тут может не быть? обсудить с Максом
-        profile = await prismaClient?.user.create({ data: { email } })
-    }
-    return {
-        bio: profile.bio ?? "",
-        email: profile.email,
-        firstName: profile.firstName ?? "",
-        lastName: profile.lastName ?? "",
-        phone: profile.phone ?? ""
-    }
+    const emailValueObject = EmailAddress.create(email)
+    const service = new ProfileService(emailValueObject)
+    const profileData = await service.profileData()
+
+    return profileData
 })

@@ -16,7 +16,6 @@ export const auctionAccessRequestStatusSchema = z.enum([
     'ready for auction access'
 ])
 
-
 /**
  * Auction access request without detailed information.
  */

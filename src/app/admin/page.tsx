@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Tabs, Button, Group, Badge } from "@mantine/core";
 import styles from "./layout.module.css";
 import { UserTable } from "@/components";
-import { useAuctionAccessRequests } from "./queries";
+import { useAdminAuctionAccessRequests } from "@/hooks";
 import type { AuctionAccessRequestStatus } from '@/services/auction-access-requests'
 
 type Tab = {
@@ -72,7 +72,7 @@ export default function AuctionAccessPage() {
     }, [activeOnboardingTab])
 
 
-    const { data: auctionAccessRequests } = useAuctionAccessRequests({ skip: 0, take: 100, status })
+    const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({ skip: 0, take: 100, status })
 
     return (
         <div className={styles.container}>
