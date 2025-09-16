@@ -1,13 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Stepper } from "@mantine/core";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaPhone, FaUpload, FaCheckCircle } from "react-icons/fa";
 import styles from "./page.module.css";
 import { CallSchedule } from "@/app/auctions/dealer/form/CallSchedule/CallSchedule";
 import { ApplicationForm } from "@/app/auctions/dealer/form/ApplicationForm/ApplicationForm";
-import {RegistrationSteps} from "@/app/auctions/dealer/form/RegistrationAuctionAcceess/RegistrationAuctionAcceess";
+import { RegistrationSteps } from "@/app/auctions/dealer/form/RegistrationAuctionAcceess/RegistrationAuctionAcceess";
+import { useAuctionAccessRequest } from "@/hooks";
+import type { UserAuctionAccessSchemaSteps } from '@/services'
+import { ApplicationSuccesses } from "./ApplicationForm/ApplicationSuccesses";
+
+const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
+    'application': 0,
+    call: 1,
+    documents: 2,
+    decision: 3,
+}
 
 const stepsData = [
     { label: "Application", description: "Fill out info", icon: <FaFileAlt /> },
@@ -17,11 +27,23 @@ const stepsData = [
 ];
 
 export default function Page() {
-    const [activeStep, setActiveStep] = useState(2);
+    const [activeStep, setActiveStep] = useState(0);
+    const [waitingForAdmin, setWaitingForAdmin] = useState(false)
+    const { data } = useAuctionAccessRequest()
 
     const handleStepClick = (index: number) => {
         if (index <= activeStep) setActiveStep(index);
     };
+
+    useEffect(() => {
+        if (!data) {
+            return
+        }
+
+        setActiveStep(stepMapping[data.step])
+        setWaitingForAdmin(data.status === 'pending')
+    }, [data])
+
 
     return (
         <Box
@@ -51,10 +73,12 @@ export default function Page() {
 
             <div className={styles.content}>
                 <div className={styles.card}>
-                    {activeStep === 0 && <ApplicationForm />}
-                    {activeStep === 1 && <CallSchedule />}
-                    {activeStep === 2 && <RegistrationSteps/>}
-                    {activeStep === 3 && <div>Final decision stage</div>}
+                    {waitingForAdmin ? <ApplicationSuccesses /> : <>
+                        {activeStep === 0 && <ApplicationForm />}
+                        {activeStep === 1 && <CallSchedule />}
+                        {activeStep === 2 && <RegistrationSteps />}
+                        {activeStep === 3 && <div>Final decision stage</div>}
+                    </>}
                 </div>
             </div>
         </Box>

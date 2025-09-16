@@ -70,3 +70,19 @@ export const updateAuctionAccessRequestSchema = z.object({
     id: z.string(),
     selectedTimeSlotId: z.string()
 })
+
+export const userAuctionAccessSchema = z.object({
+    step: z.enum(['application', 'call', 'documents', 'decision']),
+    status: z.enum(['active', 'pending']),
+    timeSlots: z.array(
+        z.object({
+            id: z.string(),
+            date: z.date()
+        })
+    ),
+    activeTimeSlot: z.object({
+        id: z.string(),
+        date: z.date()
+    }).nullable()
+})
+
