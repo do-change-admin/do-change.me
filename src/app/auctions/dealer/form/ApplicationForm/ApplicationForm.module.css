@@ -7,9 +7,13 @@
 .formSection {
     width: 100%;
     background: white;
-    padding: 2rem;
+    padding: 3rem;
     display: flex;
     align-items: center;
+}
+
+.formContent {
+    width: 100%;
 }
 
 .formHeader h1 {
