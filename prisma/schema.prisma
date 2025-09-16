@@ -312,7 +312,7 @@ model StripeSubscriptionItem {
 }
 
 model AuctionAccessRequest {
-  id              String   @id @default(uuid())
+  id              String     @id @default(uuid())
   firstName       String
   email           String
   applicationDate DateTime
@@ -320,4 +320,15 @@ model AuctionAccessRequest {
   birthDate       DateTime
   photoLink       String
   status          String
+  timeSlots       TimeSlot[]
+  activeSlotId    String?
+  activeSlot      TimeSlot?  @relation("ActiveSlot", fields: [activeSlotId], references: [id])
+}
+
+model TimeSlot {
+  id                     String                 @id @default(uuid())
+  date                   DateTime
+  AuctionAccessRequest   AuctionAccessRequest   @relation(fields: [auctionAccessRequestId], references: [id])
+  auctionAccessRequestId String
+  selectedForRequest     AuctionAccessRequest[] @relation("ActiveSlot")
 }

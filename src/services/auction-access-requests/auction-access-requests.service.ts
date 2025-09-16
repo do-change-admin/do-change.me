@@ -1,5 +1,5 @@
 import { PaginationSchemaType } from "@/schemas";
-import { AuctionAccessRequestListItem, AuctionAccessRequestStatus } from './types'
+import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestListItem, AuctionAccessRequestStatus, UpdateAuctionAccessRequest } from './types'
 import { prismaClient } from "@/infrastructure";
 import { ProfileService } from "../profile";
 import { EmailAddress } from "@/value-objects/email-address.vo";
@@ -35,5 +35,13 @@ export class AuctionAccessRequestsService {
                 photoLink: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg',
             }
         })
+    }
+
+    adminUpdate = async (payload: AdminUpdateAuctionAccessRequest) => {
+
+    }
+
+    update = async (payload: UpdateAuctionAccessRequest) => {
+
     }
 }
