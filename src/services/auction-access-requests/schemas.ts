@@ -42,6 +42,7 @@ export const timeSlotSchema = z.object({
  * Payload for admin's updates for auction access.
  */
 export const adminUpdateAuctionAccessRequestSchema = z.object({
+    id: z.string(),
     progress: z.enum(['next approve step', 'reject']).optional(),
     availableTimeSlots: z.array(timeSlotSchema).optional(),
 })
@@ -50,5 +51,6 @@ export const adminUpdateAuctionAccessRequestSchema = z.object({
  * Payload for user's updates for auction access.
  */
 export const updateAuctionAccessRequestSchema = z.object({
-    selectedTimeSlotId: z.string().optional()
+    id: z.string(),
+    selectedTimeSlotId: z.string()
 })
