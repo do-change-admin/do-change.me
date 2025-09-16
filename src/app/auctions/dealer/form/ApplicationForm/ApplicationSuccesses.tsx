@@ -1,7 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion';
-import { FaBell, FaEnvelope, FaPhone, FaCalendarAlt, FaHome, FaQuestionCircle } from 'react-icons/fa';
+import { FaBell } from 'react-icons/fa';
 import styles from './ApplicationSuccesses.module.css';
 
 export const ApplicationSuccesses = ()=> {
