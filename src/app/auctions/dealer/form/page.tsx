@@ -17,7 +17,7 @@ const stepsData = [
 ];
 
 export default function Page() {
-    const [activeStep, setActiveStep] = useState(2);
+    const [activeStep, setActiveStep] = useState(0);
 
     const handleStepClick = (index: number) => {
         if (index <= activeStep) setActiveStep(index);
