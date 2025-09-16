@@ -143,3 +143,13 @@
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.2); }
 }
+
+@media  (max-width: 900px) {
+    .statusContent {
+        padding: 1rem;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+}

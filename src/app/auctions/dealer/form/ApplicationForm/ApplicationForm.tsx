@@ -46,14 +46,12 @@ export const  ApplicationForm = ()=> {
         return <ApplicationSuccesses/>
     }
     return (
-        <div className={styles.mainContainer}>
+        <motion.div   initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6 }}
+                      className={styles.mainContainer}>
             {/* Left Section - Form */}
-            <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                className={styles.formSection}
-            >
+            <div className={styles.formSection}>
                 <div className={styles.formContent}>
                     <div className={styles.formHeader}>
                         <h1>Join Our Auction Network</h1>
@@ -167,15 +165,10 @@ export const  ApplicationForm = ()=> {
                         </button>
                     </form>
                 </div>
-            </motion.div>
+            </div>
 
             {/* Right Section */}
-            <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                className={styles.infoSection}
-            >
+            <div className={styles.infoSection}>
                 <div className={styles.infoContent}>
                     <div className={styles.infoHeader}>
                         <h2>Exclusive Car Auctions Await</h2>
@@ -212,7 +205,7 @@ export const  ApplicationForm = ()=> {
                 {/* Decorative */}
                 <FaCar className={styles.decorCar} />
                 <FaKey className={styles.decorKey} />
-            </motion.div>
-        </div>
+            </div>
+    </motion.div>
     );
 }
