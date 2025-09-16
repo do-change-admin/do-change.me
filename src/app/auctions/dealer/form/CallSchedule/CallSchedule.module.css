@@ -7,7 +7,7 @@
 }
 
 .infoSection {
-    padding: 3rem;
+    padding: 2rem;
     background: linear-gradient(135deg, #2563eb, #1e40af, #312e81);
     color: white;
     position: relative;
@@ -91,7 +91,7 @@
 .calendarTitle {
     font-size: 1.875rem;
     font-weight: bold;
-    color: #111827;
+    color: var(--text-texas-blue);
 }
 
 .calendarSubtitle {
@@ -183,7 +183,7 @@
 .timeTitle {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #111827;
+    color: var(--text-texas-blue);
     margin-bottom: 1rem;
 }
 
@@ -247,4 +247,20 @@
 .confirmBtn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+
+@media (max-width: 900px) {
+    .schedulerGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .infoSection {
+        display: none;
+    }
+
+    /* Calendar */
+    .calendarSection {
+        padding: 1rem;
+    }
 }

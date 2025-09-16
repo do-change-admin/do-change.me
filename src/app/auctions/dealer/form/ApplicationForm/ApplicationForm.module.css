@@ -7,7 +7,7 @@
 .formSection {
     width: 100%;
     background: white;
-    padding: 3rem;
+    padding: 2rem;
     display: flex;
     align-items: center;
 }
@@ -261,7 +261,7 @@
     }
 
     .infoSection {
-        padding: 1rem;
+        display: none;
     }
 
 }

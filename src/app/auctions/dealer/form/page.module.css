@@ -1,11 +1,9 @@
 .container {
     padding: 2rem;
-    background: #ffffff;
 }
 
 .content {
     width: 100%;
-    min-height: 100vh;
     display: flex;
     justify-content: center;
 }
@@ -16,5 +14,39 @@
     border-radius: 1.5rem;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    margin-top: 2rem;
+    margin-top: 1rem;
+}
+
+.stepper {
+    margin-bottom: 1rem;
+    overflow-x: auto;
+}
+
+.stepper::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .container {
+        padding: 1rem;
+    }
+    .stepper {
+        flex-direction: column;
+    }
+
+    /* скрываем текст у шагов */
+    .stepper :global(.mantine-Stepper-stepLabel),
+    .stepper :global(.mantine-Stepper-stepDescription) {
+        display: none;
+    }
+
+    /* центрируем иконки */
+    .stepper :global(.mantine-Stepper-stepIcon) {
+        margin: 0 auto;
+    }
+
+    .card {
+        padding: 1rem;
+        margin-top: 1rem;
+    }
 }

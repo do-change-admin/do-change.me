@@ -32,56 +32,6 @@ export const  CallSchedule = () => {
             <div className={styles.schedulerContainer}>
                 <div className={styles.schedulerCard}>
                     <div className={styles.schedulerGrid}>
-                        {/* INFO SECTION */}
-                        <motion.section
-                            id="interview-info"
-                            className={styles.infoSection}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <div className={styles.infoContent}>
-                                <div className={styles.iconBox}>
-                                    <FaVideo size={28} className={styles.iconWhite} />
-                                </div>
-                                <h1 className={styles.title}>Schedule Your Online Interview</h1>
-                                <p className={styles.description}>
-                                    Choose a convenient time slot to connect with our manager for your video interview.
-                                </p>
-
-                                <div className={styles.infoItems}>
-                                    <div className={styles.infoItem}>
-                                        <div className={styles.infoIconBox}>
-                                            <FaClock className={styles.iconWhite} />
-                                        </div>
-                                        <div>
-                                            <h3 className={styles.infoTitle}>Duration: 15-20 minutes</h3>
-                                            <p className={styles.infoText}>Preliminary interview before submitting documents</p>
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.infoItem}>
-                                        <div className={styles.infoIconBox}>
-                                            <FaShieldAlt className={styles.iconWhite} />
-                                        </div>
-                                        <div>
-                                            <h3 className={styles.infoTitle}>Background Check</h3>
-                                            <p className={styles.infoText}>Ensures secure access and compliance</p>
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.infoItem}>
-                                        <div className={styles.infoIconBox}>
-                                            <FaGavel className={styles.iconWhite} />
-                                        </div>
-                                        <div>
-                                            <h3 className={styles.infoTitle}>Auction Access</h3>
-                                            <p className={styles.infoText}>Gain access to live auctions after verification</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.section>
 
                         {/* CALENDAR SECTION */}
                         <motion.section
@@ -169,6 +119,56 @@ export const  CallSchedule = () => {
                                 <FaCalendarCheck className={styles.confirmIcon} />
                                 Confirm Interview Appointment
                             </button>
+                        </motion.section>
+
+                        {/* INFO SECTION */}
+                        <motion.section
+                            className={styles.infoSection}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <div className={styles.infoContent}>
+                                <div className={styles.iconBox}>
+                                    <FaVideo size={28} className={styles.iconWhite} />
+                                </div>
+                                <h1 className={styles.title}>Schedule Your Online Interview</h1>
+                                <p className={styles.description}>
+                                    Choose a convenient time slot to connect with our manager for your video interview.
+                                </p>
+
+                                <div className={styles.infoItems}>
+                                    <div className={styles.infoItem}>
+                                        <div className={styles.infoIconBox}>
+                                            <FaClock className={styles.iconWhite} />
+                                        </div>
+                                        <div>
+                                            <h3 className={styles.infoTitle}>Duration: 15-20 minutes</h3>
+                                            <p className={styles.infoText}>Preliminary interview before submitting documents</p>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.infoItem}>
+                                        <div className={styles.infoIconBox}>
+                                            <FaShieldAlt className={styles.iconWhite} />
+                                        </div>
+                                        <div>
+                                            <h3 className={styles.infoTitle}>Background Check</h3>
+                                            <p className={styles.infoText}>Ensures secure access and compliance</p>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.infoItem}>
+                                        <div className={styles.infoIconBox}>
+                                            <FaGavel className={styles.iconWhite} />
+                                        </div>
+                                        <div>
+                                            <h3 className={styles.infoTitle}>Auction Access</h3>
+                                            <p className={styles.infoText}>Gain access to live auctions after verification</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </motion.section>
                     </div>
                 </div>
