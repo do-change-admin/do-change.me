@@ -33,6 +33,7 @@ export const RegistrationSteps = () => {
                                 To get started, you need to download the <strong>Auction Access</strong> mobile application.
                                 It is available for free on both the <strong>App Store (iOS)</strong> and <strong>Google Play (Android)</strong>.
                                 Once downloaded, install the app on your device and be ready to create your account directly through it.
+                                Please note that <strong>Auction Access charges an annual registration fee of $103 per user</strong>
                             </p>
 
                             <div className={styles.stepAction}>
@@ -77,7 +78,7 @@ export const RegistrationSteps = () => {
                                 <div className={`${styles.stepNumber} ${styles.bgPurple}`}>
                                     2
                                 </div>
-                                <h3>Complete Enrollment</h3>
+                                <h3>Enrollment</h3>
                             </div>
                             <p>
                                 In the Auction Access Mobile app, tap <strong>Enroll</strong> to start the process.
@@ -109,7 +110,7 @@ export const RegistrationSteps = () => {
                                 <div className={`${styles.stepNumber} ${styles.bgGreen}`}>
                                     3
                                 </div>
-                                <h3>Complete Profile Setup</h3>
+                                <h3>Profile Setup</h3>
                             </div>
                             <p>
                                 Log into your account and navigate to profile settings. Tap <strong>Continue</strong>, then go to <strong>Documents</strong>, select both properties, and check the two boxes indicated to complete your profile for auction participation.
