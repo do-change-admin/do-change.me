@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Stepper } from "@mantine/core";
+import { Box, Stepper, Loader } from "@mantine/core";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaPhone, FaUpload, FaCheckCircle } from "react-icons/fa";
 import styles from "./page.module.css";
@@ -29,10 +29,11 @@ const stepsData = [
 export default function Page() {
     const [activeStep, setActiveStep] = useState(0);
     const [waitingForAdmin, setWaitingForAdmin] = useState(false)
-    const { data } = useAuctionAccessRequest()
+    const { data, isLoading } = useAuctionAccessRequest()
 
     const handleStepClick = (index: number) => {
-        if (index <= activeStep) setActiveStep(index);
+        // if (index <= activeStep) setActiveStep(index);
+        setActiveStep(index);
     };
 
     useEffect(() => {
@@ -67,7 +68,7 @@ export default function Page() {
                         label={step.label}
                         description={step.description}
                         icon={step.icon}
-                        allowStepSelect={false}
+                        // allowStepSelect={false}
 
                     />
                 ))}
@@ -75,12 +76,17 @@ export default function Page() {
 
             <div className={styles.content}>
                 <div className={styles.card}>
-                    {waitingForAdmin ? <ApplicationSuccesses /> : <>
+                    {isLoading && (
+                        <div className={styles.loader}>
+                            <Loader/>
+                        </div>
+                    )}
+                    {!isLoading && (waitingForAdmin ? <ApplicationSuccesses /> : <>
                         {activeStep === 0 && <ApplicationForm />}
                         {activeStep === 1 && <CallSchedule />}
                         {activeStep === 2 && <RegistrationSteps />}
                         {activeStep === 3 && <div>Final decision stage</div>}
-                    </>}
+                    </>)}
                 </div>
             </div>
         </Box>

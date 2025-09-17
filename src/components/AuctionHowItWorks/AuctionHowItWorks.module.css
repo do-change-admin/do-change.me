@@ -1,0 +1,125 @@
+.wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
+}
+
+.highlight {
+    color: var(--text-texas-blue);
+}
+
+.subtitle {
+    font-size: 1.125rem;
+    color: #4b5563;
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .steps {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+    position: relative;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.stepNumber {
+    position: absolute;
+    top: -0.75rem;
+    left: 1rem;
+    background: var(--text-texas-blue);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.875rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconWrapper {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.icon {
+    font-size: 1.75rem;
+}
+
+.stepIconBlue {
+    background: #dbeafe;
+    color: var(--text-texas-blue);
+}
+
+.stepIconGreen {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.stepIconPurple {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.stepIconYellow {
+    background: #fef9c3;
+    color: #ca8a04;
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #111827;
+}
+
+.cardDescription {
+    font-size: 1rem;
+    color: #4b5563;
+    line-height: 1.5;
+}

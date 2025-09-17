@@ -18,7 +18,7 @@ export const ApplicationSuccesses = ()=> {
                         <span className={styles.noticeTitle}>Important Notice</span>
                     </div>
                     <p className={styles.noticeText}>
-                        Please stay attentive to notifications in the app so you can proceed to the next step and schedule your interview call.
+                        Please stay attentive to notifications in the app so you can proceed to the next step.
                     </p>
                 </div>
             </div>

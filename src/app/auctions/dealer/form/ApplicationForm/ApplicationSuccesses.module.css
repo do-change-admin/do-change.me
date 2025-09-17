@@ -4,6 +4,7 @@
     gap: 1.5rem;
     text-align: center;
     padding: 2rem;
+    min-height: 40vh;
 }
 
 .title {
