@@ -12,15 +12,13 @@ import {
     FaCalendarCheck,
 } from "react-icons/fa";
 import styles from "./CallSchedule.module.css"
-import { useAuctionAccessRequest, useAuctionAccessRequestUpdate } from "@/hooks";
+import { useAuctionAccessRequest, useAuctionAccessRequestUpdate, useDatesMapping } from "@/hooks";
 import dayjs from "dayjs";
 
 export const CallSchedule = () => {
     // const [selectedDate, setSelectedDate] = useState<number | null>(null);
     // const [selectedTime, setSelectedTime] = useState<string | null>(null);
-
     const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<string>()
-
 
     // const availableDates = [3, 5, 6, 9, 10, 12, 13];
     // const availableTimes = ["9:00 AM", "11:00 AM", "2:00 PM", "4:00 PM"];
@@ -28,14 +26,6 @@ export const CallSchedule = () => {
     const { data } = useAuctionAccessRequest()
     const { mutate: update } = useAuctionAccessRequestUpdate()
 
-    const handleConfirm = () => {
-        // console.log("Interview confirmed:", {
-        //     date: selectedDate,
-        //     time: selectedTime,
-        // });
-
-        update({ body: { selectedTimeSlotId } })
-    };
 
     return (
         <main id="interview-scheduler" className={styles.schedulerWrapper}>
@@ -50,7 +40,9 @@ export const CallSchedule = () => {
                         <button
                             className={styles.confirmBtn}
                             disabled={!selectedTimeSlotId}
-                            onClick={handleConfirm}
+                            onClick={() => {
+                                update({ body: { selectedTimeSlotId } })
+                            }}
                         >
                             <FaCalendarCheck className={styles.confirmIcon} />
                             Confirm Interview Appointment

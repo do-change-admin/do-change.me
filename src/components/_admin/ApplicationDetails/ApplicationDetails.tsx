@@ -8,6 +8,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { Schedule, SchedulePicker } from "@/components/_admin/SchedulePicker/SchedulePicker";
 import { useRouter } from "next/navigation";
 import { useAdminAuctionAccessRequest, useAdminAuctionAccessRequestUpdate, useDatesMapping } from "@/hooks";
+import dayjs from "dayjs";
 
 export type ApplicationDetailsProps = {
     applicationId: string;
@@ -93,8 +94,18 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                                     </Button>
                                 </div>
                             </div>
-
-                            <SchedulePicker scheduleState={[schedule, setSchedule]} />
+                            <div>
+                                {requestInfo.timeSlots
+                                    ? <>You selected slots: {requestInfo.timeSlots.map(x => dayjs(x.date).format('YYYY-MM-DD (HH:mm)')).join(', ')}</>
+                                    : <SchedulePicker scheduleState={[schedule, setSchedule]} />
+                                }
+                            </div>
+                            <div>
+                                {requestInfo.activeTimeSlot
+                                    ? <>User selected {dayjs(requestInfo.activeTimeSlot.date).format('YYYY-MM-DD (HH:mm)')}</>
+                                    : <>Waiting for user to select time slot</>
+                                }
+                            </div>
 
                         </div>
                     </div>
