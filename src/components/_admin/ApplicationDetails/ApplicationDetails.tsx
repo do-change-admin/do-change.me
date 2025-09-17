@@ -95,7 +95,7 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                                 </div>
                             </div>
                             <div>
-                                {requestInfo.timeSlots
+                                {requestInfo.timeSlots?.length
                                     ? <>You selected slots: {requestInfo.timeSlots.map(x => dayjs(x.date).format('YYYY-MM-DD (HH:mm)')).join(', ')}</>
                                     : <SchedulePicker scheduleState={[schedule, setSchedule]} />
                                 }

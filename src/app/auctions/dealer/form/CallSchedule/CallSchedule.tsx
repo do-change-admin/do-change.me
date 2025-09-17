@@ -34,7 +34,7 @@ export const CallSchedule = () => {
                     <div className={styles.schedulerGrid}>
                         {data?.timeSlots.map(x => (<>
                             <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>
-                                {dayjs(x.date).format('YYYY-MM-DD [(]HH hours[)]')}
+                                {dayjs(x.date).format('YYYY-MM-DD [(]HH [h]our[s][)]')}
                             </button>
                         </>))}
                         <button
