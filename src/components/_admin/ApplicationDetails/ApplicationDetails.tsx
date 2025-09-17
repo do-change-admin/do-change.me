@@ -3,24 +3,20 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./ApplicationDetails.module.css";
 import { FiX, FiCheck } from "react-icons/fi";
-import dayjs from "dayjs";
 import { Button } from "@mantine/core";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { Schedule, SchedulePicker } from "@/components/_admin/SchedulePicker/SchedulePicker";
 import { useRouter } from "next/navigation";
-import { useAdminAuctionAccessRequest, useAdminAuctionAccessRequestUpdate } from "@/hooks";
+import { useAdminAuctionAccessRequest, useAdminAuctionAccessRequestUpdate, useDatesMapping } from "@/hooks";
 
 export type ApplicationDetailsProps = {
     applicationId: string;
 }
 
-interface SelectedDateTime {
-    date: string;
-    time: string;
-}
 
 export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId }) => {
     const [schedule, setSchedule] = useState<Schedule>({})
+    const { datesFromSchedule, scheduleFromDates } = useDatesMapping()
     const { data: requestInfo } = useAdminAuctionAccessRequest({ id: applicationId })
     const { mutate: update } = useAdminAuctionAccessRequestUpdate()
     const router = useRouter();
@@ -30,21 +26,9 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
         if (!slots) {
             return
         }
-        const newData: Record<string, string[]> = {}
-        slots.forEach(x => {
-            const currentDate = dayjs(x.date)
-            const day = currentDate.get('D')
-            const month = currentDate.get('M')
-            const year = currentDate.get('y')
-            const hour = currentDate.get('h')
-            const date = new Date(year, month, day)
-            const dateAsString = dayjs(date).format('YYYY-MM-DD')
-            if (!newData[dateAsString]) {
-                newData[dateAsString] = []
-            }
-            newData[dateAsString] = [...newData[dateAsString], hour <= 12 ? `${hour}:00 AM` : `${hour - 12}:00 PM`]
-        })
-        setSchedule(newData)
+        setSchedule(
+            scheduleFromDates(slots.map(x => x.date))
+        )
     }, [requestInfo?.timeSlots])
 
     if (!requestInfo) {
@@ -101,14 +85,8 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                                         <span>Reject</span>
                                     </Button>
                                     <Button onClick={() => {
-                                        const dates = Object.entries(schedule).flatMap(([dateAsString, times]) => {
-                                            const rootDate = dayjs(dateAsString)
-                                            const withTime = times.map(time => {
-                                                return rootDate.set('h', time.split(' ')[1].toLowerCase() === 'am' ? +time.split(' ')[0].split(':')[0] : +time.split(' ')[0].split(':')[0] + 12)
-                                            })
-                                            return withTime
-                                        })
-                                        update({ body: { id: applicationId, progress: 'next approve step', availableTimeSlots: dates.length ? dates.map(x => ({ date: x.toDate() })) : undefined } })
+                                        const dates = datesFromSchedule(schedule)
+                                        update({ body: { id: applicationId, progress: 'next approve step', availableTimeSlots: dates.length ? dates.map(x => ({ date: x })) : undefined } })
                                     }} className={`${styles.actionBtn} ${styles.continue}`}>
                                         <FiCheck size={20} />
                                         <span>Continue</span>
