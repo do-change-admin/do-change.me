@@ -16,23 +16,23 @@ import { useAuctionAccessRequest, useAuctionAccessRequestUpdate } from "@/hooks"
 import dayjs from "dayjs";
 
 export const CallSchedule = () => {
-    const [selectedDate, setSelectedDate] = useState<number | null>(null);
-    const [selectedTime, setSelectedTime] = useState<string | null>(null);
+    // const [selectedDate, setSelectedDate] = useState<number | null>(null);
+    // const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
     const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<string>()
 
 
-    const availableDates = [3, 5, 6, 9, 10, 12, 13];
-    const availableTimes = ["9:00 AM", "11:00 AM", "2:00 PM", "4:00 PM"];
+    // const availableDates = [3, 5, 6, 9, 10, 12, 13];
+    // const availableTimes = ["9:00 AM", "11:00 AM", "2:00 PM", "4:00 PM"];
 
     const { data } = useAuctionAccessRequest()
     const { mutate: update } = useAuctionAccessRequestUpdate()
 
     const handleConfirm = () => {
-        console.log("Interview confirmed:", {
-            date: selectedDate,
-            time: selectedTime,
-        });
+        // console.log("Interview confirmed:", {
+        //     date: selectedDate,
+        //     time: selectedTime,
+        // });
 
         update({ body: { selectedTimeSlotId } })
     };
@@ -43,10 +43,21 @@ export const CallSchedule = () => {
                 <div className={styles.schedulerCard}>
                     <div className={styles.schedulerGrid}>
                         {data?.timeSlots.map(x => (<>
-                            <button onClick={() => { setSelectedTimeSlotId(x.id) }}>{dayjs(x.date).format('YYYY-MM-DD [(]HH hours[)]')}</button>
+                            <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>
+                                {dayjs(x.date).format('YYYY-MM-DD [(]HH hours[)]')}
+                            </button>
                         </>))}
+                        <button
+                            className={styles.confirmBtn}
+                            disabled={!selectedTimeSlotId}
+                            onClick={handleConfirm}
+                        >
+                            <FaCalendarCheck className={styles.confirmIcon} />
+                            Confirm Interview Appointment
+                        </button>
+
                         {/* CALENDAR SECTION */}
-                        <motion.section
+                        {/* <motion.section
                             id="calendar-scheduler"
                             className={styles.calendarSection}
                             initial={{ opacity: 0, y: 30 }}
@@ -60,7 +71,6 @@ export const CallSchedule = () => {
                                 </p>
                             </div>
 
-                            {/* Calendar */}
                             <div className={styles.calendarWrapper}>
                                 <div className={styles.calendarMonth}>
                                     <h3>December 2024</h3>
@@ -102,7 +112,6 @@ export const CallSchedule = () => {
                                 </div>
                             </div>
 
-                            {/* Time Slots */}
                             <div className={styles.timeSlots}>
                                 <h3 className={styles.timeTitle}>Available Times</h3>
                                 <div className={styles.timeGrid}>
@@ -120,7 +129,6 @@ export const CallSchedule = () => {
                                 </div>
                             </div>
 
-                            {/* Confirm Button */}
                             <button
                                 className={styles.confirmBtn}
                                 disabled={!selectedDate || !selectedTime}
@@ -129,7 +137,7 @@ export const CallSchedule = () => {
                                 <FaCalendarCheck className={styles.confirmIcon} />
                                 Confirm Interview Appointment
                             </button>
-                        </motion.section>
+                        </motion.section> */}
 
                         {/* INFO SECTION */}
                         <motion.section
