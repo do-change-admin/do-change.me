@@ -32,21 +32,40 @@ export const CallSchedule = () => {
             <div className={styles.schedulerContainer}>
                 <div className={styles.schedulerCard}>
                     <div className={styles.schedulerGrid}>
-                        {data?.timeSlots.map(x => (<>
-                            <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>
-                                {dayjs(x.date).format('YYYY-MM-DD [(]HH [h]our[s][)]')}
-                            </button>
-                        </>))}
-                        <button
-                            className={styles.confirmBtn}
-                            disabled={!selectedTimeSlotId}
-                            onClick={() => {
-                                update({ body: { selectedTimeSlotId } })
-                            }}
+
+
+                        <motion.section
+                            id="calendar-scheduler"
+                            className={styles.calendarSection}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
                         >
-                            <FaCalendarCheck className={styles.confirmIcon} />
-                            Confirm Interview Appointment
-                        </button>
+                            <div className={styles.calendarHeader}>
+                                <h2 className={styles.calendarTitle}>Select Date & Time</h2>
+                                <p className={styles.calendarSubtitle}>
+                                    Choose from available interview slots below
+                                </p>
+                            </div>
+                            <div>
+                                {data?.timeSlots.map(x => (<>
+                                    <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>
+                                        {dayjs(x.date).format('YYYY-MM-DD [(]HH [h]our[s][)]')}
+                                    </button>
+                                </>))}
+                            </div>
+                            <button
+                                className={styles.confirmBtn}
+                                disabled={!selectedTimeSlotId}
+                                onClick={() => {
+                                    update({ body: { selectedTimeSlotId } })
+                                }}
+                            >
+                                <FaCalendarCheck className={styles.confirmIcon} />
+                                Confirm Interview Appointment
+                            </button>
+
+                        </motion.section>
 
                         {/* CALENDAR SECTION */}
                         {/* <motion.section
