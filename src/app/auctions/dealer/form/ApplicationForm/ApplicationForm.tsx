@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent, useEffect } from "react";
-import { motion } from "framer-motion";
 import {
     FaUser,
     FaEnvelope,
@@ -77,10 +76,7 @@ export const ApplicationForm = () => {
         return <ApplicationSuccesses />
     }
     return (
-        <motion.div initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className={styles.mainContainer}>
+        <div className={styles.mainContainer}>
             {/* Left Section - Form */}
             <div className={styles.formSection}>
                 <div className={styles.formContent}>
@@ -242,6 +238,6 @@ export const ApplicationForm = () => {
                 <FaCar className={styles.decorCar} />
                 <FaKey className={styles.decorKey} />
             </div>
-        </motion.div>
+        </div>
     );
 }
