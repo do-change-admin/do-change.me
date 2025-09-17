@@ -67,8 +67,8 @@ export const adminUpdateAuctionAccessRequestSchema = z.object({
  * Payload for user's updates for auction access.
  */
 export const updateAuctionAccessRequestSchema = z.object({
-    id: z.string(),
-    selectedTimeSlotId: z.string()
+    selectedTimeSlotId: z.string().optional(),
+    userMail: z.email()
 })
 
 export const userAuctionAccessSchema = z.object({

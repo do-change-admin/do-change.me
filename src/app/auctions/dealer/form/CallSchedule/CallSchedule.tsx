@@ -12,19 +12,29 @@ import {
     FaCalendarCheck,
 } from "react-icons/fa";
 import styles from "./CallSchedule.module.css"
+import { useAuctionAccessRequest, useAuctionAccessRequestUpdate } from "@/hooks";
+import dayjs from "dayjs";
 
-export const  CallSchedule = () => {
+export const CallSchedule = () => {
     const [selectedDate, setSelectedDate] = useState<number | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
+    const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<string>()
+
+
     const availableDates = [3, 5, 6, 9, 10, 12, 13];
     const availableTimes = ["9:00 AM", "11:00 AM", "2:00 PM", "4:00 PM"];
+
+    const { data } = useAuctionAccessRequest()
+    const { mutate: update } = useAuctionAccessRequestUpdate()
 
     const handleConfirm = () => {
         console.log("Interview confirmed:", {
             date: selectedDate,
             time: selectedTime,
         });
+
+        update({ body: { selectedTimeSlotId } })
     };
 
     return (
@@ -32,7 +42,9 @@ export const  CallSchedule = () => {
             <div className={styles.schedulerContainer}>
                 <div className={styles.schedulerCard}>
                     <div className={styles.schedulerGrid}>
-
+                        {data?.timeSlots.map(x => (<>
+                            <button onClick={() => { setSelectedTimeSlotId(x.id) }}>{dayjs(x.date).format('YYYY-MM-DD [(]HH hours[)]')}</button>
+                        </>))}
                         {/* CALENDAR SECTION */}
                         <motion.section
                             id="calendar-scheduler"
@@ -79,9 +91,8 @@ export const  CallSchedule = () => {
                                         return (
                                             <div
                                                 key={day}
-                                                className={`${styles.calendarCell} ${
-                                                    isAvailable ? styles.availableDay : styles.unavailableDay
-                                                } ${isSelected ? styles.selectedDay : ""}`}
+                                                className={`${styles.calendarCell} ${isAvailable ? styles.availableDay : styles.unavailableDay
+                                                    } ${isSelected ? styles.selectedDay : ""}`}
                                                 onClick={() => isAvailable && setSelectedDate(day)}
                                             >
                                                 {day}
@@ -98,9 +109,8 @@ export const  CallSchedule = () => {
                                     {availableTimes.map((time) => (
                                         <div
                                             key={time}
-                                            className={`${styles.timeSlot} ${
-                                                selectedTime === time ? styles.timeSelected : ""
-                                            }`}
+                                            className={`${styles.timeSlot} ${selectedTime === time ? styles.timeSelected : ""
+                                                }`}
                                             onClick={() => setSelectedTime(time)}
                                         >
                                             <FaClock className={styles.timeIcon} />

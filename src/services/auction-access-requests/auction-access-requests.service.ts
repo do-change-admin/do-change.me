@@ -105,14 +105,25 @@ export class AuctionAccessRequestsService {
     }
 
     update = async (payload: UpdateAuctionAccessRequest) => {
-        const foundRequest = await prismaClient.auctionAccessRequest.count({ where: { id: payload.id } })
+        const foundRequest = await prismaClient.auctionAccessRequest.findFirst({ where: { email: payload.userMail } })
         if (!foundRequest) {
             throw businessError('No according request was found')
         }
-        await prismaClient.auctionAccessRequest.update({
-            where: { id: payload.id },
+
+        if (!['awaiting documents upload', 'awaiting user confirmation'].includes(foundRequest.status)) {
+            throw businessError('Request is in admin awaiting status')
+        }
+
+        if (foundRequest.status === 'awaiting user confirmation' && !payload.selectedTimeSlotId) {
+            throw businessError('No time slot was selected')
+        }
+
+        await prismaClient.auctionAccessRequest.updateMany({
+            // TODO - make email unique
+            where: { email: payload.userMail },
             data: {
-                activeSlotId: payload.selectedTimeSlotId
+                activeSlotId: payload.selectedTimeSlotId ?? undefined,
+                status: foundRequest.status === 'awaiting documents upload' ? 'call scheduling' : 'documents under review'
             },
         })
 
