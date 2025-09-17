@@ -123,7 +123,7 @@ export class AuctionAccessRequestsService {
             where: { email: payload.userMail },
             data: {
                 activeSlotId: payload.selectedTimeSlotId ?? undefined,
-                status: foundRequest.status === 'awaiting documents upload' ? 'call scheduling' : 'documents under review'
+                status: foundRequest.status === 'awaiting documents upload' ? 'documents under review' : 'call scheduling'
             },
         })
 
