@@ -72,7 +72,7 @@ export const updateAuctionAccessRequestSchema = z.object({
 })
 
 export const userAuctionAccessSchema = z.object({
-    step: z.enum(['application', 'call', 'documents', 'decision']),
+    step: z.enum(['application', 'call', 'documents', 'approved', 'rejected']),
     status: z.enum(['active', 'pending']),
     timeSlots: z.array(
         z.object({

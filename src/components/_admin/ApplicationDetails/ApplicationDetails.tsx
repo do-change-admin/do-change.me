@@ -86,7 +86,7 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                                         <span>Reject</span>
                                     </Button>
                                     <Button onClick={() => {
-                                        const dates = datesFromSchedule(schedule)
+                                        const dates = requestInfo.timeSlots?.length ? [] : datesFromSchedule(schedule)
                                         update({ body: { id: applicationId, progress: 'next approve step', availableTimeSlots: dates.length ? dates.map(x => ({ date: x })) : undefined } })
                                     }} className={`${styles.actionBtn} ${styles.continue}`}>
                                         <FiCheck size={20} />

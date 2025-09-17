@@ -16,7 +16,8 @@ const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
     'application': 0,
     call: 1,
     documents: 2,
-    decision: 3,
+    approved: 3,
+    rejected: 3
 }
 
 const stepsData = [
@@ -78,7 +79,7 @@ export default function Page() {
                 <div className={styles.card}>
                     {isLoading && (
                         <div className={styles.loader}>
-                            <Loader/>
+                            <Loader />
                         </div>
                     )}
                     {!isLoading && (waitingForAdmin ? <ApplicationSuccesses /> : <>

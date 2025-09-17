@@ -56,6 +56,14 @@ export const handler = zodApiMethod(undefined, undefined, responseSchema,
                 return 'decision' as const
             }
 
+            if (status === 'approved') {
+                return 'approved'
+            }
+
+            if (status === 'rejected') {
+                return 'rejected'
+            }
+
             return 'application' as const
         }
 
