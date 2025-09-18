@@ -52,10 +52,6 @@ export const handler = zodApiMethod(undefined, undefined, responseSchema,
                 return 'documents' as const
             }
 
-            if (desicionStatuses.includes(status)) {
-                return 'decision' as const
-            }
-
             if (status === 'approved') {
                 return 'approved'
             }
