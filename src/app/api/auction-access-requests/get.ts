@@ -21,7 +21,9 @@ export const handler = zodApiMethod(undefined, undefined, responseSchema,
 
         const activeUserStatuses: AuctionAccessRequestStatus[] = [
             'awaiting documents upload',
-            'awaiting user confirmation'
+            'awaiting user confirmation',
+            'approved',
+            'rejected'
         ]
 
 
