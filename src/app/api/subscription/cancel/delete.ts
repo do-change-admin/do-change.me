@@ -11,7 +11,7 @@ const bodySchema = z.object({
     subscriptionId: z.string().nonempty(),
 });
 
-export type Method = ZodAPIMethod<undefined, undefined, typeof bodySchema>;
+export type Method = ZodAPIMethod<undefined, typeof bodySchema, undefined>;
 
 export const handler = zodApiMethod(
     undefined,
@@ -40,7 +40,5 @@ export const handler = zodApiMethod(
         await stripe.subscriptions.update(payload.subscriptionId, {
             cancel_at_period_end: true,
         });
-
-        return { success: true };
     }
 );
