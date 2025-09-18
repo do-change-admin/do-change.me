@@ -305,3 +305,14 @@ model StripeSubscriptionItem {
 
   subscription StripeSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 }
+
+model StripeEvent {
+  id         Int      @id @default(autoincrement())
+  eventId    String   @unique
+  type       String
+  rawPayload Json
+  processed  Boolean  @default(false)
+  attempts   Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

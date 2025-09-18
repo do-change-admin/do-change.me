@@ -6,7 +6,9 @@ import { businessError, serverError, validationError } from "@/lib/errors";
 import z from "zod";
 import { getCurrentUser } from "@/lib/getCurrentUser";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2025-08-27.basil",
+});
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
