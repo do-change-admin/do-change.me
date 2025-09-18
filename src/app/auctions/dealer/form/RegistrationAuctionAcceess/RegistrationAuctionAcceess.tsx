@@ -13,7 +13,8 @@ import {
     FaCheckCircle, FaArrowDown, FaApple, FaGooglePlay, FaCheck, FaFileAlt,
 } from "react-icons/fa";
 import styles from './RegistrationAuctionAcceess.module.css';
-import {Image} from "@mantine/core";
+import { Image } from "@mantine/core";
+import UploadForm from "../../upload-form";
 
 export const RegistrationSteps = () => {
     return (
@@ -147,8 +148,9 @@ export const RegistrationSteps = () => {
                                 </label>
                                 <div className={styles.uploadZone}>
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    <p>Click to upload or drag and drop</p>
-                                    <input type="file" accept=".png,.jpg,.jpeg,.pdf" />
+                                    {/* <p>Click to upload or drag and drop</p> */}
+                                    {/* <input type="file" accept=".png,.jpg,.jpeg,.pdf" /> */}
+                                    <UploadForm variant="license" />
                                 </div>
                             </div>
 
@@ -166,8 +168,9 @@ export const RegistrationSteps = () => {
                                 </label>
                                 <div className={styles.uploadZone}>
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    <p>Download, sign, and upload this file by clicking or dragging it here</p>
-                                    <input type="file" accept=".png,.jpg,.jpeg,.pdf" />
+                                    {/* <p>Download, sign, and upload this file by clicking or dragging it here</p> */}
+                                    {/* <input type="file" accept=".png,.jpg,.jpeg,.pdf" /> */}
+                                    <UploadForm variant="agreement" />
                                 </div>
                             </div>
 
