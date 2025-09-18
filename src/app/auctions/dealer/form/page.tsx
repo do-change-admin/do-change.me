@@ -11,6 +11,7 @@ import { RegistrationSteps } from "@/app/auctions/dealer/form/RegistrationAuctio
 import { useAuctionAccessRequest } from "@/hooks";
 import type { UserAuctionAccessSchemaSteps } from '@/services'
 import { ApplicationSuccesses } from "./ApplicationForm/ApplicationSuccesses";
+import {AuctionAccess} from "@/app/auctions/dealer/form/ApprovedAccess/ApprovedAccess";
 
 const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
     'application': 0,
@@ -33,7 +34,7 @@ export default function Page() {
     const { data, isLoading } = useAuctionAccessRequest()
 
     const handleStepClick = (index: number) => {
-        // if (index <= activeStep) setActiveStep(index);
+        if (index <= activeStep) setActiveStep(index);
         setActiveStep(index);
     };
 
@@ -69,7 +70,7 @@ export default function Page() {
                         label={step.label}
                         description={step.description}
                         icon={step.icon}
-                        allowStepSelect={false}
+                        // allowStepSelect={false}
 
                     />
                 ))}
@@ -86,7 +87,7 @@ export default function Page() {
                         {activeStep === 0 && <ApplicationForm />}
                         {activeStep === 1 && <CallSchedule />}
                         {activeStep === 2 && <RegistrationSteps />}
-                        {activeStep === 3 && <div>Final decision stage</div>}
+                        {activeStep === 3 && <AuctionAccess/>}
                     </>)}
                 </div>
             </div>

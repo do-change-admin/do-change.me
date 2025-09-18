@@ -16,15 +16,17 @@ import { useAuctionAccessRequest, useAuctionAccessRequestUpdate, useDatesMapping
 import dayjs from "dayjs";
 
 export const CallSchedule = () => {
-    // const [selectedDate, setSelectedDate] = useState<number | null>(null);
-    // const [selectedTime, setSelectedTime] = useState<string | null>(null);
+    const [selectedDate, setSelectedDate] = useState<number | null>(null);
+    const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [selectedTimeSlotId, setSelectedTimeSlotId] = useState<string>()
 
-    // const availableDates = [3, 5, 6, 9, 10, 12, 13];
-    // const availableTimes = ["9:00 AM", "11:00 AM", "2:00 PM", "4:00 PM"];
+    const availableDates = [3, 5, 6, 9, 10, 12, 13];
+    const availableTimes = ["9:00 AM", "11:00 AM", "2:00 PM", "4:00 PM"];
 
     const { data } = useAuctionAccessRequest()
     const { mutate: update } = useAuctionAccessRequestUpdate()
+
+const handleConfirm = () => {}
 
 
     return (
@@ -34,6 +36,40 @@ export const CallSchedule = () => {
                     <div className={styles.schedulerGrid}>
 
 
+                        {/*<motion.section*/}
+                        {/*    id="calendar-scheduler"*/}
+                        {/*    className={styles.calendarSection}*/}
+                        {/*    initial={{ opacity: 0, y: 30 }}*/}
+                        {/*    animate={{ opacity: 1, y: 0 }}*/}
+                        {/*    transition={{ duration: 0.8 }}*/}
+                        {/*>*/}
+                        {/*    <div className={styles.calendarHeader}>*/}
+                        {/*        <h2 className={styles.calendarTitle}>Select Date & Time</h2>*/}
+                        {/*        <p className={styles.calendarSubtitle}>*/}
+                        {/*            Choose from available interview slots below*/}
+                        {/*        </p>*/}
+                        {/*    </div>*/}
+                        {/*    <div>*/}
+                        {/*        {data?.timeSlots.map(x => (<>*/}
+                        {/*            <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>*/}
+                        {/*                {dayjs(x.date).format('YYYY-MM-DD [(]HH [h]our[s][)]')}*/}
+                        {/*            </button>*/}
+                        {/*        </>))}*/}
+                        {/*    </div>*/}
+                        {/*    <button*/}
+                        {/*        className={styles.confirmBtn}*/}
+                        {/*        disabled={!selectedTimeSlotId}*/}
+                        {/*        onClick={() => {*/}
+                        {/*            update({ body: { selectedTimeSlotId } })*/}
+                        {/*        }}*/}
+                        {/*    >*/}
+                        {/*        <FaCalendarCheck className={styles.confirmIcon} />*/}
+                        {/*        Confirm Interview Appointment*/}
+                        {/*    </button>*/}
+
+                        {/*</motion.section>*/}
+
+                        {/* CALENDAR SECTION */}
                         <motion.section
                             id="calendar-scheduler"
                             className={styles.calendarSection}
@@ -47,94 +83,66 @@ export const CallSchedule = () => {
                                     Choose from available interview slots below
                                 </p>
                             </div>
-                            <div>
-                                {data?.timeSlots.map(x => (<>
-                                    <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>
-                                        {dayjs(x.date).format('YYYY-MM-DD [(]HH [h]our[s][)]')}
-                                    </button>
-                                </>))}
-                            </div>
-                            <button
-                                className={styles.confirmBtn}
-                                disabled={!selectedTimeSlotId}
-                                onClick={() => {
-                                    update({ body: { selectedTimeSlotId } })
-                                }}
-                            >
-                                <FaCalendarCheck className={styles.confirmIcon} />
-                                Confirm Interview Appointment
-                            </button>
 
-                        </motion.section>
+                            {/*<div className={styles.calendarWrapper}>*/}
+                            {/*    <div className={styles.calendarMonth}>*/}
+                            {/*        <h3>December 2024</h3>*/}
+                            {/*        <div className={styles.navButtons}>*/}
+                            {/*            <button className={styles.navBtn}>*/}
+                            {/*                <FaChevronLeft />*/}
+                            {/*            </button>*/}
+                            {/*            <button className={styles.navBtn}>*/}
+                            {/*                <FaChevronRight />*/}
+                            {/*            </button>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
 
-                        {/* CALENDAR SECTION */}
-                        {/* <motion.section
-                            id="calendar-scheduler"
-                            className={styles.calendarSection}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <div className={styles.calendarHeader}>
-                                <h2 className={styles.calendarTitle}>Select Date & Time</h2>
-                                <p className={styles.calendarSubtitle}>
-                                    Choose from available interview slots below
-                                </p>
-                            </div>
+                            {/*    <div className={styles.weekDays}>*/}
+                            {/*        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(*/}
+                            {/*            (day) => (*/}
+                            {/*                <div key={day} className={styles.weekDay}>*/}
+                            {/*                    {day}*/}
+                            {/*                </div>*/}
+                            {/*            )*/}
+                            {/*        )}*/}
+                            {/*    </div>*/}
 
-                            <div className={styles.calendarWrapper}>
-                                <div className={styles.calendarMonth}>
-                                    <h3>December 2024</h3>
-                                    <div className={styles.navButtons}>
-                                        <button className={styles.navBtn}>
-                                            <FaChevronLeft />
-                                        </button>
-                                        <button className={styles.navBtn}>
-                                            <FaChevronRight />
-                                        </button>
-                                    </div>
-                                </div>
+                            {/*    <div className={styles.calendarDays}>*/}
+                            {/*        {Array.from({ length: 14 }, (_, i) => i + 1).map((day) => {*/}
+                            {/*            const isAvailable = availableDates.includes(day);*/}
+                            {/*            const isSelected = selectedDate === day;*/}
+                            {/*            return (*/}
+                            {/*                <div*/}
+                            {/*                    key={day}*/}
+                            {/*                    className={`${styles.calendarCell} ${isAvailable ? styles.availableDay : styles.unavailableDay*/}
+                            {/*                        } ${isSelected ? styles.selectedDay : ""}`}*/}
+                            {/*                    onClick={() => isAvailable && setSelectedDate(day)}*/}
+                            {/*                >*/}
+                            {/*                    {day}*/}
+                            {/*                </div>*/}
+                            {/*            );*/}
+                            {/*        })}*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
 
-                                <div className={styles.weekDays}>
-                                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-                                        (day) => (
-                                            <div key={day} className={styles.weekDay}>
-                                                {day}
-                                            </div>
-                                        )
-                                    )}
-                                </div>
-
-                                <div className={styles.calendarDays}>
-                                    {Array.from({ length: 14 }, (_, i) => i + 1).map((day) => {
-                                        const isAvailable = availableDates.includes(day);
-                                        const isSelected = selectedDate === day;
-                                        return (
-                                            <div
-                                                key={day}
-                                                className={`${styles.calendarCell} ${isAvailable ? styles.availableDay : styles.unavailableDay
-                                                    } ${isSelected ? styles.selectedDay : ""}`}
-                                                onClick={() => isAvailable && setSelectedDate(day)}
-                                            >
-                                                {day}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
+                            {/*        {data?.timeSlots.map(x => (<>*/}
+                            {/*            <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>*/}
+                            {/*                {dayjs(x.date).format('YYYY-MM-DD [(]HH [h]our[s][)]')}*/}
+                            {/*            </button>*/}
+                            {/*        </>))}*/}
                             <div className={styles.timeSlots}>
                                 <h3 className={styles.timeTitle}>Available Times</h3>
                                 <div className={styles.timeGrid}>
-                                    {availableTimes.map((time) => (
+                                    {data?.timeSlots.map((time) => (
                                         <div
-                                            key={time}
-                                            className={`${styles.timeSlot} ${selectedTime === time ? styles.timeSelected : ""
+                                            key={time.id}
+                                            className={`${styles.timeSlot} ${selectedTimeSlotId === time.id ? styles.timeSelected : ""
                                                 }`}
-                                            onClick={() => setSelectedTime(time)}
+                                            onClick={() => setSelectedTimeSlotId(time.id)}
                                         >
                                             <FaClock className={styles.timeIcon} />
-                                            <span>{time}</span>
+                                            <span>{dayjs(time.date).format('YYYY-MM-DD')}</span>
+                                            <span>{dayjs(time.date).format('hh:mm A')}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -148,7 +156,7 @@ export const CallSchedule = () => {
                                 <FaCalendarCheck className={styles.confirmIcon} />
                                 Confirm Interview Appointment
                             </button>
-                        </motion.section> */}
+                        </motion.section>
 
                         {/* INFO SECTION */}
                         <motion.section
