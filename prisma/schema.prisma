@@ -332,3 +332,14 @@ model TimeSlot {
   auctionAccessRequestId String
   selectedForRequest     AuctionAccessRequest[] @relation("ActiveSlot")
 }
+
+model StripeEvent {
+  id         Int      @id @default(autoincrement())
+  eventId    String   @unique
+  type       String
+  rawPayload Json
+  processed  Boolean  @default(false)
+  attempts   Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
