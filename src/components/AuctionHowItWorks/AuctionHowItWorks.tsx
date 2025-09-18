@@ -3,52 +3,55 @@
 import { motion } from "framer-motion";
 import { FaFileAlt, FaPhone, FaUserCheck, FaCar } from "react-icons/fa";
 import styles from "./AuctionHowItWorks.module.css";
-
-const steps = [
-    {
-        id: 1,
-        title: "Application",
-        description: "Here you will fill in preliminary information about yourself to get started with the process.",
-        icon: <FaFileAlt className={styles.icon} />,
-        colorClass: styles.stepIconBlue,
-    },
-    {
-        id: 2,
-        title: "Scheduled Call",
-        description: "A short call with our manager (can be a phone call, a thumb call, or a quick video call).",
-        icon: <FaPhone className={styles.icon} />,
-        colorClass: styles.stepIconGreen,
-    },
-    {
-        id: 3,
-        title: "Auction Access Registration",
-        description: "After the call, you will need to register in Auction Access and upload the required documents for verification.",
-        icon: <FaUserCheck className={styles.icon} />,
-        colorClass: styles.stepIconPurple,
-    },
-    {
-        id: 4,
-        title: "Get Auction Access",
-        description: "You receive Auction Access, can buy cars, and do what you love while earning money from it.",
-        icon: <FaCar className={styles.icon} />,
-        colorClass: styles.stepIconYellow,
-    },
-];
+import { useTranslations } from "next-intl";
 
 export const AuctionHowItWorks = () => {
+    const t = useTranslations("AuctionHowItWorks");
+
+    const steps = [
+        {
+            id: 1,
+            title: t("steps.0.title"),
+            description: t("steps.0.description"),
+            icon: <FaFileAlt className={styles.icon} />,
+            colorClass: styles.stepIconBlue,
+        },
+        {
+            id: 2,
+            title: t("steps.1.title"),
+            description: t("steps.1.description"),
+            icon: <FaPhone className={styles.icon} />,
+            colorClass: styles.stepIconGreen,
+        },
+        {
+            id: 3,
+            title: t("steps.2.title"),
+            description: t("steps.2.description"),
+            icon: <FaUserCheck className={styles.icon} />,
+            colorClass: styles.stepIconPurple,
+        },
+        {
+            id: 4,
+            title: t("steps.3.title"),
+            description: t("steps.3.description"),
+            icon: <FaCar className={styles.icon} />,
+            colorClass: styles.stepIconYellow,
+        },
+    ];
+
     return (
         <section className={styles.wrapper}>
             <div className={styles.header}>
                 <h2 className={styles.title}>
-                    How It <span className={styles.highlight}>Works</span>
+                    {t("header.title").split(" ").map((word, i) =>
+                        i === 1 ? <span key={i} className={styles.highlight}>{word} </span> : word + " "
+                    )}
                 </h2>
-                <p className={styles.subtitle}>
-                    Get started with our simple 4-step process to gain auction access and start earning money from car trading.
-                </p>
+                <p className={styles.subtitle}>{t("header.subtitle")}</p>
             </div>
 
             <div className={styles.steps}>
-                {steps.map((step, index) => (
+                {steps.map((step) => (
                     <motion.div
                         key={step.id}
                         className={styles.card}
@@ -56,9 +59,7 @@ export const AuctionHowItWorks = () => {
                         transition={{ type: "spring", stiffness: 200 }}
                     >
                         <div className={styles.stepNumber}>{step.id}</div>
-                        <div className={`${styles.iconWrapper} ${step.colorClass}`}>
-                            {step.icon}
-                        </div>
+                        <div className={`${styles.iconWrapper} ${step.colorClass}`}>{step.icon}</div>
                         <h3 className={styles.cardTitle}>{step.title}</h3>
                         <p className={styles.cardDescription}>{step.description}</p>
                     </motion.div>
@@ -66,4 +67,4 @@ export const AuctionHowItWorks = () => {
             </div>
         </section>
     );
-}
+};

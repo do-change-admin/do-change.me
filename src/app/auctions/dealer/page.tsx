@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { FaCrown, FaShieldAlt, FaClock, FaStar, FaKey } from "react-icons/fa";
+import { FaKey } from "react-icons/fa";
 import styles from "./page.module.css";
 import {useRouter} from "next/navigation";
 import {AuctionHowItWorks} from "@/components";

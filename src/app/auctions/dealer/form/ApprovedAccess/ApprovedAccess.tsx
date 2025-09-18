@@ -10,8 +10,8 @@ export const AuctionAccess = () => {
             <div id="access-card" className={styles.card}>
                 {/* Статус */}
                 <div id="status-section" className={styles.statusSection}>
-                    <h1 className={styles.title}>Arrived</h1>
-                    <p className={styles.subtitle}>Your access has been provided</p>
+                    <h1 className={styles.title}>Access Approved</h1>
+                    <p className={styles.subtitle}>Your Auction Access has been successfully approved</p>
                     <div className={styles.separator}></div>
                 </div>
 

@@ -41,7 +41,7 @@
 .title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--text-texas-blue);
     margin-bottom: 0.5rem;
 }
 

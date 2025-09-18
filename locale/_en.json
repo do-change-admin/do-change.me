@@ -1,0 +1,44 @@
+{
+  "Steps": {
+    "application": {
+      "label": "Application",
+      "description": "Fill out info"
+    },
+    "call": {
+      "label": "Call",
+      "description": "Scheduled call"
+    },
+    "documents": {
+      "label": "Documents",
+      "description": "Upload docs"
+    },
+    "decision": {
+      "label": "Decision",
+      "description": "Final approval"
+    }
+  },
+  "AuctionHowItWorks": {
+    "header": {
+      "title": "How It Works",
+      "subtitle": "Get started with our simple 4-step process to gain auction access and start earning money from car trading."
+    },
+    "steps": [
+      {
+        "title": "Application",
+        "description": "Here you will fill in preliminary information about yourself to get started with the process."
+      },
+      {
+        "title": "Scheduled Call",
+        "description": "A short call with our manager (can be a phone call, a thumb call, or a quick video call)."
+      },
+      {
+        "title": "Auction Access Registration",
+        "description": "After the call, you will need to register in Auction Access and upload the required documents for verification."
+      },
+      {
+        "title": "Get Auction Access",
+        "description": "You receive Auction Access, can buy cars, and do what you love while earning money from it."
+      }
+    ]
+  }
+}

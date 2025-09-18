@@ -33,12 +33,11 @@ export const metadata: Metadata = {
 };
 
 
-export default function SpaceLayout({children}: { children: React.ReactNode }) {
+export default async function  SpaceLayout({children,  params: { locale } }: { children: React.ReactNode, params: { locale: string } }) {
+
     return (
         <html>
-        <body
-            className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}
-        >
+        <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
         <Suspense>
             <Providers>
                 <Layout>

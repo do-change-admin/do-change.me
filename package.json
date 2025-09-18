@@ -36,6 +36,7 @@
         "jsonwebtoken": "^9.0.2",
         "next": "15.4.4",
         "next-auth": "^4.24.11",
+        "next-intl": "^4.3.9",
         "pg": "^8.16.3",
         "puppeteer": "^24.16.1",
         "react": "19.1.0",

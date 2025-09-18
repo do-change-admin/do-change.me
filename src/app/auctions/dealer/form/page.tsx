@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Box, Stepper, Loader } from "@mantine/core";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaPhone, FaUpload, FaCheckCircle } from "react-icons/fa";
 import styles from "./page.module.css";
@@ -21,17 +22,35 @@ const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
     rejected: 3
 }
 
-const stepsData = [
-    { label: "Application", description: "Fill out info", icon: <FaFileAlt /> },
-    { label: "Call", description: "Scheduled call", icon: <FaPhone /> },
-    { label: "Documents", description: "Upload docs", icon: <FaUpload /> },
-    { label: "Decision", description: "Final approval", icon: <FaCheckCircle /> },
-];
-
 export default function Page() {
     const [activeStep, setActiveStep] = useState(0);
     const [waitingForAdmin, setWaitingForAdmin] = useState(false)
     const { data, isLoading } = useAuctionAccessRequest()
+
+    const t = useTranslations("Steps");
+
+    const stepsData = [
+        {
+            label: t("application.label"),
+            description: t("application.description"),
+            icon: <FaFileAlt />
+        },
+        {
+            label: t("call.label"),
+            description: t("call.description"),
+            icon: <FaPhone />
+        },
+        {
+            label: t("documents.label"),
+            description: t("documents.description"),
+            icon: <FaUpload />
+        },
+        {
+            label: t("decision.label"),
+            description: t("decision.description"),
+            icon: <FaCheckCircle />
+        }
+    ];
 
     const handleStepClick = (index: number) => {
         if (index <= activeStep) setActiveStep(index);
