@@ -7,15 +7,44 @@ export class PublicFolderFileSystemProvider implements ProvidesFileLink, Provide
     private uploadDir = path.resolve(process.cwd(), 'public', 'uploads');
 
     async upload(file: File, id: string, originalFileName: string): Promise<{ success: boolean }> {
-        if (!existsSync(this.uploadDir)) {
-            await mkdir(this.uploadDir, { recursive: true });
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        console.log("UPLOAD")
+        try {
+            if (!existsSync(this.uploadDir)) {
+                await mkdir(this.uploadDir, { recursive: true });
+            }
+
+            const buffer = Buffer.from(await file.arrayBuffer());
+            const filePath = path.join(this.uploadDir, id);
+            await writeFile(filePath, buffer);
+
+            return { success: true };
+
         }
-
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const filePath = path.join(this.uploadDir, id);
-        await writeFile(filePath, buffer);
-
-        return { success: true };
+        catch (e) {
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            console.log("ERROR", e)
+            return { success: false }
+        }
     }
 
     async obtainDownloadLink(id: string): Promise<string | null> {

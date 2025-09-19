@@ -35,14 +35,23 @@ export const RegistrationSteps = () => {
         const formData = new FormData();
         if (agreement) {
             formData.append('agreement', agreement)
+            console.log(agreement, 'agreement')
         }
         if (license) {
             formData.append('license', license)
+            console.log(license, 'license')
         }
         // TODO - replace with React Query
         fetch('/api/auction-access-requests/files', {
             body: formData,
-            method: "POST"
+            method: "POST",
+            // headers: {
+            //     'Content-Type': 'multipart/form-data'
+            // }
+        }).then((x) => [
+            console.log(x)
+        ]).catch((x) => {
+            console.log(x, 'catch')
         })
     }
 
@@ -163,7 +172,7 @@ export const RegistrationSteps = () => {
                     </div>
                     {/* Step 4 */}
                     <div className={`${styles.stepCard} ${styles.orange} ${styles.reverse}`}>
-                        <form className={styles.form}>
+                        <div className={styles.form}>
                             <div className={styles.formGroup}>
                                 <label>
                                     <FaHashtag className={styles.iconBlue} /> Auction Access Number
@@ -177,8 +186,10 @@ export const RegistrationSteps = () => {
                                 </label>
                                 <div className={styles.uploadZone}>
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    <p>Click to upload or drag and drop</p>
-                                    <input type="file" onChange={handleFileChange(setLicense)} accept=".png,.jpg,.jpeg,.pdf" />
+                                    <label htmlFor="license_upload">
+                                        <p>Click to upload or drag and drop</p>
+                                    </label>
+                                    <input id="license_upload" type="file" onChange={handleFileChange(setLicense)} accept=".png,.jpg,.jpeg,.pdf" />
                                 </div>
                             </div>
 
@@ -196,22 +207,29 @@ export const RegistrationSteps = () => {
                                 </label>
                                 <div className={styles.uploadZone}>
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    <p>Download, sign, and upload this file by clicking or dragging it here</p>
-                                    <input onChange={handleFileChange(setAgreement)} type="file" accept=".png,.jpg,.jpeg,.pdf" />
+                                    <label htmlFor="agreement_upload">
+                                        <p>Download, sign, and upload this file by clicking or dragging it here</p>
+                                    </label>
+                                    <input id="agreement_upload" onChange={handleFileChange(setAgreement)} type="file" accept=".png,.jpg,.jpeg,.pdf" />
                                 </div>
                             </div>
 
 
                             <div className={styles.submitSection}>
-                                <button type="submit" onClick={() => { nextStep() }}>
+                                <button onClick={() => { nextStep() }}>
                                     <FaCheckCircle /> Complete Registration
                                 </button>
+
+                                <button type='submit'>
+                                    <FaCheckCircle /> asfasfas
+                                </button>
+
                                 <p>
                                     By submitting, you agree to our terms of service and privacy
                                     policy
                                 </p>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </section>

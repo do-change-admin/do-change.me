@@ -26,7 +26,7 @@ export const auctionAccessRequestListSchema = z.object({
     applicationDate: z.date(),
     lastName: z.string(),
     birthDate: z.date(),
-    photoLink: z.url(),
+    photoLink: z.string(),
     status: auctionAccessRequestStatusSchema
 })
 
@@ -40,7 +40,7 @@ export const auctionAccessRequestFullSchema = z.object({
     applicationDate: z.date(),
     lastName: z.string(),
     birthDate: z.date(),
-    photoLink: z.url(),
+    photoLink: z.string(),
     status: auctionAccessRequestStatusSchema,
     timeSlots: z.array(
         z.object({
@@ -53,8 +53,8 @@ export const auctionAccessRequestFullSchema = z.object({
         date: z.date()
     }).nullable(),
     links: z.object({
-        agreement: z.url().nullable(),
-        driverLicence: z.url().nullable()
+        agreement: z.string().nullable(),
+        driverLicence: z.string().nullable()
     })
 })
 

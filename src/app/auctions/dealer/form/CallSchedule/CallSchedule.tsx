@@ -26,7 +26,9 @@ export const CallSchedule = () => {
     const { data } = useAuctionAccessRequest()
     const { mutate: update } = useAuctionAccessRequestUpdate()
 
-const handleConfirm = () => {}
+    const handleConfirm = () => {
+        update({ body: { selectedTimeSlotId } })
+    }
 
 
     return (
@@ -150,7 +152,7 @@ const handleConfirm = () => {}
 
                             <button
                                 className={styles.confirmBtn}
-                                disabled={!selectedDate || !selectedTime}
+                                disabled={!selectedTimeSlotId}
                                 onClick={handleConfirm}
                             >
                                 <FaCalendarCheck className={styles.confirmIcon} />

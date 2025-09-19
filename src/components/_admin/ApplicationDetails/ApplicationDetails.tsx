@@ -107,8 +107,8 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                                 }
                             </div>
                             <div>
-                                {requestInfo.links.agreement ? <a href={requestInfo.links.agreement} target="_blank">Agreement</a> : <></>}
-                                {requestInfo.links.driverLicence ? <a href={requestInfo.links.driverLicence} target="_blank">License</a> : <></>}
+                                {requestInfo.links?.agreement ? <a download href={requestInfo.links.agreement} target="_blank">Agreement</a> : <></>}
+                                {requestInfo.links?.driverLicence ? <a download href={requestInfo.links.driverLicence} target="_blank">License</a> : <></>}
                             </div>
 
                         </div>

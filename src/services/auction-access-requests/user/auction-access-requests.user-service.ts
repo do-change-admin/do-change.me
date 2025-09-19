@@ -54,19 +54,34 @@ export class AuctionAccessRequestsUserService {
     }
 
     uploadFiles = async (agreement: File, driversLicense: File, email: string) => {
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
+        console.log("ASFASFAFASFASFASF")
         const request = await prismaClient.auctionAccessRequest.findFirst({
             where: { email }
         })
 
         if (!request) {
-            throw businessError('No according request was found', undefined, 404)
+            throw businessError('No according request was found', 'BUSINESS_ERROR', 404)
         }
 
-        const agreementId = v4()
-        const driverLicenseId = v4()
+        const agreementId = `${v4()}-${agreement.name}`
+        const driverLicenseId = `${v4()}-${driversLicense.name}`
 
-        await this.fileUploader.upload(agreement, agreementId, 'agreement')
-        await this.fileUploader.upload(driversLicense, driverLicenseId, 'license')
+
+        await this.fileUploader.upload(agreement, agreementId, agreement.name)
+        await this.fileUploader.upload(driversLicense, driverLicenseId, driversLicense.name)
 
         await prismaClient.auctionAccessRequest.update({
             where: { id: request.id },
