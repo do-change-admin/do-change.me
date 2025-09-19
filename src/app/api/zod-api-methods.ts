@@ -28,7 +28,7 @@ type SuccessResponse<ResponseZodSchema> = ResponseZodSchema extends undefined
 
 type ErrorResponse =
     | {
-        error: z.ZodError;
+        error: Object;
         stage:
         | "query params parsing"
         | "request body parsing"
@@ -92,7 +92,7 @@ export const zodApiMethod = <
             if (!queryParamsParsed.success) {
                 return NextResponse.json<ErrorResponse>(
                     {
-                        error: queryParamsParsed.error,
+                        error: z.treeifyError(queryParamsParsed.error),
                         stage: "query params parsing",
                         success: false,
                     },
@@ -107,7 +107,7 @@ export const zodApiMethod = <
             if (!bodyParsed.success) {
                 return NextResponse.json<ErrorResponse>(
                     {
-                        error: bodyParsed.error,
+                        error: z.treeifyError(bodyParsed.error),
                         stage: "request body parsing",
                         success: false,
                     },
@@ -126,7 +126,7 @@ export const zodApiMethod = <
                 if (!resultParsed.success) {
                     return NextResponse.json<ErrorResponse>(
                         {
-                            error: resultParsed.error,
+                            error: z.treeifyError(resultParsed.error),
                             stage: "result parsing",
                             success: false,
                         },
@@ -146,7 +146,7 @@ export const zodApiMethod = <
         } catch (e) {
             if (isApplicationError(e)) {
                 return NextResponse.json<ErrorResponse>({
-                    error: e.error,
+                    error: { message: e.error.message },
                     stage: 'api handler executing',
                     success: false
                 }, { status: e.error.statusCode ?? 500 })
