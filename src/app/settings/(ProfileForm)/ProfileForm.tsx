@@ -17,7 +17,7 @@ export const ProfileForm = () => {
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [bio, setBio] = useState("");
-    const [birthDate, setBirthDate] = useState(new Date())
+    const [birthDate, setBirthDate] = useState<Date>()
     const queryClient = useQueryClient()
 
     console.log(birthDate)
@@ -64,7 +64,9 @@ export const ProfileForm = () => {
             setLastName(profileData.lastName)
             setPhone(profileData.phone)
             setBio(profileData.bio)
-            setBirthDate(profileData.birthDate ? new Date(profileData.birthDate) : new Date())
+            if (profileData.birthDate) {
+                setBirthDate(new Date(profileData.birthDate))
+            }
         }
     }, [profileIsLoading])
 
@@ -156,7 +158,6 @@ export const ProfileForm = () => {
                 <div className={styles.field}>
                     <label className={styles.label}>Date of birth</label>
                     <DateInput value={birthDate} onChange={(x) => setBirthDate(new Date(x!))} />
-                    {/* <DatePicker value={birthDate} onChange={(x) => setBirthDate(x ? new Date(x) : new Date())} /> */}
                 </div>
 
                 <div className={styles.field}>
