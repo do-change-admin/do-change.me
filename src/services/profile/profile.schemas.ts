@@ -28,5 +28,6 @@ export const updateProfileSchema = z.object({
     lastName: z.string().optional(),
     phone: z.string().optional(),
     bio: z.string().optional(),
+    birthDate: z.coerce.date().optional()
 })
 
