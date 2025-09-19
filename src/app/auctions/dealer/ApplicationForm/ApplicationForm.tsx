@@ -16,6 +16,8 @@ import styles from "./ApplicationForm.module.css";
 import { ApplicationSuccesses } from "./ApplicationSuccesses";
 import { useAuctionAccessRequestCreation, useProfile, useProfileModifying } from "@/hooks";
 import type { ProfileData, UpdateProfilePayload } from "@/services";
+import { FaCalendar } from "react-icons/fa6";
+import { DateInput } from "@mantine/dates";
 
 export const ApplicationForm = () => {
     const { data: profileData } = useProfile()
@@ -46,8 +48,8 @@ export const ApplicationForm = () => {
                 lastName: profileData.lastName,
                 phone: profileData.phone,
                 subscription: null,
-                birthDate: null,
-                photoLink: null
+                birthDate: profileData.birthDate,
+                photoLink: profileData.photoLink
             })
         }
     }, [profileData])
@@ -91,7 +93,12 @@ export const ApplicationForm = () => {
                         <div className={styles.uploadWrapper}>
                             <label className={styles.label}>Profile Photo</label>
                             <div className={styles.uploadZone}>
-                                <input
+                                {profileData?.photoLink ? <img
+                                    src={profileData.photoLink}
+                                    alt="User avatar"
+                                    className={styles.avatar}
+                                /> : <></>}
+                                {/* <input
                                     type="file"
                                     name="photo"
                                     accept="image/*"
@@ -100,7 +107,7 @@ export const ApplicationForm = () => {
                                 />
                                 <FaCamera className={styles.uploadIcon} />
                                 <p>Click to upload your photo</p>
-                                <span>PNG, JPG up to 5MB</span>
+                                <span>PNG, JPG up to 5MB</span> */}
                             </div>
                         </div>
 
@@ -175,6 +182,23 @@ export const ApplicationForm = () => {
                                 />
                             </div>
                         </div>
+
+                        {/* Date of birth */}
+                        <div>
+                            <label>Date of birth</label>
+                            <div className={styles.inputWrapper}>
+                                <FaCalendar className={styles.icon} />
+                                <DateInput
+                                    required
+                                    disabled={!!profileData?.birthDate}
+                                    value={formData.birthDate}
+                                    onChange={(x) => {
+                                        setFormData(f => ({ ...f, birthDate: x ? new Date(x) : null }))
+                                    }}
+                                />
+                            </div>
+                        </div>
+
 
                         {/* About */}
                         <div>
