@@ -43,7 +43,7 @@ export const ProfileForm = () => {
                 onError: (e) => {
                     notifications.show({
                         title: 'Error',
-                        message: `Error while saving - ${e.error.message} (${e.stage})`,
+                        message: `Error while saving - ${e.error} (${e.stage})`,
                         color: 'red',
                     });
                 },
