@@ -145,7 +145,6 @@ export const zodApiMethod = <
             );
         } catch (e) {
             if (isApplicationError(e)) {
-                console.log(e, 'err')
                 return NextResponse.json<ErrorResponse>({
                     error: { message: e.error.message },
                     stage: 'api handler executing',

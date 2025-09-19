@@ -18,6 +18,8 @@ export const profileSchema = z.object({
     phone: z.string(),
     email: z.string(),
     bio: z.string(),
+    photoLink: z.string().nullable(),
+    birthDate: z.coerce.date().nullable(),
     subscription: subscriptionSchema.nullable(),
 })
 

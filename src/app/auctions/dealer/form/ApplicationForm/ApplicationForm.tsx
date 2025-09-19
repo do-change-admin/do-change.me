@@ -23,13 +23,14 @@ export const ApplicationForm = () => {
     const { mutate: createAuctionAccessRequest } = useAuctionAccessRequestCreation()
     const [showStub, setShowStub] = useState(false);
     const [formData, setFormData] = useState<ProfileData>({
-        // photo: null as File | null,
         firstName: "",
         lastName: "",
         email: "",
         phone: "",
         bio: "",
-        subscription: null
+        subscription: null,
+        birthDate: null,
+        photoLink: null
     });
 
     const emptyFields = profileData
@@ -44,8 +45,9 @@ export const ApplicationForm = () => {
                 firstName: profileData.firstName,
                 lastName: profileData.lastName,
                 phone: profileData.phone,
-                subscription: null
-                // photo: null
+                subscription: null,
+                birthDate: null,
+                photoLink: null
             })
         }
     }, [profileData])

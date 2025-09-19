@@ -1,9 +1,10 @@
 import { prismaClient } from "@/infrastructure";
 import { EmailAddress } from "@/value-objects/email-address.vo";
 import { ProfileData, UpdateProfilePayload } from "./profile.types";
+import { ProvidesFileLink, ProvidesFileUploading } from "@/providers/contracts";
 
 export class ProfileService {
-    constructor(private readonly email: EmailAddress) { }
+    constructor(private readonly email: EmailAddress, private readonly fileProvider: ProvidesFileUploading & ProvidesFileLink) { }
 
     profileData = async (): Promise<ProfileData> => {
         const rawEmail = this.email.address()
@@ -30,6 +31,10 @@ export class ProfileService {
 
         const activePlan = profile.userPlan.at(0);
 
+        let photoLink: string | null = null
+        if (profile.photoFileId) {
+            photoLink = await this.fileProvider.obtainDownloadLink(profile.photoFileId)
+        }
 
         return {
             bio: profile.bio ?? "",
@@ -37,6 +42,7 @@ export class ProfileService {
             firstName: profile.firstName ?? "",
             lastName: profile.lastName ?? "",
             phone: profile.phone ?? "",
+
             subscription: activePlan
                 ? {
                     planName: activePlan.plan.name,
@@ -49,7 +55,8 @@ export class ProfileService {
                     currency: activePlan.price.currency,
                 }
                 : null,
-
+            photoLink,
+            birthDate: profile.birthDate
         }
     }
 
@@ -60,6 +67,5 @@ export class ProfileService {
             where: { email: rawEmail },
             data: { bio, firstName, lastName, phone },
         })
-
     }
 }

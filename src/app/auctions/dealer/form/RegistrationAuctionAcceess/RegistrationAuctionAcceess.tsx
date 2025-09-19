@@ -35,23 +35,14 @@ export const RegistrationSteps = () => {
         const formData = new FormData();
         if (agreement) {
             formData.append('agreement', agreement)
-            console.log(agreement, 'agreement')
         }
         if (license) {
             formData.append('license', license)
-            console.log(license, 'license')
         }
         // TODO - replace with React Query
         fetch('/api/auction-access-requests/files', {
             body: formData,
             method: "POST",
-            // headers: {
-            //     'Content-Type': 'multipart/form-data'
-            // }
-        }).then((x) => [
-            console.log(x)
-        ]).catch((x) => {
-            console.log(x, 'catch')
         })
     }
 

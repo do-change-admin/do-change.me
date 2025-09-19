@@ -36,6 +36,8 @@ model User {
   accounts                Account[]
   usageAggregates         UsageAggregate[]
   userPlan                UserPlan[]
+  photoFileId             String?
+  birthDate               DateTime?
 }
 
 model Account {
