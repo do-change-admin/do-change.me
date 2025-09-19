@@ -9,11 +9,12 @@ import {
     FaGavel,
     FaChevronLeft,
     FaChevronRight,
-    FaCalendarCheck,
+    FaCalendarCheck, FaCalendarAlt,
 } from "react-icons/fa";
 import styles from "./CallSchedule.module.css"
 import { useAuctionAccessRequest, useAuctionAccessRequestUpdate, useDatesMapping } from "@/hooks";
 import dayjs from "dayjs";
+import cn from "classnames";
 
 export const CallSchedule = () => {
     const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -135,18 +136,38 @@ export const CallSchedule = () => {
                             <div className={styles.timeSlots}>
                                 <h3 className={styles.timeTitle}>Available Times</h3>
                                 <div className={styles.timeGrid}>
-                                    {data?.timeSlots.map((time) => (
-                                        <div
-                                            key={time.id}
-                                            className={`${styles.timeSlot} ${selectedTimeSlotId === time.id ? styles.timeSelected : ""
-                                                }`}
-                                            onClick={() => setSelectedTimeSlotId(time.id)}
-                                        >
-                                            <FaClock className={styles.timeIcon} />
-                                            <span>{dayjs(time.date).format('YYYY-MM-DD')}</span>
-                                            <span>{dayjs(time.date).format('hh:mm A')}</span>
-                                        </div>
-                                    ))}
+                                    {data?.timeSlots.map((time) => {
+                                        const parsedDate = new Date(time.date);
+
+                                        const day = parsedDate.toLocaleDateString("en-US", { day: "2-digit" });
+                                        const month = parsedDate.toLocaleDateString("en-US", { month: "short" });
+                                        const weekday = parsedDate.toLocaleDateString("en-US", { weekday: "short" });
+                                        const hr = parsedDate.toLocaleTimeString("en-US", {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: true,
+                                        });
+                                        return (
+                                            <div
+                                                key={time.id}
+                                                className={cn(styles.dateButton, {
+                                                    [styles.timeSelected]: selectedTimeSlotId === time.id,
+                                                })}
+                                                onClick={() => setSelectedTimeSlotId(time.id)}
+                                                role="button"
+                                                tabIndex={0}
+                                            >
+                                                <FaCalendarAlt className={styles.dateButtonIcon} />
+                                                <div className={styles.dateButtonText}>
+                                                    <span className={styles.dateButtonDay}>
+                                                      {day} {month} {weekday}
+                                                    </span>
+                                                    <span className={styles.dateButtonWeekday}>{hr}</span>
+                                                </div>
+                                            </div>
+
+                                        )
+                                    })}
                                 </div>
                             </div>
 

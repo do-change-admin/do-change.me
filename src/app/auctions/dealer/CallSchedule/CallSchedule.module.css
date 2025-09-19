@@ -183,7 +183,6 @@
 .timeTitle {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-texas-blue);
     margin-bottom: 1rem;
 }
 
@@ -209,20 +208,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.timeSelected {
-    background: var(--text-texas-blue);;
-    color: white;
-    border-color: var(--text-texas-blue);;
-}
-
-.timeIcon {
-    color: var(--text-texas-blue);;
-}
-
-.timeSelected .timeIcon {
-    color: white;
-}
-
 /* Confirm button */
 .confirmBtn {
     width: 100%;
@@ -232,21 +217,71 @@
     color: white;
     font-weight: 600;
     border-radius: 0.75rem;
-    transition: transform 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.4s;
 }
 
 .confirmBtn:hover {
-    transform: scale(1.03);
     background: linear-gradient(to right, #1d4ed8, #1e3a8a);
 }
 
 .confirmBtn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    background: #ededed;
+}
+
+/* components/DateButton/DateButton.module.css */
+.dateButton {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.dateButton:hover {
+    border-color: var(--text-texas-blue);
+}
+
+.dateButtonIcon {
+    font-size: 1.5rem;
+    color: var(--text-texas-blue);
+}
+
+.dateButtonText {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dateButtonDay {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #111827;
+}
+
+.timeSelected {
+    background: var(--text-texas-blue);;
+    color: white;
+    border-color: var(--text-texas-blue);;
+
+    span {
+        color: white;
+    }
+
+    svg {
+        fill: white;
+    }
 }
 
 

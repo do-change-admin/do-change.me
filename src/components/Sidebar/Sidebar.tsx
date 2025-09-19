@@ -50,7 +50,9 @@ export const Sidebar = () => {
                         <div
                             key={index}
                             className={cn(styles.link, {
-                                [styles.linkActive]: pathname.includes(link.href),
+                                [styles.linkActive]:link.href === "/"
+                                    ? pathname === "/" // главная строго
+                                    : pathname.startsWith(link.href),
                             })}
                             onClick={() => handleClick(link)}
                             role="button"

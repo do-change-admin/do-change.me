@@ -13,3 +13,4 @@ export * from './LanguageSelector/LanguageSelector';
 export * from './Salvage/Salvage';
 export * from './AuctionsServicesCards/AuctionsServicesCards';
 export * from './AuctionHowItWorks/AuctionHowItWorks';
+export * from './SubscriptionPlans/SubscriptionPlans';
