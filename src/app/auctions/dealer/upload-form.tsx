@@ -14,7 +14,7 @@ export default function UploadForm({ variant }: UploadFormProps) {
         const form = event.currentTarget;
         const formData = new FormData(form);
 
-        const res = await fetch('/api/upload?variant=' + variant, {
+        const res = await fetch('/api/auction-access-requests/files?variant=' + variant, {
             method: 'POST',
             body: formData,
         });
@@ -30,7 +30,7 @@ export default function UploadForm({ variant }: UploadFormProps) {
 
             {fileUrl && (
                 <div>
-                    <p>Файл загружен:</p>
+                    <p>File was uploaded:</p>
                     <a href={fileUrl} target="_blank" rel="noopener noreferrer">
                         {fileUrl}
                     </a>
