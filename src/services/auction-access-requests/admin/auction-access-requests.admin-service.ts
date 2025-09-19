@@ -1,14 +1,17 @@
 import { PaginationSchemaType } from "@/schemas";
-import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestFullItem, AuctionAccessRequestListItem, AuctionAccessRequestStatus, UpdateAuctionAccessRequest } from './types'
+import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestFullItem, AuctionAccessRequestListItem, AuctionAccessRequestStatus } from './types'
 import { prismaClient } from "@/infrastructure";
-import { ProfileService } from "../profile";
-import { EmailAddress } from "@/value-objects/email-address.vo";
 import { businessError } from "@/lib/errors";
+import { ProvidesFileLink } from "@/providers/contracts";
 
 type FindListQueryData = PaginationSchemaType & { status: AuctionAccessRequestStatus }
 
-export class AuctionAccessRequestsService {
-    detailedItemForAdmin = async (id: string): Promise<AuctionAccessRequestFullItem> => {
+export class AuctionAccessRequestsAdminService {
+    public constructor(private readonly fileLinksProvider: ProvidesFileLink) {
+
+    }
+
+    detailedItem = async (id: string): Promise<AuctionAccessRequestFullItem> => {
         const result = await prismaClient.auctionAccessRequest.findUnique({
             where: { id },
             include: { activeSlot: true, timeSlots: true }
@@ -16,6 +19,17 @@ export class AuctionAccessRequestsService {
 
         if (!result) {
             throw businessError('No request was found with according id')
+        }
+
+        let agreementLink = null
+        let driverLicenseLink = null
+
+        if (result.agreementFileId) {
+            agreementLink = await this.fileLinksProvider.obtainDownloadLink(result.agreementFileId)
+        }
+
+        if (result.driverLicenceFileId) {
+            driverLicenseLink = await this.fileLinksProvider.obtainDownloadLink(result.driverLicenceFileId)
         }
 
         return {
@@ -28,11 +42,15 @@ export class AuctionAccessRequestsService {
             photoLink: result.photoLink,
             status: result.status as AuctionAccessRequestStatus,
             timeSlots: result.timeSlots,
-            activeTimeSlot: result.activeSlot || null
+            activeTimeSlot: result.activeSlot || null,
+            links: {
+                agreement: agreementLink,
+                driverLicence: driverLicenseLink
+            }
         }
     }
 
-    findRequestsForAdmin = async (query: FindListQueryData): Promise<AuctionAccessRequestListItem[]> => {
+    findRequests = async (query: FindListQueryData): Promise<AuctionAccessRequestListItem[]> => {
         const result = await prismaClient.auctionAccessRequest.findMany({
             skip: query.skip,
             take: query.take,
@@ -55,26 +73,7 @@ export class AuctionAccessRequestsService {
         })
     }
 
-    create = async (rawEmail: string) => {
-        const email = EmailAddress.create(rawEmail)
-        const profileService = new ProfileService(email)
-        const profileData = await profileService.profileData()
-        await prismaClient.auctionAccessRequest.create({
-            data: {
-                applicationDate: new Date(),
-                email: email.address(),
-                firstName: profileData.firstName,
-                // TODO
-                birthDate: new Date(1990, 2, 4),
-                lastName: profileData.lastName,
-                status: 'review',
-                // TODO
-                photoLink: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg',
-            }
-        })
-    }
-
-    adminUpdate = async (payload: AdminUpdateAuctionAccessRequest) => {
+    update = async (payload: AdminUpdateAuctionAccessRequest) => {
         const accordingRequest = await prismaClient.auctionAccessRequest.findUnique({ where: { id: payload.id } })
         if (!accordingRequest) {
             throw businessError('No according request was found')
@@ -102,30 +101,5 @@ export class AuctionAccessRequestsService {
                 status: payload.progress ? payload.progress === 'next approve step' ? steps[accordingRequest.status as AuctionAccessRequestStatus] || 'approved' : 'rejected' : undefined
             },
         })
-    }
-
-    update = async (payload: UpdateAuctionAccessRequest) => {
-        const foundRequest = await prismaClient.auctionAccessRequest.findFirst({ where: { email: payload.userMail } })
-        if (!foundRequest) {
-            throw businessError('No according request was found')
-        }
-
-        if (!['awaiting documents upload', 'awaiting user confirmation'].includes(foundRequest.status)) {
-            throw businessError('Request is in admin awaiting status')
-        }
-
-        if (foundRequest.status === 'awaiting user confirmation' && !payload.selectedTimeSlotId) {
-            throw businessError('No time slot was selected')
-        }
-
-        await prismaClient.auctionAccessRequest.updateMany({
-            // TODO - make email unique
-            where: { email: payload.userMail },
-            data: {
-                activeSlotId: payload.selectedTimeSlotId ?? undefined,
-                status: foundRequest.status === 'awaiting documents upload' ? 'documents under review' : 'call scheduling'
-            },
-        })
-
     }
 }

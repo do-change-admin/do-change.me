@@ -15,8 +15,37 @@ import {
 import styles from './RegistrationAuctionAcceess.module.css';
 import { Image } from "@mantine/core";
 import UploadForm from "../../upload-form";
+import { ChangeEvent, useState } from "react";
+
+const handleFileChange = (
+    setFile: (file: File) => void) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files?.length) {
+            return;
+        }
+
+        const file = event.target.files[0]
+        setFile(file)
+    }
 
 export const RegistrationSteps = () => {
+    const [agreement, setAgreement] = useState<File>()
+    const [license, setLicense] = useState<File>()
+    const nextStep = () => {
+        const formData = new FormData();
+        if (agreement) {
+            formData.append('agreement', agreement)
+        }
+        if (license) {
+            formData.append('license', license)
+        }
+        // TODO - replace with React Query
+        fetch('/api/auction-access-requests/files', {
+            body: formData,
+            method: "POST"
+        })
+    }
+
     return (
         <main className={styles.container}>
             {/* Steps Section */}
@@ -148,9 +177,8 @@ export const RegistrationSteps = () => {
                                 </label>
                                 <div className={styles.uploadZone}>
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    {/* <p>Click to upload or drag and drop</p> */}
-                                    {/* <input type="file" accept=".png,.jpg,.jpeg,.pdf" /> */}
-                                    <UploadForm variant="license" />
+                                    <p>Click to upload or drag and drop</p>
+                                    <input type="file" onChange={handleFileChange(setLicense)} accept=".png,.jpg,.jpeg,.pdf" />
                                 </div>
                             </div>
 
@@ -168,15 +196,14 @@ export const RegistrationSteps = () => {
                                 </label>
                                 <div className={styles.uploadZone}>
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    {/* <p>Download, sign, and upload this file by clicking or dragging it here</p> */}
-                                    {/* <input type="file" accept=".png,.jpg,.jpeg,.pdf" /> */}
-                                    <UploadForm variant="agreement" />
+                                    <p>Download, sign, and upload this file by clicking or dragging it here</p>
+                                    <input onChange={handleFileChange(setAgreement)} type="file" accept=".png,.jpg,.jpeg,.pdf" />
                                 </div>
                             </div>
 
 
                             <div className={styles.submitSection}>
-                                <button type="submit">
+                                <button type="submit" onClick={() => { nextStep() }}>
                                     <FaCheckCircle /> Complete Registration
                                 </button>
                                 <p>

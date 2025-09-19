@@ -1,8 +1,8 @@
-import { CanSendEmail } from "@/backend-contracts";
+import { ProvidesEmailSending } from "@/providers/contracts";
 import { EmailMessage } from "@/value-objects/email-message.vo";
 import { Resend } from "resend";
 
-export class ResendEmailProvider implements CanSendEmail {
+export class ResendEmailProvider implements ProvidesEmailSending {
     private sender!: Resend;
 
     constructor(apiKey: string) {

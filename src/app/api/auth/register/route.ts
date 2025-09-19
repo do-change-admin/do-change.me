@@ -3,7 +3,7 @@ import { RegistreUser } from "./models";
 import { generatePasswordHash } from "@/lib/password";
 import { businessError, serverError, validationError } from "@/lib/errors";
 import z from "zod";
-import { ResendEmailProvider } from "@/infrastructure/email/resend-email.provider";
+import { ResendEmailProvider } from "@/providers/implementations/email/resend-email.provider";
 import { EmailService } from "@/services/email/email.service";
 import { verificationEmail } from "@/infrastructure/email/templates/verification-email";
 import { prismaClient } from "@/infrastructure/prisma/client";

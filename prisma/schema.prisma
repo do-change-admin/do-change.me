@@ -312,23 +312,19 @@ model StripeSubscriptionItem {
 }
 
 model AuctionAccessRequest {
-  id              String        @id @default(uuid())
-  firstName       String
-  email           String
-  applicationDate DateTime
-  lastName        String
-  birthDate       DateTime
-  photoLink       String
-  status          String
-  timeSlots       TimeSlot[]
-  activeSlotId    String?
-  activeSlot      TimeSlot?     @relation("ActiveSlot", fields: [activeSlotId], references: [id])
-  driverLicence   UploadedFile? @relation("DriverLicence", fields: [driverLicenceId], references: [id])
-  driverLicenceId String?
-  agreement       UploadedFile? @relation("Agreement", fields: [agreementId], references: [id])
-  agreementId     String?
-  uploadedFile    UploadedFile? @relation(fields: [uploadedFileId], references: [id])
-  uploadedFileId  String?
+  id                  String     @id @default(uuid())
+  firstName           String
+  email               String
+  applicationDate     DateTime
+  lastName            String
+  birthDate           DateTime
+  photoLink           String
+  status              String
+  timeSlots           TimeSlot[]
+  activeSlotId        String?
+  activeSlot          TimeSlot?  @relation("ActiveSlot", fields: [activeSlotId], references: [id])
+  driverLicenceFileId String?
+  agreementFileId     String?
 }
 
 model TimeSlot {
@@ -348,16 +344,4 @@ model StripeEvent {
   attempts   Int      @default(1)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-}
-
-model UploadedFile {
-  id                        String                 @id @default(uuid())
-  filename                  String
-  pathname                  String                 @unique
-  url                       String
-  contentType               String
-  uploadedAt                DateTime
-  requestsWithAgreement     AuctionAccessRequest[] @relation("Agreement")
-  requestsWithDriverLicence AuctionAccessRequest[] @relation("DriverLicence")
-  auctionAccessRequest      AuctionAccessRequest[]
 }

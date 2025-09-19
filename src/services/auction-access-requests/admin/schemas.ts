@@ -51,7 +51,11 @@ export const auctionAccessRequestFullSchema = z.object({
     activeTimeSlot: z.object({
         id: z.string(),
         date: z.date()
-    }).nullable()
+    }).nullable(),
+    links: z.object({
+        agreement: z.url().nullable(),
+        driverLicence: z.url().nullable()
+    })
 })
 
 /**
@@ -63,26 +67,4 @@ export const adminUpdateAuctionAccessRequestSchema = z.object({
     availableTimeSlots: z.array(z.object({ date: z.coerce.date() })).optional(),
 })
 
-/**
- * Payload for user's updates for auction access.
- */
-export const updateAuctionAccessRequestSchema = z.object({
-    selectedTimeSlotId: z.string().optional(),
-    userMail: z.email()
-})
-
-export const userAuctionAccessSchema = z.object({
-    step: z.enum(['application', 'call', 'documents', 'approved', 'rejected']),
-    status: z.enum(['active', 'pending']),
-    timeSlots: z.array(
-        z.object({
-            id: z.string(),
-            date: z.date()
-        })
-    ),
-    activeTimeSlot: z.object({
-        id: z.string(),
-        date: z.date()
-    }).nullable()
-})
 

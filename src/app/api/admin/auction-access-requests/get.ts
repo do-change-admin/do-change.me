@@ -1,7 +1,8 @@
 import { withPaginationSchema } from "@/schemas";
-import { auctionAccessRequestListSchema, auctionAccessRequestStatusSchema, AuctionAccessRequestsService } from "@/services";
+import { auctionAccessRequestListSchema, auctionAccessRequestStatusSchema, AuctionAccessRequestsAdminService } from "@/services";
 import z from "zod";
 import { zodApiMethod, ZodAPIMethod } from "../../zod-api-methods";
+import { PublicFolderFileSystemProvider } from "@/providers/implementations";
 
 const queryParamsSchema = z.object(
     withPaginationSchema({
@@ -22,8 +23,9 @@ export const handler = zodApiMethod(
     undefined,
     responseSchema,
     async ({ skip, status, take }) => {
-        const service = new AuctionAccessRequestsService()
-        const items = await service.findRequestsForAdmin({ skip, status, take })
+        const fileSystemProvider = new PublicFolderFileSystemProvider()
+        const service = new AuctionAccessRequestsAdminService(fileSystemProvider)
+        const items = await service.findRequests({ skip, status, take })
         return { items }
     }
 )
