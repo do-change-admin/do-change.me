@@ -106,6 +106,10 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                                     : <>Waiting for user to select time slot</>
                                 }
                             </div>
+                            <div>
+                                {requestInfo.links.agreement ? <a href={requestInfo.links.agreement} target="_blank">Agreement</a> : <></>}
+                                {requestInfo.links.driverLicence ? <a href={requestInfo.links.driverLicence} target="_blank">License</a> : <></>}
+                            </div>
 
                         </div>
                     </div>
