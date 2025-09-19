@@ -3,9 +3,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     padding: 0 1.5rem;
     position: relative;
+    margin-bottom: 2rem;
 }
 
 .ctaSection {
@@ -14,7 +14,8 @@
 }
 
 .getAccessBtn {
-    background: linear-gradient(to right, #3b82f6, #8b5cf6);
+    background: linear-gradient(270deg, #3b82f6, var(--cl-primary), #3b82f6);
+    background-size: 600% 600%;
     color: white;
     font-weight: 600;
     padding: 1.5rem 3rem;
@@ -22,16 +23,28 @@
     font-size: 1.5rem;
     border: none;
     cursor: pointer;
+    width: 100%;
     transition: all 0.3s ease;
     box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* Анимация градиента */
+    animation: gradientShift 4s ease infinite;
 }
 
 .getAccessBtn:hover {
+    transform: scale(1.05);
     box-shadow: 0 0 20px rgba(139, 92, 246, 0.7);
 }
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 
 
 
@@ -126,6 +139,9 @@
 }
 
 @media (max-width: 700px) {
+    .main {
+        margin-bottom: 2rem;
+    }
     .getAccessBtn {
         padding: 1rem 2rem;
         font-size: 1rem;

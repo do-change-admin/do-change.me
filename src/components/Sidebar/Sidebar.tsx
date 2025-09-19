@@ -50,7 +50,7 @@ export const Sidebar = () => {
                         <div
                             key={index}
                             className={cn(styles.link, {
-                                [styles.linkActive]: link.href === pathname
+                                [styles.linkActive]: pathname.includes(link.href),
                             })}
                             onClick={() => handleClick(link)}
                             role="button"

@@ -1,0 +1,266 @@
+
+
+
+.schedulerGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.infoSection {
+    padding: 2rem;
+    background: linear-gradient(135deg, #2563eb, #1e40af, #312e81);
+    color: white;
+    position: relative;
+}
+
+.iconBox {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.iconWhite {
+    color: white;
+}
+
+.title {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.description {
+    color: #dbeafe;
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+}
+
+.image {
+    width: 100%;
+    height: 16rem;
+    object-fit: cover;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+
+.infoItems {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.infoIconBox {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.infoTitle {
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.infoText {
+    color: #bfdbfe;
+}
+
+/* Calendar */
+.calendarSection {
+    padding: 3rem;
+}
+
+.calendarHeader {
+    margin-bottom: 2rem;
+}
+
+.calendarTitle {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: var(--text-texas-blue);
+}
+
+.calendarSubtitle {
+    color: #4b5563;
+}
+
+.calendarWrapper {
+    margin-bottom: 2rem;
+}
+
+.calendarMonth {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.navButtons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.navBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.weekDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 1rem;
+}
+
+.weekDay {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.calendarDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendarCell {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: default;
+}
+
+.availableDay {
+    cursor: pointer;
+    font-weight: 500;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.availableDay:hover {
+    border-color: #93c5fd;
+}
+
+.unavailableDay {
+    background: #f3f4f6;
+    color: #9ca3af;
+}
+
+.selectedDay {
+    background: var(--text-texas-blue);
+    color: white;
+    font-weight: bold;
+}
+
+/* Time slots */
+.timeSlots {
+    margin-bottom: 2rem;
+}
+
+.timeTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-texas-blue);
+    margin-bottom: 1rem;
+}
+
+.timeGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.timeSlot {
+    background: linear-gradient(to right, #eff6ff, #eef2ff);
+    border: 2px solid #bfdbfe;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+}
+
+.timeSlot:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.timeSelected {
+    background: var(--text-texas-blue);;
+    color: white;
+    border-color: var(--text-texas-blue);;
+}
+
+.timeIcon {
+    color: var(--text-texas-blue);;
+}
+
+.timeSelected .timeIcon {
+    color: white;
+}
+
+/* Confirm button */
+.confirmBtn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    background: var(--text-texas-blue);
+    color: white;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.confirmBtn:hover {
+    transform: scale(1.03);
+    background: linear-gradient(to right, #1d4ed8, #1e3a8a);
+}
+
+.confirmBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+@media (max-width: 900px) {
+    .schedulerGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .infoSection {
+        display: none;
+    }
+
+    /* Calendar */
+    .calendarSection {
+        padding: 1rem;
+    }
+}

@@ -2,9 +2,14 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 enum ReportSource {
@@ -305,6 +310,30 @@ model StripeSubscriptionItem {
   updatedAt          DateTime @updatedAt
 
   subscription StripeSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+}
+
+model AuctionAccessRequest {
+  id                  String     @id @default(uuid())
+  firstName           String
+  email               String
+  applicationDate     DateTime
+  lastName            String
+  birthDate           DateTime
+  photoLink           String
+  status              String
+  timeSlots           TimeSlot[]
+  activeSlotId        String?
+  activeSlot          TimeSlot?  @relation("ActiveSlot", fields: [activeSlotId], references: [id])
+  driverLicenceFileId String?
+  agreementFileId     String?
+}
+
+model TimeSlot {
+  id                     String                 @id @default(uuid())
+  date                   DateTime
+  AuctionAccessRequest   AuctionAccessRequest   @relation(fields: [auctionAccessRequestId], references: [id])
+  auctionAccessRequestId String
+  selectedForRequest     AuctionAccessRequest[] @relation("ActiveSlot")
 }
 
 model StripeEvent {

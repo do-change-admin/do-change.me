@@ -5,7 +5,8 @@ import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 import {Inter} from "next/font/google";
 import "./globals.css";
-import "@mantine/core/styles.css";
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import "@mantine/carousel/styles.css";
 import '@mantine/notifications/styles.css';
 
@@ -32,12 +33,11 @@ export const metadata: Metadata = {
 };
 
 
-export default function SpaceLayout({children}: { children: React.ReactNode }) {
+export default async function  SpaceLayout({children,  params: { locale } }: { children: React.ReactNode, params: { locale: string } }) {
+
     return (
         <html>
-        <body
-            className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}
-        >
+        <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
         <Suspense>
             <Providers>
                 <Layout>

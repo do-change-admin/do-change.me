@@ -1,0 +1,44 @@
+{
+  "Steps": {
+    "application": {
+      "label": "Solicitud",
+      "description": "Complete la información"
+    },
+    "call": {
+      "label": "Llamada",
+      "description": "Llamada programada"
+    },
+    "documents": {
+      "label": "Documentos",
+      "description": "Suba los documentos requeridos"
+    },
+    "decision": {
+      "label": "Decisión",
+      "description": "Aprobación final"
+    }
+  },
+  "AuctionHowItWorks": {
+    "header": {
+      "title": "Cómo Funciona",
+      "subtitle": "Comience con nuestro sencillo proceso de 4 pasos para obtener acceso a la subasta y comenzar a ganar dinero con la compraventa de autos."
+    },
+    "steps": [
+      {
+        "title": "Solicitud",
+        "description": "Aquí completará información preliminar sobre usted para comenzar el proceso."
+      },
+      {
+        "title": "Llamada Programada",
+        "description": "Una breve llamada con nuestro gerente (puede ser llamada telefónica, videollamada o una rápida llamada por mensajería)."
+      },
+      {
+        "title": "Registro en Auction Access",
+        "description": "Después de la llamada, deberá registrarse en Auction Access y subir los documentos necesarios para verificación."
+      },
+      {
+        "title": "Obtenga Acceso a la Subasta",
+        "description": "Recibe acceso a la subasta, puede comprar autos y hacer lo que le gusta mientras gana dinero con ello."
+      }
+    ]
+  }
+}

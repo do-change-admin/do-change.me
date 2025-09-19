@@ -2,7 +2,7 @@ import { after, NextRequest, NextResponse } from "next/server";
 import { RequestPassword } from "./models";
 import z from "zod";
 import { serverError, validationError } from "@/lib/errors";
-import { ResendEmailProvider } from "@/infrastructure/email/resend-email.provider";
+import { ResendEmailProvider } from "@/providers/implementations/email/resend-email.provider";
 import { EmailService } from "@/services/email/email.service";
 import { passwordReset } from "@/infrastructure/email/templates/password-reset";
 import { prismaClient } from "@/infrastructure/prisma/client";

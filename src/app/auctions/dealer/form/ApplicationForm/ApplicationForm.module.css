@@ -1,0 +1,271 @@
+.mainContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Left Form Section */
+.formSection {
+    width: 100%;
+    background: white;
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.formContent {
+    width: 100%;
+}
+
+.formHeader h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--text-texas-blue);
+}
+
+.formHeader p {
+    color: #555;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Upload */
+.uploadWrapper .label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.uploadZone {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    background: #f9f9f9;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.uploadZone:hover {
+    border-color: var(--text-texas-blue);
+    background: #eef4ff;
+}
+
+.uploadZone input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.uploadIcon {
+    font-size: 2rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+}
+
+.uploadZone p {
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.uploadZone span {
+    font-size: 0.75rem;
+    color: #777;
+}
+
+/* Inputs */
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.inputWrapper {
+    position: relative;
+}
+
+.inputWrapper .input,
+.textarea {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.inputWrapper input:focus,
+.textarea:focus {
+    border-color: var(--text-texas-blue);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.textarea {
+    resize: none;
+}
+
+.icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+.label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    color: #333;
+}
+
+/* Submit */
+.submitBtn {
+    background: var(--text-texas-blue);
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    transition: 0.3s;
+}
+
+.submitBtn:hover {
+    background: var(--text-texas-blue);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Right Info Section */
+.infoSection {
+    width: 100%;
+    background: linear-gradient(135deg, #2563eb, #1e40af, #312e81);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    color: white;
+    overflow: hidden;
+}
+
+.infoContent {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+.infoHeader h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.infoHeader p {
+    font-size: 1.1rem;
+    color: #cbd5e1;
+}
+
+.steps {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.step {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.stepIcon {
+    background: #2563eb;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step h3 {
+    font-weight: 600;
+}
+
+.step p {
+    font-size: 0.9rem;
+    color: #bfdbfe;
+}
+
+/* Images */
+.imagesGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.imageCard {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 1rem;
+    backdrop-filter: blur(6px);
+}
+
+.imageCard img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+}
+
+.imageCard p {
+    font-size: 0.75rem;
+    color: #bfdbfe;
+}
+
+/* Decorative */
+.decorCar {
+    position: absolute;
+    top: 80px;
+    right: 80px;
+    opacity: 0.2;
+    font-size: 3rem;
+}
+
+.decorKey {
+    position: absolute;
+    bottom: 80px;
+    left: 80px;
+    opacity: 0.2;
+    font-size: 2rem;
+}
+
+
+
+@media (max-width: 900px) {
+    .mainContainer {
+        grid-template-columns: 1fr;
+    }
+    .formSection {
+        padding: 1rem;
+    }
+
+    .infoSection {
+        display: none;
+    }
+
+}

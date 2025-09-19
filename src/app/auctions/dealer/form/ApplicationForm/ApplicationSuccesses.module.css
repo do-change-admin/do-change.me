@@ -1,0 +1,156 @@
+.statusContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+    padding: 2rem;
+    min-height: 40vh;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--text-texas-blue);
+}
+
+.card {
+    background: #f9fafb;
+    border-radius: 1.5rem;
+    padding: 2rem;
+}
+
+.description {
+    font-size: 1.125rem;
+    color: #374151;
+    margin-bottom: 1.5rem;
+}
+
+.highlight {
+    font-weight: 600;
+    color: var(--text-texas-blue);
+}
+
+.noticeBox {
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.noticeHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.noticeIcon {
+    color: #facc15;
+    font-size: 1.5rem;
+    animation: pulse 2s infinite;
+}
+
+.noticeTitle {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--text-texas-blue);
+}
+
+.noticeText {
+    color: #4b5563;
+}
+
+.nextSteps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.stepCard {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stepIcon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-texas-blue);
+}
+
+.stepTitle {
+    font-weight: 600;
+    color: var(--texas-blue);
+    margin-bottom: 0.5rem;
+}
+
+.stepText {
+    color: #4b5563;
+    font-size: 0.875rem;
+}
+
+.actionButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.primaryButton {
+    background-color: var(--text-texas-blue);
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.primaryButton:hover {
+    background-color: var(--text-texas-blue);
+    transform: scale(1.05);
+}
+
+.secondaryButton {
+    background-color: #f3f4f6;
+    color: #374151;
+    padding: 0.75rem 2rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+    background-color: #e5e7eb;
+    transform: scale(1.05);
+}
+
+.buttonIcon {
+    font-size: 1.25rem;
+}
+
+/* Pulse animation for bell */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@media  (max-width: 900px) {
+    .statusContent {
+        padding: 1rem;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+}
