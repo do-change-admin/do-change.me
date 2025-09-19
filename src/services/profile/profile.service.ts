@@ -2,6 +2,7 @@ import { prismaClient } from "@/infrastructure";
 import { EmailAddress } from "@/value-objects/email-address.vo";
 import { ProfileData, UpdateProfilePayload } from "./profile.types";
 import { ProvidesFileLink, ProvidesFileUploading } from "@/providers/contracts";
+import { v4 } from "uuid";
 
 export class ProfileService {
     constructor(private readonly email: EmailAddress, private readonly fileProvider: ProvidesFileUploading & ProvidesFileLink) { }
@@ -62,10 +63,19 @@ export class ProfileService {
 
     update = async (payload: UpdateProfilePayload) => {
         const rawEmail = this.email.address()
-        const { bio, firstName, lastName, phone } = payload
+        const { bio, firstName, lastName, phone, birthDate } = payload
         await prismaClient.user.update({
             where: { email: rawEmail },
-            data: { bio, firstName, lastName, phone },
+            data: { bio, firstName, lastName, phone, birthDate },
+        })
+    }
+
+    uploadPhoto = async (file: File) => {
+        const id = `${v4()}-${file.name}`;
+        await this.fileProvider.upload(file, id, file.name)
+        await prismaClient.user.update({
+            data: { photoFileId: id },
+            where: { email: this.email.address() }
         })
     }
 }

@@ -15,6 +15,7 @@ export const handler = zodApiMethod(undefined, bodySchema, undefined, async (pay
         bio: payload.bio,
         firstName: payload.firstName,
         lastName: payload.lastName,
-        phone: payload.phone
+        phone: payload.phone,
+        birthDate: payload.birthDate
     })
 })
