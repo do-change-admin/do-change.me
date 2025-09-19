@@ -1,3 +1,4 @@
+import { isApplicationError } from "@/lib/errors";
 import { getCurrentUser } from "@/lib/getCurrentUser";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
@@ -13,13 +14,13 @@ type ZodObjectData = Readonly<{
 type ZodAPIPayload<QueryParams, BodyParams> = (QueryParams extends undefined
     ? {}
     : {
-          query: z.infer<QueryParams>;
-      }) &
+        query: z.infer<QueryParams>;
+    }) &
     (BodyParams extends undefined
         ? {}
         : {
-              body: z.infer<BodyParams>;
-          });
+            body: z.infer<BodyParams>;
+        });
 
 type SuccessResponse<ResponseZodSchema> = ResponseZodSchema extends undefined
     ? {}
@@ -27,18 +28,18 @@ type SuccessResponse<ResponseZodSchema> = ResponseZodSchema extends undefined
 
 type ErrorResponse =
     | {
-          error: z.ZodError;
-          stage:
-              | "query params parsing"
-              | "request body parsing"
-              | "result parsing";
-          success: false;
-      }
+        error: z.ZodError;
+        stage:
+        | "query params parsing"
+        | "request body parsing"
+        | "result parsing";
+        success: false;
+    }
     | {
-          error: { message: string };
-          stage: "api handler executing" | "user obtaining";
-          success: false;
-      };
+        error: { message: string };
+        stage: "api handler executing" | "user obtaining";
+        success: false;
+    };
 
 export type ZodAPIMethod<Query, Body, Response> = {
     payload: ZodAPIPayload<Query, Body>;
@@ -64,11 +65,12 @@ export const zodApiMethod = <
         payload: z.infer<typeof queryParamsSchema> &
             z.infer<typeof bodyParamsSchema> & {
                 activeUser: { id: string; email: string };
-            }
+            },
+        req: NextRequest
     ) => Promise<
         ReturnData extends ZodObjectData
-            ? z.infer<typeof returnDataSchema>
-            : void
+        ? z.infer<typeof returnDataSchema>
+        : void
     >
 ) => {
     return async (request: NextRequest) => {
@@ -116,7 +118,8 @@ export const zodApiMethod = <
         }
         try {
             const result = await handler(
-                resultObject as Parameters<typeof handler>[0]
+                resultObject as Parameters<typeof handler>[0],
+                request
             );
             if (returnDataSchema) {
                 const resultParsed = returnDataSchema.safeParse(result);
@@ -141,6 +144,13 @@ export const zodApiMethod = <
                 { status: 200 }
             );
         } catch (e) {
+            if (isApplicationError(e)) {
+                return NextResponse.json<ErrorResponse>({
+                    error: e.error,
+                    stage: 'api handler executing',
+                    success: false
+                }, { status: e.error.statusCode ?? 500 })
+            }
             if (typeof e === "string") {
                 return NextResponse.json<ErrorResponse>(
                     {
