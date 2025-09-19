@@ -3,63 +3,67 @@ import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
 export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+    const { pathname } = req.nextUrl;
 
-  // Пути без проверки
-  const publicPaths = [
-    "/_next",
-    "/favicon.ico",
-    "/api/auth",
-    "/auth/reset-password",
-    "/terms",
-  ];
+    // Пути без проверки
+    const publicPaths = [
+        "/_next",
+        "/favicon.ico",
+        "/api/auth",
+        "/auth/reset-password",
+        "/terms",
+        "/api/webhooks/stripe",
+    ];
 
-  if (publicPaths.some((path) => pathname.startsWith(path))) {
-    return NextResponse.next();
-  }
-
-  const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
-
-  // Забираем токен из cookie (NextAuth хранит в `next-auth.session-token`)
-  let token = '';
-  const authSessionTokens = ['__Secure-next-auth.session-token', 'next-auth.session-token']
-
-  for (const [key, value] of req.cookies) {
-    if (authSessionTokens.includes(key)) {
-      token = value.value;
+    if (publicPaths.some((path) => pathname.startsWith(path))) {
+        return NextResponse.next();
     }
-  }
 
-  if (!token) {
-    if (!authPaths.includes(pathname)) {
-      return NextResponse.redirect(new URL("/auth/login", req.url));
+    const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
+
+    // Забираем токен из cookie (NextAuth хранит в `next-auth.session-token`)
+    let token = "";
+    const authSessionTokens = [
+        "__Secure-next-auth.session-token",
+        "next-auth.session-token",
+    ];
+
+    for (const [key, value] of req.cookies) {
+        if (authSessionTokens.includes(key)) {
+            token = value.value;
+        }
     }
+
+    if (!token) {
+        if (!authPaths.includes(pathname)) {
+            return NextResponse.redirect(new URL("/auth/login", req.url));
+        }
+        return NextResponse.next();
+    }
+
+    if (authPaths.includes(pathname)) {
+        return NextResponse.redirect(new URL("/", req.url));
+    }
+
     return NextResponse.next();
-  }
 
-  if (authPaths.includes(pathname)) {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
+    // try {
+    //   // Проверяем JWT
+    //   await jwtVerify(token, new TextEncoder().encode(process.env.NEXTAUTH_SECRET!));
+    //
+    //   // Авторизованный не должен попадать на login/register
 
-  return NextResponse.next();
-
-  // try {
-  //   // Проверяем JWT
-  //   await jwtVerify(token, new TextEncoder().encode(process.env.NEXTAUTH_SECRET!));
-  //
-  //   // Авторизованный не должен попадать на login/register
-
-  //
-  //   return NextResponse.next();
-  // } catch (e) {
-  //   console.error("JWT invalid", e);
-  //   if (!authPaths.includes(pathname)) {
-  //     return NextResponse.redirect(new URL("/auth/login", req.url));
-  //   }
-  //   return NextResponse.next();
-  // }
+    //
+    //   return NextResponse.next();
+    // } catch (e) {
+    //   console.error("JWT invalid", e);
+    //   if (!authPaths.includes(pathname)) {
+    //     return NextResponse.redirect(new URL("/auth/login", req.url));
+    //   }
+    //   return NextResponse.next();
+    // }
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|api/auth).*)"],
+    matcher: ["/((?!_next|favicon.ico|api/auth).*)"],
 };

@@ -2,9 +2,14 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 enum ReportSource {
@@ -25,10 +30,12 @@ model User {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
+  stripeCustomer          StripeCustomer?
   emailVerificationTokens EmailVerificationToken[]
   passwordResetTokens     PasswordResetToken[]
   accounts                Account[]
   usageAggregates         UsageAggregate[]
+  userPlan                UserPlan[]
 }
 
 model Account {
@@ -254,11 +261,136 @@ model VinCheckResult {
   VehicleDescriptor                   String?
   VehicleType                         String?
   WheelBaseLong                       String?
-  WheelBaseShort                       String?
+  WheelBaseShort                      String?
   WheelBaseType                       String?
   WheelSizeFront                      String?
   WheelSizeRear                       String?
   WheelieMitigation                   String?
   Wheels                              String?
   Windows                             String?
+}
+
+model StripeCustomer {
+  id               Int      @id @default(autoincrement())
+  userId           String   @unique
+  stripeCustomerId String   @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user          User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptions StripeSubscription[]
+}
+
+model StripeSubscription {
+  id                   Int       @id @default(autoincrement())
+  stripeSubscriptionId String    @unique
+  customerId           Int
+  status               String
+  cancelAtPeriodEnd    Boolean   @default(false)
+  canceledAt           DateTime?
+  trialEnd             DateTime?
+  metadata             Json?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  customer StripeCustomer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items    StripeSubscriptionItem[]
+}
+
+model StripeSubscriptionItem {
+  id                 Int      @id @default(autoincrement())
+  stripeItemId       String   @unique
+  subscriptionId     Int
+  priceId            String
+  productId          String
+  quantity           Int
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  subscription StripeSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+}
+
+model AuctionAccessRequest {
+  id                  String     @id @default(uuid())
+  firstName           String
+  email               String
+  applicationDate     DateTime
+  lastName            String
+  birthDate           DateTime
+  photoLink           String
+  status              String
+  timeSlots           TimeSlot[]
+  activeSlotId        String?
+  activeSlot          TimeSlot?  @relation("ActiveSlot", fields: [activeSlotId], references: [id])
+  driverLicenceFileId String?
+  agreementFileId     String?
+}
+
+model TimeSlot {
+  id                     String                 @id @default(uuid())
+  date                   DateTime
+  AuctionAccessRequest   AuctionAccessRequest   @relation(fields: [auctionAccessRequestId], references: [id])
+  auctionAccessRequestId String
+  selectedForRequest     AuctionAccessRequest[] @relation("ActiveSlot")
+}
+
+model StripeEvent {
+  id         Int      @id @default(autoincrement())
+  eventId    String   @unique
+  type       String
+  rawPayload Json
+  processed  Boolean  @default(false)
+  attempts   Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model UserPlan {
+  id                   Int       @id @default(autoincrement())
+  userId               String
+  planId               Int
+  planPriceId          Int
+  stripeSubscriptionId String    @unique
+  status               String
+  canceledAt           DateTime?
+  cancelAtPeriodEnd    Boolean   @default(false)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan  Plan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  price PlanPrice @relation(fields: [planPriceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, stripeSubscriptionId])
+}
+
+model Plan {
+  id              Int      @id @default(autoincrement())
+  stripeProductId String   @unique
+  slug            String   @unique
+  name            String
+  description     String?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  prices   PlanPrice[]
+  userPlan UserPlan[]
+}
+
+model PlanPrice {
+  id            Int    @id @default(autoincrement())
+  planId        Int
+  stripePriceId String @unique
+  slug          String @unique
+  interval      String
+  amount        Int
+  currency      String
+
+  plan     Plan       @relation(fields: [planId], references: [id], onDelete: Cascade)
+  userPlan UserPlan[]
 }

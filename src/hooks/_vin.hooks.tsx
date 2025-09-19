@@ -114,7 +114,10 @@ export const useActionsHistory = (pagination: PaginationSchemaType) => {
             const response = await fetch(`/api/actions-history?skip=${pagination.skip}&take=${pagination.take}`)
             const json = await response.json()
             return json.data as ActionsHistoryService.VinAnalysisResult;
-        }
+        },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        staleTime: 5 * 60 * 1000,
     })
 }
 
@@ -166,6 +169,9 @@ export const useCachedInfo = (vin: string | null) => {
             }
             return res.json()
         },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        staleTime: 5 * 60 * 1000,
         enabled: () => {
             const { success } = VinSchema.safeParse(vin)
             return success

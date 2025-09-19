@@ -8,3 +8,11 @@ export const PaginationSchema = z.object({
 export type PaginationSchemaType = z.infer<typeof PaginationSchema>
 
 export const VinSchema = z.string().min(17).max(17)
+
+export const withPaginationSchema = <T>(zodSchemaContent: T) => {
+    return {
+        ...zodSchemaContent,
+        skip: z.coerce.number(),
+        take: z.coerce.number(),
+    }
+}

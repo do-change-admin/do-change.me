@@ -11,6 +11,7 @@ const runtimeEnvSchema = z.object({
   GOOGLE_CLIENT_ID: z.string().min(1, "Cannot be empty"),
   GOOGLE_CLIENT_SECRET: z.string().min(1, "Cannot be empty"),
   STRIPE_SECRET_KEY: z.string().min(1, "Cannot be empty"),
+  STRIPE_WEBHOOK_SECRET: z.string().min(1, "Cannot be empty"),
   VEHICLE_DATABASE_API_KEY: z.string(),
   TOKEN_TTL_MS: z.coerce.number().min(60000, "Must be at least 60,000 ms (1 min)"),
   RESEND_API_KEY: z.string().min(1, "Cannot be empty"),

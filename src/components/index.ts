@@ -1,4 +1,5 @@
 export * from './_ui'
+export * from './_admin';
 export * from './Header/Header'
 export * from './Login/Login'
 export * from './Register/Register'
@@ -11,3 +12,4 @@ export * from './SearchSection/SearchSection';
 export * from './LanguageSelector/LanguageSelector';
 export * from './Salvage/Salvage';
 export * from './AuctionsServicesCards/AuctionsServicesCards';
+export * from './AuctionHowItWorks/AuctionHowItWorks';

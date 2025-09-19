@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
 import ReactCountryFlag from 'react-country-flag';
 import styles from './LanguageSelector.module.css';
+import {useLocale} from "@/contexts/_locale.context";
 
 type LangOption = {
     code: string;
@@ -22,18 +23,19 @@ const LANGUAGES: LangOption[] = [
 export const LanguageSelector = () => {
     const [open, setOpen] = useState(false);
     const [current, setCurrent] = useState<LangOption>(LANGUAGES[0]);
+    const { locale, setLocale } = useLocale();
 
     useEffect(() => {
-        const saved = localStorage.getItem('lang');
+        const saved = locale;
         if (saved) {
             const lang = LANGUAGES.find(l => l.code === saved);
-            if (lang) setCurrent(lang);
+            if (lang) setLocale(lang.code);
         }
     }, []);
 
     const handleSelect = (lang: LangOption) => {
         setCurrent(lang);
-        localStorage.setItem('lang', lang.code);
+        setLocale(lang.code);
         setOpen(false);
     };
 

@@ -4,8 +4,7 @@
 }
 
 .sidebar {
-    background: linear-gradient(to bottom right, #eff6ff, #eff6ff);
-    border-right: 1px solid rgba(251, 207, 232, 0.3);
+    background: #fafafa;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -16,7 +15,7 @@
 
 .header {
     padding: 1rem;
-    border-bottom: 1px solid rgba(251, 207, 232, 0.3);
+    /*border-bottom: 1px solid rgba(251, 207, 232, 0.3);*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -117,6 +116,14 @@
         padding: 0.5rem;
         border-radius: 0.6rem;
         color: var(--text-texas-blue);
+    }
+}
+
+.link:hover {
+    svg {
+        background: var(--text-texas-blue);
+        color: white;
+        transition: all 0.5s;
     }
 }
 

@@ -1,0 +1,33 @@
+.section {
+    flex: 1;
+    padding: 2rem;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

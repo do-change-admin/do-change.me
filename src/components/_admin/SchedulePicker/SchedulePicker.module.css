@@ -1,0 +1,94 @@
+.wrapper {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    cursor: default;
+}
+
+.badgeClose {
+    cursor: pointer;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.subTitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.calendar {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.timeGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.timeSlot {
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.timeSlot:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.timeSlotSelected {
+    background: #16a34a; /* green-600 */
+    border-color: #16a34a;
+    color: white;
+    font-weight: 600;
+}
+
+.actions {
+    margin-top: 32px;
+    padding-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    border-top: 1px solid #f3f4f6;
+}

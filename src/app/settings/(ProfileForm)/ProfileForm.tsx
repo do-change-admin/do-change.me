@@ -1,3 +1,5 @@
+'use client'
+
 import React, { FormEvent, useEffect, useState } from 'react';
 import styles from "./ProfileForm.module.css";
 import { Button, Loader } from "@mantine/core";

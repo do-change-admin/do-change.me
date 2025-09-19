@@ -41,5 +41,8 @@ export function useAuctionListings(params: AuctionParams) {
 
             return res.json();
         },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        staleTime: 5 * 60 * 1000,
     });
 }

@@ -1,0 +1,152 @@
+.section {
+    flex: 1;
+    margin-top: 2rem;
+}
+
+.container {
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.searchWrapper {
+    position: relative;
+}
+
+.searchInput {
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    outline: none;
+}
+
+.searchInput:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    cursor: pointer;
+}
+
+.email {
+    color: #bcbaba;
+}
+
+.thead {
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.th {
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tbody tr:hover {
+    background-color: #efeeee; /* light pink hover */
+    transition: background-color 0.2s;
+}
+
+.td {
+    padding: 0.75rem 1.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    color: #111827;
+}
+
+.avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    object-fit: cover;
+}
+
+.actionBtn {
+    cursor: pointer;
+    margin-right: 0.5rem;
+    font-size: 1.125rem;
+}
+
+.edit {
+    color: #ec4899; /* pink */
+}
+
+.edit:hover {
+    color: #be185d;
+}
+
+.delete {
+    color: #ef4444;
+}
+
+.delete:hover {
+    color: #b91c1c;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.pageBtn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    border: 1px solid #d1d5db;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.pageBtn:hover {
+    background-color: #f3f4f6;
+}
+
+.pageBtn.active {
+    background-color: var(--text-texas-blue);
+    color: white;
+    border-color: transparent;
+}
