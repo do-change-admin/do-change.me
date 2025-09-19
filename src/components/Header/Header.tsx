@@ -2,13 +2,18 @@
 
 import styles from "./Header.module.css";
 import {LanguageSelector} from "@/components";
+import { usePathname} from "next/navigation";
 
 export const Header = ()=> {
+    const pathname = usePathname();
+    const showLanguage = pathname.includes("dealer");
     return (
         <header className={styles.header}>
             <h1 className={styles.title}>do-change</h1>
             <div className={styles.right}>
-                <LanguageSelector/>
+                {showLanguage && (
+                    <LanguageSelector/>
+                )}
             </div>
         </header>
     );

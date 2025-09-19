@@ -14,7 +14,6 @@ import {
 } from "react-icons/fa";
 import styles from './RegistrationAuctionAcceess.module.css';
 import { Image } from "@mantine/core";
-import UploadForm from "../../upload-form";
 import { ChangeEvent, useState } from "react";
 
 const handleFileChange = (
@@ -184,13 +183,14 @@ export const RegistrationSteps = () => {
                                 <label>
                                     <FaIdCard className={styles.iconPurple} /> Driver's License
                                 </label>
-                                <div className={styles.uploadZone}>
+                                {agreement?.name}
+                                <label className={styles.uploadZone} htmlFor="license_upload">
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    <label htmlFor="license_upload">
+                                    <div>
                                         <p>Click to upload or drag and drop</p>
-                                    </label>
+                                    </div>
                                     <input id="license_upload" type="file" onChange={handleFileChange(setLicense)} accept=".png,.jpg,.jpeg,.pdf" />
-                                </div>
+                                </label>
                             </div>
 
                             <div className={styles.formGroup}>
@@ -200,18 +200,19 @@ export const RegistrationSteps = () => {
                                         href="/your-individual-agreement.pdf"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={styles.link} // <-- добавляем стиль
+                                        className={styles.link}
                                     >
                                         Agreement
                                     </a>
                                 </label>
-                                <div className={styles.uploadZone}>
+                                {agreement?.name}
+                                <label className={styles.uploadZone} htmlFor="agreement_upload">
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    <label htmlFor="agreement_upload">
+                                    <div>
                                         <p>Download, sign, and upload this file by clicking or dragging it here</p>
-                                    </label>
+                                    </div>
                                     <input id="agreement_upload" onChange={handleFileChange(setAgreement)} type="file" accept=".png,.jpg,.jpeg,.pdf" />
-                                </div>
+                                </label>
                             </div>
 
 
@@ -219,11 +220,6 @@ export const RegistrationSteps = () => {
                                 <button onClick={() => { nextStep() }}>
                                     <FaCheckCircle /> Complete Registration
                                 </button>
-
-                                <button type='submit'>
-                                    <FaCheckCircle /> asfasfas
-                                </button>
-
                                 <p>
                                     By submitting, you agree to our terms of service and privacy
                                     policy
