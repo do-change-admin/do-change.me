@@ -64,11 +64,6 @@ export const ApplicationForm = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const emptyFieldsData = emptyFields.map(x => ({ field: x, value: formData[x as keyof ProfileData] }))
-        const notFilledFields = emptyFieldsData.filter(x => !x.value).map(x => x.field)
-        if (notFilledFields.length) {
-            alert(`Some fields are left not filled: ${notFilledFields.join(', ')}, fill them to request auction access`)
-            return
-        }
         if (emptyFieldsData.length) {
             const dataToUpdateProfile = Object.fromEntries(emptyFieldsData.map(x => [x.field, x.value] as const)) as UpdateProfilePayload
             await updateProfile({ body: dataToUpdateProfile })

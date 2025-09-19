@@ -54,7 +54,7 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                         <div className={styles.card}>
                             <div className={styles.profileSection}>
                                 <img
-                                    src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg"
+                                    src={requestInfo.photoLink}
                                     alt="Applicant"
                                     className={styles.profilePhoto}
                                 />
