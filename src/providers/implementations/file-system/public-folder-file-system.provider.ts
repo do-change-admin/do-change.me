@@ -52,7 +52,7 @@ export class PublicFolderFileSystemProvider implements ProvidesFileLink, Provide
 
         try {
             await access(filePath);
-            return filePath;
+            return '/uploads/' + id;
         } catch (err) {
             return null;
         }
