@@ -129,6 +129,91 @@ export async function POST(req: Request) {
                             stripeItemId: { notIn: currentItemIds },
                         },
                     });
+
+                    const stripeCustomer = await tx.stripeCustomer.findUnique({
+                        where: {
+                            stripeCustomerId: subscription.customer as string,
+                        },
+                    });
+
+                    if (!stripeCustomer) {
+                        return NextResponse.json(
+                            businessError(
+                                "Customer not found for UserPlan",
+                                "CUSTOMER_NOT_FOUND"
+                            ),
+                            { status: 400 }
+                        );
+                    }
+
+                    const item = subscription.items.data[0];
+
+                    if (!item) {
+                        return NextResponse.json(
+                            businessError(
+                                "Subscription has no items",
+                                "INVALID_SUBSCRIPTION"
+                            ),
+                            { status: 400 }
+                        );
+                    }
+
+                    const planPrice = await tx.planPrice.findUnique({
+                        where: { stripePriceId: item.price.id },
+                    });
+
+                    if (!planPrice) {
+                        return NextResponse.json(
+                            businessError(
+                                `Price not found for ${item.price.id}`,
+                                "INVALID_SUBSCRIPTION"
+                            ),
+                            { status: 400 }
+                        );
+                    }
+
+                    await tx.userPlan.upsert({
+                        where: {
+                            userId_stripeSubscriptionId: {
+                                userId: stripeCustomer.userId,
+                                stripeSubscriptionId: subscription.id,
+                            },
+                        },
+                        update: {
+                            status: subscription.status,
+                            cancelAtPeriodEnd:
+                                subscription.cancel_at_period_end,
+                            canceledAt: subscription.cancel_at
+                                ? new Date(subscription.cancel_at * 1000)
+                                : null,
+                            currentPeriodStart: new Date(
+                                item.current_period_start * 1000
+                            ),
+                            currentPeriodEnd: new Date(
+                                item.current_period_end * 1000
+                            ),
+                            planId: planPrice.planId,
+                            planPriceId: planPrice.id,
+                        },
+                        create: {
+                            userId: stripeCustomer.userId,
+                            planId: planPrice.planId,
+                            planPriceId: planPrice.id,
+                            stripeSubscriptionId: subscription.id,
+                            status: subscription.status,
+                            cancelAtPeriodEnd:
+                                subscription.cancel_at_period_end,
+                            canceledAt: subscription.cancel_at
+                                ? new Date(subscription.cancel_at * 1000)
+                                : null,
+                            currentPeriodStart: new Date(
+                                item.current_period_start * 1000
+                            ),
+                            currentPeriodEnd: new Date(
+                                item.current_period_end * 1000
+                            ),
+                        },
+                    });
                 });
 
                 break;
@@ -145,6 +230,11 @@ export async function POST(req: Request) {
 
                     await tx.stripeSubscriptionItem.deleteMany({
                         where: { subscriptionId: subRecord.id },
+                    });
+
+                    await tx.userPlan.update({
+                        where: { stripeSubscriptionId: subscription.id },
+                        data: { status: subscription.status },
                     });
                 });
 

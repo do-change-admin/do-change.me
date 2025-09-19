@@ -1,5 +1,5 @@
 import z from "zod";
-import { ZodAPIMethod, zodApiMethod } from "../../zod-api-methods";
+import { ZodAPIMethod, zodApiMethod } from "../zod-api-methods";
 import { prismaClient } from "@/infrastructure/prisma/client";
 import Stripe from "stripe";
 
@@ -18,8 +18,10 @@ export const handler = zodApiMethod(
     bodySchema,
     undefined,
     async (payload) => {
+        const { activeUser, subscriptionId } = payload;
+
         const stripeCustomer = await prismaClient.stripeCustomer.findUnique({
-            where: { userId: payload.activeUser.id },
+            where: { userId: activeUser.id },
         });
 
         if (!stripeCustomer) {
@@ -28,7 +30,7 @@ export const handler = zodApiMethod(
 
         const subscription = await prismaClient.stripeSubscription.findFirst({
             where: {
-                stripeSubscriptionId: payload.subscriptionId,
+                stripeSubscriptionId: subscriptionId,
                 customerId: stripeCustomer.id,
             },
         });
@@ -37,7 +39,7 @@ export const handler = zodApiMethod(
             throw new Error("Subscription not found");
         }
 
-        await stripe.subscriptions.update(payload.subscriptionId, {
+        await stripe.subscriptions.update(subscriptionId, {
             cancel_at_period_end: true,
         });
     }
