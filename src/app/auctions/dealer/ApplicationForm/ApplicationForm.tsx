@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, ChangeEvent } from "react";
 import {
     FaUser,
     FaEnvelope,
@@ -18,6 +18,7 @@ import { useAuctionAccessRequestCreation, useProfile, useProfileModifying } from
 import type { ProfileData, UpdateProfilePayload } from "@/services";
 import { FaCalendar } from "react-icons/fa6";
 import { DateInput } from "@mantine/dates";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const ApplicationForm = () => {
     const { data: profileData } = useProfile()
@@ -34,6 +35,24 @@ export const ApplicationForm = () => {
         birthDate: null,
         photoLink: null
     });
+    const queryClient = useQueryClient()
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files?.length) {
+            return;
+        }
+
+        const file = event.target.files[0]
+        // setFile(file)
+        const formData = new FormData()
+        formData.set('photo', file)
+        fetch('/api/profile/photo', {
+            body: formData,
+            method: "POST",
+        }).then(() => {
+            queryClient.invalidateQueries({ queryKey: ['profile'] })
+        })
+    }
 
     const emptyFields = profileData
         ? Object.keys(profileData).filter(field => !profileData[field as keyof ProfileData])
@@ -97,7 +116,9 @@ export const ApplicationForm = () => {
                                     src={profileData.photoLink}
                                     alt="User avatar"
                                     className={styles.avatar}
-                                /> : <></>}
+                                /> : <label htmlFor="upload-photo">Please set a photo to apply</label>}
+                                <input style={{ display: 'none' }} id='upload-photo' type='file' onChange={handleFileChange} />
+
                                 {/* <input
                                     type="file"
                                     name="photo"
@@ -215,7 +236,7 @@ export const ApplicationForm = () => {
                         </div>
 
                         {/* Submit */}
-                        <button type="submit" className={styles.submitBtn}>
+                        <button type="submit" disabled={!profileData?.photoLink} className={styles.submitBtn}>
                             Submit Application <FaArrowRight />
                         </button>
                     </form>

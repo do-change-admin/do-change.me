@@ -20,8 +20,6 @@ export const ProfileForm = () => {
     const [birthDate, setBirthDate] = useState<Date>()
     const queryClient = useQueryClient()
 
-    console.log(birthDate)
-
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files?.length) {
             return;
