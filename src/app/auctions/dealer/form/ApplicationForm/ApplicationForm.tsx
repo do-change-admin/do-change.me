@@ -29,6 +29,7 @@ export const ApplicationForm = () => {
         email: "",
         phone: "",
         bio: "",
+        subscription: null
     });
 
     const emptyFields = profileData
@@ -43,6 +44,7 @@ export const ApplicationForm = () => {
                 firstName: profileData.firstName,
                 lastName: profileData.lastName,
                 phone: profileData.phone,
+                subscription: null
                 // photo: null
             })
         }
