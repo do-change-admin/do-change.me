@@ -25,11 +25,12 @@ model User {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
+  stripeCustomer          StripeCustomer?
   emailVerificationTokens EmailVerificationToken[]
   passwordResetTokens     PasswordResetToken[]
   accounts                Account[]
   usageAggregates         UsageAggregate[]
-  stripeCustomer          StripeCustomer?
+  userPlan                UserPlan[]
 }
 
 model Account {
@@ -315,4 +316,52 @@ model StripeEvent {
   attempts   Int      @default(1)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model UserPlan {
+  id                   Int       @id @default(autoincrement())
+  userId               String
+  planId               Int
+  planPriceId          Int
+  stripeSubscriptionId String    @unique
+  status               String
+  canceledAt           DateTime?
+  cancelAtPeriodEnd    Boolean   @default(false)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan  Plan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  price PlanPrice @relation(fields: [planPriceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, stripeSubscriptionId])
+}
+
+model Plan {
+  id              Int      @id @default(autoincrement())
+  stripeProductId String   @unique
+  slug            String   @unique
+  name            String
+  description     String?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  prices   PlanPrice[]
+  userPlan UserPlan[]
+}
+
+model PlanPrice {
+  id            Int    @id @default(autoincrement())
+  planId        Int
+  stripePriceId String @unique
+  slug          String @unique
+  interval      String
+  amount        Int
+  currency      String
+
+  plan     Plan       @relation(fields: [planId], references: [id], onDelete: Cascade)
+  userPlan UserPlan[]
 }
