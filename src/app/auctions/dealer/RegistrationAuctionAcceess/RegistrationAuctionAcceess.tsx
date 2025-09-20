@@ -30,6 +30,7 @@ const handleFileChange = (
 export const RegistrationSteps = () => {
     const [agreement, setAgreement] = useState<File>()
     const [license, setLicense] = useState<File>()
+    const [auctionAccessNumber, setAuctionAccessNumber] = useState('')
     const nextStep = () => {
         const formData = new FormData();
         if (agreement) {
@@ -37,6 +38,9 @@ export const RegistrationSteps = () => {
         }
         if (license) {
             formData.append('license', license)
+        }
+        if (auctionAccessNumber) {
+            formData.append('auctionAccessNumber', auctionAccessNumber)
         }
         // TODO - replace with React Query
         fetch('/api/auction-access-requests/files', {
@@ -167,7 +171,7 @@ export const RegistrationSteps = () => {
                                 <label>
                                     <FaHashtag className={styles.iconBlue} /> Auction Access Number
                                 </label>
-                                <input type="text" placeholder="Enter your Auction Access number" />
+                                <input type="text" value={auctionAccessNumber} onChange={(x) => { setAuctionAccessNumber(x.target.value) }} placeholder="Enter your Auction Access number" />
                             </div>
 
                             <div className={styles.formGroup}>

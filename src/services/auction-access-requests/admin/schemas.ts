@@ -55,7 +55,8 @@ export const auctionAccessRequestFullSchema = z.object({
     links: z.object({
         agreement: z.string().nullable(),
         driverLicence: z.string().nullable()
-    })
+    }),
+    auctionAccessNumber: z.string().optional()
 })
 
 /**

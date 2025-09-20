@@ -46,7 +46,8 @@ export class AuctionAccessRequestsAdminService {
             links: {
                 agreement: agreementLink,
                 driverLicence: driverLicenseLink
-            }
+            },
+            auctionAccessNumber: result.auctionAccessNumber ?? undefined
         }
     }
 

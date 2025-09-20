@@ -328,6 +328,7 @@ model AuctionAccessRequest {
   activeSlot          TimeSlot?  @relation("ActiveSlot", fields: [activeSlotId], references: [id])
   driverLicenceFileId String?
   agreementFileId     String?
+  auctionAccessNumber String?
 }
 
 model TimeSlot {

@@ -37,22 +37,6 @@ export const ProfileForm = () => {
         })
     }
 
-
-    /**
-     *         const formData = new FormData();
-            if (agreement) {
-                formData.append('agreement', agreement)
-            }
-            if (license) {
-                formData.append('license', license)
-            }
-            // TODO - replace with React Query
-            fetch('/api/auction-access-requests/files', {
-                body: formData,
-                method: "POST",
-            })
-    
-     */
     const { data: profileData, isLoading: profileIsLoading } = useProfile()
     const { mutate: modifyProfile, isPending: profileIsModifying } = useProfileModifying()
 

@@ -51,7 +51,7 @@ export class AuctionAccessRequestsUserService {
         })
     }
 
-    uploadFiles = async (agreement: File, driversLicense: File, email: string) => {
+    uploadFiles = async (agreement: File, driversLicense: File, auctionAccessNumber: string, email: string) => {
         const request = await prismaClient.auctionAccessRequest.findFirst({
             where: { email }
         })
@@ -69,7 +69,7 @@ export class AuctionAccessRequestsUserService {
 
         await prismaClient.auctionAccessRequest.update({
             where: { id: request.id },
-            data: { driverLicenceFileId: driverLicenseId, agreementFileId: agreementId, status: 'documents under review' }
+            data: { auctionAccessNumber, driverLicenceFileId: driverLicenseId, agreementFileId: agreementId, status: 'documents under review' }
         })
     }
 }

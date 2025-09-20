@@ -9,6 +9,11 @@ export const handler = zodApiMethod(undefined, undefined, undefined, async ({ ac
     const formData = await req.formData();
     const agreement = formData.get('agreement') as File;
     const license = formData.get('license') as File;
+    const auctionAccessNumber = formData.get('auctionAccessNumber') as string
+
+    if (!auctionAccessNumber) {
+        throw businessError('No auction access number was provided')
+    }
 
     if (!agreement) {
         throw businessError('No agreement was provided')
@@ -20,5 +25,5 @@ export const handler = zodApiMethod(undefined, undefined, undefined, async ({ ac
 
     const fileSystemProvider = new PublicFolderFileSystemProvider()
     const service = new AuctionAccessRequestsUserService(fileSystemProvider)
-    await service.uploadFiles(agreement, license, activeUser.email)
+    await service.uploadFiles(agreement, license, auctionAccessNumber, activeUser.email)
 })
