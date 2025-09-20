@@ -68,8 +68,6 @@ export default function Page() {
     }, [data])
 
 
-    return <RegistrationSteps />
-
     if (activeStep === 0 && !waitingForAdmin) {
         return (
             <>
