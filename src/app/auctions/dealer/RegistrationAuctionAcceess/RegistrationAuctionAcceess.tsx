@@ -1,15 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-    FaArrowRight,
-    FaEnvelope,
     FaUserCheck,
     FaCloudUploadAlt,
     FaHashtag,
     FaIdCard,
-    FaCamera,
-    FaImage,
     FaCheckCircle, FaArrowDown, FaApple, FaGooglePlay, FaCheck, FaFileAlt,
 } from "react-icons/fa";
 import styles from './RegistrationAuctionAcceess.module.css';
@@ -178,7 +173,7 @@ export const RegistrationSteps = () => {
                                 <label>
                                     <FaIdCard className={styles.iconPurple} /> Driver's License
                                 </label>
-                                {agreement?.name}
+                                {license?.name}
                                 <label className={styles.uploadZone} htmlFor="license_upload">
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
                                     <div>
@@ -191,20 +186,25 @@ export const RegistrationSteps = () => {
                             <div className={styles.formGroup}>
                                 <label>
                                     <FaFileAlt className={styles.iconPurple} />{' '}
-                                    <a
-                                        href="/your-individual-agreement.pdf"
+                                    Agreement
+                                </label>
+                                {agreement?.name}
+                                <div>
+                                    1. <b><a href="/your-individual-agreement.pdf"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={styles.link}
-                                    >
-                                        Agreement
-                                    </a>
-                                </label>
-                                {agreement?.name}
+                                        download
+                                        onClick={(e) => { e.stopPropagation() }}
+                                    >Download agreement</a></b>
+                                </div>
+                                <div>
+                                    2. Sign it
+                                </div>
                                 <label className={styles.uploadZone} htmlFor="agreement_upload">
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
                                     <div>
-                                        <p>Download, sign, and upload this file by clicking or dragging it here</p>
+                                        <p> 3. Upload signed agreement by clicking or dragging it here</p>
                                     </div>
                                     <input id="agreement_upload" onChange={handleFileChange(setAgreement)} type="file" accept=".png,.jpg,.jpeg,.pdf" />
                                 </label>
