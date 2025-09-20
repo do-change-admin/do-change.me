@@ -41,6 +41,7 @@ export const auctionAccessRequestFullSchema = z.object({
     lastName: z.string(),
     birthDate: z.date(),
     photoLink: z.string(),
+    bio: z.string(),
     status: auctionAccessRequestStatusSchema,
     timeSlots: z.array(
         z.object({

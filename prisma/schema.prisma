@@ -329,6 +329,7 @@ model AuctionAccessRequest {
   driverLicenceFileId String?
   agreementFileId     String?
   auctionAccessNumber String?
+  bio                 String     @default("")
 }
 
 model TimeSlot {

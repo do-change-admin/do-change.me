@@ -22,6 +22,7 @@ export class AuctionAccessRequestsUserService {
                 lastName: profileData.lastName,
                 status: 'review',
                 photoLink: profileData.photoLink!,
+                bio: profileData.bio,
             }
         })
     }
