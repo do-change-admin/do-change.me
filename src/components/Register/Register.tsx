@@ -8,6 +8,7 @@ import Alert from "@/components/Alert/Alert";
 import { AppError } from "@/lib/errors";
 import { apiFetch } from "@/lib/apiFetch";
 import { handleApiError } from "@/lib/handleApiError";
+import { signIn } from "next-auth/react";
 // import {GoogleButton} from "@/components/GoogleButton/GoogleButton";
 
 export const Register = () => {
@@ -56,7 +57,22 @@ export const Register = () => {
                 }),
             });
 
-            router.push("/auth/check-email")
+            const result = await signIn("credentials", {
+                email,
+                password,
+                redirect: false,
+            });
+
+            if (result?.ok) {
+                router.push("/");
+                return;
+            }
+
+            if (!result || !result.ok) {
+                throw result?.error || "Error while logging in"
+            }
+
+            // router.push("/auth/check-email")
 
         } catch (err) {
             if ((err as AppError).error) {
