@@ -32,7 +32,7 @@ export const Sidebar = () => {
                 <div className={styles.header}>
                     <div className={styles.avatarWrapper}>
                         <Avatar
-                            src=''
+                            src={profileData?.photoLink}
                             alt="User Avatar"
                             radius="xl"
                             size={48}

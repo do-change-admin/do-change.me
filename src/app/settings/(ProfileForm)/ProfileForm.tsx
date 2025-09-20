@@ -2,13 +2,12 @@
 
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import styles from "./ProfileForm.module.css";
-import { Button, Loader } from "@mantine/core";
+import {Avatar, Button, Loader} from "@mantine/core";
 import { FaCamera } from "react-icons/fa";
-import { useProfile, useProfileModifying } from "@/hooks";
+import {useProfile, useProfileModifying, useUploadPhoto} from "@/hooks";
 import { notifications } from "@mantine/notifications";
 import { ProfileFormSkeleton } from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
-import { useQueryClient } from '@tanstack/react-query';
-import { DateInput, DatePicker } from '@mantine/dates';
+import { DateInput } from '@mantine/dates';
 
 
 export const ProfileForm = () => {
@@ -17,28 +16,18 @@ export const ProfileForm = () => {
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [bio, setBio] = useState("");
-    const [birthDate, setBirthDate] = useState<Date>()
-    const queryClient = useQueryClient()
+    const [birthDate, setBirthDate] = useState<Date>();
+    const { data: profileData, isLoading: profileIsLoading } = useProfile();
+    const { mutate: modifyProfile, isPending: profileIsModifying } = useProfileModifying();
+    const { mutate: uploadPhoto, isPending: isPendingUploadPhoto } = useUploadPhoto();
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!event.target.files?.length) {
-            return;
-        }
+        if (!event.target.files?.length) return;
+        uploadPhoto(event.target.files[0]);
+    };
 
-        const file = event.target.files[0]
-        // setFile(file)
-        const formData = new FormData()
-        formData.set('photo', file)
-        fetch('/api/profile/photo', {
-            body: formData,
-            method: "POST",
-        }).then(() => {
-            queryClient.invalidateQueries({ queryKey: ['profile'] })
-        })
-    }
-
-    const { data: profileData, isLoading: profileIsLoading } = useProfile()
-    const { mutate: modifyProfile, isPending: profileIsModifying } = useProfileModifying()
+    const maxAllowedDate = new Date();
+    maxAllowedDate.setFullYear(maxAllowedDate.getFullYear() - 18);
 
     useEffect(() => {
         if (!profileIsLoading && profileData) {
@@ -56,7 +45,7 @@ export const ProfileForm = () => {
     const handleSave = (e: FormEvent) => {
         e.preventDefault();
         modifyProfile(
-            { body: { bio, firstName, lastName, phone, birthDate } },
+            { body: { bio, firstName, lastName, phone, birthDate: birthDate! } },
             {
                 onSuccess: () => {
                     notifications.show({
@@ -68,7 +57,7 @@ export const ProfileForm = () => {
                 onError: (e) => {
                     notifications.show({
                         title: 'Error',
-                        message: `Error while saving - ${e.error} (${e.stage})`,
+                        message: `Error while saving`,
                         color: 'red',
                     });
                 },
@@ -76,7 +65,7 @@ export const ProfileForm = () => {
         );
     };
 
-    if (profileIsLoading) {
+    if (profileIsLoading || isPendingUploadPhoto || profileIsModifying) {
         return <ProfileFormSkeleton />
     }
 
@@ -95,11 +84,11 @@ export const ProfileForm = () => {
 
             <div className={styles.avatarRow}>
                 <div className={styles.avatarWrap}>
-                    {profileData?.photoLink ? <img
-                        src={profileData.photoLink}
+                    <Avatar
+                        src={profileData?.photoLink}
                         alt="User avatar"
                         className={styles.avatar}
-                    /> : <></>}
+                    />
                     <button className={styles.avatarBtn} aria-label="Change photo">
                         <FaCamera className={styles.avatarIcon} />
                     </button>
@@ -139,7 +128,17 @@ export const ProfileForm = () => {
 
                 <div className={styles.field}>
                     <label className={styles.label}>Date of birth</label>
-                    <DateInput value={birthDate} onChange={(x) => setBirthDate(new Date(x!))} />
+                    <DateInput
+                        placeholder="Pick date"
+                        value={birthDate ? birthDate.toISOString().split("T")[0] : null}
+                        onChange={(x) => setBirthDate(new Date(x!))}
+                        classNames={{
+                            input: styles.inputDateInput,
+                        }}
+                        maxDate={maxAllowedDate}
+                        m={0}
+                        p={0}
+                    />
                 </div>
 
                 <div className={styles.field}>

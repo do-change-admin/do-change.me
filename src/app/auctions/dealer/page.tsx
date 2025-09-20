@@ -80,8 +80,9 @@ export default function Page() {
                 )}
             </>
         )
-
-
+    }
+    if (activeStep === 0 && !waitingForAdmin) {
+        return <AccessMainStep onStart={() => setActiveStep(1)}/>
     }
 
     return (

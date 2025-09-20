@@ -24,10 +24,10 @@ export const profileSchema = z.object({
 })
 
 export const updateProfileSchema = z.object({
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    phone: z.string().optional(),
-    bio: z.string().optional(),
-    birthDate: z.coerce.date().optional()
+    firstName: z.string().nonempty(),
+    lastName: z.string().nonempty(),
+    phone: z.string().nonempty(),
+    bio: z.string().nonempty(),
+    birthDate: z.coerce.date()
 })
 

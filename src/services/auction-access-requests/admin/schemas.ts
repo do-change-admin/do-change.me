@@ -66,7 +66,7 @@ export const auctionAccessRequestFullSchema = z.object({
 export const adminUpdateAuctionAccessRequestSchema = z.object({
     id: z.string(),
     progress: z.enum(['next approve step', 'reject']).optional(),
-    availableTimeSlots: z.array(z.object({ date: z.coerce.date() })).optional(),
+    availableTimeSlots: z.array(z.object({ date: z.coerce.date() })).nonempty().optional(),
 })
 
 

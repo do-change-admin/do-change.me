@@ -79,7 +79,9 @@ export const useMileagePriceQuery = (
 
             return !cacheStatus.marketPricesWereFound.includes(mileage)
         },
-        staleTime: 5 * 60 * 1000
+        staleTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     });
 };
 
@@ -103,7 +105,7 @@ export function useCheckRecords(vin: string) {
             }
 
             return data;
-        },
+        }
     });
 }
 
@@ -155,6 +157,9 @@ export const useSalvageCheck = (vin: string | null, cacheStatus?: CacheStatus) =
             const { success } = VinSchema.safeParse(vin)
             return success
         },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        staleTime: 5 * 60 * 1000,
     });
 };
 

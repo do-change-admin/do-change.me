@@ -25,7 +25,7 @@ const subTabs: Tab[] = [{
     status: 'awaiting user confirmation',
     label: "Awaiting User Confirmation"
 }, {
-    label: "Scheduled",
+    label: "Scheduling",
     status: 'call scheduling'
 }, {
     label: "Call Completed - Awaiting Decision",

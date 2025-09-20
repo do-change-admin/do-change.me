@@ -5,8 +5,8 @@ import {SearchSection, SubscriptionPlans} from "@/components";
 export default function Reports() {
     return (
         <main id="main-content" className={styles.main}>
+            <SearchSection />
             <SubscriptionPlans/>
-            {/*<SearchSection />*/}
         </main>
     );
 };

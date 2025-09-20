@@ -20,18 +20,18 @@ const AUCTION_CARDS = [
         headerClass: styles.dealers,
         highlight: false,
     },
-    {
-        id: "/auctions/insurance",
-        title: "Insurance Auction",
-        subtitle: "Copart, IAAI and 140+ auctions",
-        img: "https://storage.googleapis.com/uxpilot-auth.appspot.com/bc77c00253-df52ce3651ba8510878a.png",
-        icon: <FaGavel color="white" />,
-        buttonText: "View Cars",
-        buttonIcon: <FaEye />,
-        btnClass: styles.insuranceBtn,
-        headerClass: styles.insurance,
-        highlight: true,
-    }
+    // {
+    //     id: "/auctions/insurance",
+    //     title: "Insurance Auction",
+    //     subtitle: "Copart, IAAI and 140+ auctions",
+    //     img: "https://storage.googleapis.com/uxpilot-auth.appspot.com/bc77c00253-df52ce3651ba8510878a.png",
+    //     icon: <FaGavel color="white" />,
+    //     buttonText: "View Cars",
+    //     buttonIcon: <FaEye />,
+    //     btnClass: styles.insuranceBtn,
+    //     headerClass: styles.insurance,
+    //     highlight: true,
+    // }
 ];
 
 const AuctionCard = ({

@@ -6,6 +6,7 @@ import {ProfileForm} from "./(ProfileForm)/ProfileForm";
 import { Button, Group} from "@mantine/core";
 import {signOut} from "next-auth/react";
 import {FaCcVisa} from "react-icons/fa6";
+import {SubscriptionPlans} from "@/components";
 
 export default function SettingsContent() {
 
@@ -69,6 +70,7 @@ export default function SettingsContent() {
                 {/*    </div>*/}
                 {/*</div>*/}
             </section>
+            {/*<SubscriptionPlans/>*/}
 
             <Group gap="xs" justify="right">
                 <Button

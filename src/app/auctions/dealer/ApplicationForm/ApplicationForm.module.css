@@ -25,6 +25,7 @@
 
 .formHeader p {
     color: #555;
+    margin-bottom: 2rem;
 }
 
 .form {
@@ -142,6 +143,7 @@
     align-items: center;
     gap: 0.5rem;
     transition: 0.3s;
+    width: 100%;
 }
 
 .submitBtn:hover {
@@ -261,7 +263,7 @@
         grid-template-columns: 1fr;
     }
     .formSection {
-        padding: 1rem;
+        padding: 0;
     }
 
     .infoSection {

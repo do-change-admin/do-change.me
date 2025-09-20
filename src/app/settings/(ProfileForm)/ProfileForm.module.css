@@ -188,6 +188,22 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
 }
 
+.inputDateInput {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    font-size: 14px;
+    outline: none;
+    transition: box-shadow .15s ease, border-color .15s ease;
+}
+
+.inputDateInput:focus {
+    border-color: var(--blue-600);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+}
+
+
 .textarea {
     resize: vertical;
 }

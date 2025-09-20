@@ -36,7 +36,7 @@
 
 @media (max-width: 900px) {
     .container {
-        padding: 1rem;
+        padding: 0.5rem;
     }
     .stepper {
         flex-direction: column;

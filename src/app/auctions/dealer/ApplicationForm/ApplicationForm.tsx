@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, useEffect, ChangeEvent } from "react";
+import React, { useState, FormEvent, useEffect, ChangeEvent } from "react";
 import {
     FaUser,
     FaEnvelope,
@@ -19,82 +19,18 @@ import type { ProfileData, UpdateProfilePayload } from "@/services";
 import { FaCalendar } from "react-icons/fa6";
 import { DateInput } from "@mantine/dates";
 import { useQueryClient } from "@tanstack/react-query";
+import {Avatar} from "@mantine/core";
+import {ProfileForm} from "@/app/settings/(ProfileForm)/ProfileForm";
 
 export const ApplicationForm = () => {
     const { data: profileData } = useProfile()
-    const { mutateAsync: updateProfile } = useProfileModifying()
     const { mutate: createAuctionAccessRequest } = useAuctionAccessRequestCreation()
-    const [showStub, setShowStub] = useState(false);
-    const [formData, setFormData] = useState<ProfileData>({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        bio: "",
-        subscription: null,
-        birthDate: null,
-        photoLink: null
-    });
-    const queryClient = useQueryClient()
-
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!event.target.files?.length) {
-            return;
-        }
-
-        const file = event.target.files[0]
-        // setFile(file)
-        const formData = new FormData()
-        formData.set('photo', file)
-        fetch('/api/profile/photo', {
-            body: formData,
-            method: "POST",
-        }).then(() => {
-            queryClient.invalidateQueries({ queryKey: ['profile'] })
-        })
-    }
-
-    const emptyFields = profileData
-        ? Object.keys(profileData).filter(field => !profileData[field as keyof ProfileData])
-        : []
-
-    useEffect(() => {
-        if (profileData) {
-            setFormData({
-                bio: profileData.bio,
-                email: profileData.email,
-                firstName: profileData.firstName,
-                lastName: profileData.lastName,
-                phone: profileData.phone,
-                subscription: null,
-                birthDate: profileData.birthDate,
-                photoLink: profileData.photoLink
-            })
-        }
-    }, [profileData])
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value, files } = e.target as any;
-        if (files) {
-            setFormData((prev) => ({ ...prev, [name]: files[0] }));
-        } else {
-            setFormData((prev) => ({ ...prev, [name]: value }));
-        }
-    };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const emptyFieldsData = emptyFields.map(x => ({ field: x, value: formData[x as keyof ProfileData] }))
-        if (emptyFieldsData.length) {
-            const dataToUpdateProfile = Object.fromEntries(emptyFieldsData.map(x => [x.field, x.value] as const)) as UpdateProfilePayload
-            await updateProfile({ body: dataToUpdateProfile })
-        }
         await createAuctionAccessRequest({})
     };
 
-    if (showStub) {
-        return <ApplicationSuccesses />
-    }
     return (
         <div className={styles.mainContainer}>
             {/* Left Section - Form */}
@@ -106,140 +42,11 @@ export const ApplicationForm = () => {
                             Complete your application to get exclusive access to premium car auctions
                         </p>
                     </div>
-
-                    <form onSubmit={handleSubmit} className={styles.form}>
-                        {/* Photo Upload */}
-                        <div className={styles.uploadWrapper}>
-                            <label className={styles.label}>Profile Photo</label>
-                            <div className={styles.uploadZone}>
-                                {profileData?.photoLink ? <img
-                                    src={profileData.photoLink}
-                                    alt="User avatar"
-                                    className={styles.avatar}
-                                /> : <label htmlFor="upload-photo">Please set a photo to apply</label>}
-                                <input style={{ display: 'none' }} id='upload-photo' type='file' onChange={handleFileChange} />
-
-                                {/* <input
-                                    type="file"
-                                    name="photo"
-                                    accept="image/*"
-                                    onChange={handleChange}
-                                    className={styles.input}
-                                />
-                                <FaCamera className={styles.uploadIcon} />
-                                <p>Click to upload your photo</p>
-                                <span>PNG, JPG up to 5MB</span> */}
-                            </div>
-                        </div>
-
-                        {/* Name Fields */}
-                        <div className={styles.row}>
-                            <div>
-                                <label className={styles.label}>First Name</label>
-                                <div className={styles.inputWrapper}>
-                                    <FaUser className={styles.icon} />
-                                    <input
-                                        type="text"
-                                        name="firstName"
-                                        placeholder="John"
-                                        value={formData.firstName}
-                                        onChange={handleChange}
-                                        className={styles.input}
-                                        disabled={!!profileData?.firstName}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label className={styles.label}>Last Name</label>
-                                <div className={styles.inputWrapper}>
-                                    <FaUser className={styles.icon} />
-                                    <input
-                                        type="text"
-                                        name="lastName"
-                                        placeholder="Doe"
-                                        value={formData.lastName}
-                                        onChange={handleChange}
-                                        required
-                                        disabled={!!profileData?.lastName}
-                                        className={styles.input}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Email */}
-                        <div>
-                            <label className={styles.label}>Email Address</label>
-                            <div className={styles.inputWrapper}>
-                                <FaEnvelope className={styles.icon} />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="john@example.com"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className={styles.input}
-                                    disabled
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        {/* Phone */}
-                        <div>
-                            <label>Phone Number</label>
-                            <div className={styles.inputWrapper}>
-                                <FaPhone className={styles.icon} />
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    placeholder="+1 (555) 123-4567"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className={styles.input}
-                                    disabled={!!profileData?.phone}
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        {/* Date of birth */}
-                        <div>
-                            <label>Date of birth</label>
-                            <div className={styles.inputWrapper}>
-                                <FaCalendar className={styles.icon} />
-                                <DateInput
-                                    required
-                                    disabled={!!profileData?.birthDate}
-                                    value={formData.birthDate}
-                                    onChange={(x) => {
-                                        setFormData(f => ({ ...f, birthDate: x ? new Date(x) : null }))
-                                    }}
-                                />
-                            </div>
-                        </div>
-
-
-                        {/* About */}
-                        <div>
-                            <label>Tell us about yourself</label>
-                            <textarea
-                                name="bio"
-                                rows={4}
-                                placeholder="Share your experience with cars, auction interests..."
-                                value={formData.bio}
-                                onChange={handleChange}
-                                className={styles.textarea}
-                                disabled={!!profileData?.bio}
-                            />
-                        </div>
-
-                        {/* Submit */}
-                        <button type="submit" disabled={!profileData?.photoLink} className={styles.submitBtn}>
-                            Submit Application <FaArrowRight />
-                        </button>
-                    </form>
+                    <ProfileForm/>
+                    {/* Submit */}
+                    <button onClick={handleSubmit} className={styles.submitBtn}>
+                        Submit Application <FaArrowRight />
+                    </button>
                 </div>
             </div>
 

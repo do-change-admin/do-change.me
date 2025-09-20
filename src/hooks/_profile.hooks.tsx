@@ -7,7 +7,10 @@ export const useProfile = () => {
         queryKey: ['profile'],
         queryFn: () => {
             return apiRequest('/api/profile', 'GET')({})
-        }
+        },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        staleTime: 5 * 60 * 1000,
     })
 }
 
@@ -17,6 +20,32 @@ export const useProfileModifying = () => {
         mutationFn: apiRequest('/api/profile', 'PATCH'),
         onSuccess: () => {
             client.invalidateQueries({ queryKey: ['profile'] })
-        }
+        },
     })
+}
+
+
+export function useUploadPhoto() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async function (file: File) {
+            const formData = new FormData();
+            formData.set("photo", file);
+
+            const response = await fetch("/api/profile/photo", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to upload photo");
+            }
+
+            return response.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["profile"] });
+        },
+    });
 }

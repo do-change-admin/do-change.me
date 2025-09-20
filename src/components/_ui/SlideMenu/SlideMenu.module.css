@@ -1,7 +1,7 @@
 .subMenu {
     padding-left: 5rem;
     position: fixed;
-    border-right: 1px solid rgba(193, 191, 192, 0.69);
+    border-right: 1px solid rgba(237, 237, 237, 0.69);
     width: 0;
     transition: width 0.2s;
     z-index: 99;
