@@ -1,9 +1,10 @@
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { jwtVerify } from "jose";
+import { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
+
 
     // Пути без проверки
     const publicPaths = [
@@ -18,6 +19,18 @@ export async function middleware(req: NextRequest) {
     if (publicPaths.some((path) => pathname.startsWith(path))) {
         return NextResponse.next();
     }
+
+    if (pathname.startsWith('/admin')) {
+        const user = await getToken({ req, secret: process.env.AUTH_SECRET })
+        if (!user) {
+            return NextResponse.redirect(new URL("/auth/login", req.url));
+        }
+        if (!(process.env.ADMIN_EMAILS?.split(',') ?? []).includes(user.email)) {
+            return NextResponse.redirect(new URL("/", req.url));
+        }
+        return NextResponse.next()
+    }
+
 
     const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
 
