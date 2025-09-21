@@ -3,7 +3,7 @@
 import React from 'react';
 import styles from './MobileBottomNav.module.css';
 import { useScanner, useSlideMenu } from '@/contexts';
-import { AuctionServicesCards } from '@/components';
+import { AuctionsServicesCards } from '@/components';
 import { useNavMenu } from '@/hooks';
 import { FaQrcode } from 'react-icons/fa';
 
@@ -12,7 +12,7 @@ export const MobileBottomNav = () => {
     const { openMenu } = useSlideMenu();
 
     const handleOpenMenu = () => {
-        openMenu(<AuctionServicesCards />);
+        openMenu(<AuctionsServicesCards />);
     };
 
     const { navLinks, handleClick } = useNavMenu(handleOpenMenu);
