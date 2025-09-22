@@ -1,7 +1,7 @@
 import { withPaginationSchema } from "@/schemas";
 import { auctionAccessRequestListSchema, auctionAccessRequestStatusSchema, AuctionAccessRequestsAdminService } from "@/services";
 import z from "zod";
-import { zodApiMethod, ZodAPIMethod } from "../../zod-api-methods";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../zod-api-methods";
 import { PublicFolderFileSystemProvider } from "@/providers/implementations";
 
 const queryParamsSchema = z.object(
@@ -16,9 +16,9 @@ const responseSchema = z.object({
     )
 })
 
-export type Method = ZodAPIMethod<typeof queryParamsSchema, undefined, typeof responseSchema>
+export type Method = ZodAPIMethod_DEPRECATED<typeof queryParamsSchema, undefined, typeof responseSchema>
 
-export const handler = zodApiMethod(
+export const handler = zodApiMethod_DEPRECATED(
     queryParamsSchema,
     undefined,
     responseSchema,

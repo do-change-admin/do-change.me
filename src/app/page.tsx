@@ -2,16 +2,16 @@
 
 import React from "react";
 import styles from "./page.module.css";
-import {SearchSection, CookieBanner, SubscriptionPlans} from "@/components";
-import {useDisclosure} from "@mantine/hooks";
+import { SearchSection, CookieBanner, SubscriptionPlans } from "@/components";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function Reports() {
-    const [opened, {open, close}] = useDisclosure(false);
+    const [opened, { open, close }] = useDisclosure(false);
     return (
         <main id="main-content" className={styles.main}>
-            <SubscriptionPlans opened={opened} close={close}/>
-            <SearchSection openSubscription={open}/>
-            <CookieBanner/>
+            <SubscriptionPlans opened={opened} close={close} />
+            <SearchSection openSubscription={open} />
+            <CookieBanner />
         </main>
     );
 };
