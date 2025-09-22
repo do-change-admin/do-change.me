@@ -29,7 +29,7 @@ export default function SettingsContent() {
                             </div>
                             <p className={styles.planDesc}>Access to all features and priority support</p>
                             <div className={styles.planMeta}>
-                                <span>$29/month</span>
+                                <span>50/month</span>
                                 <span className={styles.dot}>•</span>
                                 <span>Next billing: March 15, 2024</span>
                             </div>
@@ -70,7 +70,7 @@ export default function SettingsContent() {
                 {/*    </div>*/}
                 {/*</div>*/}
             </section>
-            {/*<SubscriptionPlans/>*/}
+            <SubscriptionPlans/>
 
             <Group gap="xs" justify="right">
                 <Button

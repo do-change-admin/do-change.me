@@ -122,10 +122,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                             <h2>About</h2>
                         </div>
                         <p className={styles.text}>
-                            Experienced software engineer with 8+ years in full-stack
-                            development. Passionate about creating innovative solutions and
-                            leading cross-functional teams. Strong background in React,
-                            Node.js, and cloud technologies.
+                            {requestInfo.bio}
                         </p>
                     </section>
 

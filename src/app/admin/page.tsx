@@ -86,11 +86,11 @@ export default function AuctionAccessPage() {
                     {mainTabs.map((tab) => (
                         <Tabs.Tab value={tab.status} key={tab.label} className={styles.tabWithBadge}>
                             {tab.label}
-                            {!!tab.count && (
-                                <Badge color="pink" size="sm" className={styles.tabBadge}>
-                                    {tab.count}
-                                </Badge>
-                            )}
+                            {/*{!!tab.count && (*/}
+                            {/*    <Badge color="pink" size="sm" className={styles.tabBadge}>*/}
+                            {/*        {tab.count}*/}
+                            {/*    </Badge>*/}
+                            {/*)}*/}
                         </Tabs.Tab>
                     ))}
                 </Tabs.List>

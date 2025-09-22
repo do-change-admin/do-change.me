@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, {FC} from "react";
 import styles from "./SearchSection.module.css";
 import { SearchHistory } from "./SearchHistory/SearchHistory";
 import { SampleResults } from "./SampleResults/SampleResults";
@@ -10,7 +10,11 @@ import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useCachedInfo } f
 import { VinSearch } from "./VinSearch/VinSearch";
 import cn from "classnames";
 
-export const SearchSection = () => {
+interface SearchSectionProps {
+    openSubscription?: () => void
+}
+
+export const SearchSection:FC<SearchSectionProps> = ({openSubscription}) => {
     const searchParams = useSearchParams();
     const vin = searchParams.get("vin") || '1C6RD6FT1CS310366';
 
@@ -47,7 +51,7 @@ export const SearchSection = () => {
                             </div>
                         </div>
                     </div>
-                    <VinSearch />
+                    <VinSearch openSubscription={openSubscription}/>
                 </div>
                 <SampleResults baseInfo={cachedInfo?.baseInfo} vin={vin} cacheStatus={cachedInfo?.cachedDataStatus}
                     cachedPricesInfo={cachedInfo?.marketAnalysis ?? []} />
