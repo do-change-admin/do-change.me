@@ -25,6 +25,7 @@ import {useRouter} from "next/navigation";
 import {Avatar, Badge, Button, Loader, Text, Group, CopyButton, Tooltip, Card} from "@mantine/core";
 import dayjs from "dayjs";
 import cn from "classnames";
+import {AiOutlineArrowLeft} from "react-icons/ai";
 
 export interface UserCardProps {
     applicationId: string;
@@ -75,6 +76,15 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
             >
                 {/* Header */}
                 <div className={styles.header}>
+                    <Button
+                        variant="light"
+                        color="white"
+                        mb={16}
+                        leftSection={<AiOutlineArrowLeft size={18} />}
+                        onClick={() => router.push("/admin")}
+                    >
+                        Back
+                    </Button>
                     <div className={styles.headerContent}>
                         <div className={styles.userPhoto}>
                             <Avatar
@@ -153,41 +163,6 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                 <FaCalendarAlt className={styles.sectionIconBlue}/>
                                 <h2>Available Slots</h2>
                             </div>
-                            {/*<div className={styles.calendarBox}>*/}
-                            {/*    <div className={styles.calendarHeader}>*/}
-                            {/*        <h3>December 2024</h3>*/}
-                            {/*        <div className={styles.calendarNav}>*/}
-                            {/*            <button>*/}
-                            {/*                <FaChevronLeft />*/}
-                            {/*            </button>*/}
-                            {/*            <button>*/}
-                            {/*                <FaChevronRight />*/}
-                            {/*            </button>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*    <div className={styles.calendarGrid}>*/}
-                            {/*        <span>Sun</span>*/}
-                            {/*        <span>Mon</span>*/}
-                            {/*        <span>Tue</span>*/}
-                            {/*        <span>Wed</span>*/}
-                            {/*        <span>Thu</span>*/}
-                            {/*        <span>Fri</span>*/}
-                            {/*        <span>Sat</span>*/}
-                            {/*        /!* Days (демо) *!/*/}
-                            {/*        <span className={styles.dayMuted}>1</span>*/}
-                            {/*        <span className={styles.dayMuted}>2</span>*/}
-                            {/*        <span className={styles.dayActive}>20</span>*/}
-                            {/*        <span className={styles.dayActive}>22</span>*/}
-                            {/*        <span className={styles.dayActive}>27</span>*/}
-                            {/*    </div>*/}
-                            {/*    <div className={styles.selectedSlots}>*/}
-                            {/*        <span>Selected slots: Dec 20, 22, 27</span>*/}
-                            {/*    </div>*/}
-                            {/*    <div className={styles.userSelected}>*/}
-                            {/*        <FaCheckCircle />*/}
-                            {/*        <span>User selected: December 22, 2024</span>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
                             <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
                                 {requestInfo.timeSlots?.length ? (
                                     <Card shadow="sm" padding="lg" radius="md" withBorder>
