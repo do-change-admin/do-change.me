@@ -1,6 +1,7 @@
 import { AuctionAccessRequestsAPI } from "@/app/api/auction-access-requests/route"
 import { apiRequest } from "@/lib/apiFetch"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {useState} from "react";
 
 export const useAuctionAccessRequestCreation = () => {
     const queryClient = useQueryClient()
@@ -29,5 +30,52 @@ export const useAuctionAccessRequestUpdate = () => {
             queryClient.invalidateQueries({ queryKey: ['auction-access-user-data'] })
         }
     })
-
 }
+
+type UseAuctionAccessRequestProps = {
+    onSuccess?: () => void;
+    onError?: (error: any) => void;
+};
+
+export const useAuctionAccessDock = ({ onSuccess, onError }: UseAuctionAccessRequestProps = {}) => {
+    const [agreement, setAgreement] = useState<File | null>(null);
+    const [license, setLicense] = useState<File | null>(null);
+    const [auctionAccessNumber, setAuctionAccessNumber] = useState('');
+
+    const mutation = useMutation({
+        mutationFn: async () => {
+            const formData = new FormData();
+            if (agreement) formData.append('agreement', agreement);
+            if (license) formData.append('license', license);
+            if (auctionAccessNumber) formData.append('auctionAccessNumber', auctionAccessNumber);
+
+            const response = await fetch('/api/auction-access-requests/files', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit auction access request');
+            }
+
+            return response.json();
+        },
+        onSuccess,
+        onError,
+    });
+
+    const nextStep = () => {
+        mutation.mutate();
+    };
+
+    return {
+        agreement,
+        setAgreement,
+        license,
+        setLicense,
+        auctionAccessNumber,
+        setAuctionAccessNumber,
+        nextStep,
+        ...mutation, // возвращает isLoading, isError, error, data и т.д.
+    };
+};

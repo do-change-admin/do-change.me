@@ -107,7 +107,7 @@ export default function Page() {
                         label={step.label}
                         description={step.description}
                         icon={step.icon}
-                        allowStepSelect={false}
+                        // allowStepSelect={false}
 
                     />
                 ))}
@@ -126,6 +126,11 @@ export default function Page() {
                         {activeStep === 3 && <RegistrationSteps />}
                         {activeStep === 4 && <AuctionAccess />}
                     </>)}
+
+                    {/*{activeStep === 0 && <ApplicationForm />}*/}
+                    {/*{activeStep === 1 && <CallSchedule />}*/}
+                    {/*{activeStep === 2 && <RegistrationSteps />}*/}
+                    {/*{activeStep === 3 && <AuctionAccess />}*/}
                 </div>
             </div>
         </Box>

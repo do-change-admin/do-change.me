@@ -8,8 +8,10 @@ import {
     FaCheckCircle, FaArrowDown, FaApple, FaGooglePlay, FaCheck, FaFileAlt,
 } from "react-icons/fa";
 import styles from './RegistrationAuctionAcceess.module.css';
-import { Image } from "@mantine/core";
+import {Button, Image} from "@mantine/core";
 import { ChangeEvent, useState } from "react";
+import {useAuctionAccessDock} from "@/hooks";
+import {notifications} from "@mantine/notifications";
 
 const handleFileChange = (
     setFile: (file: File) => void) =>
@@ -23,26 +25,25 @@ const handleFileChange = (
     }
 
 export const RegistrationSteps = () => {
-    const [agreement, setAgreement] = useState<File>()
-    const [license, setLicense] = useState<File>()
-    const [auctionAccessNumber, setAuctionAccessNumber] = useState('')
-    const nextStep = () => {
-        const formData = new FormData();
-        if (agreement) {
-            formData.append('agreement', agreement)
-        }
-        if (license) {
-            formData.append('license', license)
-        }
-        if (auctionAccessNumber) {
-            formData.append('auctionAccessNumber', auctionAccessNumber)
-        }
-        // TODO - replace with React Query
-        fetch('/api/auction-access-requests/files', {
-            body: formData,
-            method: "POST",
-        })
-    }
+    const {
+        agreement,
+        setAgreement,
+        license,
+        setLicense,
+        auctionAccessNumber,
+        setAuctionAccessNumber,
+        nextStep,
+        isPending,
+    } = useAuctionAccessDock({
+        onError: (e: any) => {
+            notifications.show({
+                title: 'Error',
+                message: `Error while saving. Please make sure all required fields are filled correctly.`,
+                color: 'red',
+            });
+        },
+    });
+
 
     return (
         <main className={styles.container}>
@@ -212,9 +213,17 @@ export const RegistrationSteps = () => {
 
 
                             <div className={styles.submitSection}>
-                                <button onClick={() => { nextStep() }}>
-                                    <FaCheckCircle /> Complete Registration
-                                </button>
+                                <Button
+                                    h={50}
+                                    radius="1rem"
+                                    fullWidth
+                                    leftSection={<FaCheckCircle />}
+                                    onClick={nextStep}
+                                    disabled={isPending}
+                                    loading={isPending}
+                                >
+                                    Complete Registration
+                                </Button>
                                 <p>
                                     By submitting, you agree to our terms of service and privacy
                                     policy

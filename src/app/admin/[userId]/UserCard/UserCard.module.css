@@ -283,6 +283,60 @@
     color: #2563eb;
 }
 
+.docActions a {
+    border: none;
+    background: transparent;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: #2563eb;
+}
+
+.dateButton {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+
+.dateButtonIcon {
+    font-size: 1.5rem;
+    color: var(--text-texas-blue);
+}
+
+.dateButtonText {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dateButtonDay {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #111827;
+}
+
+.timeSelected {
+    background: var(--text-texas-blue);;
+    color: white;
+    border-color: var(--text-texas-blue);;
+
+    span {
+        color: white;
+    }
+
+    svg {
+        fill: white;
+    }
+}
+
 .docActions button:hover {
     background: #f3f4f6;
 }

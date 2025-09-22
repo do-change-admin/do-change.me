@@ -37,42 +37,6 @@ export const CallSchedule = () => {
             <div className={styles.schedulerContainer}>
                 <div className={styles.schedulerCard}>
                     <div className={styles.schedulerGrid}>
-
-
-                        {/*<motion.section*/}
-                        {/*    id="calendar-scheduler"*/}
-                        {/*    className={styles.calendarSection}*/}
-                        {/*    initial={{ opacity: 0, y: 30 }}*/}
-                        {/*    animate={{ opacity: 1, y: 0 }}*/}
-                        {/*    transition={{ duration: 0.8 }}*/}
-                        {/*>*/}
-                        {/*    <div className={styles.calendarHeader}>*/}
-                        {/*        <h2 className={styles.calendarTitle}>Select Date & Time</h2>*/}
-                        {/*        <p className={styles.calendarSubtitle}>*/}
-                        {/*            Choose from available interview slots below*/}
-                        {/*        </p>*/}
-                        {/*    </div>*/}
-                        {/*    <div>*/}
-                        {/*        {data?.timeSlots.map(x => (<>*/}
-                        {/*            <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>*/}
-                        {/*                {dayjs(x.date).format('YYYY-MM-DD [(]HH [h]our[s][)]')}*/}
-                        {/*            </button>*/}
-                        {/*        </>))}*/}
-                        {/*    </div>*/}
-                        {/*    <button*/}
-                        {/*        className={styles.confirmBtn}*/}
-                        {/*        disabled={!selectedTimeSlotId}*/}
-                        {/*        onClick={() => {*/}
-                        {/*            update({ body: { selectedTimeSlotId } })*/}
-                        {/*        }}*/}
-                        {/*    >*/}
-                        {/*        <FaCalendarCheck className={styles.confirmIcon} />*/}
-                        {/*        Confirm Interview Appointment*/}
-                        {/*    </button>*/}
-
-                        {/*</motion.section>*/}
-
-                        {/* CALENDAR SECTION */}
                         <motion.section
                             id="calendar-scheduler"
                             className={styles.calendarSection}
@@ -86,53 +50,6 @@ export const CallSchedule = () => {
                                     Choose from available interview slots below
                                 </p>
                             </div>
-
-                            {/*<div className={styles.calendarWrapper}>*/}
-                            {/*    <div className={styles.calendarMonth}>*/}
-                            {/*        <h3>December 2024</h3>*/}
-                            {/*        <div className={styles.navButtons}>*/}
-                            {/*            <button className={styles.navBtn}>*/}
-                            {/*                <FaChevronLeft />*/}
-                            {/*            </button>*/}
-                            {/*            <button className={styles.navBtn}>*/}
-                            {/*                <FaChevronRight />*/}
-                            {/*            </button>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-
-                            {/*    <div className={styles.weekDays}>*/}
-                            {/*        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(*/}
-                            {/*            (day) => (*/}
-                            {/*                <div key={day} className={styles.weekDay}>*/}
-                            {/*                    {day}*/}
-                            {/*                </div>*/}
-                            {/*            )*/}
-                            {/*        )}*/}
-                            {/*    </div>*/}
-
-                            {/*    <div className={styles.calendarDays}>*/}
-                            {/*        {Array.from({ length: 14 }, (_, i) => i + 1).map((day) => {*/}
-                            {/*            const isAvailable = availableDates.includes(day);*/}
-                            {/*            const isSelected = selectedDate === day;*/}
-                            {/*            return (*/}
-                            {/*                <div*/}
-                            {/*                    key={day}*/}
-                            {/*                    className={`${styles.calendarCell} ${isAvailable ? styles.availableDay : styles.unavailableDay*/}
-                            {/*                        } ${isSelected ? styles.selectedDay : ""}`}*/}
-                            {/*                    onClick={() => isAvailable && setSelectedDate(day)}*/}
-                            {/*                >*/}
-                            {/*                    {day}*/}
-                            {/*                </div>*/}
-                            {/*            );*/}
-                            {/*        })}*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-
-                            {/*        {data?.timeSlots.map(x => (<>*/}
-                            {/*            <button onClick={() => { setSelectedTimeSlotId(x.id) }} style={{ background: x.id === selectedTimeSlotId ? 'lightgrey' : undefined }}>*/}
-                            {/*                {dayjs(x.date).format('YYYY-MM-DD [(]HH [h]our[s][)]')}*/}
-                            {/*            </button>*/}
-                            {/*        </>))}*/}
                             <div className={styles.timeSlots}>
                                 <h3 className={styles.timeTitle}>Available Times</h3>
                                 <div className={styles.timeGrid}>

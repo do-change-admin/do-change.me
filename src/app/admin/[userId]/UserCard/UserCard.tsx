@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 import {
     FaCalendarAlt,
     FaPaperPlane,
@@ -9,14 +9,12 @@ import {
     FaClock,
     FaTimes,
     FaArrowRight,
-    FaChevronLeft,
-    FaChevronRight,
-    FaCheckCircle,
     FaFileUpload,
     FaIdCard,
     FaEye,
     FaDownload,
-    FaFileContract,
+    FaFileContract, FaCheck,
+    FaCopy,
 } from "react-icons/fa";
 
 import styles from "./UserCard.module.css";
@@ -24,18 +22,19 @@ import React, {FC, useEffect, useState} from "react";
 import {Schedule, SchedulePicker} from "@/components/_admin/SchedulePicker/SchedulePicker";
 import {useAdminAuctionAccessRequest, useAdminAuctionAccessRequestUpdate, useDatesMapping} from "@/hooks";
 import {useRouter} from "next/navigation";
-import {Avatar, Loader} from "@mantine/core";
+import {Avatar, Badge, Button, Loader, Text, Group, CopyButton, Tooltip, Card} from "@mantine/core";
 import dayjs from "dayjs";
+import cn from "classnames";
 
 export interface UserCardProps {
     applicationId: string;
 }
 
-export  const  UserCard:FC<UserCardProps> = ({applicationId}) => {
+export const UserCard: FC<UserCardProps> = ({applicationId}) => {
     const [schedule, setSchedule] = useState<Schedule>({})
-    const { datesFromSchedule, scheduleFromDates } = useDatesMapping()
-    const { data: requestInfo } = useAdminAuctionAccessRequest({ id: applicationId })
-    const { mutate: update } = useAdminAuctionAccessRequestUpdate()
+    const {datesFromSchedule, scheduleFromDates} = useDatesMapping()
+    const {data: requestInfo} = useAdminAuctionAccessRequest({id: applicationId})
+    const {mutate: update} = useAdminAuctionAccessRequestUpdate()
     const router = useRouter();
 
     useEffect(() => {
@@ -52,19 +51,27 @@ export  const  UserCard:FC<UserCardProps> = ({applicationId}) => {
         return <Loader/>
     }
 
-    const handleReject = () => { update({ body: { id: applicationId, progress: 'reject' } }) }
+    const handleReject = () => {
+        update({body: {id: applicationId, progress: 'reject'}})
+    }
     const handleContinue = () => {
         const dates = requestInfo.timeSlots?.length ? [] : datesFromSchedule(schedule)
-        update({ body: { id: applicationId, progress: 'next approve step', availableTimeSlots: dates.length ? dates.map(x => ({ date: x })) : undefined } })
+        update({
+            body: {
+                id: applicationId,
+                progress: 'next approve step',
+                availableTimeSlots: dates.length ? dates.map(x => ({date: x})) : undefined
+            }
+        })
     }
 
     return (
         <div className={styles.container}>
             <motion.div
                 className={styles.card}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                initial={{opacity: 0, y: 20}}
+                animate={{opacity: 1, y: 0}}
+                transition={{duration: 0.5}}
             >
                 {/* Header */}
                 <div className={styles.header}>
@@ -80,16 +87,16 @@ export  const  UserCard:FC<UserCardProps> = ({applicationId}) => {
                             <h1 className={styles.userName}>{requestInfo.firstName} {requestInfo.lastName}</h1>
                             <div className={styles.dates}>
                                 <div className={styles.dateItem}>
-                                    <FaCalendarAlt />
+                                    <FaCalendarAlt/>
                                     <span>Born: {new Date(requestInfo.birthDate).toDateString()}</span>
                                 </div>
                                 <div className={styles.dateItem}>
-                                    <FaPaperPlane />
+                                    <FaPaperPlane/>
                                     <span>Applied: {new Date(requestInfo.applicationDate).toDateString()}</span>
                                 </div>
                             </div>
                             <div className={styles.email}>
-                                <FaEnvelope />
+                                <FaEnvelope/>
                                 <span>{requestInfo.email}</span>
                             </div>
                         </div>
@@ -101,7 +108,7 @@ export  const  UserCard:FC<UserCardProps> = ({applicationId}) => {
                     {/* About */}
                     <section className={styles.section}>
                         <div className={styles.sectionHeader}>
-                            <FaUserCircle className={styles.sectionIcon} />
+                            <FaUserCircle className={styles.sectionIcon}/>
                             <h2>About</h2>
                         </div>
                         <p className={styles.text}>
@@ -115,7 +122,7 @@ export  const  UserCard:FC<UserCardProps> = ({applicationId}) => {
                     {/* Status */}
                     <section className={styles.section}>
                         <div className={styles.sectionHeader}>
-                            <FaClock className={styles.sectionIconOrange} />
+                            <FaClock className={styles.sectionIconOrange}/>
                             <h2>Application Status</h2>
                         </div>
                         <div className={styles.statusBox}>
@@ -132,10 +139,10 @@ export  const  UserCard:FC<UserCardProps> = ({applicationId}) => {
                     {/* Buttons */}
                     <section className={styles.buttons}>
                         <button className={styles.rejectBtn} onClick={handleReject}>
-                            <FaTimes /> Reject
+                            <FaTimes/> Reject
                         </button>
                         <button className={styles.continueBtn} onClick={handleContinue}>
-                            <FaArrowRight /> Continue
+                            <FaArrowRight/> Continue
                         </button>
                     </section>
 
@@ -143,7 +150,7 @@ export  const  UserCard:FC<UserCardProps> = ({applicationId}) => {
                         {/* Calendar */}
                         <section className={styles.section}>
                             <div className={styles.sectionHeader}>
-                                <FaCalendarAlt className={styles.sectionIconBlue} />
+                                <FaCalendarAlt className={styles.sectionIconBlue}/>
                                 <h2>Available Slots</h2>
                             </div>
                             {/*<div className={styles.calendarBox}>*/}
@@ -181,63 +188,155 @@ export  const  UserCard:FC<UserCardProps> = ({applicationId}) => {
                             {/*        <span>User selected: December 22, 2024</span>*/}
                             {/*    </div>*/}
                             {/*</div>*/}
-                            <div>
-                                {requestInfo.timeSlots?.length
-                                    ? <>You selected slots: {requestInfo.timeSlots.map(x => dayjs(x.date).format('YYYY-MM-DD (HH:mm)')).join(', ')}</>
-                                    : <SchedulePicker scheduleState={[schedule, setSchedule]} />
-                                }
+                            <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+                                {requestInfo.timeSlots?.length ? (
+                                    <Card shadow="sm" padding="lg" radius="md" withBorder>
+                                        <Text fw={600} size="lg" mb="sm">
+                                            Active Slot:
+                                        </Text>
+                                        <Group gap="sm" wrap="wrap">
+                                            {requestInfo.timeSlots.map((slot, index) => {
+                                                const parsedDate = new Date(slot.date);
+
+                                                const day = parsedDate.toLocaleDateString("en-US", {day: "2-digit"});
+                                                const month = parsedDate.toLocaleDateString("en-US", {month: "short"});
+                                                const weekday = parsedDate.toLocaleDateString("en-US", {weekday: "short"});
+                                                const hr = parsedDate.toLocaleTimeString("en-US", {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                    hour12: true,
+                                                });
+                                                return (
+                                                    <div
+                                                        key={String(slot.date)}
+                                                        className={styles.dateButton}
+                                                    >
+                                                        <FaCalendarAlt className={styles.dateButtonIcon}/>
+                                                        <div className={styles.dateButtonText}>
+                                                    <span className={styles.dateButtonDay}>
+                                                      {day} {month} {weekday}
+                                                    </span>
+                                                            <span className={styles.dateButtonWeekday}>{hr}</span>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </Group>
+                                    </Card>
+                                ) : (
+                                    <SchedulePicker scheduleState={[schedule, setSchedule]}/>
+                                )}
+
+                                <Card shadow="sm" padding="lg" radius="md" withBorder>
+                                    <Text fw={600} size="lg" mb="sm">
+                                        Selected Slots:
+                                    </Text>
+                                    {requestInfo.activeTimeSlot ? (
+                                        <div className={styles.dateButton}>
+                                            <FaCalendarAlt className={styles.dateButtonIcon} color="green"/>
+                                            <div className={styles.dateButtonText}>
+                                                 <span className={styles.dateButtonDay}>
+                                                        {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", {day: "2-digit"})}
+
+                                                        {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", {month: "short"})}
+                                                 </span>
+                                                <span
+                                                    className={styles.dateButtonWeekday}>{new Date(requestInfo.activeTimeSlot.date).toLocaleTimeString("en-US", {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                    hour12: true,
+                                                })}</span>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <Text color="dimmed">Waiting for user to select a time slot</Text>
+                                    )}
+                                </Card>
                             </div>
                         </section>
 
                         {/* Documents */}
-                        <section className={styles.section}>
-                            <div className={styles.sectionHeader}>
-                                <FaFileUpload className={styles.sectionIconBlue} />
-                                <h2>Uploaded Documents</h2>
-                            </div>
+                        {requestInfo.links.agreement && requestInfo.links.driverLicence && (
+                            <section className={styles.section}>
+                                <div className={styles.sectionHeader}>
+                                    <FaFileUpload className={styles.sectionIconBlue}/>
+                                    <h2>Uploaded Documents</h2>
+                                </div>
 
-                            <div className={styles.docCard}>
-                                <div className={styles.docInfo}>
-                                    <div className={styles.docIcon}>
-                                        <FaIdCard />
-                                    </div>
-                                    <div>
-                                        <h3>Driver License</h3>
-                                        <p>drivers_license_sarah.pdf</p>
-                                        <small>Uploaded on Dec 18, 2024</small>
-                                    </div>
-                                </div>
-                                <div className={styles.docActions}>
-                                    <button>
-                                        <FaEye />
-                                    </button>
-                                    <button>
-                                        <FaDownload />
-                                    </button>
-                                </div>
-                            </div>
 
-                            <div className={styles.docCard}>
-                                <div className={styles.docInfo}>
-                                    <div className={styles.docIconGreen}>
-                                        <FaFileContract />
+                                <div className={styles.docCard}>
+                                    <div className={styles.docInfo}>
+                                        <div className={styles.docIcon}>
+                                            <FaIdCard/>
+                                        </div>
+                                        <div>
+                                            <h3>Driver License</h3>
+                                            <p>drivers_license_sarah.pdf</p>
+                                            <small>Uploaded on Dec 18, 2024</small>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3>Agreement Contract</h3>
-                                        <p>employment_agreement_signed.pdf</p>
-                                        <small>Uploaded on Dec 18, 2024</small>
+                                    <div className={styles.docActions}>
+                                        <button>
+                                            <FaEye/>
+                                        </button>
+                                        <a download href={requestInfo.links.agreement} target="_blank">
+                                            <FaDownload/>
+                                        </a>
                                     </div>
                                 </div>
-                                <div className={styles.docActions}>
-                                    <button>
-                                        <FaEye />
-                                    </button>
-                                    <button>
-                                        <FaDownload />
-                                    </button>
+
+                                <div className={styles.docCard}>
+                                    <div className={styles.docInfo}>
+                                        <div className={styles.docIconGreen}>
+                                            <FaFileContract/>
+                                        </div>
+                                        <div>
+                                            <h3>Agreement Contract</h3>
+                                            <p>employment_agreement_signed.pdf</p>
+                                            <small>Uploaded on Dec 18, 2024</small>
+                                        </div>
+                                    </div>
+                                    <div className={styles.docActions}>
+                                        <button>
+                                            <FaEye/>
+                                        </button>
+                                        <a download href={requestInfo.links.driverLicence} target="_blank">
+                                            <FaDownload/>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                        </section>
+                                {requestInfo.auctionAccessNumber && (
+                                    <Group flex="column" gap="sm" style={{marginTop: 20}}>
+                                        <Text size="lg" fw={600}>
+                                            Auction Access Number
+                                        </Text>
+
+                                        <CopyButton value={requestInfo.auctionAccessNumber} timeout={2000}>
+                                            {({copied, copy}) => (
+                                                <Group gap="sm">
+
+                                                    <Tooltip label={copied ? 'Copied!' : 'Copy to clipboard'} withArrow>
+                                                        <Button
+                                                            size="md"
+                                                            variant="transparent"
+                                                            onClick={copy}
+                                                            rightSection={copied ? <FaCheck size={18}/> :
+                                                                <FaCopy size={18}/>}
+                                                        >
+                                                            {requestInfo.auctionAccessNumber}
+                                                        </Button>
+                                                    </Tooltip>
+                                                </Group>
+                                            )}
+                                        </CopyButton>
+
+                                        <Text size="sm" color="dimmed">
+                                            Click the badge or the button to copy your auction access number.
+                                        </Text>
+                                    </Group>
+                                )}
+                            </section>
+                        )}
                     </div>
                 </div>
             </motion.div>
