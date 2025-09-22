@@ -7,15 +7,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-08-27.basil",
 });
 
-const bodySchema = z.object({
+const querySchema = z.object({
     subscriptionId: z.string().nonempty(),
 });
 
-export type Method = ZodAPIMethod<undefined, typeof bodySchema, undefined>;
+export type Method = ZodAPIMethod<typeof querySchema, undefined, undefined>;
 
 export const handler = zodApiMethod(
+    querySchema,
     undefined,
-    bodySchema,
     undefined,
     async (payload) => {
         const { activeUser, subscriptionId } = payload;
