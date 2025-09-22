@@ -66,6 +66,10 @@ export const method = zodApiMethod(schemas, {
     },
 
     onSuccess: async ({ result, requestPayload }) => {
+        if (!process.env.MARKET_VALUE_ENDPOINT) {
+            return
+        }
+
         await prismaClient.marketPriceAnalysisResult.deleteMany({
             where: {
                 vin: requestPayload.vin,
