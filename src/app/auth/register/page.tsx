@@ -1,10 +1,11 @@
 import React from 'react';
-import {Register} from "@/components";
+import {CookieBanner, Register} from "@/components";
 
 const RegisterPage = () => {
     return (
         <div>
             <Register/>
+            <CookieBanner />
         </div>
     );
 };

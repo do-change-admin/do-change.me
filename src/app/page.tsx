@@ -11,7 +11,6 @@ export default function Reports() {
         <main id="main-content" className={styles.main}>
             <SubscriptionPlans opened={opened} close={close} />
             <SearchSection openSubscription={open} />
-            <CookieBanner />
         </main>
     );
 };
