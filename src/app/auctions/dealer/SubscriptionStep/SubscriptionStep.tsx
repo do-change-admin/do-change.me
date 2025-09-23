@@ -32,13 +32,6 @@ export const SubscriptionStep: FC<SubscriptionStep> = () => {
 
                     {/* Right Subscription Card */}
                     <div className={styles.subscriptionCard}>
-                        <div className={styles.cardHeader}>
-                            <div className={styles.cardIconWrapper}>
-                                <FaCrown className={styles.cardIcon} />
-                            </div>
-                            <h3 className={styles.cardTitle}>Premium Plan</h3>
-                        </div>
-
                         <div className={styles.featuresList}>
                             <div className={styles.featureItem}>
                                 <FaCheck className={styles.featureIcon} />
