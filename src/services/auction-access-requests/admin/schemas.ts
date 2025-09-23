@@ -13,7 +13,8 @@ export const auctionAccessRequestStatusSchema = z.enum([
     'awaiting documents upload',
     'documents under review',
     'corrections required',
-    'ready for auction access'
+    'ready for auction access',
+    'subscription ended'
 ])
 
 /**

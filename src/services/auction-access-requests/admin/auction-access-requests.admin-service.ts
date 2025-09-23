@@ -11,6 +11,13 @@ export class AuctionAccessRequestsAdminService {
 
     }
 
+    setStatus = async (id: string, status: AuctionAccessRequestStatus) => {
+        await prismaClient.auctionAccessRequest.update({
+            where: { id },
+            data: { status }
+        })
+    }
+
     detailedItem = async (id: string): Promise<AuctionAccessRequestFullItem> => {
         const result = await prismaClient.auctionAccessRequest.findUnique({
             where: { id },
