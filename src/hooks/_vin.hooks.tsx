@@ -6,6 +6,7 @@ import { PaginationSchemaType, VinSchema } from '@/schemas';
 import { CachedData_GET_Response, CacheStatus } from '@/app/api/vin/cached-data/models';
 import { MarketValueAPI } from '@/app/api/vin/market-value/route';
 import { apiRequest } from '@/lib/apiFetch';
+import { ReportsAPI } from '@/app/api/vin/report/route';
 
 const VIN_LENGTH = 17;
 
@@ -168,6 +169,18 @@ export const useCachedInfo = (vin: string | null) => {
         enabled: () => {
             const { success } = VinSchema.safeParse(vin)
             return success
+        }
+    })
+}
+
+export const useReport = () => {
+    const router = useRouter()
+
+    return useMutation<ReportsAPI['GET']['response'], ReportsAPI['GET']['error'], ReportsAPI['GET']['payload']>({
+        mutationFn: apiRequest('/api/vin/report', 'GET'),
+        onSuccess: ({ markup }) => {
+            sessionStorage.setItem("report", markup);
+            router.push("/report");
         }
     })
 }

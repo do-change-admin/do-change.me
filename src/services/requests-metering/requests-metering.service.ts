@@ -3,8 +3,9 @@ import { User } from "@prisma/client";
 import { prismaClient } from "@/infrastructure/prisma/client";
 
 export class RequestsMeteringService {
+    public constructor(private readonly userId: string) { }
+
     incrementUsage = async (
-        user: User,
         featureKey: FeatureKey,
         amount: number = 1
     ): Promise<void> => {
@@ -13,7 +14,7 @@ export class RequestsMeteringService {
         const aggregate = await prismaClient.usageAggregate.findUnique({
             where: {
                 userId_featureKey_periodStart_periodEnd: {
-                    userId: user.id,
+                    userId: this.userId,
                     featureKey,
                     periodStart,
                     periodEnd,
@@ -29,7 +30,7 @@ export class RequestsMeteringService {
         } else {
             await prismaClient.usageAggregate.create({
                 data: {
-                    userId: user.id,
+                    userId: this.userId,
                     featureKey,
                     periodStart,
                     periodEnd,
