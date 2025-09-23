@@ -40,7 +40,25 @@ export const useAdminAuctionAccessStatusSetting = () => {
         mutationFn: apiRequest('/api/admin/auction-access-requests/set-status', 'PATCH'),
         onSuccess: (s, { query: { id } }) => {
             client.invalidateQueries({ queryKey: ['auction-access-requests', 'full', id] })
+        }
+    })
+}
 
+export const useAdminAuctionAccessFinalizing = () => {
+    const client = useQueryClient()
+
+    return useMutation<void, void, { id: string, qr: File, auctionAccessNumber: string }>({
+        mutationFn: async (payload) => {
+            const formData = new FormData()
+            formData.set("qr", payload.qr)
+            formData.set("number", payload.auctionAccessNumber)
+            await fetch('/api/admin/auction-access-requests/finalize?id=' + payload.id, {
+                body: formData,
+                method: "POST"
+            })
+        },
+        onSuccess: (s, { id }) => {
+            client.invalidateQueries({ queryKey: ['auction-access-requests', 'full', id] })
         }
     })
 }
