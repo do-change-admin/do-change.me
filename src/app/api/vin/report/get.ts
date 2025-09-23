@@ -4,6 +4,7 @@ import { VinSchema } from "@/schemas";
 import { RequestsMeteringService } from "@/services/requests-metering/requests-metering.service";
 import { FeatureKey } from "@/value-objects/feature-key.vo";
 import { businessError } from "@/lib/errors";
+import { noSubscriptionsGuard } from "@/api-guards";
 
 const schemas = {
     body: undefined,
@@ -50,5 +51,6 @@ export const method = zodApiMethod(schemas, {
     onSuccess: async ({ activeUser }) => {
         const service = new RequestsMeteringService(activeUser.id)
         await service.incrementUsage(FeatureKey.Report)
-    }
+    },
+    beforehandler: noSubscriptionsGuard
 })
