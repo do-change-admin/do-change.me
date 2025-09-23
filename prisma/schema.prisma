@@ -29,7 +29,7 @@ model User {
   bio                   String?
   address               String?
   state                 String?
-  index                 String?
+  zipCode               String?
   auctionAccessNumber   String?
   auctionAccessQRFileId String?
   createdAt             DateTime  @default(now())

@@ -51,7 +51,7 @@ export class ProfileService {
             auctionAccessNumber: profile.auctionAccessNumber || null,
             address: profile.address || null,
             auctionAccessQRLink,
-            index: profile.index || null,
+            zipCode: profile.zipCode || null,
             state: profile.state || null,
 
             subscription: activePlan
@@ -73,11 +73,11 @@ export class ProfileService {
 
     update = async (payload: UpdateProfilePayload) => {
         const rawEmail = this.email.address()
-        const { bio, firstName, lastName, phone, birthDate, address, index, state } = payload
+        const { bio, firstName, lastName, phone, birthDate, address, zipCode, state } = payload
         await prismaClient.user.update({
             where: { email: rawEmail },
             data: {
-                bio, firstName, lastName, phone, birthDate, address, index, state
+                bio, firstName, lastName, phone, birthDate, address, zipCode, state
             },
         })
     }

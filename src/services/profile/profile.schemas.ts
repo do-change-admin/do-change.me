@@ -20,7 +20,7 @@ export const profileSchema = z.object({
     bio: z.string(),
     address: z.string().nullable(),
     state: z.string().nullable(),
-    index: z.string().nullable(),
+    zipCode: z.string().nullable(),
     photoLink: z.string().nullable(),
     birthDate: z.coerce.date().nullable(),
     auctionAccessNumber: z.string().nullable(),
@@ -36,6 +36,6 @@ export const updateProfileSchema = z.object({
     birthDate: z.coerce.date(),
     address: z.string().nullable(),
     state: z.string().nullable(),
-    index: z.string().nullable(),
+    zipCode: z.string().nullable(),
 })
 

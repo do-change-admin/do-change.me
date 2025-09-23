@@ -18,7 +18,7 @@ export const handler = zodApiMethod_DEPRECATED(undefined, bodySchema, undefined,
         phone: payload.phone,
         birthDate: payload.birthDate,
         address: payload.address,
-        index: payload.index,
+        zipCode: payload.zipCode,
         state: payload.state
     })
 })
