@@ -1,11 +1,10 @@
 import z from "zod";
-import { ZodAPIMethod, zodApiMethod } from "../../zod-api-methods";
+import { ZodAPIMethod, zodApiMethod, ZodAPISchemas } from "../../zod-api-methods";
 import { VinSchema } from "@/schemas";
 import { businessError } from "@/lib/errors";
 import { prismaClient } from "@/infrastructure";
-import { ActionsHistoryService, ProfileService } from "@/services";
-import { EmailAddress } from "@/value-objects/email-address.vo";
-import { PublicFolderFileSystemProvider } from "@/providers/implementations";
+import { ActionsHistoryService } from "@/services";
+import { noSubscriptionsGuard } from "@/api-guards";
 
 const schemas = {
     body: undefined,
@@ -29,7 +28,7 @@ const schemas = {
             )
         })
     })
-}
+} satisfies ZodAPISchemas
 
 export type Method = ZodAPIMethod<typeof schemas>
 
@@ -95,15 +94,5 @@ export const method = zodApiMethod(schemas, {
         })
     },
 
-    beforehandler: async ({ activeUser }) => {
-        const service = new ProfileService(
-            EmailAddress.create(activeUser.email),
-            new PublicFolderFileSystemProvider()
-        )
-        const { subscription } = await service.profileData() || {}
-
-        if (!subscription) {
-            throw businessError('No subscription was found', undefined, 401)
-        }
-    }
+    beforehandler: noSubscriptionsGuard
 })

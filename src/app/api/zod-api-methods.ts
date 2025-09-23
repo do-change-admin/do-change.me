@@ -1,9 +1,9 @@
 import { isApplicationError } from "@/lib/errors";
 import { getCurrentUser } from "@/lib/getCurrentUser";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
+import z, { ZodObject } from "zod";
 
-type ZodObjectData = Readonly<{
+export type ZodObjectData = Readonly<{
     [k: string]: z.core.$ZodType<
         unknown,
         unknown,
@@ -39,6 +39,12 @@ type ErrorResponse = {
     | "user obtaining";
     success: false;
 };
+
+export type ZodAPISchemas = {
+    body: ZodObject | undefined,
+    query: ZodObject | undefined,
+    response: ZodObject | undefined
+}
 
 export type ZodAPIMethod_DEPRECATED<Query, Body, Response> = {
     payload: ZodAPIPayload<Query, Body>;
