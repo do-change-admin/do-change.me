@@ -1,5 +1,5 @@
 import z from "zod";
-import { zodApiMethod, ZodAPIMethod } from "../zod-api-methods";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../zod-api-methods";
 import { prismaClient } from "@/infrastructure";
 
 const planPriceSchema = z.object({
@@ -28,9 +28,9 @@ const responseSchema = z.object({
     plans: z.array(planSchema),
 });
 
-export type Method = ZodAPIMethod<undefined, undefined, typeof responseSchema>;
+export type Method = ZodAPIMethod_DEPRECATED<undefined, undefined, typeof responseSchema>;
 
-export const handler = zodApiMethod(
+export const handler = zodApiMethod_DEPRECATED(
     undefined,
     undefined,
     responseSchema,

@@ -1,12 +1,12 @@
 import { AuctionAccessRequestStatus, UserAuctionAccessSchema, userAuctionAccessSchema } from "@/services";
-import { zodApiMethod, ZodAPIMethod } from "../zod-api-methods";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../zod-api-methods";
 import { prismaClient } from "@/infrastructure";
 
 const responseSchema = userAuctionAccessSchema
 
-export type Method = ZodAPIMethod<undefined, undefined, typeof responseSchema>
+export type Method = ZodAPIMethod_DEPRECATED<undefined, undefined, typeof responseSchema>
 
-export const handler = zodApiMethod(undefined, undefined, responseSchema,
+export const handler = zodApiMethod_DEPRECATED(undefined, undefined, responseSchema,
     async ({ activeUser }) => {
         const request = await prismaClient.auctionAccessRequest.findFirst({ where: { email: activeUser.email }, include: { activeSlot: true, timeSlots: true } })
 

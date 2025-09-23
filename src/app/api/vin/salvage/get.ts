@@ -1,6 +1,6 @@
 import { VinSchema } from "@/schemas"
 import z from "zod"
-import { zodApiMethod, ZodAPIMethod } from "../../zod-api-methods"
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../zod-api-methods"
 import { prismaClient } from "@/infrastructure"
 import { ActionsHistoryService } from "@/services"
 
@@ -12,9 +12,9 @@ const resultSchema = z.object({
     salvageWasFound: z.boolean()
 })
 
-export type Method = ZodAPIMethod<typeof queryParamsSchema, undefined, typeof resultSchema>
+export type Method = ZodAPIMethod_DEPRECATED<typeof queryParamsSchema, undefined, typeof resultSchema>
 
-export const handler = zodApiMethod(queryParamsSchema, undefined, resultSchema, async (payload) => {
+export const handler = zodApiMethod_DEPRECATED(queryParamsSchema, undefined, resultSchema, async (payload) => {
     const response = await fetch(`${process.env.SALVAGE_ENDPOINT!}?vin=${payload.vin}`, {
         method: "GET",
         headers: {

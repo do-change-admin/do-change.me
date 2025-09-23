@@ -1,10 +1,10 @@
 import { adminUpdateAuctionAccessRequestSchema, AuctionAccessRequestsAdminService } from "@/services";
-import { zodApiMethod, ZodAPIMethod } from "../../zod-api-methods";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../zod-api-methods";
 import { PublicFolderFileSystemProvider } from "@/providers/implementations";
 
-export type Method = ZodAPIMethod<undefined, typeof adminUpdateAuctionAccessRequestSchema, undefined>
+export type Method = ZodAPIMethod_DEPRECATED<undefined, typeof adminUpdateAuctionAccessRequestSchema, undefined>
 
-export const handler = zodApiMethod(
+export const handler = zodApiMethod_DEPRECATED(
     undefined,
     adminUpdateAuctionAccessRequestSchema,
     undefined,

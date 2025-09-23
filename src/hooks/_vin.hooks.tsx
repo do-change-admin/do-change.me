@@ -1,10 +1,11 @@
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { useRouter } from "next/navigation";
-import { PricesResultDTO } from "@/app/api/vin/market-value/models";
 import { VehicleBaseInfoDTO } from '@/app/api/vin/base-info/models';
 import { ActionsHistoryService } from '@/services';
 import { PaginationSchemaType, VinSchema } from '@/schemas';
 import { CachedData_GET_Response, CacheStatus } from '@/app/api/vin/cached-data/models';
+import { MarketValueAPI } from '@/app/api/vin/market-value/route';
+import { apiRequest } from '@/lib/apiFetch';
 
 const VIN_LENGTH = 17;
 
@@ -47,22 +48,9 @@ export const useMileagePriceQuery = (
     mileage: number | undefined,
     cacheStatus: CacheStatus | undefined,
 ) => {
-    return useQuery<PricesResultDTO, Error>({
+    return useQuery<MarketValueAPI['GET']['response'], MarketValueAPI['GET']['error']>({
         queryKey: ['mileagePrice', vin, mileage],
-        queryFn: async () => {
-            if (!vin) {
-                throw new Error('VIN was not provided')
-            }
-            if (!mileage) {
-                throw new Error(`Mileage was not selected`);
-            }
-            const response = await fetch(`/api/vin/market-value?vin=${vin}&mileage=${mileage}`);
-            if (!response.ok) {
-                throw new Error(`Request finished with ${response.status} status code`);
-            }
-            const data: PricesResultDTO = await response.json();
-            return data;
-        },
+        queryFn: () => apiRequest('/api/vin/market-value', 'GET')({ query: { vin, mileage } }),
         enabled: () => {
             if (!cacheStatus) {
                 return false

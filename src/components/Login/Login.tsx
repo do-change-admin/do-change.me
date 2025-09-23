@@ -183,11 +183,11 @@ export const Login = () => {
                 </div>
               </div>
 
-              <div className={styles.options}>
-                {/* <label className={styles.rememberMeLabel}>
+              {/* <div className={styles.options}>
+                <label className={styles.rememberMeLabel}>
                   <input type="checkbox" className={styles.checkbox} />
                   <span className={styles.rememberMeText}>Remember me</span>
-                </label> */}
+                </label>
                 <span
                   className={styles.forgotPassword}
                   onClick={() => {
@@ -202,7 +202,7 @@ export const Login = () => {
                   Forgot password?
                 </span>
               </div>
-
+ */}
               <button type="submit" className={styles.submitButton}>
                 Sign In
               </button>

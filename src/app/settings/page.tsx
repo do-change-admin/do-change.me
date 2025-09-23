@@ -1,19 +1,21 @@
 "use client";
 
 import styles from "./page.module.css";
-import {FaCheck, FaSignOutAlt} from "react-icons/fa";
-import {ProfileForm} from "./(ProfileForm)/ProfileForm";
-import { Button, Group} from "@mantine/core";
-import {signOut} from "next-auth/react";
-import {FaCcVisa} from "react-icons/fa6";
-import {SubscriptionPlans} from "@/components";
+import { FaCheck, FaSignOutAlt } from "react-icons/fa";
+import { ProfileForm } from "./(ProfileForm)/ProfileForm";
+import { Button, Group } from "@mantine/core";
+import { signOut } from "next-auth/react";
+import { FaCcVisa } from "react-icons/fa6";
+import { SubscriptionPlans } from "@/components";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function SettingsContent() {
+    const [opened, { open, close }] = useDisclosure(false);
 
 
     return (
         <div className={styles.settings}>
-            <ProfileForm/>
+            <ProfileForm />
 
             {/*Subscription*/}
             <section className={styles.card}>
@@ -70,11 +72,11 @@ export default function SettingsContent() {
                 {/*    </div>*/}
                 {/*</div>*/}
             </section>
-            <SubscriptionPlans/>
+            <SubscriptionPlans close={close} opened={opened} />
 
             <Group gap="xs" justify="right">
                 <Button
-                    leftSection={ <FaSignOutAlt/>}
+                    leftSection={<FaSignOutAlt />}
                     color="red"
                     variant="light"
                     radius="lg"
@@ -88,10 +90,10 @@ export default function SettingsContent() {
 }
 
 function HistoryItem({
-                         title,
-                         date,
-                         amount,
-                     }: {
+    title,
+    date,
+    amount,
+}: {
     title: string;
     date: string;
     amount: string;
@@ -100,7 +102,7 @@ function HistoryItem({
         <div className={styles.historyItem}>
             <div className={styles.historyLeft}>
                 <div className={styles.historyIcon}>
-                    <FaCheck/>
+                    <FaCheck />
                 </div>
                 <div>
                     <p className={styles.historyTitle}>{title}</p>

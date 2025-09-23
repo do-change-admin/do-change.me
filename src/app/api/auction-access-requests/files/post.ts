@@ -1,11 +1,11 @@
-import { zodApiMethod, ZodAPIMethod } from "../../zod-api-methods";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../zod-api-methods";
 import { businessError } from "@/lib/errors";
 import { PublicFolderFileSystemProvider } from "@/providers/implementations";
 import { AuctionAccessRequestsUserService } from "@/services";
 
-export type Method = ZodAPIMethod<undefined, undefined, undefined>
+export type Method = ZodAPIMethod_DEPRECATED<undefined, undefined, undefined>
 
-export const handler = zodApiMethod(undefined, undefined, undefined, async ({ activeUser }, req) => {
+export const handler = zodApiMethod_DEPRECATED(undefined, undefined, undefined, async ({ activeUser }, req) => {
     const formData = await req.formData();
     const agreement = formData.get('agreement') as File;
     const license = formData.get('license') as File;
