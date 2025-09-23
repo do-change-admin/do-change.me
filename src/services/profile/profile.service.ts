@@ -67,7 +67,10 @@ export class ProfileService {
                 }
                 : null,
             photoLink,
-            birthDate: profile.birthDate
+            birthDate: profile.birthDate,
+            subscriptionDetails: {
+                reportsLeft: 10
+            }
         }
     }
 

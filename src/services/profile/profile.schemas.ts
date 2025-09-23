@@ -26,6 +26,9 @@ export const profileSchema = z.object({
     auctionAccessNumber: z.string().nullable(),
     auctionAccessQRLink: z.string().nullable(),
     subscription: subscriptionSchema.nullable(),
+    subscriptionDetails: z.object({
+        reportsLeft: z.number()
+    })
 })
 
 export const updateProfileSchema = z.object({

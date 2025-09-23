@@ -14,7 +14,8 @@ export interface ISampleResults {
     vin: string,
     cacheStatus?: CacheStatus,
     cachedPricesInfo?: CachedData_GET_Response['marketAnalysis'],
-    baseInfo?: CachedData_GET_Response['baseInfo']
+    baseInfo?: CachedData_GET_Response['baseInfo'],
+    reportsLeft: number
 }
 
 const formatNumber = (num: number) => {
@@ -22,7 +23,7 @@ const formatNumber = (num: number) => {
     return intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPricesInfo, baseInfo }) => {
+export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPricesInfo, baseInfo, reportsLeft }) => {
 
     const [averageMileage, setAverageMileage] = useState<number>(25);
     const { data: refetchedMileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(vin, averageMileage * 1000, cacheStatus);
@@ -76,7 +77,7 @@ export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPric
                         </div>
                         <DistributionChart distribution={mileageData?.market_prices?.distribution ?? []} />
                     </div>
-                    <ReportsProvider vin={vin} />
+                    <ReportsProvider vin={vin} reportsLeft={reportsLeft} />
                 </div>
                 <CarInfo {...baseInfo} />
             </div>
