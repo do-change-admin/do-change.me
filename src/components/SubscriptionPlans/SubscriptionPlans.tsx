@@ -116,8 +116,8 @@ export const SubscriptionPlans: FC<SubscriptionPlansProps> = ({ opened, close })
                                     onClick={async () => {
                                         const { url } = await subscribe({
                                             body: {
-                                                planId: onlyReportsPlan!.prices![0].planId.toString(),
-                                                priceId: onlyReportsPlan!.prices![0].stripePriceId
+                                                planId: onlyReportsPlan?.prices?.[0]?.planId?.toString() ?? "",
+                                                priceId: onlyReportsPlan?.prices?.[0].stripePriceId ?? ""
                                             }
                                         })
                                         if (url) {
@@ -204,8 +204,8 @@ export const SubscriptionPlans: FC<SubscriptionPlansProps> = ({ opened, close })
                                 <button className={styles.buttonPurple} onClick={async () => {
                                     const { url } = await subscribe({
                                         body: {
-                                            planId: auctionAccessPlan!.prices![0].planId.toString(),
-                                            priceId: auctionAccessPlan!.prices![0].stripePriceId
+                                            planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
+                                            priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
                                         }
                                     })
                                     if (url) {
