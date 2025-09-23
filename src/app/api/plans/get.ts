@@ -1,5 +1,5 @@
 import z from "zod";
-import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../zod-api-methods";
+import { zodApiMethod, ZodAPIMethod, zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED, ZodAPISchemas } from "../zod-api-methods";
 import { prismaClient } from "@/infrastructure";
 
 const planPriceSchema = z.object({
@@ -24,22 +24,32 @@ const planSchema = z.object({
     prices: z.array(planPriceSchema),
 });
 
-const responseSchema = z.object({
-    plans: z.array(planSchema),
-});
+const schemas = {
+    body: undefined,
+    query: undefined,
+    response: z.object({
+        basic: planSchema,
+        auctionAccess: planSchema
+    })
+} satisfies ZodAPISchemas
 
-export type Method = ZodAPIMethod_DEPRECATED<undefined, undefined, typeof responseSchema>;
+export type Method = ZodAPIMethod<typeof schemas>
 
-export const handler = zodApiMethod_DEPRECATED(
-    undefined,
-    undefined,
-    responseSchema,
-    async () => {
-        const plans = await prismaClient.plan.findMany({
-            include: { prices: { orderBy: { id: "asc" } } },
-            orderBy: { id: "asc" },
-        });
+export const method = zodApiMethod(schemas, {
+    handler: async () => {
+        const basic = await prismaClient.plan.findFirst({
+            where: { slug: "basic" },
+            include: { prices: true }
+        })
+        const auctionAccess = await prismaClient.plan.findFirst({
+            where: { slug: "auction access" },
+            include: { prices: true }
+        })
 
-        return { plans };
+        return {
+            auctionAccess: auctionAccess!,
+            basic: basic!
+        };
+
     }
-);
+})

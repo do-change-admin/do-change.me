@@ -1,6 +1,6 @@
 "use client";
 
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 import {
     FaCar,
     FaCheck,
@@ -17,17 +17,23 @@ import {
     FaLock
 } from "react-icons/fa";
 import styles from "./SubscriptionPlans.module.css";
-import {useRouter} from "next/navigation";
-import {Badge, Drawer, Modal, Text} from "@mantine/core";
-import {FC} from "react";
+import { useRouter } from "next/navigation";
+import { Badge, Drawer, Modal, Text } from "@mantine/core";
+import { FC } from "react";
+import { usePlans, useSubscriptionCreation } from "@/hooks";
 
 interface SubscriptionPlansProps {
     opened: boolean;
     close: () => void;
 }
 
-export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) => {
-    const router = useRouter();
+export const SubscriptionPlans: FC<SubscriptionPlansProps> = ({ opened, close }) => {
+    const router = useRouter()
+    const { data: plans } = usePlans()
+    const { mutateAsync: subscribe } = useSubscriptionCreation()
+
+    const onlyReportsPlan = plans?.basic
+    const auctionAccessPlan = plans?.auctionAccess
 
     return (
         <Drawer size="100%" opened={opened} onClose={close}>
@@ -37,8 +43,8 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                     <div className={styles.grid}>
                         {/* Basic Plan */}
                         <motion.div
-                            whileHover={{y: -8}}
-                            transition={{duration: 0.3}}
+                            whileHover={{ y: -8 }}
+                            transition={{ duration: 0.3 }}
                             className={styles.card}
                         >
                             <div className={styles.cardContent}>
@@ -48,7 +54,7 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                                         <p className={styles.cardText}>Perfect for individual users</p>
                                     </div>
                                     <div className={styles.iconBlue}>
-                                        <FaCar/>
+                                        <FaCar />
                                     </div>
                                 </div>
 
@@ -63,25 +69,25 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
 
                                 <div className={styles.features}>
                                     <div className={styles.feature}>
-                                        <FaCheck className={styles.checkGreen}/>
+                                        <FaCheck className={styles.checkGreen} />
                                         <div>
                                             <strong>Market Value</strong> — <Badge size="lg"
-                                                                                   variant="light">Unlimited</Badge>
+                                                variant="light">Unlimited</Badge>
                                             <p className={styles.featureNote}>Get accurate market pricing for any
                                                 vehicle</p>
                                         </div>
                                     </div>
                                     <div className={styles.feature}>
-                                        <FaCheck className={styles.checkGreen}/>
+                                        <FaCheck className={styles.checkGreen} />
                                         <div>
                                             <strong>Total Loss Check</strong> — <Badge size="lg"
-                                                                                       variant="light">Unlimited</Badge>
+                                                variant="light">Unlimited</Badge>
                                             <p className={styles.featureNote}>Verify if vehicle was declared a total
                                                 loss</p>
                                         </div>
                                     </div>
                                     <div className={styles.feature}>
-                                        <FaFileAlt className={styles.iconBlue}/>
+                                        <FaFileAlt className={styles.iconBlue} />
                                         <div>
                                             <strong>10 Vehicle History Reports</strong>
                                             <p className={styles.featureNote}>The best report options, such as Carfax
@@ -90,7 +96,7 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                                         </div>
                                     </div>
                                     <div className={styles.feature}>
-                                        <FaShieldAlt className={styles.iconPurple}/>
+                                        <FaShieldAlt className={styles.iconPurple} />
                                         <div>
                                             <strong>Fraud Protection</strong>
                                             <p className={styles.featureNote}>Advanced algorithms to detect potential
@@ -98,7 +104,7 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                                         </div>
                                     </div>
                                     <div className={styles.feature}>
-                                        <FaHeadset className={styles.iconOrange}/>
+                                        <FaHeadset className={styles.iconOrange} />
                                         <div>
                                             <strong>24/7 Customer Support</strong>
                                             <p className={styles.featureNote}>Get help whenever you need it</p>
@@ -106,16 +112,28 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                                     </div>
                                 </div>
 
-                                <button className={styles.buttonBlue}>
-                                    <FaRocket/> Get Plan
+                                <button
+                                    onClick={async () => {
+                                        const { url } = await subscribe({
+                                            body: {
+                                                planId: onlyReportsPlan!.prices![0].planId.toString(),
+                                                priceId: onlyReportsPlan!.prices![0].stripePriceId
+                                            }
+                                        })
+                                        if (url) {
+                                            router.push(url)
+                                        }
+                                    }}
+                                    className={styles.buttonBlue}>
+                                    <FaRocket /> Get Plan
                                 </button>
                             </div>
                         </motion.div>
 
                         {/* Premium Plan */}
                         <motion.div
-                            whileHover={{y: -8}}
-                            transition={{duration: 0.3}}
+                            whileHover={{ y: -8 }}
+                            transition={{ duration: 0.3 }}
                             className={styles.cardPremium}
                         >
                             <div className={styles.ribbon}>MOST POPULAR</div>
@@ -126,7 +144,7 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                                         <p className={styles.cardText}>For professionals</p>
                                     </div>
                                     <div className={styles.iconPurpleBg}>
-                                        <FaCrown/>
+                                        <FaCrown />
                                     </div>
                                 </div>
 
@@ -142,10 +160,10 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
 
                                 <div className={styles.features}>
                                     <p className={styles.extraNote}>
-                                        <FaStar className={styles.iconYellow}/> Everything in Basic Plan, plus:
+                                        <FaStar className={styles.iconYellow} /> Everything in Basic Plan, plus:
                                     </p>
                                     <div className={styles.feature}>
-                                        <FaGavel className={styles.iconPurple}/>
+                                        <FaGavel className={styles.iconPurple} />
                                         <div>
                                             <strong>Auction Access</strong>
                                             <p className={styles.featureNote}>Access to exclusive dealer auctions
@@ -153,7 +171,7 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                                         </div>
                                     </div>
                                     <div className={styles.feature}>
-                                        <FaShareAlt className={styles.iconPink}/>
+                                        <FaShareAlt className={styles.iconPink} />
                                         <div>
                                             <strong>Syndication</strong>
                                             <p className={styles.featureNote}>Distribute your inventory across multiple
@@ -161,7 +179,7 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                                         </div>
                                     </div>
                                     <div className={styles.feature}>
-                                        <FaFileAlt className={styles.iconBlue}/>
+                                        <FaFileAlt className={styles.iconBlue} />
                                         <div>
                                             <strong>50 Vehicle History Reports</strong>
                                             <p className={styles.featureNote}>The best report options, such as Carfax
@@ -173,7 +191,7 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
 
                                 <div className={styles.auctionBox}>
                                     <h4 className={styles.auctionTitle}>
-                                        <FaInfoCircle className={styles.iconPurple}/> Auction Access Process
+                                        <FaInfoCircle className={styles.iconPurple} /> Auction Access Process
                                     </h4>
                                     <p className={styles.auctionText}>
                                         You will go through several verification steps to obtain Auction Access. After
@@ -183,15 +201,25 @@ export const SubscriptionPlans:FC<SubscriptionPlansProps> = ({opened, close}) =>
                                     </p>
                                 </div>
 
-                                <button className={styles.buttonPurple} onClick={() => router.push('auctions/dealer')}>
-                                    <FaUnlock/> Get Access
+                                <button className={styles.buttonPurple} onClick={async () => {
+                                    const { url } = await subscribe({
+                                        body: {
+                                            planId: auctionAccessPlan!.prices![0].planId.toString(),
+                                            priceId: auctionAccessPlan!.prices![0].stripePriceId
+                                        }
+                                    })
+                                    if (url) {
+                                        router.push(url)
+                                    }
+                                }}>
+                                    <FaUnlock /> Get Access
                                 </button>
                             </div>
                         </motion.div>
                     </div>
 
                     <div className={styles.footerNote}>
-                        <FaLock/> Secure payment • Cancel anytime
+                        <FaLock /> Secure payment • Cancel anytime
                     </div>
                 </div>
             </section>
