@@ -31,9 +31,9 @@ export const useBaseInfoByVIN = (
             return (await response.json());
         },
         enabled: () => {
-            if (!cacheStatus || cacheStatus?.baseInfoWasFound) {
-                return false
-            }
+            // if (!cacheStatus || cacheStatus?.baseInfoWasFound) {
+            //     return false
+            // }
             const { success } = VinSchema.safeParse(vin)
             return success
         },
