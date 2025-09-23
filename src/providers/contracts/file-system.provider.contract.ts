@@ -5,3 +5,5 @@ export interface ProvidesFileUploading {
 export interface ProvidesFileLink {
     obtainDownloadLink(id: string): Promise<string | null>
 }
+
+export type FileSystemProvider = ProvidesFileUploading & ProvidesFileLink

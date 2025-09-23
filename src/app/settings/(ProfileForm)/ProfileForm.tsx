@@ -2,21 +2,23 @@
 
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import styles from "./ProfileForm.module.css";
-import {Avatar, Button, Loader} from "@mantine/core";
+import { Avatar, Button, Loader } from "@mantine/core";
 import { FaCamera } from "react-icons/fa";
-import {useProfile, useProfileModifying, useUploadPhoto} from "@/hooks";
+import { useProfile, useProfileModifying, useUploadPhoto } from "@/hooks";
 import { notifications } from "@mantine/notifications";
 import { ProfileFormSkeleton } from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
 import { DateInput } from '@mantine/dates';
 
 
 export const ProfileForm = () => {
-
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [bio, setBio] = useState("");
     const [birthDate, setBirthDate] = useState<Date>();
+    const [address, setAddress] = useState<string | null>(null)
+    const [state, setState] = useState<string | null>(null)
+    const [index, setIndex] = useState<string | null>(null)
     const { data: profileData, isLoading: profileIsLoading } = useProfile();
     const { mutate: modifyProfile, isPending: profileIsModifying } = useProfileModifying();
     const { mutate: uploadPhoto, isPending: isPendingUploadPhoto } = useUploadPhoto();
@@ -35,6 +37,9 @@ export const ProfileForm = () => {
             setLastName(profileData.lastName)
             setPhone(profileData.phone)
             setBio(profileData.bio)
+            setState(profileData.state)
+            setAddress(profileData.address)
+            setIndex(profileData.index)
             if (profileData.birthDate) {
                 setBirthDate(new Date(profileData.birthDate))
             }
@@ -45,7 +50,7 @@ export const ProfileForm = () => {
     const handleSave = (e: FormEvent) => {
         e.preventDefault();
         modifyProfile(
-            { body: { bio, firstName, lastName, phone, birthDate: birthDate! } },
+            { body: { bio, firstName, lastName, phone, birthDate: birthDate!, address, state, index } },
             {
                 onSuccess: () => {
                     notifications.show({
