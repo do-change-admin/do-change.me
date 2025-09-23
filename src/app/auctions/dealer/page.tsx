@@ -1,19 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Box, Stepper, Loader } from "@mantine/core";
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
-import { FaFileAlt, FaPhone, FaUpload, FaCheckCircle } from "react-icons/fa";
+import {useEffect, useState} from "react";
+import {Box, Stepper, Loader} from "@mantine/core";
+import {useTranslations} from "next-intl";
+import {motion} from "framer-motion";
+import {FaFileAlt, FaPhone, FaUpload, FaCheckCircle} from "react-icons/fa";
 import styles from "./page.module.css";
-import { CallSchedule } from "./CallSchedule/CallSchedule";
-import { ApplicationForm } from "./ApplicationForm/ApplicationForm";
-import { RegistrationSteps } from "./RegistrationAuctionAcceess/RegistrationAuctionAcceess";
-import { useAuctionAccessRequest } from "@/hooks";
-import type { UserAuctionAccessSchemaSteps } from '@/services'
-import { ApplicationSuccesses } from "./ApplicationForm/ApplicationSuccesses";
-import { AuctionAccess } from "./ApprovedAccess/ApprovedAccess";
-import { AccessMainStep } from "./AccessMainStep/AccessMainStep";
+import {CallSchedule} from "./CallSchedule/CallSchedule";
+import {ApplicationForm} from "./ApplicationForm/ApplicationForm";
+import {RegistrationSteps} from "./RegistrationAuctionAcceess/RegistrationAuctionAcceess";
+import {useAuctionAccessRequest} from "@/hooks";
+import type {UserAuctionAccessSchemaSteps} from '@/services'
+import {ApplicationSuccesses} from "./ApplicationForm/ApplicationSuccesses";
+import {AccessMainStep} from "./AccessMainStep/AccessMainStep";
+import {SubscriptionStep} from "@/app/auctions/dealer/SubscriptionStep/SubscriptionStep";
 
 const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
     application: 0,
@@ -26,7 +26,7 @@ const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
 export default function Page() {
     const [activeStep, setActiveStep] = useState(0);
     const [waitingForAdmin, setWaitingForAdmin] = useState(false)
-    const { data, isLoading } = useAuctionAccessRequest()
+    const {data, isLoading} = useAuctionAccessRequest()
 
     const t = useTranslations("Steps");
 
@@ -34,22 +34,22 @@ export default function Page() {
         {
             label: t("application.label"),
             description: t("application.description"),
-            icon: <FaFileAlt />
+            icon: <FaFileAlt/>
         },
         {
             label: t("call.label"),
             description: t("call.description"),
-            icon: <FaPhone />
+            icon: <FaPhone/>
         },
         {
             label: t("documents.label"),
             description: t("documents.description"),
-            icon: <FaUpload />
+            icon: <FaUpload/>
         },
         {
             label: t("decision.label"),
             description: t("decision.description"),
-            icon: <FaCheckCircle />
+            icon: <FaCheckCircle/>
         }
     ];
 
@@ -73,10 +73,10 @@ export default function Page() {
             <>
                 {isLoading ? (
                     <div className={styles.loader}>
-                        <Loader />
+                        <Loader/>
                     </div>
                 ) : (
-                    <AccessMainStep onStart={() => setActiveStep(1)} />
+                    <AccessMainStep onStart={() => setActiveStep(1)}/>
                 )}
             </>
         )
@@ -89,9 +89,9 @@ export default function Page() {
         <Box
             className={styles.container}
             component={motion.div}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{opacity: 0, y: 20}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.5}}
         >
             <Stepper
                 active={activeStep}
@@ -114,24 +114,34 @@ export default function Page() {
             </Stepper>
 
             <div className={styles.content}>
-                <div className={styles.card}>
-                    {isLoading && (
+                {isLoading && (
+                    <div className={styles.card}>
                         <div className={styles.loader}>
-                            <Loader />
+                            <Loader/>
+                        </div>
+                    </div>
+                )}
+                {!isLoading && (waitingForAdmin ? <ApplicationSuccesses/> : <>
+                    {activeStep === 1 && (
+                        <div className={styles.card}>
+                            <ApplicationForm/>
                         </div>
                     )}
-                    {!isLoading && (waitingForAdmin ? <ApplicationSuccesses /> : <>
-                        {activeStep === 1 && <ApplicationForm />}
-                        {activeStep === 2 && <CallSchedule />}
-                        {activeStep === 3 && <RegistrationSteps />}
-                        {activeStep === 4 && <AuctionAccess />}
-                    </>)}
+                    {activeStep === 2 && (
+                        <div className={styles.card}>
+                            <CallSchedule/>
+                        </div>
+                    )}
+                    {activeStep === 3 && (
+                        <div className={styles.card}><RegistrationSteps/></div>
+                    )}
+                    {activeStep === 4 && <SubscriptionStep/>}
+                </>)}
 
-                    {/*{activeStep === 0 && <ApplicationForm />}*/}
-                    {/*{activeStep === 1 && <CallSchedule />}*/}
-                    {/*{activeStep === 2 && <RegistrationSteps />}*/}
-                    {/*{activeStep === 3 && <AuctionAccess />}*/}
-                </div>
+                {/*{activeStep === 0 && <ApplicationForm />}*/}
+                {/*{activeStep === 1 && <CallSchedule />}*/}
+                {/*{activeStep === 2 && <RegistrationSteps />}*/}
+                {/*{activeStep === 3 && <AuctionAccess />}*/}
             </div>
         </Box>
     );
