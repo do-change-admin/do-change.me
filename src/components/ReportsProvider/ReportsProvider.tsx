@@ -5,7 +5,7 @@ import styles from "./ReportsProvider.module.css";
 import { FaCheckCircle, FaRegFileAlt } from "react-icons/fa";
 import Image from "next/image";
 import React, { FC } from "react";
-import { useCheckRecords } from "@/hooks";
+import {useCheckRecords, useReport} from "@/hooks";
 import { FiRefreshCw } from "react-icons/fi";
 
 export interface IReportsProviderProp {
@@ -14,7 +14,7 @@ export interface IReportsProviderProp {
 }
 
 export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) => {
-    const { mutate: handleCheck } = useCheckRecords(vin || '');
+    const { mutate: getReport } = useReport();
     return (
         <motion.div
             className={styles.reportFooter}
@@ -51,7 +51,12 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) 
                             </div>
                             <h3>CARFAX Report</h3>
                             <p>Most comprehensive database with 22+ billion records</p>
-                            <button className={styles.btnBlue} onClick={() => handleCheck('carfax')}>Order CARFAX Report</button>
+                            <button className={styles.btnBlue} onClick={() => getReport({
+                                query: {
+                                    vin,
+                                    provider: "carfax"
+                                }
+                            })}>Order CARFAX Report</button>
                             <div className={styles.priceBlue}>$0.99</div>
                         </div>
                     </motion.div>
@@ -67,7 +72,12 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) 
                             </div>
                             <h3>AutoCheck Report</h3>
                             <p>Experian's trusted vehicle history service</p>
-                            <button className={styles.btnOrange} onClick={() => handleCheck("autocheck")}>Order AutoCheck Report</button>
+                            <button className={styles.btnOrange} onClick={() => getReport({
+                                query: {
+                                    vin,
+                                    provider: "autocheck"
+                                }
+                            })}>Order AutoCheck Report</button>
                             <div className={styles.priceOrange}>$0.99</div>
                         </div>
                     </motion.div>
