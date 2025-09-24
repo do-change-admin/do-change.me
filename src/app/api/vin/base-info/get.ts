@@ -2,7 +2,6 @@ import z from "zod";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
 import { VinSchema } from "@/schemas";
 import { baseVehicleInfoSchema } from "./schemas";
-import presetData from "./presetData";
 import { prismaClient } from "@/infrastructure";
 import { businessError } from "@/lib/errors";
 import { noSubscriptionsGuard } from "@/api-guards";
@@ -20,13 +19,15 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload }) => {
-        const baseInfoURL =
-            process.env.BASE_INFO_API_URL
-        if (!baseInfoURL) {
-            return presetData;
+        const cachedBaseInfoData = await prismaClient.vinCheckResult.findFirst({
+            where: { VIN: payload.vin }
+        });
+
+        if (cachedBaseInfoData) {
+            return cachedBaseInfoData
         }
 
-        const apiAnswer = await fetch(`${baseInfoURL}/${payload.vin}?format=json`);
+        const apiAnswer = await fetch(`${process.env.BASE_INFO_API_URL}/${payload.vin}?format=json`);
         const json = await apiAnswer.json();
 
         if (!json?.Results?.[0]) {
