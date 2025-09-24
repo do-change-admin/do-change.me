@@ -1,3 +1,4 @@
+import { AuctionAccessRequestAdminCountAPI } from "@/app/api/admin/auction-access-requests/count/route"
 import { AuctionAccessRequestsDetailsAdminAPI } from "@/app/api/admin/auction-access-requests/details/route"
 import { AuctionAccessRequestsAdminAPI } from "@/app/api/admin/auction-access-requests/route"
 import { AuctionAccessRequestsSetStatusAdminAPI } from "@/app/api/admin/auction-access-requests/set-status/route"
@@ -29,6 +30,7 @@ export const useAdminAuctionAccessRequestUpdate = () => {
         mutationFn: apiRequest('/api/admin/auction-access-requests', 'PATCH'),
         onSuccess: (s, { body: { id } }) => {
             client.invalidateQueries({ queryKey: ['auction-access-requests', 'full', id] })
+            client.invalidateQueries({ queryKey: ['auction-access-requests', 'count'] })
         }
     })
 }
@@ -40,6 +42,7 @@ export const useAdminAuctionAccessStatusSetting = () => {
         mutationFn: apiRequest('/api/admin/auction-access-requests/set-status', 'PATCH'),
         onSuccess: (s, { query: { id } }) => {
             client.invalidateQueries({ queryKey: ['auction-access-requests', 'full', id] })
+            client.invalidateQueries({ queryKey: ['auction-access-requests', 'count'] })
         }
     })
 }
@@ -59,6 +62,16 @@ export const useAdminAuctionAccessFinalizing = () => {
         },
         onSuccess: (s, { id }) => {
             client.invalidateQueries({ queryKey: ['auction-access-requests', 'full', id] })
+            client.invalidateQueries({ queryKey: ['auction-access-requests', 'count'] })
+        }
+    })
+}
+
+export const useAdminAuctionAccessCount = () => {
+    return useQuery<AuctionAccessRequestAdminCountAPI['GET']['response'], AuctionAccessRequestAdminCountAPI['GET']['error']>({
+        queryKey: ['auction-access-requests', 'count'],
+        queryFn: () => {
+            return apiRequest('/api/admin/auction-access-requests/count', 'GET')({})
         }
     })
 }

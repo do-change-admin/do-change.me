@@ -1,5 +1,5 @@
 import { PaginationSchemaType } from "@/schemas";
-import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestFullItem, AuctionAccessRequestListItem, AuctionAccessRequestStatus } from './types'
+import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestCountByStages, AuctionAccessRequestFullItem, AuctionAccessRequestListItem, AuctionAccessRequestStatus } from './types'
 import { prismaClient } from "@/infrastructure";
 import { businessError } from "@/lib/errors";
 import { ProvidesFileLink } from "@/providers/contracts";
@@ -11,8 +11,62 @@ export class AuctionAccessRequestsAdminService {
 
     }
 
-    count = async () => {
-        return 1
+    count = async (): Promise<AuctionAccessRequestCountByStages> => {
+        const review = await prismaClient.auctionAccessRequest.count({
+            where: {
+                status: { in: ['review'] }
+            }
+        })
+
+        const scheduling = await prismaClient.auctionAccessRequest.count({
+            where: {
+                status: {
+                    in: ['awaiting user confirmation', 'call scheduling', 'call completed']
+                }
+            }
+        })
+
+        const onboarding = await prismaClient.auctionAccessRequest.count({
+            where: {
+                status: {
+                    in: [
+                        'awaiting documents upload',
+                        'documents under review',
+                        'corrections required',
+                        'ready for auction access'
+                    ]
+                }
+            }
+        })
+
+        const approved = await prismaClient.auctionAccessRequest.count({
+            where: {
+                status: {
+                    in: [
+                        'approved'
+                    ]
+                }
+            }
+        })
+
+        const rejected = await prismaClient.auctionAccessRequest.count({
+            where: {
+                status: {
+                    in: [
+                        'rejected'
+                    ]
+                }
+            }
+        })
+
+
+        return {
+            review,
+            scheduling,
+            onboarding,
+            approved,
+            rejected
+        }
     }
 
     setStatus = async (id: string, status: AuctionAccessRequestStatus) => {

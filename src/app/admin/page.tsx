@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Tabs, Button, Group, Badge } from "@mantine/core";
 import styles from "./layout.module.css";
 import { UserTable } from "@/components";
-import { useAdminAuctionAccessRequests } from "@/hooks";
+import { useAdminAuctionAccessCount, useAdminAuctionAccessRequests } from "@/hooks";
 import type { AuctionAccessRequestStatus } from '@/services/auction-access-requests'
 
 type Tab = {
@@ -58,6 +58,10 @@ export default function AuctionAccessPage() {
     const [activeStatus, setActiveStatus] = useState<AuctionAccessRequestStatus>(mainTabs[0].status);
     const [activeSubTab, setActiveSubTab] = useState<AuctionAccessRequestStatus>(subTabs[0].status);
     const [activeOnboardingTab, setActiveOnboardingTabsTab] = useState<AuctionAccessRequestStatus>(subOnboardingTabs[0].status);
+
+    const { data: groupedCount } = useAdminAuctionAccessCount()
+
+    console.log(groupedCount)
 
     useEffect(() => {
         setStatus(activeSubTab)

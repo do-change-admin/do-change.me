@@ -1,5 +1,14 @@
 import z from "zod";
 
+export const auctionAccessRequestCountByStagesSchema = z.object({
+    review: z.number().nonnegative(),
+    scheduling: z.number().nonnegative(),
+    onboarding: z.number().nonnegative(),
+    approved: z.number().nonnegative(),
+    rejected: z.number().nonnegative()
+
+})
+
 /**
  * All possible statuses for auction access request.
  */
