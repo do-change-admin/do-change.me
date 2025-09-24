@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prismaClient } from '@/infrastructure'
 import { VinSchema } from "@/schemas"
-import { CarReport, VinCheckResult } from "@prisma/client"
 import { PricesResultDTO } from "../market-value/models"
 import { CachedData_GET_Response, mapReportFromPrismaToReportData } from "./models"
 
@@ -13,7 +12,7 @@ export const GET = async (req: NextRequest) => {
         return NextResponse.json(error, { status: 400 })
     }
 
-    const cachedBaseInfoData = await prismaClient.vinCheckResult.findFirst({
+    const cachedBaseInfoData = await prismaClient.vinCheckResult.count({
         where: { VIN: vin }
     });
 
@@ -33,7 +32,6 @@ export const GET = async (req: NextRequest) => {
 
 
     return NextResponse.json<CachedData_GET_Response>({
-        baseInfo: cachedBaseInfoData,
         salvage: salvageData ? salvageData.salvageWasFound : null,
         marketAnalysis: marketPriceInfoData?.map(marketPriceInfoData => ({
             mileage: marketPriceInfoData.mileage,

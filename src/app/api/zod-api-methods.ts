@@ -154,11 +154,13 @@ export const zodApiMethod = <
                         req: request,
                     })
                 }
-                await logic.beforehandler({
-                    activeUser: user,
-                    payload: resultObject as any,
-                    req: request
-                })
+                if (!ignoreBeforeHandler) {
+                    await logic.beforehandler({
+                        activeUser: user,
+                        payload: resultObject as any,
+                        req: request
+                    })
+                }
             }
             let flags: Parameters<typeof logic['handler']>[0]['flags'] = {}
             const result = await logic.handler({

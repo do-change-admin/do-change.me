@@ -22,11 +22,10 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const actionsHistoryResponse = useActionsHistory({ skip: 0, take: 10 })
 
     const { data: cachedInfo, isLoading: isLoadingCarInfo } = useCachedInfo(vin)
-    const { data: refetchedBaseInfo, isLoading } = useBaseInfoByVIN(vin, cachedInfo?.cachedDataStatus);
+    const { data: baseInfo, isLoading } = useBaseInfoByVIN(vin, cachedInfo?.cachedDataStatus);
     const { data: refetchedHasSalvage, isLoading: salvageIsLoading } = useSalvageCheck(vin, cachedInfo?.cachedDataStatus);
 
     const hasSalvage = cachedInfo?.cachedDataStatus.salvageInfoWasFound ? !!cachedInfo.salvage : !!refetchedHasSalvage
-    const baseInfo = cachedInfo?.baseInfo ?? refetchedBaseInfo
 
     return (
         <section className={styles.searchSection}>
@@ -54,7 +53,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                     </div>
                     <VinSearch openSubscription={openSubscription} />
                 </div>
-                <SampleResults reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0} baseInfo={cachedInfo?.baseInfo} vin={vin} cacheStatus={cachedInfo?.cachedDataStatus}
+                <SampleResults baseInfo={baseInfo} reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0} vin={vin} cacheStatus={cachedInfo?.cachedDataStatus}
                     cachedPricesInfo={cachedInfo?.marketAnalysis ?? []} />
                 <SearchHistory searches={actionsHistoryResponse.data} isLoading={actionsHistoryResponse.isFetching || actionsHistoryResponse.isLoading} />
             </div>

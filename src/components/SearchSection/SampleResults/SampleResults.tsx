@@ -9,13 +9,14 @@ import { DistributionChart } from "@/components/DistributionChart/DistributionCh
 import { CachedData_GET_Response, CacheStatus } from "@/app/api/vin/cached-data/models";
 import { ReportsProvider } from "@/components/ReportsProvider/ReportsProvider";
 import { CarInfo } from "@/components/SearchSection/CarInfo/CarInfo";
+import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
 
 export interface ISampleResults {
     vin: string,
     cacheStatus?: CacheStatus,
     cachedPricesInfo?: CachedData_GET_Response['marketAnalysis'],
-    baseInfo?: CachedData_GET_Response['baseInfo'],
-    reportsLeft: number
+    reportsLeft: number,
+    baseInfo: VehicleBaseInfoDTO | undefined
 }
 
 const formatNumber = (num: number) => {
@@ -23,7 +24,7 @@ const formatNumber = (num: number) => {
     return intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPricesInfo, baseInfo, reportsLeft }) => {
+export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPricesInfo, reportsLeft, baseInfo }) => {
 
     const [averageMileage, setAverageMileage] = useState<number>(25);
     const { data: refetchedMileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(vin, averageMileage * 1000, cacheStatus);
@@ -79,7 +80,7 @@ export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPric
                     </div>
                     <ReportsProvider vin={vin} reportsLeft={reportsLeft} />
                 </div>
-                <CarInfo {...baseInfo} />
+                {baseInfo ? <CarInfo {...baseInfo} /> : <>Loading...</>}
             </div>
         </section>
     );
