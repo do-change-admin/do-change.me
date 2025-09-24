@@ -50,7 +50,6 @@ export async function middleware(req: NextRequest) {
 
     if (!user) {
         if (!authPaths.includes(pathname)) {
-            'сюда нахуй'
             return NextResponse.redirect(new URL("/auth/login", req.url));
         }
         return NextResponse.next();

@@ -72,7 +72,8 @@ export const zodApiMethod = <
         handler: (request: {
             payload: z.infer<typeof schemas.query> & z.infer<typeof schemas.body>,
             activeUser: { id: string; email: string },
-            req: NextRequest
+            req: NextRequest,
+            flags: Record<string, boolean>
         }) => Promise<ReturnData extends ZodObjectData ? z.infer<typeof schemas.response> : void
         >,
         beforehandler?: (request: {
@@ -84,8 +85,14 @@ export const zodApiMethod = <
             requestPayload: z.infer<typeof schemas.query> & z.infer<typeof schemas.body>,
             activeUser: { id: string; email: string },
             req: NextRequest
-            result: ReturnData extends ZodObjectData ? z.infer<typeof schemas.response> : undefined
-        }) => Promise<void>
+            result: ReturnData extends ZodObjectData ? z.infer<typeof schemas.response> : undefined,
+            flags: Record<string, boolean>
+        }) => Promise<void>,
+        ignoreBeforeHandler?: (request: {
+            payload: z.infer<typeof schemas.query> & z.infer<typeof schemas.body>,
+            activeUser: { id: string; email: string },
+            req: NextRequest
+        }) => Promise<boolean>
     },
 ) => {
     return async (request: NextRequest) => {
@@ -139,16 +146,26 @@ export const zodApiMethod = <
         }
         try {
             if (logic.beforehandler) {
+                let ignoreBeforeHandler = false
+                if (logic.ignoreBeforeHandler) {
+                    ignoreBeforeHandler = await logic.ignoreBeforeHandler({
+                        activeUser: user,
+                        payload: resultObject as any,
+                        req: request,
+                    })
+                }
                 await logic.beforehandler({
                     activeUser: user,
                     payload: resultObject as any,
                     req: request
                 })
             }
+            let flags: Parameters<typeof logic['handler']>[0]['flags'] = {}
             const result = await logic.handler({
                 activeUser: user,
                 payload: resultObject as any,
-                req: request
+                req: request,
+                flags
             });
             if (schemas.response) {
                 const resultParsed = schemas.response.safeParse(result);
@@ -171,6 +188,7 @@ export const zodApiMethod = <
                         req: request,
                         result: resultParsed as any,
                         requestPayload: resultObject as any,
+                        flags
                     })
                 }
                 return NextResponse.json<SuccessResponse<unknown>>(
