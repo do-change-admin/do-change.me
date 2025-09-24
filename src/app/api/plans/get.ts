@@ -1,6 +1,13 @@
 import z from "zod";
-import { zodApiMethod, ZodAPIMethod, zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED, ZodAPISchemas } from "../zod-api-methods";
+import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../zod-api-methods";
 import { prismaClient } from "@/infrastructure";
+
+const querySchema = z.object({
+    available: z
+        .string()
+        .transform((v) => v === "true")
+        .optional(),
+});
 
 const planPriceSchema = z.object({
     id: z.number(),
@@ -26,30 +33,45 @@ const planSchema = z.object({
 
 const schemas = {
     body: undefined,
-    query: undefined,
+    query: querySchema,
     response: z.object({
-        basic: planSchema,
-        auctionAccess: planSchema
-    })
-} satisfies ZodAPISchemas
+        basic: planSchema.nullable(),
+        auctionAccess: planSchema.nullable(),
+    }),
+} satisfies ZodAPISchemas;
 
-export type Method = ZodAPIMethod<typeof schemas>
+export type Method = ZodAPIMethod<typeof schemas>;
 
 export const method = zodApiMethod(schemas, {
-    handler: async () => {
-        const basic = await prismaClient.plan.findFirst({
-            where: { slug: "basic" },
-            include: { prices: true }
-        })
-        const auctionAccess = await prismaClient.plan.findFirst({
-            where: { slug: "auction access" },
-            include: { prices: true }
-        })
+    handler: async (res) => {
+        const { payload, activeUser } = res;
+
+        let excludePlanId: number | undefined = undefined;
+
+        if (payload.available) {
+            const userPlan = await prismaClient.userPlan.findFirst({
+                where: { userId: activeUser.id },
+            });
+            excludePlanId = userPlan?.planId;
+        }
+
+        const [basic, auctionAccess] = await Promise.all([
+            prismaClient.plan.findFirst({
+                where: { slug: "basic" },
+                include: { prices: true },
+            }),
+            prismaClient.plan.findFirst({
+                where: { slug: "auction access" },
+                include: { prices: true },
+            }),
+        ]);
 
         return {
-            auctionAccess: auctionAccess!,
-            basic: basic!
+            basic: basic && basic.id !== excludePlanId ? basic : null,
+            auctionAccess:
+                auctionAccess && auctionAccess.id !== excludePlanId
+                    ? auctionAccess
+                    : null,
         };
-
-    }
-})
+    },
+});
