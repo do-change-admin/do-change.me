@@ -386,6 +386,7 @@ model Plan {
   active          Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  reportsCount    Int      @default(0)
 
   prices   PlanPrice[]
   userPlan UserPlan[]
