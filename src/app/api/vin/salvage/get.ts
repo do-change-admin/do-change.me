@@ -5,6 +5,7 @@ import { prismaClient } from "@/infrastructure"
 import { ActionsHistoryService } from "@/services"
 import { noSubscriptionsGuard } from "@/api-guards"
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers"
+import { businessError } from "@/lib/errors"
 
 const schemas = {
     body: undefined,
@@ -41,6 +42,10 @@ export const method = zodApiMethod(schemas, {
             },
         });
 
+        if (!response.ok) {
+            throw businessError('Error while obtaining salvage')
+        }
+
         let salvageWasFound: boolean | undefined = undefined
 
         try {
@@ -52,9 +57,12 @@ export const method = zodApiMethod(schemas, {
             // it can't be used as JSON. We assume it's salvage or total loss case.
             salvageWasFound = true
         }
+
+        console.log(salvageWasFound, 'salvage')
         return { salvageWasFound }
     },
     onSuccess: async ({ flags, result, requestPayload }) => {
+        console.log(result, 'result')
         if (!flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE]) {
             await prismaClient.salvageInfo.create({
                 data: { salvageWasFound: result.salvageWasFound, vin: requestPayload.vin }

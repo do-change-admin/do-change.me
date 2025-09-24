@@ -188,7 +188,7 @@ export const zodApiMethod = <
                     logic.onSuccess({
                         activeUser: user,
                         req: request,
-                        result: resultParsed as any,
+                        result: resultParsed.data as any,
                         requestPayload: resultObject as any,
                         flags
                     })

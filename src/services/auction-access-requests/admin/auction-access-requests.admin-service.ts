@@ -11,6 +11,10 @@ export class AuctionAccessRequestsAdminService {
 
     }
 
+    count = async () => {
+        return 1
+    }
+
     setStatus = async (id: string, status: AuctionAccessRequestStatus) => {
         await prismaClient.auctionAccessRequest.update({
             where: { id },
