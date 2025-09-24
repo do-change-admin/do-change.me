@@ -4,6 +4,20 @@ import { prismaClient } from "@/infrastructure/prisma/client";
 export class RequestsMeteringService {
     public constructor(private readonly userId: string) { }
 
+    getUsage = async (featureKey: FeatureKey) => {
+        const { periodStart, periodEnd } = await this.getCurrentMonthPeriod();
+
+        const data = await prismaClient.usageAggregate.findFirst({
+            where: { userId: this.userId, periodEnd, periodStart, featureKey }
+        })
+
+        if (!data) {
+            return 0
+        }
+
+        return data.usageCount
+    }
+
     incrementUsage = async (
         featureKey: FeatureKey,
         amount: number = 1

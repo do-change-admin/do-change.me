@@ -3,6 +3,8 @@ import { EmailAddress } from "@/value-objects/email-address.vo";
 import { ProfileData, UpdateProfilePayload } from "./profile.types";
 import { ProvidesFileLink, ProvidesFileUploading } from "@/providers/contracts";
 import { v4 } from "uuid";
+import { RequestsMeteringService } from "../requests-metering/requests-metering.service";
+import { FeatureKey } from "@/value-objects/feature-key.vo";
 
 export class ProfileService {
     constructor(private readonly email: EmailAddress, private readonly fileProvider: ProvidesFileUploading & ProvidesFileLink) { }
@@ -14,7 +16,7 @@ export class ProfileService {
             include: {
                 userPlan: {
                     where: { status: "active" },
-                    include: { plan: true, price: true },
+                    include: { plan: { include: { userPlan: true } }, price: true },
                 },
             },
         });
@@ -24,7 +26,7 @@ export class ProfileService {
                 data: { email: rawEmail }, include: {
                     userPlan: {
                         where: { status: "active" },
-                        include: { plan: true, price: true },
+                        include: { plan: { include: { userPlan: true } }, price: true },
                     },
                 },
             })
@@ -42,6 +44,8 @@ export class ProfileService {
             auctionAccessQRLink = await this.fileProvider.obtainDownloadLink(profile.auctionAccessQRFileId)
         }
 
+        const service = new RequestsMeteringService(profile.id)
+        const usedReports = await service.getUsage(FeatureKey.Report)
         return {
             bio: profile.bio ?? "",
             email: profile.email,
@@ -69,7 +73,7 @@ export class ProfileService {
             photoLink,
             birthDate: profile.birthDate,
             subscriptionDetails: {
-                reportsLeft: 10
+                reportsLeft: (activePlan?.plan.reportsCount ?? 0) - usedReports
             }
         }
     }
