@@ -13,8 +13,6 @@ import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
 
 export interface ISampleResults {
     vin: string,
-    cacheStatus?: CacheStatus,
-    cachedPricesInfo?: CachedData_GET_Response['marketAnalysis'],
     reportsLeft: number,
     baseInfo: VehicleBaseInfoDTO | undefined
 }
@@ -24,12 +22,11 @@ const formatNumber = (num: number) => {
     return intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPricesInfo, reportsLeft, baseInfo }) => {
+export const SampleResults: FC<ISampleResults> = ({ vin, reportsLeft, baseInfo }) => {
 
     const [averageMileage, setAverageMileage] = useState<number>(25);
-    const { data: refetchedMileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(vin, averageMileage * 1000, cacheStatus);
+    const { data: mileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(vin, averageMileage * 1000);
 
-    const mileageData = cachedPricesInfo?.find(x => x.mileage === averageMileage * 1000) || refetchedMileageData
     return (
         <section className={styles.sampleResults}>
             <div className={styles.card}>

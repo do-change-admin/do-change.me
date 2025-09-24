@@ -6,7 +6,7 @@ import { prismaClient } from "@/infrastructure";
 import { businessError } from "@/lib/errors";
 import { noSubscriptionsGuard } from "@/api-guards";
 import { ActionsHistoryService } from "@/services";
-import { isDemoVin } from "../vin-api.helpers";
+import { isDemoVin, VinAPIFlags } from "../vin-api.helpers";
 
 const schemas = {
     body: undefined,
@@ -18,7 +18,6 @@ const schemas = {
 
 export type Method = ZodAPIMethod<typeof schemas>
 
-const DATA_WAS_TAKEN_FROM_CACHE = 'DATA_WAS_TAKEN_FROM_CACHE'
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload, flags }) => {
@@ -27,7 +26,7 @@ export const method = zodApiMethod(schemas, {
         });
 
         if (cachedBaseInfoData) {
-            flags[DATA_WAS_TAKEN_FROM_CACHE] = true
+            flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE] = true
             return cachedBaseInfoData
         }
 
@@ -41,7 +40,7 @@ export const method = zodApiMethod(schemas, {
         return json?.Results?.[0];
     },
     onSuccess: async ({ result, requestPayload, flags }) => {
-        if (!flags[DATA_WAS_TAKEN_FROM_CACHE]) {
+        if (!flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE]) {
             await prismaClient.vinCheckResult.create({ data: result }) ?? [];
         }
 

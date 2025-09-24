@@ -12,7 +12,6 @@ const VIN_LENGTH = 17;
 
 export const useBaseInfoByVIN = (
     vin: string | null,
-    cacheStatus: CacheStatus | undefined,
 ) => {
     return useQuery<VehicleBaseInfoDTO>({
         queryKey: ['vinCheck', vin],
@@ -47,16 +46,11 @@ export const useBaseInfoByVIN = (
 export const useMileagePriceQuery = (
     vin: string | null,
     mileage: number | undefined,
-    cacheStatus: CacheStatus | undefined,
 ) => {
     return useQuery<MarketValueAPI['GET']['response'], MarketValueAPI['GET']['error']>({
         queryKey: ['mileagePrice', vin, mileage],
         queryFn: () => apiRequest('/api/vin/market-value', 'GET')({ query: { vin, mileage } }),
         enabled: () => {
-            if (!cacheStatus) {
-                return false
-            }
-
             if (!mileage) {
                 return false
             }
@@ -66,7 +60,7 @@ export const useMileagePriceQuery = (
                 return false
             }
 
-            return !cacheStatus.marketPricesWereFound.includes(mileage)
+            return true
         },
         staleTime: 5 * 60 * 1000,
         refetchOnWindowFocus: false,

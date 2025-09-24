@@ -28,7 +28,6 @@ export type CacheStatus = {
 
 export type CachedData_GET_Response = {
     cachedDataStatus: CacheStatus,
-    marketAnalysis: (PricesResultDTO & { mileage: number })[],
     carfaxReportData: ReportData | null,
     autocheckReportData: ReportData | null,
     salvage: boolean | null

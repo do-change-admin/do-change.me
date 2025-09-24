@@ -33,15 +33,6 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.json<CachedData_GET_Response>({
         salvage: salvageData ? salvageData.salvageWasFound : null,
-        marketAnalysis: marketPriceInfoData?.map(marketPriceInfoData => ({
-            mileage: marketPriceInfoData.mileage,
-            market_prices: {
-                above: marketPriceInfoData.above,
-                average: marketPriceInfoData.average,
-                below: marketPriceInfoData.below,
-                distribution: marketPriceInfoData.distribution as PricesResultDTO['market_prices']['distribution']
-            }
-        })) ?? [],
         autocheckReportData: autoCheckReport ? mapReportFromPrismaToReportData(autoCheckReport) : null,
         carfaxReportData: carfaxReport ? mapReportFromPrismaToReportData(carfaxReport) : null,
         cachedDataStatus: {

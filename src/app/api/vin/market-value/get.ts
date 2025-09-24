@@ -5,6 +5,24 @@ import { businessError } from "@/lib/errors";
 import { prismaClient } from "@/infrastructure";
 import { ActionsHistoryService } from "@/services";
 import { noSubscriptionsGuard } from "@/api-guards";
+import { isDemoVin, VinAPIFlags } from "../vin-api.helpers";
+
+export const marketPricesSchema = z.object({
+    market_prices: z.object({
+        average: z.number(),
+        below: z.number(),
+        above: z.number(),
+        distribution: z.array(
+            z.object({
+                group: z.object({
+                    count: z.number(),
+                    max: z.number(),
+                    min: z.number()
+                })
+            })
+        )
+    })
+})
 
 const schemas = {
     body: undefined,
@@ -12,42 +30,25 @@ const schemas = {
         vin: VinSchema,
         mileage: z.coerce.number(),
     }),
-    response: z.object({
-        market_prices: z.object({
-            average: z.number(),
-            below: z.number(),
-            above: z.number(),
-            distribution: z.array(
-                z.object({
-                    group: z.object({
-                        count: z.number(),
-                        max: z.number(),
-                        min: z.number()
-                    })
-                })
-            )
-        })
-    })
+    response: marketPricesSchema
 } satisfies ZodAPISchemas
 
 export type Method = ZodAPIMethod<typeof schemas>
 
+
 export const method = zodApiMethod(schemas, {
-    handler: async ({ payload }) => {
-        const marketValueURL = process.env.MARKET_VALUE_ENDPOINT
-        if (!marketValueURL) {
-            return {
-                market_prices: {
-                    above: 9000.12,
-                    average: 8900.14,
-                    below: 8771.241,
-                    distribution: []
-                }
-            }
+    handler: async ({ payload, flags }) => {
+        const cachedData = await prismaClient.marketPriceAnalysisResult.findMany({
+            where: { vin: payload.vin, mileage: payload.mileage }
+        })
+
+        if (cachedData) {
+            flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE] = true
+            return cachedData
         }
 
         const apiAnswer = await fetch(
-            `${marketValueURL}/vmv?vin=${payload.vin}&mileage=${payload.mileage}`,
+            `${process.env.MARKET_VALUE_ENDPOINT}/vmv?vin=${payload.vin}&mileage=${payload.mileage}`,
             {
                 headers: {
                     "x-rapidapi-key": process.env.RAPID_API_KEY!,
@@ -64,27 +65,20 @@ export const method = zodApiMethod(schemas, {
         return marketPrices
     },
 
-    onSuccess: async ({ result, requestPayload }) => {
-        if (!process.env.MARKET_VALUE_ENDPOINT) {
-            return
-        }
+    onSuccess: async ({ result, requestPayload, flags }) => {
+        if (!flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE]) {
+            await prismaClient.marketPriceAnalysisResult.create({
+                data: {
+                    vin: requestPayload.vin,
+                    mileage: requestPayload.mileage,
+                    above: result.market_prices.above,
+                    average: result.market_prices.average,
+                    below: result.market_prices.below,
+                    distribution: result.market_prices.distribution ?? []
+                }
+            })
 
-        await prismaClient.marketPriceAnalysisResult.deleteMany({
-            where: {
-                vin: requestPayload.vin,
-                mileage: requestPayload.mileage
-            }
-        })
-        await prismaClient.marketPriceAnalysisResult.create({
-            data: {
-                vin: requestPayload.vin,
-                mileage: requestPayload.mileage,
-                above: result.market_prices.above,
-                average: result.market_prices.average,
-                below: result.market_prices.below,
-                distribution: result.market_prices.distribution ?? []
-            }
-        })
+        }
         await ActionsHistoryService.Register({
             target: "market value", payload: {
                 vin: requestPayload.vin,
@@ -93,6 +87,6 @@ export const method = zodApiMethod(schemas, {
             }
         })
     },
-
-    beforehandler: noSubscriptionsGuard
+    beforehandler: noSubscriptionsGuard,
+    ignoreBeforeHandler: isDemoVin
 })
