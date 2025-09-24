@@ -1,12 +1,13 @@
-import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from "next/navigation";
 import { VehicleBaseInfoDTO } from '@/app/api/vin/base-info/models';
 import { ActionsHistoryService } from '@/services';
 import { PaginationSchemaType, VinSchema } from '@/schemas';
-import { CachedData_GET_Response, CacheStatus } from '@/app/api/vin/cached-data/models';
+import { CachedData_GET_Response } from '@/app/api/vin/cached-data/models';
 import { MarketValueAPI } from '@/app/api/vin/market-value/route';
 import { apiRequest } from '@/lib/apiFetch';
 import { ReportsAPI } from '@/app/api/vin/report/route';
+import { SalvageAPI } from '@/app/api/vin/salvage/route';
 
 const VIN_LENGTH = 17;
 
@@ -31,9 +32,6 @@ export const useBaseInfoByVIN = (
             return (await response.json());
         },
         enabled: () => {
-            // if (!cacheStatus || cacheStatus?.baseInfoWasFound) {
-            //     return false
-            // }
             const { success } = VinSchema.safeParse(vin)
             return success
         },
@@ -121,28 +119,16 @@ export function usePhotoHook(vin: string) {
     });
 }
 
-export const useSalvageCheck = (vin: string | null, cacheStatus?: CacheStatus) => {
-    return useQuery<boolean>({
+export const useSalvageCheck = (vin: string | null) => {
+    return useQuery<SalvageAPI['GET']['response'], SalvageAPI['GET']['error']>({
         queryKey: ["salvage", vin],
-        queryFn: async () => {
-            const res = await fetch(`/api/vin/salvage?vin=${vin}`);
-            if (!res.ok) {
-                const errorData = await res.json().catch(() => ({}));
-                throw new Error(errorData?.message || "error VIN");
-            }
-            return res.json();
+        queryFn: () => {
+            return apiRequest('/api/vin/salvage', 'GET')({ query: { vin } } as SalvageAPI['GET']['payload'])
         },
         enabled: () => {
-            if (!cacheStatus || cacheStatus.salvageInfoWasFound) {
-                return false
-            }
-
             const { success } = VinSchema.safeParse(vin)
             return success
         },
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-        staleTime: 5 * 60 * 1000,
     });
 };
 

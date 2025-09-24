@@ -6,7 +6,7 @@ import { SearchHistory } from "./SearchHistory/SearchHistory";
 import { SampleResults } from "./SampleResults/SampleResults";
 import { LoadingMinute, Salvage } from "@/components";
 import { useSearchParams } from "next/navigation";
-import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useCachedInfo, useProfile } from "@/hooks";
+import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useProfile } from "@/hooks";
 import { VinSearch } from "./VinSearch/VinSearch";
 import cn from "classnames";
 
@@ -21,22 +21,19 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
 
     const actionsHistoryResponse = useActionsHistory({ skip: 0, take: 10 })
 
-    const { data: cachedInfo, isLoading: isLoadingCarInfo } = useCachedInfo(vin)
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(vin);
-    const { data: refetchedHasSalvage, isLoading: salvageIsLoading } = useSalvageCheck(vin, cachedInfo?.cachedDataStatus);
-
-    const hasSalvage = cachedInfo?.cachedDataStatus.salvageInfoWasFound ? !!cachedInfo.salvage : !!refetchedHasSalvage
+    const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(vin);
 
     return (
         <section className={styles.searchSection}>
             <div className={styles.container}>
                 <div className={cn(styles.glass, {
-                    [styles.bgClean]: !hasSalvage,
-                    [styles.bgSalvage]: hasSalvage,
+                    [styles.bgClean]: !salvageInfo?.salvageWasFound,
+                    [styles.bgSalvage]: salvageInfo?.salvageWasFound,
                 })}>
 
-                    <Salvage hasSalvage={hasSalvage} isPending={salvageIsLoading} />
-                    {(isLoading || salvageIsLoading || isLoadingCarInfo) && <LoadingMinute label="We’re compiling the Vehicle History Report" />}
+                    <Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />
+                    {(isLoading || salvageIsLoading) && <LoadingMinute label="We’re compiling the Vehicle History Report" />}
                     <div className={styles.searchSectionHeader}>
                         <div className={styles.header}>
                             <div className={styles.headerFlex}>

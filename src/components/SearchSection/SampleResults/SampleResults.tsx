@@ -2,11 +2,9 @@
 
 import styles from "./SampleResults.module.css";
 import React, { FC, useState } from "react";
-import { PricesResultDTO } from "@/app/api/vin/market-value/models";
 import { MileageButtons } from "@/components/SearchSection/MileageButtons/MileageButtons";
 import { useMileagePriceQuery } from "@/hooks";
 import { DistributionChart } from "@/components/DistributionChart/DistributionChart";
-import { CachedData_GET_Response, CacheStatus } from "@/app/api/vin/cached-data/models";
 import { ReportsProvider } from "@/components/ReportsProvider/ReportsProvider";
 import { CarInfo } from "@/components/SearchSection/CarInfo/CarInfo";
 import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
