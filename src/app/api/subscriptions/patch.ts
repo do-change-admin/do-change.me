@@ -1,5 +1,8 @@
 import z from "zod";
-import { ZodAPIMethod, zodApiMethod } from "../zod-api-methods";
+import {
+    zodApiMethod_DEPRECATED,
+    ZodAPIMethod_DEPRECATED,
+} from "../zod-api-methods";
 import { prismaClient } from "@/infrastructure";
 import Stripe from "stripe";
 
@@ -11,9 +14,13 @@ const bodySchema = z.object({
     priceId: z.string().nonempty(),
 });
 
-export type Method = ZodAPIMethod<undefined, typeof bodySchema, undefined>;
+export type Method = ZodAPIMethod_DEPRECATED<
+    undefined,
+    typeof bodySchema,
+    undefined
+>;
 
-export const handler = zodApiMethod(
+export const handler = zodApiMethod_DEPRECATED(
     undefined,
     bodySchema,
     undefined,
