@@ -2,17 +2,18 @@
 
 import { motion } from "framer-motion";
 import styles from "./ReportsProvider.module.css";
-import {FaCheckCircle, FaRegFileAlt} from "react-icons/fa";
+import { FaCheckCircle, FaRegFileAlt } from "react-icons/fa";
 import Image from "next/image";
-import React, {FC} from "react";
-import {useCheckRecords} from "@/hooks";
-import {FiRefreshCw} from "react-icons/fi";
+import React, { FC } from "react";
+import { useCheckRecords } from "@/hooks";
+import { FiRefreshCw } from "react-icons/fi";
 
 export interface IReportsProviderProp {
-    vin: string
+    vin: string;
+    reportsLeft: number;
 }
 
-export const ReportsProvider:FC<IReportsProviderProp> = ({vin}) => {
+export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) => {
     const { mutate: handleCheck } = useCheckRecords(vin || '');
     return (
         <motion.div
@@ -32,7 +33,7 @@ export const ReportsProvider:FC<IReportsProviderProp> = ({vin}) => {
                 <div className={styles.intro}>
                     <div className={styles.reportsAvailable}>
                         <FaCheckCircle className={styles.checkIcon} />
-                        <span>20 Reports Available</span>
+                        <span>{reportsLeft.toString()} Reports Available</span>
                     </div>
                     <p>Choose your preferred vehicle history provider</p>
                 </div>
@@ -66,7 +67,7 @@ export const ReportsProvider:FC<IReportsProviderProp> = ({vin}) => {
                             </div>
                             <h3>AutoCheck Report</h3>
                             <p>Experian's trusted vehicle history service</p>
-                            <button className={styles.btnOrange}  onClick={() => handleCheck("autocheck")}>Order AutoCheck Report</button>
+                            <button className={styles.btnOrange} onClick={() => handleCheck("autocheck")}>Order AutoCheck Report</button>
                             <div className={styles.priceOrange}>$0.99</div>
                         </div>
                     </motion.div>

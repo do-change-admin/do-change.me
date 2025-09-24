@@ -18,9 +18,17 @@ export const profileSchema = z.object({
     phone: z.string(),
     email: z.string(),
     bio: z.string(),
+    address: z.string().nullable(),
+    state: z.string().nullable(),
+    zipCode: z.string().nullable(),
     photoLink: z.string().nullable(),
     birthDate: z.coerce.date().nullable(),
+    auctionAccessNumber: z.string().nullable(),
+    auctionAccessQRLink: z.string().nullable(),
     subscription: subscriptionSchema.nullable(),
+    subscriptionDetails: z.object({
+        reportsLeft: z.number()
+    })
 })
 
 export const updateProfileSchema = z.object({
@@ -28,6 +36,9 @@ export const updateProfileSchema = z.object({
     lastName: z.string().nonempty(),
     phone: z.string().nonempty(),
     bio: z.string().nonempty(),
-    birthDate: z.coerce.date()
+    birthDate: z.coerce.date(),
+    address: z.string().nullable(),
+    state: z.string().nullable(),
+    zipCode: z.string().nullable(),
 })
 

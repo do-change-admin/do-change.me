@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
-
+    const user = await getToken({ req, secret: process.env.AUTH_SECRET })
 
     // Пути без проверки
     const publicPaths = [
@@ -12,6 +12,8 @@ export async function middleware(req: NextRequest) {
         "/favicon.ico",
         "/api/auth",
         "/auth/reset-password",
+        "/auth/login",
+        "/auth/register",
         "/terms",
         "/api/webhooks/stripe",
     ];
@@ -21,7 +23,6 @@ export async function middleware(req: NextRequest) {
     }
 
     if (pathname.startsWith('/admin')) {
-        const user = await getToken({ req, secret: process.env.AUTH_SECRET })
         if (!user) {
             return NextResponse.redirect(new URL("/auth/login", req.url));
         }
@@ -47,7 +48,7 @@ export async function middleware(req: NextRequest) {
         }
     }
 
-    if (!token) {
+    if (!user) {
         if (!authPaths.includes(pathname)) {
             return NextResponse.redirect(new URL("/auth/login", req.url));
         }
@@ -78,5 +79,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/((?!_next|favicon.ico|api/auth).*)"],
+    matcher: ["/((?!_next|favicon.ico|api/auth).*)", '/'],
 };

@@ -1,19 +1,33 @@
 import { FeatureKey } from "@/value-objects/feature-key.vo";
-import { User } from "@prisma/client";
 import { prismaClient } from "@/infrastructure/prisma/client";
 
 export class RequestsMeteringService {
+    public constructor(private readonly userId: string) { }
+
+    getUsage = async (featureKey: FeatureKey) => {
+        const { periodStart, periodEnd } = await this.getCurrentMonthPeriod();
+
+        const data = await prismaClient.usageAggregate.findFirst({
+            where: { userId: this.userId, periodEnd, periodStart, featureKey }
+        })
+
+        if (!data) {
+            return 0
+        }
+
+        return data.usageCount
+    }
+
     incrementUsage = async (
-        user: User,
         featureKey: FeatureKey,
         amount: number = 1
     ): Promise<void> => {
-        const { periodStart, periodEnd } = this.getCurrentMonthPeriod();
+        const { periodStart, periodEnd } = await this.getCurrentMonthPeriod();
 
         const aggregate = await prismaClient.usageAggregate.findUnique({
             where: {
                 userId_featureKey_periodStart_periodEnd: {
-                    userId: user.id,
+                    userId: this.userId,
                     featureKey,
                     periodStart,
                     periodEnd,
@@ -29,7 +43,7 @@ export class RequestsMeteringService {
         } else {
             await prismaClient.usageAggregate.create({
                 data: {
-                    userId: user.id,
+                    userId: this.userId,
                     featureKey,
                     periodStart,
                     periodEnd,
@@ -39,10 +53,12 @@ export class RequestsMeteringService {
         }
     };
 
-    private getCurrentMonthPeriod = () => {
-        const now = new Date();
-        const periodStart = new Date(now.getFullYear(), now.getMonth(), 1);
-        const periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    private getCurrentMonthPeriod = async () => {
+        const user = await prismaClient.user.findUnique({
+            where: { id: this.userId }, include: { userPlan: true }
+        })
+        const periodStart = user?.userPlan[0].currentPeriodStart ?? new Date()
+        const periodEnd = user?.userPlan[0].currentPeriodEnd ?? new Date()
         return { periodStart, periodEnd };
     };
 }

@@ -2,19 +2,17 @@
 
 import styles from "./SampleResults.module.css";
 import React, { FC, useState } from "react";
-import { PricesResultDTO } from "@/app/api/vin/market-value/models";
 import { MileageButtons } from "@/components/SearchSection/MileageButtons/MileageButtons";
 import { useMileagePriceQuery } from "@/hooks";
 import { DistributionChart } from "@/components/DistributionChart/DistributionChart";
-import { CachedData_GET_Response, CacheStatus } from "@/app/api/vin/cached-data/models";
 import { ReportsProvider } from "@/components/ReportsProvider/ReportsProvider";
 import { CarInfo } from "@/components/SearchSection/CarInfo/CarInfo";
+import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
 
 export interface ISampleResults {
     vin: string,
-    cacheStatus?: CacheStatus,
-    cachedPricesInfo?: CachedData_GET_Response['marketAnalysis'],
-    baseInfo?: CachedData_GET_Response['baseInfo']
+    reportsLeft: number,
+    baseInfo: VehicleBaseInfoDTO | undefined
 }
 
 const formatNumber = (num: number) => {
@@ -22,12 +20,11 @@ const formatNumber = (num: number) => {
     return intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPricesInfo, baseInfo }) => {
+export const SampleResults: FC<ISampleResults> = ({ vin, reportsLeft, baseInfo }) => {
 
     const [averageMileage, setAverageMileage] = useState<number>(25);
-    const { data: refetchedMileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(vin, averageMileage * 1000, cacheStatus);
+    const { data: mileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(vin, averageMileage * 1000);
 
-    const mileageData = cachedPricesInfo?.find(x => x.mileage === averageMileage * 1000) || refetchedMileageData
     return (
         <section className={styles.sampleResults}>
             <div className={styles.card}>
@@ -76,9 +73,9 @@ export const SampleResults: FC<ISampleResults> = ({ vin, cacheStatus, cachedPric
                         </div>
                         <DistributionChart distribution={mileageData?.market_prices?.distribution ?? []} />
                     </div>
-                    <ReportsProvider vin={vin} />
+                    <ReportsProvider vin={vin} reportsLeft={reportsLeft} />
                 </div>
-                <CarInfo {...baseInfo} />
+                {baseInfo ? <CarInfo {...baseInfo} /> : <>Loading...</>}
             </div>
         </section>
     );

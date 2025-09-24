@@ -1,23 +1,23 @@
 "use client";
 
 import styles from "./page.module.css";
-import {FaCheck, FaSignOutAlt} from "react-icons/fa";
-import {ProfileForm} from "./(ProfileForm)/ProfileForm";
-import { Button, Group} from "@mantine/core";
-import {signOut} from "next-auth/react";
-import {FaCcVisa} from "react-icons/fa6";
-import {SubscriptionPlans} from "@/components";
+import {FaCheck, FaSignOutAlt, FaTimes} from "react-icons/fa";
+import { ProfileForm } from "./(ProfileForm)/ProfileForm";
+import { Button, Group } from "@mantine/core";
+import { signOut } from "next-auth/react";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function SettingsContent() {
+    const [opened, { open, close }] = useDisclosure(false);
 
 
     return (
         <div className={styles.settings}>
-            <ProfileForm/>
+            <ProfileForm />
 
             {/*Subscription*/}
             <section className={styles.card}>
-                <h2 className={styles.cardTitle}>Subscription & Billing</h2>
+                <h2 className={styles.cardTitle}>Subscription</h2>
 
                 {/* Current plan */}
                 <div id="current-plan" className={styles.planBox}>
@@ -27,17 +27,21 @@ export default function SettingsContent() {
                                 <h3 className={styles.planName}>Pro Plan</h3>
                                 <span className={styles.planBadge}>Current</span>
                             </div>
-                            <p className={styles.planDesc}>Access to all features and priority support</p>
                             <div className={styles.planMeta}>
-                                <span>$29/month</span>
-                                <span className={styles.dot}>•</span>
-                                <span>Next billing: March 15, 2024</span>
+                                <div>50/month</div>
+                                <div>Next billing: March 15, 2024</div>
                             </div>
                         </div>
 
                         <div className={styles.actionsCol}>
                             {/*<button className={styles.ghostBtn}>Change Plan</button>*/}
-                            <button className={styles.dangerLink}>Cancel Subscription</button>
+                            <Button
+                                variant="light"
+                                c="red"
+                                leftSection={<FaTimes />}
+                            >
+                                Cancel
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -70,11 +74,10 @@ export default function SettingsContent() {
                 {/*    </div>*/}
                 {/*</div>*/}
             </section>
-            {/*<SubscriptionPlans/>*/}
 
             <Group gap="xs" justify="right">
                 <Button
-                    leftSection={ <FaSignOutAlt/>}
+                    leftSection={<FaSignOutAlt />}
                     color="red"
                     variant="light"
                     radius="lg"
@@ -88,10 +91,10 @@ export default function SettingsContent() {
 }
 
 function HistoryItem({
-                         title,
-                         date,
-                         amount,
-                     }: {
+    title,
+    date,
+    amount,
+}: {
     title: string;
     date: string;
     amount: string;
@@ -100,7 +103,7 @@ function HistoryItem({
         <div className={styles.historyItem}>
             <div className={styles.historyLeft}>
                 <div className={styles.historyIcon}>
-                    <FaCheck/>
+                    <FaCheck />
                 </div>
                 <div>
                     <p className={styles.historyTitle}>{title}</p>

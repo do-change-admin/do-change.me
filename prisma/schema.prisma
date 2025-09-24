@@ -18,17 +18,22 @@ enum ReportSource {
 }
 
 model User {
-  id              String    @id @default(uuid())
-  firstName       String?
-  lastName        String?
-  email           String    @unique
-  password        String?
-  image           String?
-  emailVerifiedAt DateTime?
-  phone           String?
-  bio             String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                    String    @id @default(uuid())
+  firstName             String?
+  lastName              String?
+  email                 String    @unique
+  password              String?
+  image                 String?
+  emailVerifiedAt       DateTime?
+  phone                 String?
+  bio                   String?
+  address               String?
+  state                 String?
+  zipCode               String?
+  auctionAccessNumber   String?
+  auctionAccessQRFileId String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   stripeCustomer          StripeCustomer?
   emailVerificationTokens EmailVerificationToken[]
@@ -381,6 +386,7 @@ model Plan {
   active          Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  reportsCount    Int      @default(0)
 
   prices   PlanPrice[]
   userPlan UserPlan[]

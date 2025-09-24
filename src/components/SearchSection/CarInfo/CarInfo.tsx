@@ -41,24 +41,24 @@ export interface ICarInfo {
 
 export const CarInfo: FC<ICarInfo> = ({
 
-                                                           BodyClass,
-                                                           PlantCountry,
-                                                           DisplacementL,
-                                                           EngineCylinders,
-                                                           Turbo,
-                                                           DriveType,
-                                                           GVWR,
-                                                           BodyCabType,
-                                                           SteeringLocation,
-                                                           Manufacturer,
-                                                           PlantCompanyName,
-                                                           PlantState,
-                                                           OtherEngineInfo,
-                                                           AirBagLocFront,
-                                                           AirBagLocSide,
-                                                           SeatBeltsAll,
-                                                           BrakeSystemType,
-                                                       }) => {
+    BodyClass,
+    PlantCountry,
+    DisplacementL,
+    EngineCylinders,
+    Turbo,
+    DriveType,
+    GVWR,
+    BodyCabType,
+    SteeringLocation,
+    Manufacturer,
+    PlantCompanyName,
+    PlantState,
+    OtherEngineInfo,
+    AirBagLocFront,
+    AirBagLocSide,
+    SeatBeltsAll,
+    BrakeSystemType,
+}) => {
     return (
         <div id="car-specs-container" className={styles.container}>
             <div id="car-specs-card" className={styles.card}>

@@ -1,17 +1,23 @@
 import { PublicFolderFileSystemProvider } from "@/providers/implementations";
-import { zodApiMethod, ZodAPIMethod } from "../zod-api-methods";
+import { zodApiMethod, ZodAPIMethod, zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED, ZodAPISchemas } from "../zod-api-methods";
 import { profileSchema, ProfileService } from "@/services";
 import { EmailAddress } from "@/value-objects/email-address.vo";
 
-const responseSchema = profileSchema
+const schemas = {
+    body: undefined,
+    query: undefined,
+    response: profileSchema
+} satisfies ZodAPISchemas
 
-export type Method = ZodAPIMethod<undefined, undefined, typeof responseSchema>;
+export type Method = ZodAPIMethod<typeof schemas>;
 
-export const handler = zodApiMethod(undefined, undefined, responseSchema, async (payload) => {
-    const { email } = payload.activeUser
-    const emailValueObject = EmailAddress.create(email)
-    const service = new ProfileService(emailValueObject, new PublicFolderFileSystemProvider())
-    const profileData = await service.profileData()
+export const handler = zodApiMethod(schemas, {
+    handler: async ({ activeUser }) => {
+        const { email } = activeUser
+        const emailValueObject = EmailAddress.create(email)
+        const service = new ProfileService(emailValueObject, new PublicFolderFileSystemProvider())
+        const profileData = await service.profileData()
 
-    return profileData
+        return profileData
+    }
 })

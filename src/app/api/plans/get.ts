@@ -1,5 +1,11 @@
 import z from "zod";
-import { zodApiMethod, ZodAPIMethod } from "../zod-api-methods";
+import {
+    zodApiMethod,
+    ZodAPIMethod,
+    zodApiMethod_DEPRECATED,
+    ZodAPIMethod_DEPRECATED,
+    ZodAPISchemas,
+} from "../zod-api-methods";
 import { prismaClient } from "@/infrastructure";
 
 const querySchema = z.object({
@@ -31,41 +37,31 @@ const planSchema = z.object({
     prices: z.array(planPriceSchema),
 });
 
-const responseSchema = z.object({
-    plans: z.array(planSchema),
-});
+const schemas = {
+    body: undefined,
+    query: querySchema,
+    response: z.object({
+        basic: planSchema,
+        auctionAccess: planSchema,
+    }),
+} satisfies ZodAPISchemas;
 
-export type Method = ZodAPIMethod<
-    typeof querySchema,
-    undefined,
-    typeof responseSchema
->;
+export type Method = ZodAPIMethod<typeof schemas>;
 
-export const handler = zodApiMethod(
-    querySchema,
-    undefined,
-    responseSchema,
-    async (payload) => {
-        const { activeUser, available } = payload;
-
-        let excludePlanId: number | undefined = undefined;
-
-        if (available) {
-            const userPlan = await prismaClient.userPlan.findFirst({
-                where: { userId: activeUser.id },
-            });
-            excludePlanId = userPlan?.planId;
-        }
-
-        const plans = await prismaClient.plan.findMany({
-            where: {
-                active: true,
-                ...(excludePlanId ? { id: { not: excludePlanId } } : {}),
-            },
-            include: { prices: { orderBy: { id: "asc" } } },
-            orderBy: { id: "asc" },
+export const method = zodApiMethod(schemas, {
+    handler: async () => {
+        const basic = await prismaClient.plan.findFirst({
+            where: { slug: "basic" },
+            include: { prices: true },
+        });
+        const auctionAccess = await prismaClient.plan.findFirst({
+            where: { slug: "auction access" },
+            include: { prices: true },
         });
 
-        return { plans };
-    }
-);
+        return {
+            auctionAccess: auctionAccess!,
+            basic: basic!,
+        };
+    },
+});

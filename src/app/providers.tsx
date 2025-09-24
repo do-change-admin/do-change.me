@@ -9,16 +9,28 @@ import { MantineProvider } from "@mantine/core";
 import { AppContextProvider } from "@/contexts";
 import { NextIntlClientProvider } from "next-intl";
 import { allMessages } from "../../locale";
-import {useLocale} from "@/contexts/_locale.context";
+import { useLocale } from "@/contexts/_locale.context";
 
 export function Providers({
-                              children,
-                              session,
-                          }: {
+    children,
+    session,
+}: {
     children: React.ReactNode;
     session?: Session | null;
 }) {
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                retry: false,
+                refetchOnWindowFocus: false
+            },
+            mutations: {
+                retry: false,
+
+            }
+        }
+    });
+
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -26,7 +38,7 @@ export function Providers({
                 <AppContextProvider>
                     <MantineProvider>
                         <Notifications position="top-right" zIndex={1000} />
-                            {children}
+                        {children}
                     </MantineProvider>
                 </AppContextProvider>
             </SessionProvider>

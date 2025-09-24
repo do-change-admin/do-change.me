@@ -17,7 +17,8 @@ const runtimeEnvSchema = z.object({
   RESEND_API_KEY: z.string().min(1, "Cannot be empty"),
   NEXTAUTH_URL: z.url(),
   DATABASE_URL: z.string(),
-  ADMIN_EMAILS: z.string()
+  ADMIN_EMAILS: z.string(),
+  DEMO_VIN: z.string()
 })
 
 function validateBuildEnv() {

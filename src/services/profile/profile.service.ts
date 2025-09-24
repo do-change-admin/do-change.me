@@ -3,6 +3,8 @@ import { EmailAddress } from "@/value-objects/email-address.vo";
 import { ProfileData, UpdateProfilePayload } from "./profile.types";
 import { ProvidesFileLink, ProvidesFileUploading } from "@/providers/contracts";
 import { v4 } from "uuid";
+import { RequestsMeteringService } from "../requests-metering/requests-metering.service";
+import { FeatureKey } from "@/value-objects/feature-key.vo";
 
 export class ProfileService {
     constructor(private readonly email: EmailAddress, private readonly fileProvider: ProvidesFileUploading & ProvidesFileLink) { }
@@ -14,7 +16,7 @@ export class ProfileService {
             include: {
                 userPlan: {
                     where: { status: "active" },
-                    include: { plan: true, price: true },
+                    include: { plan: { include: { userPlan: true } }, price: true },
                 },
             },
         });
@@ -24,7 +26,7 @@ export class ProfileService {
                 data: { email: rawEmail }, include: {
                     userPlan: {
                         where: { status: "active" },
-                        include: { plan: true, price: true },
+                        include: { plan: { include: { userPlan: true } }, price: true },
                     },
                 },
             })
@@ -37,12 +39,24 @@ export class ProfileService {
             photoLink = await this.fileProvider.obtainDownloadLink(profile.photoFileId)
         }
 
+        let auctionAccessQRLink: string | null = null
+        if (profile.auctionAccessQRFileId) {
+            auctionAccessQRLink = await this.fileProvider.obtainDownloadLink(profile.auctionAccessQRFileId)
+        }
+
+        const service = new RequestsMeteringService(profile.id)
+        const usedReports = await service.getUsage(FeatureKey.Report)
         return {
             bio: profile.bio ?? "",
             email: profile.email,
             firstName: profile.firstName ?? "",
             lastName: profile.lastName ?? "",
             phone: profile.phone ?? "",
+            auctionAccessNumber: profile.auctionAccessNumber || null,
+            address: profile.address || null,
+            auctionAccessQRLink,
+            zipCode: profile.zipCode || null,
+            state: profile.state || null,
 
             subscription: activePlan
                 ? {
@@ -57,16 +71,21 @@ export class ProfileService {
                 }
                 : null,
             photoLink,
-            birthDate: profile.birthDate
+            birthDate: profile.birthDate,
+            subscriptionDetails: {
+                reportsLeft: (activePlan?.plan.reportsCount ?? 0) - usedReports
+            }
         }
     }
 
     update = async (payload: UpdateProfilePayload) => {
         const rawEmail = this.email.address()
-        const { bio, firstName, lastName, phone, birthDate } = payload
+        const { bio, firstName, lastName, phone, birthDate, address, zipCode, state } = payload
         await prismaClient.user.update({
             where: { email: rawEmail },
-            data: { bio, firstName, lastName, phone, birthDate },
+            data: {
+                bio, firstName, lastName, phone, birthDate, address, zipCode, state
+            },
         })
     }
 

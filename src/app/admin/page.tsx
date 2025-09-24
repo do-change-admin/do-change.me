@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Tabs, Button, Group, Badge } from "@mantine/core";
 import styles from "./layout.module.css";
 import { UserTable } from "@/components";
-import { useAdminAuctionAccessRequests } from "@/hooks";
+import { useAdminAuctionAccessCount, useAdminAuctionAccessRequests } from "@/hooks";
 import type { AuctionAccessRequestStatus } from '@/services/auction-access-requests'
 
 type Tab = {
@@ -59,6 +59,10 @@ export default function AuctionAccessPage() {
     const [activeSubTab, setActiveSubTab] = useState<AuctionAccessRequestStatus>(subTabs[0].status);
     const [activeOnboardingTab, setActiveOnboardingTabsTab] = useState<AuctionAccessRequestStatus>(subOnboardingTabs[0].status);
 
+    const { data: groupedCount } = useAdminAuctionAccessCount()
+
+    console.log(groupedCount)
+
     useEffect(() => {
         setStatus(activeSubTab)
     }, [activeSubTab])
@@ -86,11 +90,11 @@ export default function AuctionAccessPage() {
                     {mainTabs.map((tab) => (
                         <Tabs.Tab value={tab.status} key={tab.label} className={styles.tabWithBadge}>
                             {tab.label}
-                            {!!tab.count && (
-                                <Badge color="pink" size="sm" className={styles.tabBadge}>
-                                    {tab.count}
-                                </Badge>
-                            )}
+                            {/*{!!tab.count && (*/}
+                            {/*    <Badge color="pink" size="sm" className={styles.tabBadge}>*/}
+                            {/*        {tab.count}*/}
+                            {/*    </Badge>*/}
+                            {/*)}*/}
                         </Tabs.Tab>
                     ))}
                 </Tabs.List>
