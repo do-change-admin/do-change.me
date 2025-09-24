@@ -19,8 +19,9 @@ import type { ProfileData, UpdateProfilePayload } from "@/services";
 import { FaCalendar } from "react-icons/fa6";
 import { DateInput } from "@mantine/dates";
 import { useQueryClient } from "@tanstack/react-query";
-import {Avatar} from "@mantine/core";
+import {Avatar, Button, Group, Text} from "@mantine/core";
 import {ProfileForm} from "@/app/settings/(ProfileForm)/ProfileForm";
+import {FiAlertCircle, FiCheckCircle} from "react-icons/fi";
 
 export const ApplicationForm = () => {
     const { data: profileData } = useProfile()
@@ -31,6 +32,26 @@ export const ApplicationForm = () => {
         await createAuctionAccessRequest({})
     };
 
+    const requiredFields: (keyof ProfileData)[] = [
+        "firstName",
+        "lastName",
+        "phone",
+        "email",
+        "state",
+        "zipCode",
+        "address",
+        "photoLink",
+    ]
+
+    const validateUser =  requiredFields?.every((key) => {
+
+            if (profileData) {
+                const value = profileData[key];
+                return value !== null && value !== "" && value !== undefined;
+            }
+        });
+
+    console.log(profileData)
     return (
         <div className={styles.mainContainer}>
             {/* Left Section - Form */}
@@ -42,11 +63,28 @@ export const ApplicationForm = () => {
                             Complete your application to get exclusive access to premium car auctions
                         </p>
                     </div>
-                    <ProfileForm/>
+                    {!validateUser && (
+                        <ProfileForm isNotSettings/>
+                    )}
+                    {!validateUser ? (
+                        <Group gap="xs" m="md">
+                            <FiAlertCircle color="red" size={18} />
+                            <Text c="red" size="sm">
+                                Please fill in all required fields to submit your application.
+                            </Text>
+                        </Group>
+                    ) : (
+                        <Group gap="xs" mt="lg" mb="lg">
+                            <FiCheckCircle color="green" size={18} />
+                            <Text c="green" size="sm">
+                                Your profile is complete. You can now submit your application.
+                            </Text>
+                        </Group>
+                    )}
                     {/* Submit */}
-                    <button onClick={handleSubmit} className={styles.submitBtn}>
+                    <Button onClick={handleSubmit} radius="lg" fullWidth disabled={!validateUser} h={50}>
                         Submit Application <FaArrowRight />
-                    </button>
+                    </Button>
                 </div>
             </div>
 

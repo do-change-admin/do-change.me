@@ -68,8 +68,8 @@ export const handler = zodApiMethod_DEPRECATED(
                     priceId: planPrice.id,
                 },
             },
-            success_url: `${process.env.NEXTAUTH_URL}/account/billing?success=1`,
-            cancel_url: `${process.env.NEXTAUTH_URL}/account/billing?canceled=1`,
+            success_url: `${process.env.NEXTAUTH_URL}`,
+            cancel_url: `${process.env.NEXTAUTH_URL}/cancel`,
         });
 
         return { url: session.url };

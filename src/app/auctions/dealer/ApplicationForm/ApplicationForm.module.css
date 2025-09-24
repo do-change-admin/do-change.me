@@ -129,28 +129,6 @@
     color: #333;
 }
 
-/* Submit */
-.submitBtn {
-    background: var(--text-texas-blue);
-    color: white;
-    padding: 1rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    transition: 0.3s;
-    width: 100%;
-}
-
-.submitBtn:hover {
-    background: var(--text-texas-blue);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
 /* Right Info Section */
 .infoSection {
     width: 100%;

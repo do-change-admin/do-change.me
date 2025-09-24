@@ -68,6 +68,7 @@ export class ProfileService {
                     currentPeriodEnd: activePlan.currentPeriodEnd,
                     amount: activePlan.price.amount,
                     currency: activePlan.price.currency,
+                    id: String(activePlan.stripeSubscriptionId),
                 }
                 : null,
             photoLink,

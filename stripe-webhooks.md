@@ -57,7 +57,7 @@ STRIPE_WEBHOOK_SECRET=whsec_*************
 
 Assume your Next.js/Express server listens for webhooks at:
 
-    http://localhost:3000/api/webhook/stripe
+    http://localhost:3000/api/webhooks/stripe
 
 ---
 
@@ -66,7 +66,7 @@ Assume your Next.js/Express server listens for webhooks at:
 In a separate terminal, run:
 
 ```bash
-stripe listen --forward-to localhost:3000/api/webhook/stripe
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
 ```
 
 Once started, CLI will show something like:

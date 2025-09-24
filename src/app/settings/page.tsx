@@ -6,10 +6,12 @@ import { ProfileForm } from "./(ProfileForm)/ProfileForm";
 import { Button, Group } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import { useDisclosure } from "@mantine/hooks";
+import {useProfile, useSubscriptionDeletion} from "@/hooks";
 
 export default function SettingsContent() {
     const [opened, { open, close }] = useDisclosure(false);
-
+    const { data: profileData, isLoading: profileIsLoading } = useProfile();
+    const {mutate: cancel } = useSubscriptionDeletion()
 
     return (
         <div className={styles.settings}>
@@ -24,12 +26,12 @@ export default function SettingsContent() {
                     <div className={styles.planRow}>
                         <div>
                             <div className={styles.planTitleRow}>
-                                <h3 className={styles.planName}>Pro Plan</h3>
+                                <h3 className={styles.planName}>{profileData?.subscription?.planName}</h3>
                                 <span className={styles.planBadge}>Current</span>
                             </div>
                             <div className={styles.planMeta}>
-                                <div>50/month</div>
-                                <div>Next billing: March 15, 2024</div>
+                                <div>{profileData?.subscription?.amount}/month</div>
+                                <div>Next billing: {profileData?.subscription?.currentPeriodEnd.toString()}</div>
                             </div>
                         </div>
 
@@ -39,6 +41,7 @@ export default function SettingsContent() {
                                 variant="light"
                                 c="red"
                                 leftSection={<FaTimes />}
+                                onClick={() => cancel({query: {subscriptionId: profileData?.subscription?.id || ''} })}
                             >
                                 Cancel
                             </Button>

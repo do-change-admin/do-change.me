@@ -67,6 +67,10 @@ export const AuctionsServicesCards = () => {
                 <motion.div
                     whileHover={{ scale: 1.02 }}
                     className={styles.card}
+                    onClick={() => {
+                        router.push("/auctions/insurance");
+                        closeMenu()
+                    }}
                 >
                     <div className={styles.cardContent}>
                         <div className={`${styles.iconBox} ${styles.blue}`}>

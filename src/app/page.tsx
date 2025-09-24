@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./page.module.css";
-import { SearchSection, CookieBanner, SubscriptionPlans } from "@/components";
+import { SearchSection, SubscriptionPlans } from "@/components";
 import { useDisclosure } from "@mantine/hooks";
 
 export default function Reports() {

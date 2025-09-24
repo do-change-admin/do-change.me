@@ -9,6 +9,7 @@ export const subscriptionSchema = z.object({
     currentPeriodEnd: z.date(),
     amount: z.number(),
     currency: z.string(),
+    id: z.string(),
 });
 
 

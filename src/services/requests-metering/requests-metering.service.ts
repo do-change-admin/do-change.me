@@ -57,8 +57,8 @@ export class RequestsMeteringService {
         const user = await prismaClient.user.findUnique({
             where: { id: this.userId }, include: { userPlan: true }
         })
-        const periodStart = user?.userPlan[0].currentPeriodStart ?? new Date()
-        const periodEnd = user?.userPlan[0].currentPeriodEnd ?? new Date()
+        const periodStart = user?.userPlan[0]?.currentPeriodStart ?? new Date()
+        const periodEnd = user?.userPlan[0]?.currentPeriodEnd ?? new Date()
         return { periodStart, periodEnd };
     };
 }
