@@ -1,7 +1,10 @@
 import z from "zod";
 import { prismaClient } from "@/infrastructure";
 import Stripe from "stripe";
-import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../zod-api-methods";
+import {
+    zodApiMethod_DEPRECATED,
+    ZodAPIMethod_DEPRECATED,
+} from "../zod-api-methods";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-08-27.basil",

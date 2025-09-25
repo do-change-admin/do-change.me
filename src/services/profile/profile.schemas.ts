@@ -1,4 +1,4 @@
-import z from "zod"
+import z from "zod";
 
 export const subscriptionSchema = z.object({
     planName: z.string(),
@@ -6,12 +6,12 @@ export const subscriptionSchema = z.object({
     priceSlug: z.string(),
     status: z.string(),
     cancelAtPeriodEnd: z.boolean(),
+    canceledAt: z.date().nullable(),
     currentPeriodEnd: z.date(),
     amount: z.number(),
     currency: z.string(),
-    id: z.string(),
+    id: z.number(),
 });
-
 
 export const profileSchema = z.object({
     firstName: z.string(),
@@ -28,9 +28,9 @@ export const profileSchema = z.object({
     auctionAccessQRLink: z.string().nullable(),
     subscription: subscriptionSchema.nullable(),
     subscriptionDetails: z.object({
-        reportsLeft: z.number()
-    })
-})
+        reportsLeft: z.number(),
+    }),
+});
 
 export const updateProfileSchema = z.object({
     firstName: z.string().nonempty(),
@@ -41,5 +41,4 @@ export const updateProfileSchema = z.object({
     address: z.string().nullable(),
     state: z.string().nullable(),
     zipCode: z.string().nullable(),
-})
-
+});

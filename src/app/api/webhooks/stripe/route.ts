@@ -235,7 +235,14 @@ export async function POST(req: Request) {
 
                     await tx.userPlan.update({
                         where: { stripeSubscriptionId: subscription.id },
-                        data: { status: subscription.status },
+                        data: {
+                            status: subscription.status,
+                            cancelAtPeriodEnd:
+                                subscription.cancel_at_period_end,
+                            canceledAt: subscription.cancel_at
+                                ? new Date(subscription.cancel_at * 1000)
+                                : null,
+                        },
                     });
                 });
 
