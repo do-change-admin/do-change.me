@@ -1,17 +1,17 @@
 "use client";
 
 import styles from "./page.module.css";
-import {FaCheck, FaSignOutAlt, FaTimes} from "react-icons/fa";
+import { FaCheck, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { ProfileForm } from "./(ProfileForm)/ProfileForm";
 import { Button, Group } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import { useDisclosure } from "@mantine/hooks";
-import {useProfile, useSubscriptionDeletion} from "@/hooks";
+import { useProfile, useSubscriptionDeletion } from "@/hooks";
 
 export default function SettingsContent() {
     const [opened, { open, close }] = useDisclosure(false);
     const { data: profileData, isLoading: profileIsLoading } = useProfile();
-    const {mutate: cancel } = useSubscriptionDeletion()
+    const { mutate: cancel } = useSubscriptionDeletion();
 
     return (
         <div className={styles.settings}>
@@ -26,12 +26,21 @@ export default function SettingsContent() {
                     <div className={styles.planRow}>
                         <div>
                             <div className={styles.planTitleRow}>
-                                <h3 className={styles.planName}>{profileData?.subscription?.planName}</h3>
-                                <span className={styles.planBadge}>Current</span>
+                                <h3 className={styles.planName}>
+                                    {profileData?.subscription?.planName}
+                                </h3>
+                                <span className={styles.planBadge}>
+                                    Current
+                                </span>
                             </div>
                             <div className={styles.planMeta}>
-                                <div>{profileData?.subscription?.amount}/month</div>
-                                <div>Next billing: {profileData?.subscription?.currentPeriodEnd.toString()}</div>
+                                <div>
+                                    {profileData?.subscription?.amount}/month
+                                </div>
+                                <div>
+                                    Next billing:{" "}
+                                    {profileData?.subscription?.currentPeriodEnd.toString()}
+                                </div>
                             </div>
                         </div>
 
@@ -41,7 +50,15 @@ export default function SettingsContent() {
                                 variant="light"
                                 c="red"
                                 leftSection={<FaTimes />}
-                                onClick={() => cancel({query: {subscriptionId: profileData?.subscription?.id || ''} })}
+                                onClick={() =>
+                                    cancel({
+                                        query: {
+                                            subscriptionId:
+                                                profileData?.subscription?.id ||
+                                                0,
+                                        },
+                                    })
+                                }
                             >
                                 Cancel
                             </Button>
