@@ -108,7 +108,7 @@ export default function Page() {
                         label={step.label}
                         description={step.description}
                         icon={step.icon}
-                        // allowStepSelect={false}
+                        allowStepSelect={false}
 
                     />
                 ))}
