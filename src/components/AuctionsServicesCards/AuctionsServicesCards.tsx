@@ -86,23 +86,6 @@ export const AuctionsServicesCards = () => {
                     </div>
                 </motion.div>
             </div>
-
-            {/* QR Section */}
-            <div className={styles.qrSection}>
-                <div className={styles.qrPlaceholder}>
-                    <div className={styles.qrBox}>
-                        <FaQrcode className={styles.qrIcon} />
-                    </div>
-                    <p className={styles.qrText}>
-                        Here will be your QR-code
-                    </p>
-                </div>
-
-                <div className={styles.accessNumber}>
-                    <p className={styles.accessLabel}>Auction Access Number</p>
-                    <p className={styles.accessValue}>__-____-____</p>
-                </div>
-            </div>
         </main>
     );
 }

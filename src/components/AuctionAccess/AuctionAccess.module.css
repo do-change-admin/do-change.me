@@ -1,0 +1,107 @@
+.main {
+    padding: 2rem;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.qrBox {
+    width: 100%;
+    height: 200px;
+    background: #fff;
+    border: 1px dashed #d1d5db;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qrIcon {
+    color: #9ca3af;
+    font-size: 1.5rem;
+}
+
+.accessNumber {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    white-space: nowrap;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.accessLabel {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+}
+
+.accessValue {
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: monospace;
+    color: #111827;
+}
+
+.actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.primaryBtn {
+    width: 100%;
+    background: #2563eb;
+    color: #fff;
+    padding: 1rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.primaryBtn:hover {
+    background: #1d4ed8;
+}
+
+.secondaryBtn {
+    width: 100%;
+    background: #f3f4f6;
+    color: #374151;
+    padding: 1rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.secondaryBtn:hover {
+    background: #e5e7eb;
+}
+
+@media (max-width: 700px) {
+    .main {
+      width: 100%;
+    }
+    .cardContent {
+        flex-direction: row;
+    }
+
+    .qrBox {
+        width: 100%;
+    }
+
+    .accessValue {
+        font-size: 1rem;
+    }
+}

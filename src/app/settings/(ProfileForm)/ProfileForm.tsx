@@ -158,13 +158,13 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         <p className={styles.linkBtn}>Change Avatar</p>
                     </label>
                     <input style={{display: 'none'}} id='photo-upload' type='file' onChange={handleFileChange}/>
+                    {(isNotSettings && !Boolean(profileData?.photoLink)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
                 </div>
-                {(!isNotSettings || !Boolean(profileData?.photoLink)) && (
-                    <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
-                        <AiOutlineExclamationCircle/>
-                        This field is required
-                    </Text>
-                )}
             </div>
 
             <form className={styles.grid} onSubmit={handleSave}>
@@ -176,7 +176,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                     />
-                    {(!isNotSettings || !Boolean(profileData?.firstName)) && (
+                    {(isNotSettings && !Boolean(profileData?.firstName)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
@@ -191,7 +191,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         value={profileData?.lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
-                    {(!isNotSettings || !Boolean(profileData?.lastName)) && (
+                    {(isNotSettings && !Boolean(profileData?.lastName)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
@@ -212,7 +212,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         m={0}
                         p={0}
                     />
-                    {(!isNotSettings || !Boolean(profileData?.birthDate)) && (
+                    {(isNotSettings && !Boolean(profileData?.birthDate)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
@@ -229,7 +229,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         value={profileData?.email}
                         disabled
                     />
-                    {(!isNotSettings || !Boolean(profileData?.email)) && (
+                    {(isNotSettings && !Boolean(profileData?.email)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
@@ -245,7 +245,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                     />
-                    {(!isNotSettings || !Boolean(profileData?.phone)) && (
+                    {(isNotSettings && !Boolean(profileData?.phone)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
@@ -262,7 +262,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         value={address || ''}
                         onChange={(e) => setAddress(e.target.value)}
                     />
-                    {(!isNotSettings || !Boolean(profileData?.address)) && (
+                    {(isNotSettings && !Boolean(profileData?.address)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
@@ -279,7 +279,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         value={zipCode || ''}
                         onChange={(e) => setZipCode(e.target.value)}
                     />
-                    {(!isNotSettings || !Boolean(profileData?.zipCode)) && (
+                    {(isNotSettings &&  !Boolean(profileData?.zipCode)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
@@ -302,7 +302,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                             input: styles.inputDateInput,
                         }}
                     />
-                    {(!isNotSettings || !Boolean(profileData?.state)) && (
+                    {(isNotSettings &&  !Boolean(profileData?.state)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
@@ -318,7 +318,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
                     />
-                    {(!isNotSettings || !Boolean(profileData?.bio)) && (
+                    {(isNotSettings && !Boolean(profileData?.bio)) && (
                         <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
                             <AiOutlineExclamationCircle/>
                             This field is required
