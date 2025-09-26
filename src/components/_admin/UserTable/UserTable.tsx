@@ -5,6 +5,8 @@ import { FiSearch, FiEdit, FiTrash2, FiFilter } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import type { AuctionAccessRequestListItem } from '@/services'
 import { FC } from "react";
+import { motion } from "framer-motion";
+import {FaInbox} from "react-icons/fa";
 
 export type UserTableProps = {
     requests: AuctionAccessRequestListItem[]
@@ -15,7 +17,17 @@ export const UserTable: FC<UserTableProps> = ({ requests }) => {
     if (!requests.length) {
         return <section className={styles.section}>
             <div className={styles.container}>
-                <h5 style={{ textAlign: 'center' }}>No requests with this status were found</h5>
+                <motion.div
+                    className={styles.emptyState}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                >
+                    <FaInbox className={styles.emptyIcon} />
+                    <h5 className={styles.emptyText}>
+                        No users found with this status
+                    </h5>
+                </motion.div>
             </div>
         </section>
     }

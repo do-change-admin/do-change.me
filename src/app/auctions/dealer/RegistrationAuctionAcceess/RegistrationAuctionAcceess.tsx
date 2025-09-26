@@ -1,21 +1,17 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-    FaArrowRight,
-    FaEnvelope,
     FaUserCheck,
     FaCloudUploadAlt,
     FaHashtag,
     FaIdCard,
-    FaCamera,
-    FaImage,
     FaCheckCircle, FaArrowDown, FaApple, FaGooglePlay, FaCheck, FaFileAlt,
 } from "react-icons/fa";
 import styles from './RegistrationAuctionAcceess.module.css';
-import { Image } from "@mantine/core";
-import UploadForm from "../../upload-form";
+import {Button, Image} from "@mantine/core";
 import { ChangeEvent, useState } from "react";
+import {useAuctionAccessDock} from "@/hooks";
+import {notifications} from "@mantine/notifications";
 
 const handleFileChange = (
     setFile: (file: File) => void) =>
@@ -29,31 +25,25 @@ const handleFileChange = (
     }
 
 export const RegistrationSteps = () => {
-    const [agreement, setAgreement] = useState<File>()
-    const [license, setLicense] = useState<File>()
-    const nextStep = () => {
-        const formData = new FormData();
-        if (agreement) {
-            formData.append('agreement', agreement)
-            console.log(agreement, 'agreement')
-        }
-        if (license) {
-            formData.append('license', license)
-            console.log(license, 'license')
-        }
-        // TODO - replace with React Query
-        fetch('/api/auction-access-requests/files', {
-            body: formData,
-            method: "POST",
-            // headers: {
-            //     'Content-Type': 'multipart/form-data'
-            // }
-        }).then((x) => [
-            console.log(x)
-        ]).catch((x) => {
-            console.log(x, 'catch')
-        })
-    }
+    const {
+        agreement,
+        setAgreement,
+        license,
+        setLicense,
+        auctionAccessNumber,
+        setAuctionAccessNumber,
+        nextStep,
+        isPending,
+    } = useAuctionAccessDock({
+        onError: (e: any) => {
+            notifications.show({
+                title: 'Error',
+                message: `Error while saving. Please make sure all required fields are filled correctly.`,
+                color: 'red',
+            });
+        },
+    });
+
 
     return (
         <main className={styles.container}>
@@ -177,53 +167,63 @@ export const RegistrationSteps = () => {
                                 <label>
                                     <FaHashtag className={styles.iconBlue} /> Auction Access Number
                                 </label>
-                                <input type="text" placeholder="Enter your Auction Access number" />
+                                <input type="text" value={auctionAccessNumber} onChange={(x) => { setAuctionAccessNumber(x.target.value) }} placeholder="Enter your Auction Access number" />
                             </div>
 
                             <div className={styles.formGroup}>
                                 <label>
                                     <FaIdCard className={styles.iconPurple} /> Driver's License
                                 </label>
-                                <div className={styles.uploadZone}>
+                                {license?.name}
+                                <label className={styles.uploadZone} htmlFor="license_upload">
                                     <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    <label htmlFor="license_upload">
+                                    <div>
                                         <p>Click to upload or drag and drop</p>
-                                    </label>
+                                    </div>
                                     <input id="license_upload" type="file" onChange={handleFileChange(setLicense)} accept=".png,.jpg,.jpeg,.pdf" />
-                                </div>
+                                </label>
                             </div>
 
                             <div className={styles.formGroup}>
                                 <label>
                                     <FaFileAlt className={styles.iconPurple} />{' '}
-                                    <a
-                                        href="/your-individual-agreement.pdf"
+                                    Agreement
+                                </label>
+                                {agreement?.name}
+                                <div>
+                                    1. <b><a href="/your-individual-agreement.pdf"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={styles.link} // <-- добавляем стиль
-                                    >
-                                        Agreement
-                                    </a>
-                                </label>
-                                <div className={styles.uploadZone}>
-                                    <FaCloudUploadAlt size={40} className={styles.iconGray} />
-                                    <label htmlFor="agreement_upload">
-                                        <p>Download, sign, and upload this file by clicking or dragging it here</p>
-                                    </label>
-                                    <input id="agreement_upload" onChange={handleFileChange(setAgreement)} type="file" accept=".png,.jpg,.jpeg,.pdf" />
+                                        className={styles.link}
+                                        download
+                                        onClick={(e) => { e.stopPropagation() }}
+                                    >Download agreement</a></b>
                                 </div>
+                                <div>
+                                    2. Sign it
+                                </div>
+                                <label className={styles.uploadZone} htmlFor="agreement_upload">
+                                    <FaCloudUploadAlt size={40} className={styles.iconGray} />
+                                    <div>
+                                        <p> 3. Upload signed agreement by clicking or dragging it here</p>
+                                    </div>
+                                    <input id="agreement_upload" onChange={handleFileChange(setAgreement)} type="file" accept=".png,.jpg,.jpeg,.pdf" />
+                                </label>
                             </div>
 
 
                             <div className={styles.submitSection}>
-                                <button onClick={() => { nextStep() }}>
-                                    <FaCheckCircle /> Complete Registration
-                                </button>
-
-                                <button type='submit'>
-                                    <FaCheckCircle /> asfasfas
-                                </button>
-
+                                <Button
+                                    h={50}
+                                    radius="1rem"
+                                    fullWidth
+                                    leftSection={<FaCheckCircle />}
+                                    onClick={nextStep}
+                                    disabled={isPending}
+                                    loading={isPending}
+                                >
+                                    Complete Registration
+                                </Button>
                                 <p>
                                     By submitting, you agree to our terms of service and privacy
                                     policy

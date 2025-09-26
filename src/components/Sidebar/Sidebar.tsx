@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import styles from "./Sidebar.module.css";
 import {FaSignOutAlt} from "react-icons/fa";
 import {usePathname} from "next/navigation";
-import {AuctionServicesCards} from "@/components/AuctionsServicesCards/AuctionsServicesCards";
+import {AuctionsServicesCards} from "@/components";
 import {useSlideMenu} from "@/contexts";
 import {useNavMenu, useProfile} from "@/hooks";
 import {Avatar} from "@mantine/core";
@@ -17,7 +17,7 @@ export const Sidebar = () => {
     const { data: profileData } = useProfile()
 
     const handleOpenMenu = () => {
-        openMenu(<AuctionServicesCards/>);
+        openMenu(<AuctionsServicesCards/>);
     };
     const { navLinks, handleClick } = useNavMenu(handleOpenMenu);
     const pathname = usePathname();
@@ -32,7 +32,7 @@ export const Sidebar = () => {
                 <div className={styles.header}>
                     <div className={styles.avatarWrapper}>
                         <Avatar
-                            src=''
+                            src={profileData?.photoLink}
                             alt="User Avatar"
                             radius="xl"
                             size={48}
@@ -50,7 +50,9 @@ export const Sidebar = () => {
                         <div
                             key={index}
                             className={cn(styles.link, {
-                                [styles.linkActive]: pathname.includes(link.href),
+                                [styles.linkActive]:link.href === "/"
+                                    ? pathname === "/" // главная строго
+                                    : pathname.startsWith(link.href),
                             })}
                             onClick={() => handleClick(link)}
                             role="button"

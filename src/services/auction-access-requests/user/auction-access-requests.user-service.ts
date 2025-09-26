@@ -3,27 +3,26 @@ import { prismaClient } from "@/infrastructure";
 import { ProfileService } from "../../profile";
 import { EmailAddress } from "@/value-objects/email-address.vo";
 import { businessError } from "@/lib/errors";
-import { ProvidesFileUploading } from '@/providers/contracts';
+import { ProvidesFileUploading, ProvidesFileLink } from '@/providers/contracts';
 import { v4 } from 'uuid'
 
 export class AuctionAccessRequestsUserService {
-    public constructor(private readonly fileUploader: ProvidesFileUploading) { }
+    public constructor(private readonly fileUploader: ProvidesFileUploading & ProvidesFileLink) { }
 
     create = async (rawEmail: string) => {
         const email = EmailAddress.create(rawEmail)
-        const profileService = new ProfileService(email)
+        const profileService = new ProfileService(email, this.fileUploader)
         const profileData = await profileService.profileData()
         await prismaClient.auctionAccessRequest.create({
             data: {
                 applicationDate: new Date(),
                 email: email.address(),
                 firstName: profileData.firstName,
-                // TODO
-                birthDate: new Date(1990, 2, 4),
+                birthDate: profileData.birthDate!,
                 lastName: profileData.lastName,
                 status: 'review',
-                // TODO
-                photoLink: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg',
+                photoLink: profileData.photoLink!,
+                bio: profileData.bio,
             }
         })
     }
@@ -53,21 +52,7 @@ export class AuctionAccessRequestsUserService {
         })
     }
 
-    uploadFiles = async (agreement: File, driversLicense: File, email: string) => {
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
-        console.log("ASFASFAFASFASFASF")
+    uploadFiles = async (agreement: File, driversLicense: File, auctionAccessNumber: string, email: string) => {
         const request = await prismaClient.auctionAccessRequest.findFirst({
             where: { email }
         })
@@ -85,7 +70,7 @@ export class AuctionAccessRequestsUserService {
 
         await prismaClient.auctionAccessRequest.update({
             where: { id: request.id },
-            data: { driverLicenceFileId: driverLicenseId, agreementFileId: agreementId, status: 'documents under review' }
+            data: { auctionAccessNumber, driverLicenceFileId: driverLicenseId, agreementFileId: agreementId, status: 'documents under review' }
         })
     }
 }

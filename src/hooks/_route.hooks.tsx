@@ -26,7 +26,7 @@ export const NAV_LINK: NavLink[] = [
             { label: "insurance Auctions", href: "/auctions/insurance" },
         ],
     },
-    { label: "Sell", href: "/marketplace", icon: <FaTag /> },
+    { label: "Sell", href: "/sell", icon: <FaTag /> },
     { label: "Settings", href: "/settings", icon: <FaCog /> },
 ];
 

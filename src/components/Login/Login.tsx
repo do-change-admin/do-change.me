@@ -10,7 +10,7 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { LoginModal } from "../LoginModal/LoginModal";
 import Alert from "@/components/Alert/Alert";
-import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
+// import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 import { AppError, isBusinessError } from "@/lib/errors";
 import { handleApiError } from "@/lib/handleApiError";
 
@@ -183,7 +183,7 @@ export const Login = () => {
                 </div>
               </div>
 
-              <div className={styles.options}>
+              {/* <div className={styles.options}>
                 <label className={styles.rememberMeLabel}>
                   <input type="checkbox" className={styles.checkbox} />
                   <span className={styles.rememberMeText}>Remember me</span>
@@ -202,7 +202,7 @@ export const Login = () => {
                   Forgot password?
                 </span>
               </div>
-
+ */}
               <button type="submit" className={styles.submitButton}>
                 Sign In
               </button>
@@ -214,9 +214,9 @@ export const Login = () => {
               <div className={styles.line}></div>
             </div>
 
-            <div className={styles.socialLogin}>
+            {/* <div className={styles.socialLogin}>
               <GoogleButton text="Continue with Google" />
-            </div>
+            </div> */}
 
             <div className={styles.signupLink}>
               <p>

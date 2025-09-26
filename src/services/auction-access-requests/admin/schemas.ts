@@ -1,5 +1,14 @@
 import z from "zod";
 
+export const auctionAccessRequestCountByStagesSchema = z.object({
+    review: z.number().nonnegative(),
+    scheduling: z.number().nonnegative(),
+    onboarding: z.number().nonnegative(),
+    approved: z.number().nonnegative(),
+    rejected: z.number().nonnegative()
+
+})
+
 /**
  * All possible statuses for auction access request.
  */
@@ -13,7 +22,8 @@ export const auctionAccessRequestStatusSchema = z.enum([
     'awaiting documents upload',
     'documents under review',
     'corrections required',
-    'ready for auction access'
+    'ready for auction access',
+    'subscription ended'
 ])
 
 /**
@@ -41,6 +51,7 @@ export const auctionAccessRequestFullSchema = z.object({
     lastName: z.string(),
     birthDate: z.date(),
     photoLink: z.string(),
+    bio: z.string(),
     status: auctionAccessRequestStatusSchema,
     timeSlots: z.array(
         z.object({
@@ -55,7 +66,8 @@ export const auctionAccessRequestFullSchema = z.object({
     links: z.object({
         agreement: z.string().nullable(),
         driverLicence: z.string().nullable()
-    })
+    }),
+    auctionAccessNumber: z.string().optional()
 })
 
 /**
@@ -64,7 +76,7 @@ export const auctionAccessRequestFullSchema = z.object({
 export const adminUpdateAuctionAccessRequestSchema = z.object({
     id: z.string(),
     progress: z.enum(['next approve step', 'reject']).optional(),
-    availableTimeSlots: z.array(z.object({ date: z.coerce.date() })).optional(),
+    availableTimeSlots: z.array(z.object({ date: z.coerce.date() })).nonempty().optional(),
 })
 
 

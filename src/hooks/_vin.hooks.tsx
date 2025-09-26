@@ -1,16 +1,18 @@
-import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from "next/navigation";
-import { PricesResultDTO } from "@/app/api/vin/market-value/models";
 import { VehicleBaseInfoDTO } from '@/app/api/vin/base-info/models';
 import { ActionsHistoryService } from '@/services';
 import { PaginationSchemaType, VinSchema } from '@/schemas';
-import { CachedData_GET_Response, CacheStatus } from '@/app/api/vin/cached-data/models';
+import { CachedData_GET_Response } from '@/app/api/vin/cached-data/models';
+import { MarketValueAPI } from '@/app/api/vin/market-value/route';
+import { apiRequest } from '@/lib/apiFetch';
+import { ReportsAPI } from '@/app/api/vin/report/route';
+import { SalvageAPI } from '@/app/api/vin/salvage/route';
 
 const VIN_LENGTH = 17;
 
 export const useBaseInfoByVIN = (
     vin: string | null,
-    cacheStatus: CacheStatus | undefined,
 ) => {
     return useQuery<VehicleBaseInfoDTO>({
         queryKey: ['vinCheck', vin],
@@ -30,9 +32,6 @@ export const useBaseInfoByVIN = (
             return (await response.json());
         },
         enabled: () => {
-            if (!cacheStatus || cacheStatus?.baseInfoWasFound) {
-                return false
-            }
             const { success } = VinSchema.safeParse(vin)
             return success
         },
@@ -45,29 +44,11 @@ export const useBaseInfoByVIN = (
 export const useMileagePriceQuery = (
     vin: string | null,
     mileage: number | undefined,
-    cacheStatus: CacheStatus | undefined,
 ) => {
-    return useQuery<PricesResultDTO, Error>({
+    return useQuery<MarketValueAPI['GET']['response'], MarketValueAPI['GET']['error']>({
         queryKey: ['mileagePrice', vin, mileage],
-        queryFn: async () => {
-            if (!vin) {
-                throw new Error('VIN was not provided')
-            }
-            if (!mileage) {
-                throw new Error(`Mileage was not selected`);
-            }
-            const response = await fetch(`/api/vin/market-value?vin=${vin}&mileage=${mileage}`);
-            if (!response.ok) {
-                throw new Error(`Request finished with ${response.status} status code`);
-            }
-            const data: PricesResultDTO = await response.json();
-            return data;
-        },
+        queryFn: () => apiRequest('/api/vin/market-value', 'GET')({ query: { vin, mileage } }),
         enabled: () => {
-            if (!cacheStatus) {
-                return false
-            }
-
             if (!mileage) {
                 return false
             }
@@ -77,9 +58,11 @@ export const useMileagePriceQuery = (
                 return false
             }
 
-            return !cacheStatus.marketPricesWereFound.includes(mileage)
+            return true
         },
-        staleTime: 5 * 60 * 1000
+        staleTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     });
 };
 
@@ -103,7 +86,7 @@ export function useCheckRecords(vin: string) {
             }
 
             return data;
-        },
+        }
     });
 }
 
@@ -136,22 +119,13 @@ export function usePhotoHook(vin: string) {
     });
 }
 
-export const useSalvageCheck = (vin: string | null, cacheStatus?: CacheStatus) => {
-    return useQuery<boolean>({
+export const useSalvageCheck = (vin: string | null) => {
+    return useQuery<SalvageAPI['GET']['response'], SalvageAPI['GET']['error']>({
         queryKey: ["salvage", vin],
-        queryFn: async () => {
-            const res = await fetch(`/api/vin/salvage?vin=${vin}`);
-            if (!res.ok) {
-                const errorData = await res.json().catch(() => ({}));
-                throw new Error(errorData?.message || "error VIN");
-            }
-            return res.json();
+        queryFn: () => {
+            return apiRequest('/api/vin/salvage', 'GET')({ query: { vin } } as SalvageAPI['GET']['payload'])
         },
         enabled: () => {
-            if (!cacheStatus || cacheStatus.salvageInfoWasFound) {
-                return false
-            }
-
             const { success } = VinSchema.safeParse(vin)
             return success
         },
@@ -175,6 +149,18 @@ export const useCachedInfo = (vin: string | null) => {
         enabled: () => {
             const { success } = VinSchema.safeParse(vin)
             return success
+        }
+    })
+}
+
+export const useReport = () => {
+    const router = useRouter()
+
+    return useMutation<ReportsAPI['GET']['response'], ReportsAPI['GET']['error'], ReportsAPI['GET']['payload']>({
+        mutationFn: apiRequest('/api/vin/report', 'GET'),
+        onSuccess: ({ markup }) => {
+            sessionStorage.setItem("report", markup);
+            router.push("/report");
         }
     })
 }

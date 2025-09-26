@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FaGavel, FaHammer, FaEye, FaKey } from "react-icons/fa";
+import {FaGavel, FaHammer, FaEye, FaKey, FaShieldAlt, FaChevronRight, FaCar, FaQrcode} from "react-icons/fa";
 import styles from "./AuctionServicesCards.module.css";
 import {useRouter} from "next/navigation";
 import {useSlideMenu} from "@/contexts";
+import Link from "next/link";
 
 
 const AUCTION_CARDS = [
@@ -20,67 +21,88 @@ const AUCTION_CARDS = [
         headerClass: styles.dealers,
         highlight: false,
     },
-    {
-        id: "/auctions/insurance",
-        title: "Insurance Auction",
-        subtitle: "Copart, IAAI and 140+ auctions",
-        img: "https://storage.googleapis.com/uxpilot-auth.appspot.com/bc77c00253-df52ce3651ba8510878a.png",
-        icon: <FaGavel color="white" />,
-        buttonText: "View Cars",
-        buttonIcon: <FaEye />,
-        btnClass: styles.insuranceBtn,
-        headerClass: styles.insurance,
-        highlight: true,
-    }
+    // {
+    //     id: "/auctions/insurance",
+    //     title: "Insurance Auction",
+    //     subtitle: "Copart, IAAI and 140+ auctions",
+    //     img: "https://storage.googleapis.com/uxpilot-auth.appspot.com/bc77c00253-df52ce3651ba8510878a.png",
+    //     icon: <FaGavel color="white" />,
+    //     buttonText: "View Cars",
+    //     buttonIcon: <FaEye />,
+    //     btnClass: styles.insuranceBtn,
+    //     headerClass: styles.insurance,
+    //     highlight: true,
+    // }
 ];
 
-const AuctionCard = ({
-                         title,
-                         subtitle,
-                         img,
-                         icon,
-                         buttonText,
-                         buttonIcon,
-                         btnClass,
-                         headerClass,
-                         highlight,
-                         onClick,
-                     }: any) => (
-    <motion.div
-        className={`${styles.card} ${highlight ? styles.highlight : ""}`}
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.3 }}
-    >
-        <div className={`${styles.header} ${headerClass}`}>
-            <img className={styles.bgImage} src={img} alt={title} />
-            <div className={styles.headerContent}>
-                <div className={styles.iconWrapper}>{icon}</div>
-                <h3 className={styles.title}>{title}</h3>
-                <p className={styles.subtitle}>{subtitle}</p>
-            </div>
-        </div>
-        <div className={styles.footer}>
-            <motion.button whileHover={{ scale: 1.05 }} className={`${styles.button} ${btnClass}`} onClick={onClick}>
-                {buttonIcon}
-                {buttonText}
-            </motion.button>
-        </div>
-    </motion.div>
-);
-
-
-export const AuctionServicesCards = () => {
+export const AuctionsServicesCards = () => {
     const router = useRouter();
     const { closeMenu } = useSlideMenu();
     return (
-        <section className={styles.grid}>
-            {AUCTION_CARDS.map((card) => (
-                <AuctionCard onClick={() => {
-                    router.push(card.id)
-                    closeMenu()
+        <main className={styles.main}>
+            <div className={styles.menuOptions}>
+                {/* Dealer Auctions */}
+                <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className={styles.card}
+                    onClick={() => {
+                        router.push("/auctions/dealer");
+                        closeMenu()
+                    }}
+                >
+                    <div className={styles.cardContent}>
+                        <div className={`${styles.iconBox} ${styles.green}`}>
+                            <FaCar className={styles.icon} />
+                        </div>
+                        <div className={styles.cardText}>
+                            <h3 className={styles.cardTitle}>Dealer Auctions</h3>
+                            <p className={styles.cardDesc}>
+                                Manheim, ADESA
+                            </p>
+                        </div>
+                        <FaChevronRight className={styles.chevron} />
+                    </div>
+                </motion.div>
+                {/* Insurance Auctions */}
+                <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className={styles.card}
+                    onClick={() => {
+                        router.push("/auctions/insurance");
+                        closeMenu()
+                    }}
+                >
+                    <div className={styles.cardContent}>
+                        <div className={`${styles.iconBox} ${styles.blue}`}>
+                            <FaShieldAlt className={styles.icon} />
+                        </div>
+                        <div className={styles.cardText}>
+                            <h3 className={styles.cardTitle}>Insurance Auctions</h3>
+                            <p className={styles.cardDesc}>
+                                Copart, IAAI and 140+
+                            </p>
+                        </div>
+                        <FaChevronRight className={styles.chevron} />
+                    </div>
+                </motion.div>
+            </div>
 
-                }} key={card.id} {...card} />
-            ))}
-        </section>
+            {/* QR Section */}
+            <div className={styles.qrSection}>
+                <div className={styles.qrPlaceholder}>
+                    <div className={styles.qrBox}>
+                        <FaQrcode className={styles.qrIcon} />
+                    </div>
+                    <p className={styles.qrText}>
+                        Here will be your QR-code
+                    </p>
+                </div>
+
+                <div className={styles.accessNumber}>
+                    <p className={styles.accessLabel}>Auction Access Number</p>
+                    <p className={styles.accessValue}>__-____-____</p>
+                </div>
+            </div>
+        </main>
     );
-};
+}

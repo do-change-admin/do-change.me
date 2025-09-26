@@ -30,6 +30,11 @@ export const apiRequest = (url: string, method: "GET" | "POST" | "DELETE" | "PAT
             },
             body: payload?.body ? JSON.stringify(payload.body) : undefined,
         })
+
+        if (!result.ok) {
+            throw await result.json();
+        }
+
         return await result.json()
     }
 }

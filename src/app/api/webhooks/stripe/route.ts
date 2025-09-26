@@ -9,6 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
+    console.log("start");
     const payload = await req.text();
     const sig = req.headers.get("stripe-signature") || "";
 
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
             case "customer.subscription.created":
             case "customer.subscription.updated": {
                 const subscription = event.data.object;
-
+                console.log("subscription", subscription);
                 await prismaClient.$transaction(async (tx) => {
                     const sub = await tx.stripeSubscription.upsert({
                         where: { stripeSubscriptionId: subscription.id },
@@ -234,7 +235,14 @@ export async function POST(req: Request) {
 
                     await tx.userPlan.update({
                         where: { stripeSubscriptionId: subscription.id },
-                        data: { status: subscription.status },
+                        data: {
+                            status: subscription.status,
+                            cancelAtPeriodEnd:
+                                subscription.cancel_at_period_end,
+                            canceledAt: subscription.cancel_at
+                                ? new Date(subscription.cancel_at * 1000)
+                                : null,
+                        },
                     });
                 });
 

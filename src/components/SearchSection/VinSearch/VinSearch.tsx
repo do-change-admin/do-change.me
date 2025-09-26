@@ -8,7 +8,7 @@ import {BiBarcode} from "react-icons/bi";
 import {useScanner} from "@/contexts";
 import Image from "next/image";
 
-export const VinSearch = () => {
+export const VinSearch = ({openSubscription}:{openSubscription?: () => void}) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const initVin = searchParams.get("vin");
@@ -16,8 +16,11 @@ export const VinSearch = () => {
     const { start } = useScanner();
 
     const handleSearch = () => {
-        if (!vin && vin?.length !== 17) return;
-        router.push(`/?vin=${encodeURIComponent(vin)}`);
+        if (openSubscription) {
+            openSubscription()
+        }
+        // if (!vin && vin?.length !== 17) return;
+        // router.push(`/?vin=${encodeURIComponent(vin)}`);
     };
 
     return (

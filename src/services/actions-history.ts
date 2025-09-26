@@ -81,7 +81,6 @@ export const ShowCurrentHistory = async (
         where: { userMail },
         orderBy: { registeredAt: "desc" },
     });
-    console.log(data);
     const result = data.map(
         ({ target, payload, registeredAt }) =>
         ({

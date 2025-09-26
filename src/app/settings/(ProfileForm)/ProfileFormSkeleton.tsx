@@ -29,6 +29,11 @@ export const ProfileFormSkeleton = () => {
                 </div>
 
                 <div className={styles.field}>
+                    <label className={styles.label}>Date of birth</label>
+                    <Skeleton radius="1rem" height={40}/>
+                </div>
+
+                <div className={styles.field}>
                     <label className={styles.label}>Email</label>
                     <Skeleton radius="1rem" height={40}/>
                 </div>

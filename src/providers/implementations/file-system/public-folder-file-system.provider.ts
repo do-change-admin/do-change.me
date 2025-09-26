@@ -7,17 +7,6 @@ export class PublicFolderFileSystemProvider implements ProvidesFileLink, Provide
     private uploadDir = path.resolve(process.cwd(), 'public', 'uploads');
 
     async upload(file: File, id: string, originalFileName: string): Promise<{ success: boolean }> {
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
-        console.log("UPLOAD")
         try {
             if (!existsSync(this.uploadDir)) {
                 await mkdir(this.uploadDir, { recursive: true });
@@ -31,18 +20,6 @@ export class PublicFolderFileSystemProvider implements ProvidesFileLink, Provide
 
         }
         catch (e) {
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
-            console.log("ERROR", e)
             return { success: false }
         }
     }

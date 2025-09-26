@@ -1,7 +1,10 @@
 import z from "zod";
 import { prismaClient } from "@/infrastructure";
 import Stripe from "stripe";
-import { zodApiMethod, ZodAPIMethod } from "../zod-api-methods";
+import {
+    zodApiMethod_DEPRECATED,
+    ZodAPIMethod_DEPRECATED,
+} from "../zod-api-methods";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-08-27.basil",
@@ -16,13 +19,13 @@ const responseSchema = z.object({
     url: z.string().nullable(),
 });
 
-export type Method = ZodAPIMethod<
+export type Method = ZodAPIMethod_DEPRECATED<
     undefined,
     typeof bodySchema,
     typeof responseSchema
 >;
 
-export const handler = zodApiMethod(
+export const handler = zodApiMethod_DEPRECATED(
     undefined,
     bodySchema,
     responseSchema,
@@ -68,8 +71,8 @@ export const handler = zodApiMethod(
                     priceId: planPrice.id,
                 },
             },
-            success_url: `${process.env.NEXTAUTH_URL}/account/billing?success=1`,
-            cancel_url: `${process.env.NEXTAUTH_URL}/account/billing?canceled=1`,
+            success_url: `${process.env.NEXTAUTH_URL}`,
+            cancel_url: `${process.env.NEXTAUTH_URL}/cancel`,
         });
 
         return { url: session.url };

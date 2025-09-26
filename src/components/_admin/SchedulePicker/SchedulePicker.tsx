@@ -137,16 +137,6 @@ export const SchedulePicker: FC<{ scheduleState: [Schedule, Dispatch<SetStateAct
                     </div>
                 </div>
             </div>
-
-            {/* Action Buttons */}
-            <div className={styles.actions}>
-                <Button variant="default" size="md">
-                    Cancel
-                </Button>
-                <Button size="md" onClick={handleConfirm}>
-                    Confirm
-                </Button>
-            </div>
         </Card>
     );
 };

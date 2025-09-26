@@ -1,6 +1,13 @@
 import z from "zod";
-import { zodApiMethod, ZodAPIMethod } from "../zod-api-methods";
+import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../zod-api-methods";
 import { prismaClient } from "@/infrastructure";
+
+const querySchema = z.object({
+    available: z
+        .string()
+        .transform((v) => v === "true")
+        .optional(),
+});
 
 const planPriceSchema = z.object({
     id: z.number(),
@@ -24,22 +31,47 @@ const planSchema = z.object({
     prices: z.array(planPriceSchema),
 });
 
-const responseSchema = z.object({
-    plans: z.array(planSchema),
+const schemas = {
+    body: undefined,
+    query: querySchema,
+    response: z.object({
+        basic: planSchema.nullable(),
+        auctionAccess: planSchema.nullable(),
+    }),
+} satisfies ZodAPISchemas;
+
+export type Method = ZodAPIMethod<typeof schemas>;
+
+export const method = zodApiMethod(schemas, {
+    handler: async (res) => {
+        const { payload, activeUser } = res;
+
+        let excludePlanId: number | undefined = undefined;
+
+        if (payload.available) {
+            const userPlan = await prismaClient.userPlan.findFirst({
+                where: { userId: activeUser.id },
+            });
+            excludePlanId = userPlan?.planId;
+        }
+
+        const [basic, auctionAccess] = await Promise.all([
+            prismaClient.plan.findFirst({
+                where: { slug: "basic" },
+                include: { prices: true },
+            }),
+            prismaClient.plan.findFirst({
+                where: { slug: "auction access" },
+                include: { prices: true },
+            }),
+        ]);
+
+        return {
+            basic: basic && basic.id !== excludePlanId ? basic : null,
+            auctionAccess:
+                auctionAccess && auctionAccess.id !== excludePlanId
+                    ? auctionAccess
+                    : null,
+        };
+    },
 });
-
-export type Method = ZodAPIMethod<undefined, undefined, typeof responseSchema>;
-
-export const handler = zodApiMethod(
-    undefined,
-    undefined,
-    responseSchema,
-    async () => {
-        const plans = await prismaClient.plan.findMany({
-            include: { prices: { orderBy: { id: "asc" } } },
-            orderBy: { id: "asc" },
-        });
-
-        return { plans };
-    }
-);

@@ -1,22 +1,87 @@
 'use client'
 
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from 'react';
 import styles from "./ProfileForm.module.css";
-import { Button, Loader } from "@mantine/core";
-import { FaCamera } from "react-icons/fa";
-import { useProfile, useProfileModifying } from "@/hooks";
-import { notifications } from "@mantine/notifications";
-import { ProfileFormSkeleton } from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
+import {Avatar, Button, Loader, Select} from "@mantine/core";
+import {FaCamera} from "react-icons/fa";
+import {useProfile, useProfileModifying, useUploadPhoto} from "@/hooks";
+import {notifications} from "@mantine/notifications";
+import {ProfileFormSkeleton} from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
+import {DateInput} from '@mantine/dates';
 
-export const ProfileForm = () => {
+export const STATES = [
+    {value: "AL", label: "Alabama (AL)"},
+    {value: "AK", label: "Alaska (AK)"},
+    {value: "AZ", label: "Arizona (AZ)"},
+    {value: "AR", label: "Arkansas (AR)"},
+    {value: "CA", label: "California (CA)"},
+    {value: "CO", label: "Colorado (CO)"},
+    {value: "CT", label: "Connecticut (CT)"},
+    {value: "DE", label: "Delaware (DE)"},
+    {value: "FL", label: "Florida (FL)"},
+    {value: "GA", label: "Georgia (GA)"},
+    {value: "HI", label: "Hawaii (HI)"},
+    {value: "ID", label: "Idaho (ID)"},
+    {value: "IL", label: "Illinois (IL)"},
+    {value: "IN", label: "Indiana (IN)"},
+    {value: "IA", label: "Iowa (IA)"},
+    {value: "KS", label: "Kansas (KS)"},
+    {value: "KY", label: "Kentucky (KY)"},
+    {value: "LA", label: "Louisiana (LA)"},
+    {value: "ME", label: "Maine (ME)"},
+    {value: "MD", label: "Maryland (MD)"},
+    {value: "MA", label: "Massachusetts (MA)"},
+    {value: "MI", label: "Michigan (MI)"},
+    {value: "MN", label: "Minnesota (MN)"},
+    {value: "MS", label: "Mississippi (MS)"},
+    {value: "MO", label: "Missouri (MO)"},
+    {value: "MT", label: "Montana (MT)"},
+    {value: "NE", label: "Nebraska (NE)"},
+    {value: "NV", label: "Nevada (NV)"},
+    {value: "NH", label: "New Hampshire (NH)"},
+    {value: "NJ", label: "New Jersey (NJ)"},
+    {value: "NM", label: "New Mexico (NM)"},
+    {value: "NY", label: "New York (NY)"},
+    {value: "NC", label: "North Carolina (NC)"},
+    {value: "ND", label: "North Dakota (ND)"},
+    {value: "OH", label: "Ohio (OH)"},
+    {value: "OK", label: "Oklahoma (OK)"},
+    {value: "OR", label: "Oregon (OR)"},
+    {value: "PA", label: "Pennsylvania (PA)"},
+    {value: "RI", label: "Rhode Island (RI)"},
+    {value: "SC", label: "South Carolina (SC)"},
+    {value: "SD", label: "South Dakota (SD)"},
+    {value: "TN", label: "Tennessee (TN)"},
+    {value: "TX", label: "Texas (TX)"},
+    {value: "UT", label: "Utah (UT)"},
+    {value: "VT", label: "Vermont (VT)"},
+    {value: "VA", label: "Virginia (VA)"},
+    {value: "WA", label: "Washington (WA)"},
+    {value: "WV", label: "West Virginia (WV)"},
+    {value: "WI", label: "Wisconsin (WI)"},
+    {value: "WY", label: "Wyoming (WY)"},
+];
 
+export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = false}) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [bio, setBio] = useState("");
+    const [birthDate, setBirthDate] = useState<Date>();
+    const [address, setAddress] = useState<string | null>(null)
+    const [state, setState] = useState<string | null>(null)
+    const [zipCode, setZipCode] = useState<string | null>(null)
+    const { data: profileData, isLoading: profileIsLoading } = useProfile();
+    const { mutate: modifyProfile, isPending: profileIsModifying } = useProfileModifying();
+    const { mutate: uploadPhoto, isPending: isPendingUploadPhoto } = useUploadPhoto();
 
-    const { data: profileData, isLoading: profileIsLoading } = useProfile()
-    const { mutate: modifyProfile, isPending: profileIsModifying } = useProfileModifying()
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files?.length) return;
+        uploadPhoto(event.target.files[0]);
+    };
+
+    const maxAllowedDate = new Date();
+    maxAllowedDate.setFullYear(maxAllowedDate.getFullYear() - 18);
 
     useEffect(() => {
         if (!profileIsLoading && profileData) {
@@ -24,6 +89,12 @@ export const ProfileForm = () => {
             setLastName(profileData.lastName)
             setPhone(profileData.phone)
             setBio(profileData.bio)
+            setState(profileData.state)
+            setAddress(profileData.address)
+            setZipCode(profileData.zipCode)
+            if (profileData.birthDate) {
+                setBirthDate(new Date(profileData.birthDate))
+            }
         }
     }, [profileIsLoading])
 
@@ -31,7 +102,7 @@ export const ProfileForm = () => {
     const handleSave = (e: FormEvent) => {
         e.preventDefault();
         modifyProfile(
-            { body: { bio, firstName, lastName, phone } },
+            { body: { bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode } },
             {
                 onSuccess: () => {
                     notifications.show({
@@ -43,7 +114,7 @@ export const ProfileForm = () => {
                 onError: (e) => {
                     notifications.show({
                         title: 'Error',
-                        message: `Error while saving - ${e.error} (${e.stage})`,
+                        message: `Error while saving`,
                         color: 'red',
                     });
                 },
@@ -51,8 +122,8 @@ export const ProfileForm = () => {
         );
     };
 
-    if (profileIsLoading) {
-        return <ProfileFormSkeleton />
+    if (profileIsLoading || isPendingUploadPhoto || profileIsModifying) {
+        return <ProfileFormSkeleton/>
     }
 
     return (
@@ -62,82 +133,149 @@ export const ProfileForm = () => {
                 <Button
                     onClick={handleSave}
                     disabled={profileIsModifying}
-                    leftSection={profileIsModifying ? <Loader size="xs" color="white" /> : null}
+                    leftSection={profileIsModifying ? <Loader size="xs" color="white"/> : null}
                 >
                     {profileIsModifying ? 'Saving...' : 'Save'}
                 </Button>
             </div>
+            {(!isNotSettings || !Boolean(profileData?.photoLink)) && (
+                <div className={styles.avatarRow}>
+                    <div className={styles.avatarWrap}>
+                        <Avatar
+                            src={profileData?.photoLink}
+                            alt="User avatar"
+                            className={styles.avatar}
+                        />
+                        <button className={styles.avatarBtn} aria-label="Change photo">
+                            <FaCamera className={styles.avatarIcon}/>
+                        </button>
+                    </div>
 
-            <div className={styles.avatarRow}>
-                <div className={styles.avatarWrap}>
-                    <img
-                        src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg"
-                        alt="User avatar"
-                        className={styles.avatar}
-                    />
-                    <button className={styles.avatarBtn} aria-label="Change photo">
-                        <FaCamera className={styles.avatarIcon} />
-                    </button>
+                    <div className={styles.avatarInfo}>
+                        <h3 className={styles.userName}>{profileData?.firstName} {profileData?.lastName}</h3>
+                        <p className={styles.userEmail}>{profileData?.email}</p>
+                        <label htmlFor='photo-upload'>
+                            <p className={styles.linkBtn}>Change Avatar</p>
+                        </label>
+                        <input style={{display: 'none'}} id='photo-upload' type='file' onChange={handleFileChange}/>
+                    </div>
                 </div>
-
-                <div className={styles.avatarInfo}>
-                    <h3 className={styles.userName}>{profileData?.firstName} {profileData?.lastName}</h3>
-                    <p className={styles.userEmail}>{profileData?.email}</p>
-                    <button className={styles.linkBtn}>Change Avatar</button>
-                </div>
-            </div>
-
+            )}
             <form className={styles.grid} onSubmit={handleSave}>
-                <div className={styles.field}>
-                    <label className={styles.label}>First Name</label>
-                    <input
-                        type="text"
-                        className={styles.input}
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                    />
-                </div>
+                {(!isNotSettings || !Boolean(profileData?.firstName)) && (
+                    <div className={styles.field}>
+                        <label className={styles.label}>First Name</label>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </div>
+                )}
+                {(!isNotSettings || !Boolean(profileData?.email)) && (
+                    <div className={styles.field}>
+                        <label className={styles.label}>Last Name</label>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </div>
+                )}
+                {(!isNotSettings || !Boolean(profileData?.birthDate)) && (
+                    <div className={styles.field}>
+                        <label className={styles.label}>Date of birth</label>
+                        <DateInput
+                            placeholder="Pick date"
+                            value={birthDate ? birthDate.toISOString().split("T")[0] : null}
+                            onChange={(x) => setBirthDate(new Date(x!))}
+                            classNames={{
+                                input: styles.inputDateInput,
+                            }}
+                            maxDate={maxAllowedDate}
+                            m={0}
+                            p={0}
+                        />
+                    </div>
+                )}
+                {(!isNotSettings || !Boolean(profileData?.email)) && (
+                    <div className={styles.field}>
+                        <label className={styles.label}>Email</label>
+                        <input
+                            type="email"
+                            className={`${styles.input} ${styles.disabled}`}
+                            value={profileData?.email}
+                            disabled
+                        />
+                    </div>
+                )}
+                {(!isNotSettings || !Boolean(profileData?.phone)) && (
+                    <div className={styles.field}>
+                        <label className={styles.label}>Phone</label>
+                        <input
+                            type="tel"
+                            className={styles.input}
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+                    </div>
+                )}
+                {(!isNotSettings || !Boolean(profileData?.address)) && (
+                    <div className={styles.field}>
+                        <label className={styles.label}>Address</label>
+                        <input
+                            type="tel"
+                            className={styles.input}
+                            value={address || ''}
+                            onChange={(e) => setAddress(e.target.value)}
+                        />
+                    </div>
+                )}
 
-                <div className={styles.field}>
-                    <label className={styles.label}>Last Name</label>
-                    <input
-                        type="text"
-                        className={styles.input}
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Email</label>
-                    <input
-                        type="email"
-                        className={`${styles.input} ${styles.disabled}`}
-                        value={profileData?.email}
-                        disabled
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Phone</label>
-                    <input
-                        type="tel"
-                        className={styles.input}
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                    />
-                </div>
-
-                <div className={styles.fieldFull}>
-                    <label className={styles.label}>Bio</label>
-                    <textarea
-                        rows={3}
-                        placeholder="Tell us about yourself..."
-                        className={`${styles.input} ${styles.textarea}`}
-                        value={bio}
-                        onChange={(e) => setBio(e.target.value)}
-                    />
-                </div>
+                {(!isNotSettings || !Boolean(profileData?.zipCode)) && (
+                    <div className={styles.field}>
+                        <label className={styles.label}>Zip Code</label>
+                        <input
+                            type="tel"
+                            className={styles.input}
+                            value={zipCode || ''}
+                            onChange={(e) => setZipCode(e.target.value)}
+                        />
+                    </div>
+                )}
+                {(!isNotSettings || !Boolean(profileData?.state) )&& (
+                    <div className={styles.field}>
+                        <label className={styles.label}>State</label>
+                        <Select
+                            data={STATES}
+                            value={state}
+                            onChange={setState}
+                            placeholder="Select a state"
+                            searchable
+                            nothingFoundMessage="No state found"
+                            radius="lg"
+                            p={0}
+                            m={0}
+                            classNames={{
+                                input: styles.inputDateInput,
+                            }}
+                        />
+                    </div>
+                )}
+                {(!isNotSettings || !Boolean(profileData?.bio)) && (
+                    <div className={styles.fieldFull}>
+                        <label className={styles.label}>Bio</label>
+                        <textarea
+                            rows={3}
+                            placeholder="Tell us about yourself..."
+                            className={`${styles.input} ${styles.textarea}`}
+                            value={bio}
+                            onChange={(e) => setBio(e.target.value)}
+                        />
+                    </div>
+                )}
             </form>
         </section>
     );

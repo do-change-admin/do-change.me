@@ -1,16 +1,16 @@
 .subMenu {
     padding-left: 5rem;
     position: fixed;
-    border-right: 1px solid rgba(193, 191, 192, 0.69);
-    width: 0;
-    transition: width 0.2s;
+    left: -400px;
+    border-right: 1px solid rgba(237, 237, 237, 0.69);
+    transition: all 0.2s linear;
     z-index: 99;
     background: white;
     height: 100vh;
 }
 
 .subMenuOpen {
-    width: 400px;
+    left: 0;
     margin-right: -5rem;
 }
 
