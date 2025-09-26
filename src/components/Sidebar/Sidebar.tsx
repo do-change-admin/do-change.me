@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import styles from "./Sidebar.module.css";
 import {FaSignOutAlt} from "react-icons/fa";
 import {usePathname} from "next/navigation";
-import {AuctionsServicesCards} from "@/components";
+import { AuctionsServicesCards} from "@/components";
 import {useSlideMenu} from "@/contexts";
 import {useNavMenu, useProfile} from "@/hooks";
 import {Avatar} from "@mantine/core";
@@ -21,8 +21,6 @@ export const Sidebar = () => {
     };
     const { navLinks, handleClick } = useNavMenu(handleOpenMenu);
     const pathname = usePathname();
-
-
 
 
     return (

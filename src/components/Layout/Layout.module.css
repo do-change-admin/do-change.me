@@ -4,6 +4,7 @@
   height: 100vh;
   background-color: #f9fafb;
   font-family: "Inter", sans-serif;
+  position: relative;
 }
 
 .mainContent {
@@ -28,6 +29,12 @@
   margin-left: 5rem;
 }
 
+.auctionButton {
+  z-index: 1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  right: 1rem;
+  bottom: 1rem;
+}
 
 @media (max-width: 700px) {
   .main {
@@ -37,5 +44,10 @@
 
   .header {
     margin: 0;
+  }
+
+  .auctionButton {
+    bottom: 5.5rem;
+    right: 0.5rem;
   }
 }
