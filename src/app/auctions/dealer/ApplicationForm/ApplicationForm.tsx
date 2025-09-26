@@ -63,9 +63,7 @@ export const ApplicationForm = () => {
                             Complete your application to get exclusive access to premium car auctions
                         </p>
                     </div>
-                    {!validateUser && (
-                        <ProfileForm isNotSettings/>
-                    )}
+                    <ProfileForm isNotSettings/>
                     {!validateUser ? (
                         <Group gap="xs" m="md">
                             <FiAlertCircle color="red" size={18} />

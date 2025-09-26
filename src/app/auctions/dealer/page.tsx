@@ -14,6 +14,7 @@ import type {UserAuctionAccessSchemaSteps} from '@/services'
 import {ApplicationSuccesses} from "./ApplicationForm/ApplicationSuccesses";
 import {AccessMainStep} from "./AccessMainStep/AccessMainStep";
 import {SubscriptionStep} from "@/app/auctions/dealer/SubscriptionStep/SubscriptionStep";
+import {SuccessCard} from "@/app/auctions/dealer/SuccessPage/SuccessCard";
 
 const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
     application: 0,
@@ -121,7 +122,7 @@ export default function Page() {
                         </div>
                     </div>
                 )}
-                {!isLoading && (waitingForAdmin ? <ApplicationSuccesses/> : <>
+                {!isLoading && (waitingForAdmin ? <SuccessCard/> : <>
                     {activeStep === 1 && (
                         <div className={styles.card}>
                             <ApplicationForm/>
