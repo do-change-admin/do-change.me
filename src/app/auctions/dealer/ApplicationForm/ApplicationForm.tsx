@@ -40,7 +40,7 @@ export const ApplicationForm = () => {
         "state",
         "zipCode",
         "address",
-        // "photoLink",
+        "photoLink",
     ]
 
     const validateUser =  requiredFields?.every((key) => {
