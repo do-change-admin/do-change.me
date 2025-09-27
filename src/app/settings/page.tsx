@@ -7,6 +7,7 @@ import { Button, Group } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import { useDisclosure } from "@mantine/hooks";
 import { useProfile, useSubscriptionDeletion } from "@/hooks";
+import {Plans} from "@/components/SubscriptionPlans/Plans";
 
 export default function SettingsContent() {
     const [opened, { open, close }] = useDisclosure(false);
@@ -39,8 +40,14 @@ export default function SettingsContent() {
                                 </div>
                                 <div>
                                     Next billing:{" "}
-                                    {profileData?.subscription?.currentPeriodEnd.toString()}
+                                    {profileData?.subscription?.currentPeriodEnd &&
+                                        new Date(profileData.subscription.currentPeriodEnd).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                        })}
                                 </div>
+
                             </div>
                         </div>
 
@@ -94,7 +101,7 @@ export default function SettingsContent() {
                 {/*    </div>*/}
                 {/*</div>*/}
             </section>
-
+            <Plans/>
             <Group gap="xs" justify="right">
                 <Button
                     leftSection={<FaSignOutAlt />}
