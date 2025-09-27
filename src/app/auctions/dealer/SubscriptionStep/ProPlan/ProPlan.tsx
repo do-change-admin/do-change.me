@@ -19,9 +19,9 @@ export const ProPlan = () => {
                 <div className={styles.featureItem}>
                     <FaCheck className={styles.featureIcon} />
                     <span>
-                  100 Vehicle History Reports
+                  Unlimited Vehicle History Reports
                   <br />
-                  <span className={styles.featureSubText}>Additional reports $0.95 each</span>
+                  {/*<span className={styles.featureSubText}>Additional reports $0.95 each</span>*/}
                 </span>
                 </div>
                 <div className={styles.featureItem}>

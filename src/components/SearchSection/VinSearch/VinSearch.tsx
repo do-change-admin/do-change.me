@@ -7,21 +7,32 @@ import { Input } from '@/components/_ui';
 import {BiBarcode} from "react-icons/bi";
 import {useScanner} from "@/contexts";
 import Image from "next/image";
+import {useProfile} from "@/hooks";
 
 export const VinSearch = ({openSubscription}:{openSubscription?: () => void}) => {
     const router = useRouter();
+    const {data} = useProfile();
     const searchParams = useSearchParams();
     const initVin = searchParams.get("vin");
     const [vin, setVin] = useState(initVin);
     const { start } = useScanner();
 
     const handleSearch = () => {
-        if (openSubscription) {
+        if (openSubscription && !data?.subscription) {
             openSubscription()
+            return;
         }
-        // if (!vin && vin?.length !== 17) return;
-        // router.push(`/?vin=${encodeURIComponent(vin)}`);
+        if (!vin && vin?.length !== 17) return;
+        router.push(`/?vin=${encodeURIComponent(vin)}`);
     };
+
+    const handleStartScanner = () => {
+        if (openSubscription && !data?.subscription) {
+            openSubscription()
+            return;
+        }
+        start()
+    }
 
     return (
         <div className={styles.searchPanel}>
@@ -43,7 +54,7 @@ export const VinSearch = ({openSubscription}:{openSubscription?: () => void}) =>
                         <motion.div
                             whileHover={{ scale: 1.05 }}
                             className={styles.scanBox}
-                            onClick={start}
+                            onClick={handleStartScanner}
                         >
                             <div className={styles.qrBox}>
                                 <Image className={styles.qrIcon} src="/scanIcon.png" alt='' width={25} height={25}/>
