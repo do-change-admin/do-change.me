@@ -3,14 +3,17 @@
 import { motion } from "framer-motion";
 import { FaCheckCircle, FaGavel, FaShieldAlt, FaClock } from "react-icons/fa";
 import styles from "./ApprovedAccess.module.css";
+import {useProfile} from "@/hooks";
+import {Avatar} from "@mantine/core";
 
-export const AuctionAccess = () => {
+export const ApprovedAccess = () => {
+    const {data: profileData} = useProfile()
     return (
         <main id="auction-access-main" className={styles.main}>
             <div id="access-card" className={styles.card}>
                 {/* Статус */}
                 <div id="status-section" className={styles.statusSection}>
-                    <h1 className={styles.title}>Access Approved</h1>
+                    <h1 className={styles.title}>Auction Access</h1>
                     <p className={styles.subtitle}>Your Auction Access has been successfully approved</p>
                     <div className={styles.separator}></div>
                 </div>
@@ -20,7 +23,7 @@ export const AuctionAccess = () => {
                     {/* QR */}
                     <div id="qr-section" className={styles.qrSection}>
                         <div className={styles.qrBox}>
-                            <div className={styles.qrPlaceholder}>QR</div>
+                            <Avatar src={profileData?.auctionAccessQRLink} className={styles.qrPlaceholder}/>
                         </div>
                         <h3 className={styles.qrTitle}>Scan QR Code</h3>
                     </div>
@@ -28,15 +31,15 @@ export const AuctionAccess = () => {
                     {/* Профиль */}
                     <div id="profile-section" className={styles.profileSection}>
                         <div className={styles.profileImageWrapper}>
-                            <img
+                            <Avatar
                                 className={styles.profileImage}
-                                src="https://storage.googleapis.com/uxpilot-auth.appspot.com/c83e0917e7-2d3a2ed1e0fa28ee4e41.png"
+                                src={profileData?.photoLink}
                                 alt="professional auction house attendee portrait"
                             />
                         </div>
                         <div className={styles.profileCard}>
                             <h3>Auction Access Number</h3>
-                            <div className={styles.profileNumber}>#AA-2024-7853</div>
+                            <div className={styles.profileNumber}>{profileData?.auctionAccessNumber}</div>
                         </div>
                     </div>
                 </div>
