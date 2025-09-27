@@ -209,6 +209,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({ isNotSettings = f
                             input: styles.inputDateInput,
                         }}
                         maxDate={maxAllowedDate}
+                        defaultDate={maxAllowedDate}
                         m={0}
                         p={0}
                     />
