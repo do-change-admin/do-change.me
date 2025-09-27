@@ -1,5 +1,5 @@
 import { businessError } from "@/lib/errors";
-import { PublicFolderFileSystemProvider } from "@/providers/implementations";
+import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 import { ProfileService } from "@/services";
 import { EmailAddress } from "@/value-objects/email-address.vo";
 
@@ -11,7 +11,7 @@ export const noSubscriptionsGuard = async ({ activeUser }: {
 }) => {
     const service = new ProfileService(
         EmailAddress.create(activeUser.email),
-        new PublicFolderFileSystemProvider()
+        new VercelBlobFileSystemProvider()
     )
     const { subscription } = await service.profileData() || {}
 
