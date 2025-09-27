@@ -144,7 +144,8 @@ export default function Page() {
                     {activeStep === 3 && (
                         <div className={styles.card}><RegistrationSteps/></div>
                     )}
-                    {activeStep === 4 && <SubscriptionStep/>}
+                    {activeStep === 4 && <SubscriptionStep />}
+                    {activeStep === 5 && <SubscriptionStep isRejected/>}
                 </>)}
             </div>
         </Box>
