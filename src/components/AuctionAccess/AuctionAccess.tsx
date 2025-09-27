@@ -21,6 +21,7 @@ export const AuctionAccess = () => {
     return (
         <main className={styles.main}>
             <Modal
+remove                radius="lg"
                 opened={opened}
                 onClose={() => setOpened(false)}
                 title="Auction Access"
