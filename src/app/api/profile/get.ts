@@ -1,4 +1,4 @@
-import { PublicFolderFileSystemProvider } from "@/providers/implementations";
+import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 import { zodApiMethod, ZodAPIMethod, zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED, ZodAPISchemas } from "../zod-api-methods";
 import { profileSchema, ProfileService } from "@/services";
 import { EmailAddress } from "@/value-objects/email-address.vo";
@@ -15,7 +15,7 @@ export const handler = zodApiMethod(schemas, {
     handler: async ({ activeUser }) => {
         const { email } = activeUser
         const emailValueObject = EmailAddress.create(email)
-        const service = new ProfileService(emailValueObject, new PublicFolderFileSystemProvider())
+        const service = new ProfileService(emailValueObject, new VercelBlobFileSystemProvider())
         const profileData = await service.profileData()
 
         return profileData

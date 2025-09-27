@@ -1,5 +1,5 @@
 import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "@/app/api/zod-api-methods";
-import { PublicFolderFileSystemProvider } from "@/providers/implementations";
+import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 import { auctionAccessRequestFullSchema, AuctionAccessRequestsAdminService } from "@/services";
 import z from "zod";
 
@@ -12,7 +12,7 @@ const responseSchema = auctionAccessRequestFullSchema
 export type Method = ZodAPIMethod_DEPRECATED<typeof queryParamsSchema, undefined, typeof responseSchema>
 
 export const handler = zodApiMethod_DEPRECATED(queryParamsSchema, undefined, responseSchema, async (payload) => {
-    const fileSystemProvider = new PublicFolderFileSystemProvider()
+    const fileSystemProvider = new VercelBlobFileSystemProvider()
     const service = new AuctionAccessRequestsAdminService(fileSystemProvider)
     const result = await service.detailedItem(payload.id)
 

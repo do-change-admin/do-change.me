@@ -1,6 +1,6 @@
 import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../zod-api-methods";
 import { businessError } from "@/lib/errors";
-import { PublicFolderFileSystemProvider } from "@/providers/implementations";
+import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 import { AuctionAccessRequestsUserService } from "@/services";
 
 export type Method = ZodAPIMethod_DEPRECATED<undefined, undefined, undefined>
@@ -23,7 +23,7 @@ export const handler = zodApiMethod_DEPRECATED(undefined, undefined, undefined, 
         throw businessError('No license was provided')
     }
 
-    const fileSystemProvider = new PublicFolderFileSystemProvider()
+    const fileSystemProvider = new VercelBlobFileSystemProvider()
     const service = new AuctionAccessRequestsUserService(fileSystemProvider)
     await service.uploadFiles(agreement, license, auctionAccessNumber, activeUser.email)
 })

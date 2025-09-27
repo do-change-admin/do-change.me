@@ -1,7 +1,7 @@
 import { zodApiMethod, ZodAPISchemas } from "@/app/api/zod-api-methods";
 import { prismaClient } from "@/infrastructure";
 import { businessError } from "@/lib/errors";
-import { PublicFolderFileSystemProvider } from "@/providers/implementations";
+import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 import { v4 } from "uuid";
 import z from "zod";
 
@@ -16,7 +16,7 @@ export const method = zodApiMethod(schemas, {
         const formData = await req.formData();
         const qr = formData.get('qr') as File;
         const auctionAccessNumber = formData.get('number') as string;
-        const provider = new PublicFolderFileSystemProvider()
+        const provider = new VercelBlobFileSystemProvider()
         const auctionAccessQRFileId = `${v4()}-${qr.name}`
         await provider.upload(qr, auctionAccessQRFileId, qr.name)
 
