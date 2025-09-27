@@ -43,10 +43,26 @@ export const ProfileFormSkeleton = () => {
                     <Skeleton radius="1rem" height={40}/>
                 </div>
 
+                <div className={styles.field}>
+                    <label className={styles.label}>Phone</label>
+                    <Skeleton radius="1rem" height={40}/>
+                </div>
+
+                <div className={styles.field}>
+                    <label className={styles.label}>Phone</label>
+                    <Skeleton radius="1rem" height={40}/>
+                </div>
+
+                <div className={styles.field}>
+                    <label className={styles.label}>Phone</label>
+                    <Skeleton radius="1rem" height={40}/>
+                </div>
+
                 <div className={styles.fieldFull}>
                     <label className={styles.label}>Bio</label>
                     <Skeleton radius="1rem" height={80}/>
                 </div>
+
             </form>
         </section>
     );

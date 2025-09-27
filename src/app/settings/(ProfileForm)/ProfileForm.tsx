@@ -2,12 +2,13 @@
 
 import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from 'react';
 import styles from "./ProfileForm.module.css";
-import {Avatar, Button, Loader, Select} from "@mantine/core";
+import {Avatar, Button, Loader, Select, Text} from "@mantine/core";
 import {FaCamera} from "react-icons/fa";
 import {useProfile, useProfileModifying, useUploadPhoto} from "@/hooks";
 import {notifications} from "@mantine/notifications";
 import {ProfileFormSkeleton} from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
 import {DateInput} from '@mantine/dates';
+import {AiOutlineExclamationCircle} from "react-icons/ai";
 
 export const STATES = [
     {value: "AL", label: "Alabama (AL)"},
@@ -71,9 +72,9 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
     const [address, setAddress] = useState<string | null>(null)
     const [state, setState] = useState<string | null>(null)
     const [zipCode, setZipCode] = useState<string | null>(null)
-    const { data: profileData, isLoading: profileIsLoading } = useProfile();
-    const { mutate: modifyProfile, isPending: profileIsModifying } = useProfileModifying();
-    const { mutate: uploadPhoto, isPending: isPendingUploadPhoto } = useUploadPhoto();
+    const {data: profileData, isLoading: profileIsLoading} = useProfile();
+    const {mutate: modifyProfile, isPending: profileIsModifying} = useProfileModifying();
+    const {mutate: uploadPhoto, isPending: isPendingUploadPhoto} = useUploadPhoto();
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files?.length) return;
@@ -102,7 +103,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
     const handleSave = (e: FormEvent) => {
         e.preventDefault();
         modifyProfile(
-            { body: { bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode } },
+            {body: {bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode}},
             {
                 onSuccess: () => {
                     notifications.show({
@@ -138,144 +139,192 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({isNotSettings = fa
                     {profileIsModifying ? 'Saving...' : 'Save'}
                 </Button>
             </div>
-            {(!isNotSettings || !Boolean(profileData?.photoLink)) && (
-                <div className={styles.avatarRow}>
-                    <div className={styles.avatarWrap}>
-                        <Avatar
-                            src={profileData?.photoLink}
-                            alt="User avatar"
-                            className={styles.avatar}
-                        />
-                        <button className={styles.avatarBtn} aria-label="Change photo">
-                            <FaCamera className={styles.avatarIcon}/>
-                        </button>
-                    </div>
-
-                    <div className={styles.avatarInfo}>
-                        <h3 className={styles.userName}>{profileData?.firstName} {profileData?.lastName}</h3>
-                        <p className={styles.userEmail}>{profileData?.email}</p>
-                        <label htmlFor='photo-upload'>
-                            <p className={styles.linkBtn}>Change Avatar</p>
-                        </label>
-                        <input style={{display: 'none'}} id='photo-upload' type='file' onChange={handleFileChange}/>
-                    </div>
+            <div className={styles.avatarRow}>
+                <div className={styles.avatarWrap}>
+                    <Avatar
+                        src={profileData?.photoLink}
+                        alt="User avatar"
+                        className={styles.avatar}
+                    />
+                    <button className={styles.avatarBtn} aria-label="Change photo">
+                        <FaCamera className={styles.avatarIcon}/>
+                    </button>
                 </div>
-            )}
-            <form className={styles.grid} onSubmit={handleSave}>
-                {(!isNotSettings || !Boolean(profileData?.firstName)) && (
-                    <div className={styles.field}>
-                        <label className={styles.label}>First Name</label>
-                        <input
-                            type="text"
-                            className={styles.input}
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </div>
-                )}
-                {(!isNotSettings || !Boolean(profileData?.email)) && (
-                    <div className={styles.field}>
-                        <label className={styles.label}>Last Name</label>
-                        <input
-                            type="text"
-                            className={styles.input}
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </div>
-                )}
-                {(!isNotSettings || !Boolean(profileData?.birthDate)) && (
-                    <div className={styles.field}>
-                        <label className={styles.label}>Date of birth</label>
-                        <DateInput
-                            placeholder="Pick date"
-                            value={birthDate ? birthDate.toISOString().split("T")[0] : null}
-                            onChange={(x) => setBirthDate(new Date(x!))}
-                            classNames={{
-                                input: styles.inputDateInput,
-                            }}
-                            maxDate={maxAllowedDate}
-                            m={0}
-                            p={0}
-                        />
-                    </div>
-                )}
-                {(!isNotSettings || !Boolean(profileData?.email)) && (
-                    <div className={styles.field}>
-                        <label className={styles.label}>Email</label>
-                        <input
-                            type="email"
-                            className={`${styles.input} ${styles.disabled}`}
-                            value={profileData?.email}
-                            disabled
-                        />
-                    </div>
-                )}
-                {(!isNotSettings || !Boolean(profileData?.phone)) && (
-                    <div className={styles.field}>
-                        <label className={styles.label}>Phone</label>
-                        <input
-                            type="tel"
-                            className={styles.input}
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                        />
-                    </div>
-                )}
-                {(!isNotSettings || !Boolean(profileData?.address)) && (
-                    <div className={styles.field}>
-                        <label className={styles.label}>Address</label>
-                        <input
-                            type="tel"
-                            className={styles.input}
-                            value={address || ''}
-                            onChange={(e) => setAddress(e.target.value)}
-                        />
-                    </div>
-                )}
 
-                {(!isNotSettings || !Boolean(profileData?.zipCode)) && (
-                    <div className={styles.field}>
-                        <label className={styles.label}>Zip Code</label>
-                        <input
-                            type="tel"
-                            className={styles.input}
-                            value={zipCode || ''}
-                            onChange={(e) => setZipCode(e.target.value)}
-                        />
-                    </div>
-                )}
-                {(!isNotSettings || !Boolean(profileData?.state) )&& (
-                    <div className={styles.field}>
-                        <label className={styles.label}>State</label>
-                        <Select
-                            data={STATES}
-                            value={state}
-                            onChange={setState}
-                            placeholder="Select a state"
-                            searchable
-                            nothingFoundMessage="No state found"
-                            radius="lg"
-                            p={0}
-                            m={0}
-                            classNames={{
-                                input: styles.inputDateInput,
-                            }}
-                        />
-                    </div>
-                )}
-                {(!isNotSettings || !Boolean(profileData?.bio)) && (
-                    <div className={styles.fieldFull}>
-                        <label className={styles.label}>Bio</label>
-                        <textarea
-                            rows={3}
-                            placeholder="Tell us about yourself..."
-                            className={`${styles.input} ${styles.textarea}`}
-                            value={bio}
-                            onChange={(e) => setBio(e.target.value)}
-                        />
-                    </div>
-                )}
+                <div className={styles.avatarInfo}>
+                    <h3 className={styles.userName}>{profileData?.firstName} {profileData?.lastName}</h3>
+                    <p className={styles.userEmail}>{profileData?.email}</p>
+                    <label htmlFor='photo-upload'>
+                        <p className={styles.linkBtn}>Change Avatar</p>
+                    </label>
+                    <input style={{display: 'none'}} id='photo-upload' type='file' onChange={handleFileChange}/>
+                    {(isNotSettings && !Boolean(profileData?.photoLink)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+            </div>
+
+            <form className={styles.grid} onSubmit={handleSave}>
+                <div className={styles.field}>
+                    <label className={styles.label}>First Name</label>
+                    <input
+                        type="text"
+                        className={styles.input}
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+                    {(isNotSettings && !Boolean(profileData?.firstName)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label}>Last Name</label>
+                    <input
+                        type="text"
+                        className={styles.input}
+                        value={profileData?.lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
+                    {(isNotSettings && !Boolean(profileData?.lastName)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+
+                <div className={styles.field}>
+                    <label className={styles.label}>Date of birth</label>
+                    <DateInput
+                        placeholder="Pick date"
+                        value={birthDate ? birthDate.toISOString().split("T")[0] : null}
+                        onChange={(x) => setBirthDate(new Date(x!))}
+                        classNames={{
+                            input: styles.inputDateInput,
+                        }}
+                        maxDate={maxAllowedDate}
+                        m={0}
+                        p={0}
+                    />
+                    {(isNotSettings && !Boolean(profileData?.birthDate)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+
+                <div className={styles.field}>
+                    <label className={styles.label}>Email</label>
+                    <input
+                        type="email"
+                        placeholder="Enter email"
+                        className={`${styles.input} ${styles.disabled}`}
+                        value={profileData?.email}
+                        disabled
+                    />
+                    {(isNotSettings && !Boolean(profileData?.email)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label}>Phone</label>
+                    <input
+                        type="tel"
+                        className={styles.input}
+                        placeholder="Enter phone number"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                    />
+                    {(isNotSettings && !Boolean(profileData?.phone)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+
+                <div className={styles.field}>
+                    <label className={styles.label}>Address</label>
+                    <input
+                        type="tel"
+                        className={styles.input}
+                        placeholder="Enter your street address"
+                        value={address || ''}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                    {(isNotSettings && !Boolean(profileData?.address)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+
+                <div className={styles.field}>
+                    <label className={styles.label}>Zip Code</label>
+                    <input
+                        type="tel"
+                        className={styles.input}
+                        placeholder="Enter Zip Code"
+                        value={zipCode || ''}
+                        onChange={(e) => setZipCode(e.target.value)}
+                    />
+                    {(isNotSettings &&  !Boolean(profileData?.zipCode)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label}>State</label>
+                    <Select
+                        data={STATES}
+                        value={state}
+                        onChange={setState}
+                        placeholder="Select a state"
+                        searchable
+                        nothingFoundMessage="No state found"
+                        radius="lg"
+                        p={0}
+                        m={0}
+                        classNames={{
+                            input: styles.inputDateInput,
+                        }}
+                    />
+                    {(isNotSettings &&  !Boolean(profileData?.state)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
+                <div className={styles.fieldFull}>
+                    <label className={styles.label}>Bio</label>
+                    <textarea
+                        rows={3}
+                        placeholder="Tell us about yourself..."
+                        className={`${styles.input} ${styles.textarea}`}
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                    />
+                    {(isNotSettings && !Boolean(profileData?.bio)) && (
+                        <Text c="red" size="sm" style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                            <AiOutlineExclamationCircle/>
+                            This field is required
+                        </Text>
+                    )}
+                </div>
             </form>
         </section>
     );

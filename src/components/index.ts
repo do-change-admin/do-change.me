@@ -15,3 +15,4 @@ export * from './AuctionsServicesCards/AuctionsServicesCards';
 export * from './AuctionHowItWorks/AuctionHowItWorks';
 export * from './SubscriptionPlans/SubscriptionPlans';
 export * from './CookieBanner/CookieBanner';
+export * from './AuctionAccess/AuctionAccess';

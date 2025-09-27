@@ -78,6 +78,7 @@ export default function AuctionAccessPage() {
 
     const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({ skip: 0, take: 100, status })
 
+
     return (
         <div className={styles.container}>
             {/* Main Tabs */}
@@ -90,9 +91,9 @@ export default function AuctionAccessPage() {
                     {mainTabs.map((tab) => (
                         <Tabs.Tab value={tab.status} key={tab.label} className={styles.tabWithBadge}>
                             {tab.label}
-                            {/*{!!tab.count && (*/}
+                            {/*{!!groupedCount[tab?.label?.toLowerCase()] && (*/}
                             {/*    <Badge color="pink" size="sm" className={styles.tabBadge}>*/}
-                            {/*        {tab.count}*/}
+                            {/*        {groupedCount[tab?.label?.toLowerCase()]}*/}
                             {/*    </Badge>*/}
                             {/*)}*/}
                         </Tabs.Tab>
