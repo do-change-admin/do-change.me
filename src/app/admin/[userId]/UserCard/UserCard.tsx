@@ -20,9 +20,26 @@ import {
 import styles from "./UserCard.module.css";
 import React, {FC, useEffect, useState} from "react";
 import {Schedule, SchedulePicker} from "@/components/_admin/SchedulePicker/SchedulePicker";
-import {useAdminAuctionAccessRequest, useAdminAuctionAccessRequestUpdate, useDatesMapping} from "@/hooks";
+import {
+    useAdminAuctionAccessFinalizing,
+    useAdminAuctionAccessRequest,
+    useAdminAuctionAccessRequestUpdate,
+    useDatesMapping
+} from "@/hooks";
 import {useRouter} from "next/navigation";
-import {Avatar, Badge, Button, Loader, Text, Group, CopyButton, Tooltip, Card} from "@mantine/core";
+import {
+    Avatar,
+    Badge,
+    Button,
+    Loader,
+    Text,
+    Group,
+    CopyButton,
+    Tooltip,
+    Card,
+    TextInput,
+    FileInput
+} from "@mantine/core";
 import dayjs from "dayjs";
 import cn from "classnames";
 import {AiOutlineArrowLeft} from "react-icons/ai";
@@ -33,9 +50,18 @@ export interface UserCardProps {
 
 export const UserCard: FC<UserCardProps> = ({applicationId}) => {
     const [schedule, setSchedule] = useState<Schedule>({})
+
+    const [formData, setFormData] = useState<{
+        number: string;
+        qrFile: File | null;
+    }>({
+        number: "",
+        qrFile: null,
+    });
     const {datesFromSchedule, scheduleFromDates} = useDatesMapping()
     const {data: requestInfo} = useAdminAuctionAccessRequest({id: applicationId})
     const {mutate: update} = useAdminAuctionAccessRequestUpdate()
+    const {mutate: addAuctionAccess} = useAdminAuctionAccessFinalizing()
     const router = useRouter();
 
     useEffect(() => {
@@ -66,6 +92,12 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
         })
     }
 
+
+    const handleSubmit = () => {
+        console.log("Collected data:", formData);
+        addAuctionAccess({id: applicationId, qr: formData.qrFile, auctionAccessNumber: formData.number})
+    };
+
     return (
         <div className={styles.container}>
             <motion.div
@@ -80,7 +112,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                         variant="light"
                         color="white"
                         mb={16}
-                        leftSection={<AiOutlineArrowLeft size={18} />}
+                        leftSection={<AiOutlineArrowLeft size={18}/>}
                         onClick={() => router.push("/admin")}
                     >
                         Back
@@ -112,7 +144,6 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                         </div>
                     </div>
                 </div>
-
                 {/* Body */}
                 <div className={styles.body}>
                     {/* About */}
@@ -210,7 +241,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                                  <span className={styles.dateButtonDay}>
                                                         {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", {day: "2-digit"})}
 
-                                                        {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", {month: "short"})}
+                                                     {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", {month: "short"})}
                                                  </span>
                                                 <span
                                                     className={styles.dateButtonWeekday}>{new Date(requestInfo.activeTimeSlot.date).toLocaleTimeString("en-US", {
@@ -309,6 +340,31 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                 )}
                             </section>
                         )}
+                    </div>
+                    <div>
+                        <Group>
+                            <TextInput
+                                label="Auction Access Number"
+                                placeholder="Enter your number"
+                                value={formData?.number}
+                                onChange={(e) =>
+                                    setFormData((prev) => ({...prev, number: e?.currentTarget?.value}))
+                                }
+                                mb="md"
+                            />
+
+                            <FileInput
+                                label="Upload QR Code"
+                                placeholder="Choose file"
+                                accept="image/*"
+                                value={formData?.qrFile}
+                                onChange={(file) =>
+                                    setFormData((prev) => ({...prev, qrFile: file}))
+                                }
+                                mb="md"
+                            />
+                        </Group>
+                        <Button bg="pink" onClick={handleSubmit}>Save</Button>
                     </div>
                 </div>
             </motion.div>

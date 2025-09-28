@@ -50,11 +50,7 @@
     gap: 1.5rem;
     max-width: 40rem;
     margin: 0 auto;
-}
-@media (min-width: 768px) {
-    .grid {
-        grid-template-columns: 1fr 1fr;
-    }
+    place-items: center;
 }
 
 .cardOrange,

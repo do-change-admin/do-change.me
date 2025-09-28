@@ -1,7 +1,7 @@
 import { EmailAddress } from "@/value-objects/email-address.vo";
 import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../zod-api-methods";
 import { updateProfileSchema, ProfileService } from '@/services'
-import { PublicFolderFileSystemProvider } from "@/providers/implementations";
+import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 
 const bodySchema = updateProfileSchema
 
@@ -10,7 +10,7 @@ export type Method = ZodAPIMethod_DEPRECATED<undefined, typeof bodySchema, undef
 export const handler = zodApiMethod_DEPRECATED(undefined, bodySchema, undefined, async (payload) => {
     const { email } = payload.activeUser
     const emailValueObject = EmailAddress.create(email)
-    const service = new ProfileService(emailValueObject, new PublicFolderFileSystemProvider())
+    const service = new ProfileService(emailValueObject, new VercelBlobFileSystemProvider())
     await service.update({
         bio: payload.bio,
         firstName: payload.firstName,
@@ -19,6 +19,6 @@ export const handler = zodApiMethod_DEPRECATED(undefined, bodySchema, undefined,
         birthDate: payload.birthDate,
         address: payload.address,
         zipCode: payload.zipCode,
-        state: payload.state
+        state: payload.state,
     })
 })

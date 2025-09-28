@@ -1,5 +1,5 @@
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "@/app/api/zod-api-methods";
-import { PublicFolderFileSystemProvider } from "@/providers/implementations";
+import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 import { AuctionAccessRequestsAdminService, auctionAccessRequestStatusSchema } from "@/services";
 import z from "zod";
 
@@ -17,7 +17,7 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload }) => {
-        const service = new AuctionAccessRequestsAdminService(new PublicFolderFileSystemProvider())
+        const service = new AuctionAccessRequestsAdminService(new VercelBlobFileSystemProvider())
         await service.setStatus(payload.id, payload.newStatus)
     }
 })
