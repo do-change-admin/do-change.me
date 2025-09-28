@@ -35,12 +35,10 @@ export const profileSchema = z.object({
 export const updateProfileSchema = z.object({
     firstName: z.string().nonempty(),
     lastName: z.string().nonempty(),
-    phone: z.string().nonempty(),
-    bio: z.string().nonempty(),
-    birthDate: z.coerce.date(),
+    phone: z.string().nullable(),
+    bio: z.string().nullable(),
+    birthDate: z.coerce.date().nullable(),
     address: z.string().nullable(),
     state: z.string().nullable(),
     zipCode: z.string().nullable(),
-    auctionAccessQRLink: z.string().nullable(),
-    auctionAccessNumber: z.string().nullable(),
 });

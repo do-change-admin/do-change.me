@@ -3,10 +3,14 @@
 import { FC } from "react";
 import { FaCheck, FaCrown, FaRocket } from "react-icons/fa";
 import styles from "./SubscriptionStep.module.css";
+import { usePlans, useSubscriptionCreation } from "@/hooks";
+import { pl } from "zod/v4/locales";
 
-interface SubscriptionStep {}
+interface SubscriptionStep { }
 
 export const SubscriptionStep: FC<SubscriptionStep> = () => {
+    const { data: plans } = usePlans()
+    const { mutateAsync: subscribe } = useSubscriptionCreation()
     return (
         <div className={styles.container}>
             <div className={styles.cardWrapper}>
@@ -44,10 +48,10 @@ export const SubscriptionStep: FC<SubscriptionStep> = () => {
                             <div className={styles.featureItem}>
                                 <FaCheck className={styles.featureIcon} />
                                 <span>
-                  100 Vehicle History Reports
-                  <br />
-                  <span className={styles.featureSubText}>Additional reports $0.95 each</span>
-                </span>
+                                    100 Vehicle History Reports
+                                    <br />
+                                    <span className={styles.featureSubText}>Additional reports $0.95 each</span>
+                                </span>
                             </div>
                             <div className={styles.featureItem}>
                                 <FaCheck className={styles.featureIcon} />
@@ -64,7 +68,25 @@ export const SubscriptionStep: FC<SubscriptionStep> = () => {
                             <div className={styles.savingsBadge}>You Save 50%!</div>
                         </div>
 
-                        <button className={styles.getPlanBtn}>
+                        <button onClick={() => {
+                            if (!plans || !plans.auctionAccess) {
+                                return
+                            }
+
+                            const [price] = plans.auctionAccess.prices
+
+                            if (!price) {
+                                return
+                            }
+
+                            subscribe({
+                                body: {
+                                    planId: price.planId.toString(),
+                                    priceId: price.stripePriceId
+                                }
+                            })
+
+                        }} className={styles.getPlanBtn}>
                             <FaRocket className={styles.rocketIcon} />
                             Get Your Plan
                         </button>

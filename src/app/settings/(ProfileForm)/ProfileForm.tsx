@@ -103,7 +103,7 @@ export const ProfileForm: FC<{ isNotSettings?: boolean }> = ({ isNotSettings = f
     const handleSave = (e: FormEvent) => {
         e.preventDefault();
         modifyProfile(
-            { body: { bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode, auctionAccessNumber: null, auctionAccessQRLink: null } },
+            { body: { bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode } },
             {
                 onSuccess: () => {
                     notifications.show({

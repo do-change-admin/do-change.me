@@ -1,7 +1,7 @@
 import { AuctionAccessRequestsAPI } from "@/app/api/auction-access-requests/route"
 import { apiRequest } from "@/lib/apiFetch"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import {useState} from "react";
+import { useState } from "react";
 
 export const useAuctionAccessRequestCreation = () => {
     const queryClient = useQueryClient()
@@ -33,15 +33,14 @@ export const useAuctionAccessRequestUpdate = () => {
 }
 
 type UseAuctionAccessRequestProps = {
-    onSuccess?: () => void;
     onError?: (error: any) => void;
 };
 
-export const useAuctionAccessDock = ({ onSuccess, onError }: UseAuctionAccessRequestProps = {}) => {
+export const useAuctionAccessDock = ({ onError }: UseAuctionAccessRequestProps = {}) => {
     const [agreement, setAgreement] = useState<File | null>(null);
     const [license, setLicense] = useState<File | null>(null);
     const [auctionAccessNumber, setAuctionAccessNumber] = useState('');
-
+    const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: async () => {
             const formData = new FormData();
@@ -60,7 +59,9 @@ export const useAuctionAccessDock = ({ onSuccess, onError }: UseAuctionAccessReq
 
             return response.json();
         },
-        onSuccess,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['auction-access-user-data'] })
+        },
         onError,
     });
 

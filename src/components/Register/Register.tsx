@@ -13,6 +13,7 @@ import { signIn } from "next-auth/react";
 
 export const Register = () => {
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false)
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -45,7 +46,7 @@ export const Register = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setIsLoading(true)
         try {
             await apiFetch<{ message: string }>("/api/auth/register", {
                 method: "POST",
@@ -85,6 +86,9 @@ export const Register = () => {
                 setAlertType("error");
                 setAlertVisible(true);
             }
+        }
+        finally {
+            setIsLoading(false)
         }
     };
 
@@ -191,7 +195,7 @@ export const Register = () => {
                             <button
                                 type="submit"
                                 className={styles.registerButton}
-                                disabled={!isFormValid}
+                                disabled={!isFormValid || isLoading}
                             >
                                 Create Account
                             </button>
