@@ -1,3 +1,5 @@
+'use client'
+
 import { useAdminUsersInfo } from "@/hooks/_admin-users.hooks";
 
 export default function () {
