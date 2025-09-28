@@ -3,14 +3,14 @@
 import { FC } from "react";
 import { FaCheck, FaCrown, FaRocket } from "react-icons/fa";
 import styles from "./SubscriptionStep.module.css";
-import { usePlans, useSubscriptionCreation } from "@/hooks";
-import { pl } from "zod/v4/locales";
+import { ProPlan } from "@/app/auctions/dealer/SubscriptionStep/ProPlan/ProPlan";
+import { BasicPlan } from "@/app/auctions/dealer/SubscriptionStep/BasicPlan/BasicPlan";
 
-interface SubscriptionStep { }
+interface SubscriptionStep {
+    isRejected?: boolean;
+}
 
-export const SubscriptionStep: FC<SubscriptionStep> = () => {
-    const { data: plans } = usePlans()
-    const { mutateAsync: subscribe } = useSubscriptionCreation()
+export const SubscriptionStep: FC<SubscriptionStep> = ({ isRejected }) => {
     return (
         <div className={styles.container}>
             <div className={styles.cardWrapper}>
@@ -23,76 +23,34 @@ export const SubscriptionStep: FC<SubscriptionStep> = () => {
 
                 <div className={styles.grid}>
                     {/* Left Text Section */}
-                    <div className={styles.textSection}>
-                        <div className={styles.label}>
-                            <FaCheck className={styles.iconCheck} />
-                            Auction Access Granted
+                    {!isRejected ? (
+                        <div className={styles.textSection}>
+                            <div className={styles.label}>
+                                <FaCheck className={styles.iconCheck} />
+                                Auction Access Granted
+                            </div>
+                            <h1 className={styles.title}>Congratulations!</h1>
+                            <p className={styles.description}>
+                                You've unlocked exclusive Auction Access. After purchasing the plan, you'll receive your number and QR code to attend offline dealer auctions.
+                            </p>
                         </div>
-                        <h1 className={styles.title}>Congratulations!</h1>
-                        <p className={styles.description}>
-                            You've unlocked exclusive Auction Access. After purchasing the plan, you'll receive your number and QR code to attend offline dealer auctions.
-                        </p>
-                    </div>
+                    ) : (
+                        <div className={styles.textSection}>
+                            <h1 className={styles.title}>We’re sorry, but we are unable to grant you Auction Access at this time.</h1>
+                            <p className={styles.description}>
+                                If anything changes, we’ll be sure to contact you right away.
+                            </p>
+                            <p className={styles.description}>
+                                In the meantime, you can take advantage of our Basic Subscription and continue using our great service to check vehicles and view detailed reports.
+                            </p>
+                        </div>
+                    )}
+
 
                     {/* Right Subscription Card */}
-                    <div className={styles.subscriptionCard}>
-                        <div className={styles.featuresList}>
-                            <div className={styles.featureItem}>
-                                <FaCheck className={styles.featureIcon} />
-                                <span>Unlimited Market Value</span>
-                            </div>
-                            <div className={styles.featureItem}>
-                                <FaCheck className={styles.featureIcon} />
-                                <span>Unlimited Salvage Check</span>
-                            </div>
-                            <div className={styles.featureItem}>
-                                <FaCheck className={styles.featureIcon} />
-                                <span>
-                                    100 Vehicle History Reports
-                                    <br />
-                                    <span className={styles.featureSubText}>Additional reports $0.95 each</span>
-                                </span>
-                            </div>
-                            <div className={styles.featureItem}>
-                                <FaCheck className={styles.featureIcon} />
-                                <span>Auction Access Included</span>
-                            </div>
-                        </div>
-
-                        <div className={styles.pricingSection}>
-                            <div className={styles.priceRow}>
-                                <span className={styles.oldPrice}>$200</span>
-                                <span className={styles.newPrice}>$100</span>
-                                <span className={styles.priceSuffix}>/month</span>
-                            </div>
-                            <div className={styles.savingsBadge}>You Save 50%!</div>
-                        </div>
-
-                        <button onClick={() => {
-                            if (!plans || !plans.auctionAccess) {
-                                return
-                            }
-
-                            const [price] = plans.auctionAccess.prices
-
-                            if (!price) {
-                                return
-                            }
-
-                            subscribe({
-                                body: {
-                                    planId: price.planId.toString(),
-                                    priceId: price.stripePriceId
-                                }
-                            })
-
-                        }} className={styles.getPlanBtn}>
-                            <FaRocket className={styles.rocketIcon} />
-                            Get Your Plan
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    {!isRejected ? <ProPlan /> : <BasicPlan />}
+                </div >
+            </div >
+        </div >
     );
 };

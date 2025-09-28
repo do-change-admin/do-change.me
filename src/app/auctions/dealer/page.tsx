@@ -9,12 +9,13 @@ import styles from "./page.module.css";
 import {CallSchedule} from "./CallSchedule/CallSchedule";
 import {ApplicationForm} from "./ApplicationForm/ApplicationForm";
 import {RegistrationSteps} from "./RegistrationAuctionAcceess/RegistrationAuctionAcceess";
-import {useAuctionAccessRequest} from "@/hooks";
+import {useAuctionAccessRequest, useProfile} from "@/hooks";
 import type {UserAuctionAccessSchemaSteps} from '@/services'
 import {ApplicationSuccesses} from "./ApplicationForm/ApplicationSuccesses";
 import {AccessMainStep} from "./AccessMainStep/AccessMainStep";
 import {SubscriptionStep} from "@/app/auctions/dealer/SubscriptionStep/SubscriptionStep";
 import {SuccessCard} from "@/app/auctions/dealer/SuccessPage/SuccessCard";
+import {ApprovedAccess} from "@/app/auctions/dealer/ApprovedAccess/ApprovedAccess";
 
 const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
     application: 0,
@@ -28,6 +29,7 @@ export default function Page() {
     const [activeStep, setActiveStep] = useState(0);
     const [waitingForAdmin, setWaitingForAdmin] = useState(false)
     const {data, isLoading} = useAuctionAccessRequest()
+    const {data: profileData} = useProfile()
 
     const t = useTranslations("Steps");
 
@@ -86,6 +88,12 @@ export default function Page() {
         return <AccessMainStep onStart={() => setActiveStep(1)}/>
     }
 
+    if (profileData?.subscription) {
+        return (
+            <ApprovedAccess/>
+        )
+    }
+
     return (
         <Box
             className={styles.container}
@@ -136,13 +144,9 @@ export default function Page() {
                     {activeStep === 3 && (
                         <div className={styles.card}><RegistrationSteps/></div>
                     )}
-                    {activeStep === 4 && <SubscriptionStep/>}
+                    {activeStep === 4 && <SubscriptionStep />}
+                    {activeStep === 5 && <SubscriptionStep isRejected/>}
                 </>)}
-
-                {/*{activeStep === 1 && <ApplicationForm />}*/}
-                {/*{activeStep === 2 && <CallSchedule />}*/}
-                {/*{activeStep === 3 && <RegistrationSteps />}*/}
-                {/*{activeStep === 4 && <SubscriptionStep />}*/}
             </div>
         </Box>
     );

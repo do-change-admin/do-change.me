@@ -50,10 +50,12 @@ export const useAdminAuctionAccessStatusSetting = () => {
 export const useAdminAuctionAccessFinalizing = () => {
     const client = useQueryClient()
 
-    return useMutation<void, void, { id: string, qr: File, auctionAccessNumber: string }>({
+    return useMutation<void, void, { id: string, qr: File | Blob | null, auctionAccessNumber: string }>({
         mutationFn: async (payload) => {
             const formData = new FormData()
-            formData.set("qr", payload.qr)
+            if (payload.qr) {
+                formData.set("qr", payload.qr)
+            }
             formData.set("number", payload.auctionAccessNumber)
             await fetch('/api/admin/auction-access-requests/finalize?id=' + payload.id, {
                 body: formData,
