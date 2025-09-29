@@ -10,6 +10,7 @@ import {ProfileFormSkeleton} from "@/app/settings/(ProfileForm)/ProfileFormSkele
 import {DateInput} from '@mantine/dates';
 import {AiOutlineExclamationCircle} from "react-icons/ai";
 import cn from "classnames";
+import {ProfileData} from "@/services";
 
 export const STATES = [
     {value: "AL", label: "Alabama (AL)"},
@@ -135,6 +136,26 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({isApplicationF
     if (!isApplicationForm && (isPending || profileIsLoading || profileIsModifying)) {
         return <ProfileFormSkeleton/>
     }
+
+
+    const requiredFields: (keyof ProfileData)[] = [
+        "firstName",
+        "lastName",
+        "phone",
+        "email",
+        "state",
+        "zipCode",
+        "address",
+        "photoLink",
+    ]
+
+    const validateUser =  requiredFields?.every((key) => {
+
+        if (profileData) {
+            const value = profileData[key];
+            return value !== null && value !== "" && value !== undefined;
+        }
+    });
 
     return (
         <section className={cn(styles.card, {
@@ -343,7 +364,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({isApplicationF
             {isApplicationForm && (
                 <Button
                     onClick={handleSubmitApplocation}
-                    disabled={profileIsModifying || isPending}
+                    disabled={!validateUser}
                     fullWidth
                     radius="lg"
                     h={50}
