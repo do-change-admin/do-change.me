@@ -5,16 +5,17 @@ import { ProvidesFileLink, ProvidesFileUploading } from "@/providers/contracts";
 import { v4 } from "uuid";
 import { RequestsMeteringService } from "../requests-metering/requests-metering.service";
 import { FeatureKey } from "@/value-objects/feature-key.vo";
+import { businessError } from "@/lib/errors";
 
 export class ProfileService {
     constructor(
         private readonly email: EmailAddress,
         private readonly fileProvider: ProvidesFileUploading & ProvidesFileLink
-    ) {}
+    ) { }
 
     profileData = async (): Promise<ProfileData> => {
         const rawEmail = this.email.address();
-        let profile = await prismaClient.user.findUnique({
+        const profile = await prismaClient.user.findUnique({
             where: { email: rawEmail },
             include: {
                 userPlan: {
@@ -26,20 +27,9 @@ export class ProfileService {
                 },
             },
         });
+
         if (!profile) {
-            // TODO - насколько вообще норм, что его тут может не быть? обсудить с Максом
-            profile = await prismaClient?.user.create({
-                data: { email: rawEmail },
-                include: {
-                    userPlan: {
-                        where: { status: "active" },
-                        include: {
-                            plan: { include: { userPlan: true } },
-                            price: true,
-                        },
-                    },
-                },
-            });
+            throw businessError('profile was not found', undefined, 404)
         }
 
         const activePlan = profile.userPlan.at(0);
@@ -74,17 +64,17 @@ export class ProfileService {
 
             subscription: activePlan
                 ? {
-                      planName: activePlan.plan.name,
-                      planSlug: activePlan.plan.slug,
-                      priceSlug: activePlan.price.slug,
-                      status: activePlan.status,
-                      cancelAtPeriodEnd: activePlan.cancelAtPeriodEnd,
-                      canceledAt: activePlan.canceledAt,
-                      currentPeriodEnd: activePlan.currentPeriodEnd,
-                      amount: activePlan.price.amount,
-                      currency: activePlan.price.currency,
-                      id: activePlan.id,
-                  }
+                    planName: activePlan.plan.name,
+                    planSlug: activePlan.plan.slug,
+                    priceSlug: activePlan.price.slug,
+                    status: activePlan.status,
+                    cancelAtPeriodEnd: activePlan.cancelAtPeriodEnd,
+                    canceledAt: activePlan.canceledAt,
+                    currentPeriodEnd: activePlan.currentPeriodEnd,
+                    amount: activePlan.price.amount,
+                    currency: activePlan.price.currency,
+                    id: activePlan.id,
+                }
                 : null,
             photoLink,
             birthDate: profile.birthDate,
