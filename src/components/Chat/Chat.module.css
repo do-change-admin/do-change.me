@@ -1,0 +1,16 @@
+/* скрытый класс-заглушка, чтобы импорт не был пустым */
+.hidden {
+    display: none;
+}
+
+#crisp-chatbox {
+    right: 0 !important;
+    bottom: 0 !important;
+}
+
+@media (max-width: 700px) {
+    #crisp-chatbox {
+        right: 1rem !important;
+        bottom: 5rem !important;
+    }
+}

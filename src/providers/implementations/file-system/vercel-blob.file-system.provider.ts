@@ -12,7 +12,7 @@ export class VercelBlobFileSystemProvider implements FileSystemProvider {
         }
     }
     async obtainDownloadLink(id: string): Promise<string | null> {
-        return (await head(id)).downloadUrl || (await head(id)).url
+        return (await head(id)).url || (await head(id)).downloadUrl
     }
 
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import {usePathname} from "next/navigation";
-import {MobileBottomNav, Sidebar, Header, SlideMenu, Scanner, AuctionAccess} from "@/components";
+import {MobileBottomNav, Sidebar, Header, SlideMenu, Scanner, AuctionAccess, Chat} from "@/components";
 import styles from "./Layout.module.css";
 import React from "react";
 import {useLocale} from "@/contexts/_locale.context";
@@ -9,6 +9,7 @@ import {allMessages} from "../../../locale";
 import {NextIntlClientProvider} from "next-intl";
 import {ActionIcon, Image} from "@mantine/core";
 import {useSlideMenu} from "@/contexts";
+import {useProfile} from "@/hooks";
 
 export function Layout({children}: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -16,6 +17,7 @@ export function Layout({children}: { children: React.ReactNode }) {
     const isTermsPage = pathname.includes("/terms");
     const isAdminPage = pathname.includes("/admin");
   const { openMenu, isOpen, closeMenu } = useSlideMenu();
+  const {data} = useProfile()
 
     const {locale} = useLocale();
     const messages = allMessages[locale] || allMessages["en"];
@@ -37,6 +39,7 @@ export function Layout({children}: { children: React.ReactNode }) {
         <>
             <SlideMenu/>
             <Scanner/>
+            <Chat />
             <div className={styles.app}>
                 <Sidebar/>
                 <div className={styles.mainContent}>

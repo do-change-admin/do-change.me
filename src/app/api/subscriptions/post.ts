@@ -29,9 +29,10 @@ export const handler = zodApiMethod_DEPRECATED(
     undefined,
     bodySchema,
     responseSchema,
-    async (payload) => {
+    async (payload, req) => {
         const { activeUser, planId, priceId } = payload;
-
+        const sourceLinkWithoutProto = req.headers.get('x-forwarded-host') || req.headers.get('host')
+        const sourceLink = sourceLinkWithoutProto ? `https://${sourceLinkWithoutProto}` : null
         let stripeCustomer = await prismaClient.stripeCustomer.findUnique({
             where: { userId: activeUser.id },
         });
@@ -71,8 +72,8 @@ export const handler = zodApiMethod_DEPRECATED(
                     priceId: planPrice.id,
                 },
             },
-            success_url: `${process.env.NEXTAUTH_URL}`,
-            cancel_url: `${process.env.NEXTAUTH_URL}/cancel`,
+            success_url: `${sourceLink || process.env.NEXTAUTH_URL}`,
+            cancel_url: `${sourceLink || process.env.NEXTAUTH_URL}/cancel`,
         });
 
         return { url: session.url };
