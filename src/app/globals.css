@@ -80,8 +80,6 @@ select {
 #crisp-chatbox .cc-1kr6o .cc-18ov6 {
   right: 1rem !important;
   bottom: 1rem !important;
-  position: fixed !important;
-  z-index: -2 !important;
 }
 
 * {

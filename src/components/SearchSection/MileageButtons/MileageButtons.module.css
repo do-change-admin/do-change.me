@@ -9,7 +9,7 @@
 }
 
 .mileageButtons button {
-    padding: 0.4rem 0.8rem;
+    padding: 0.2rem 0.8rem;
     border-radius: 1rem;
     border: 1px solid var(--text-texas-blue);
     background: white;
@@ -50,7 +50,7 @@
         margin-bottom: 1rem;
     }
     .mileageButtons button {
-        padding: 0.8rem;
+        padding: 0.3rem 0.8rem;
     }
 
 }

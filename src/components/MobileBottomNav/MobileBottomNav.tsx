@@ -3,7 +3,7 @@
 import React from 'react';
 import styles from './MobileBottomNav.module.css';
 import { useScanner, useSlideMenu } from '@/contexts';
-import { AuctionsServicesCards } from '@/components';
+import {AuctionsServicesCards, Chat} from '@/components';
 import { useNavMenu } from '@/hooks';
 import { FaQrcode } from 'react-icons/fa';
 
