@@ -24,34 +24,7 @@ import {ProfileForm} from "@/app/settings/(ProfileForm)/ProfileForm";
 import {FiAlertCircle, FiCheckCircle} from "react-icons/fi";
 
 export const ApplicationForm = () => {
-    const { data: profileData } = useProfile()
-    const { mutate: createAuctionAccessRequest } = useAuctionAccessRequestCreation()
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        await createAuctionAccessRequest({})
-    };
-
-    const requiredFields: (keyof ProfileData)[] = [
-        "firstName",
-        "lastName",
-        "phone",
-        "email",
-        "state",
-        "zipCode",
-        "address",
-        "photoLink",
-    ]
-
-    const validateUser =  requiredFields?.every((key) => {
-
-            if (profileData) {
-                const value = profileData[key];
-                return value !== null && value !== "" && value !== undefined;
-            }
-        });
-
-    console.log(profileData)
     return (
         <div className={styles.mainContainer}>
             {/* Left Section - Form */}
@@ -63,28 +36,7 @@ export const ApplicationForm = () => {
                             Complete your application to get exclusive access to premium car auctions
                         </p>
                     </div>
-                    {!validateUser && (
-                        <ProfileForm isNotSettings/>
-                    )}
-                    {!validateUser ? (
-                        <Group gap="xs" m="md">
-                            <FiAlertCircle color="red" size={18} />
-                            <Text c="red" size="sm">
-                                Please fill in all required fields to submit your application.
-                            </Text>
-                        </Group>
-                    ) : (
-                        <Group gap="xs" mt="lg" mb="lg">
-                            <FiCheckCircle color="green" size={18} />
-                            <Text c="green" size="sm">
-                                Your profile is complete. You can now submit your application.
-                            </Text>
-                        </Group>
-                    )}
-                    {/* Submit */}
-                    <Button onClick={handleSubmit} radius="lg" fullWidth disabled={!validateUser} h={50}>
-                        Submit Application <FaArrowRight />
-                    </Button>
+                    <ProfileForm isApplicationForm/>
                 </div>
             </div>
 

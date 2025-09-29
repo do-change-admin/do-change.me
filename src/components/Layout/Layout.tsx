@@ -39,10 +39,12 @@ export function Layout({children}: { children: React.ReactNode }) {
         <>
             <SlideMenu/>
             <Scanner/>
-            <Chat />
             <div className={styles.app}>
                 <Sidebar/>
                 <div className={styles.mainContent}>
+                    <div className={styles.chat}>
+                        <Chat />
+                    </div>
                   <ActionIcon
                       className={styles.auctionButton}
                       pos="fixed"

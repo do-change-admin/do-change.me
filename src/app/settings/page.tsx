@@ -126,7 +126,7 @@ export default function SettingsContent() {
                 </section>
             )}
             <Plans/>
-            <Group gap="xs" justify="right">
+            <Group gap="xs" justify="right" mt="2rem">
                 <Button
                     leftSection={<FaSignOutAlt />}
                     color="red"

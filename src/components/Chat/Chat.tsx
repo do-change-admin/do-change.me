@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import styles from "./Chat.module.css";
 
 export const Chat = () => {
     useEffect(() => {
@@ -17,5 +16,5 @@ export const Chat = () => {
         })();
     }, []);
 
-    return <div className={styles.hidden}></div>;
+    return null;
 };

@@ -77,6 +77,11 @@ select {
   color: black;
 }
 
+#crisp-chatbox .cc-1kr6o .cc-18ov6 {
+  right: 1rem !important;
+  bottom: 1rem !important;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -88,8 +93,8 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+@media (max-width: 700px) {
+  #crisp-chatbox .cc-1kr6o .cc-18ov6 {
+    bottom: 6rem !important;
   }
 }
