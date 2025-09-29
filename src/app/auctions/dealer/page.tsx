@@ -60,15 +60,15 @@ export default function Page() {
         if (index <= activeStep) setActiveStep(index);
         setActiveStep(index);
     };
-
-    useEffect(() => {
-        if (!data) {
-            return
-        }
-
-        setActiveStep(stepMapping[data.step])
-        setWaitingForAdmin(data.status === 'pending')
-    }, [data])
+    //
+    // useEffect(() => {
+    //     if (!data) {
+    //         return
+    //     }
+    //
+    //     setActiveStep(stepMapping[data.step])
+    //     setWaitingForAdmin(data.status === 'pending')
+    // }, [data])
 
 
     if (activeStep === 0 && !waitingForAdmin) {
