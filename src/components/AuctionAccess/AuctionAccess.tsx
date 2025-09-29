@@ -4,19 +4,20 @@ import styles from "./AuctionAccess.module.css";
 import { FaQrcode, FaHashtag } from "react-icons/fa";
 import {useProfile, useProfileModifying} from "@/hooks";
 import {Avatar, Button, FileInput, Modal, Text, TextInput, Title} from "@mantine/core";
-import {FormEvent, useState} from "react";
-import {notifications} from "@mantine/notifications";
+import { useState} from "react";
+import {useRouter} from "next/navigation";
+import {useSlideMenu} from "@/contexts";
 
 
 export const AuctionAccess = () => {
+    const router = useRouter();
+    const { closeMenu } = useSlideMenu();
     const { data: profileData } = useProfile()
     const [opened, setOpened] = useState(false);
     const [qrFile, setQrFile] = useState<File | null>(null);
     const [number, setNumber] = useState("");
-    const {mutate: modifyProfile, isPending: profileIsModifying} = useProfileModifying();
 
-    const handleSave = (e: FormEvent) => {
-    };
+
 
     return (
         <main className={styles.main}>
@@ -67,8 +68,10 @@ export const AuctionAccess = () => {
             </div>
             {!profileData?.auctionAccessNumber && (
                 <>
-                    <Button radius="lg" fullWidth variant="outline" onClick={() => setOpened(true)}>Add Auction Access</Button>
-                    <Button radius="lg" fullWidth bg="pink" >Get Access</Button>
+                    <Button h={40} mt={10}  radius="lg" fullWidth bg="pink" onClick={() => {
+                        router.push('/auctions/dealer')
+                        closeMenu()
+                    }}>Get Access</Button>
                 </>
             )}
         </main>

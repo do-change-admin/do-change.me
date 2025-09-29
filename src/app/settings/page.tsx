@@ -54,75 +54,77 @@ export default function SettingsContent() {
             <ProfileForm />
 
             {/*Subscription*/}
-            <section className={styles.card}>
-                <h2 className={styles.cardTitle}>Subscription</h2>
+            {profileData?.subscription && (
+                <section className={styles.card}>
+                    <h2 className={styles.cardTitle}>Subscription</h2>
 
-                {/* Current plan */}
-                <div id="current-plan" className={styles.planBox}>
-                    <div className={styles.planRow}>
-                        <div>
-                            <div className={styles.planTitleRow}>
-                                <h3 className={styles.planName}>
-                                    {profileData?.subscription?.planName}
-                                </h3>
-                                <span className={styles.planBadge}>
+                    {/* Current plan */}
+                    <div id="current-plan" className={styles.planBox}>
+                        <div className={styles.planRow}>
+                            <div>
+                                <div className={styles.planTitleRow}>
+                                    <h3 className={styles.planName}>
+                                        {profileData?.subscription?.planName}
+                                    </h3>
+                                    <span className={styles.planBadge}>
                                     Current
                                 </span>
-                            </div>
-                            <div className={styles.planMeta}>
-                                <div>
-                                    {profileData?.subscription?.amount}/month
                                 </div>
-                                <div>
-                                    Next billing:{" "}
-                                    {formattedDate}
+                                <div className={styles.planMeta}>
+                                    <div>
+                                        {profileData?.subscription?.amount}/month
+                                    </div>
+                                    <div>
+                                        Next billing:{" "}
+                                        {formattedDate}
+                                    </div>
+
                                 </div>
-
                             </div>
-                        </div>
 
-                        <div className={styles.actionsCol}>
-                            {/*<button className={styles.ghostBtn}>Change Plan</button>*/}
-                            <Button
-                                variant="light"
-                                c="red"
-                                leftSection={<FaTimes />}
-                                onClick={open}
-                            >
-                                Cancel
-                            </Button>
+                            <div className={styles.actionsCol}>
+                                {/*<button className={styles.ghostBtn}>Change Plan</button>*/}
+                                <Button
+                                    variant="light"
+                                    c="red"
+                                    leftSection={<FaTimes />}
+                                    onClick={open}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Billing history */}
-                {/*<div id="billing-history" className={styles.block}>*/}
-                {/*    <h3 className={styles.blockTitle}>Billing History</h3>*/}
+                    {/* Billing history */}
+                    {/*<div id="billing-history" className={styles.block}>*/}
+                    {/*    <h3 className={styles.blockTitle}>Billing History</h3>*/}
 
-                {/*    <div className={styles.historyList}>*/}
-                {/*        <HistoryItem title="Pro Plan - February 2024" date="Feb 15, 2024" amount="$29.00" />*/}
-                {/*        <HistoryItem title="Pro Plan - January 2024" date="Jan 15, 2024" amount="$29.00" />*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                    {/*    <div className={styles.historyList}>*/}
+                    {/*        <HistoryItem title="Pro Plan - February 2024" date="Feb 15, 2024" amount="$29.00" />*/}
+                    {/*        <HistoryItem title="Pro Plan - January 2024" date="Jan 15, 2024" amount="$29.00" />*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
-                {/* Payment method */}
-                {/*<div id="payment-method" className={styles.blockTop}>*/}
-                {/*    <h3 className={styles.blockTitle}>Payment Method</h3>*/}
+                    {/* Payment method */}
+                    {/*<div id="payment-method" className={styles.blockTop}>*/}
+                    {/*    <h3 className={styles.blockTitle}>Payment Method</h3>*/}
 
-                {/*    <div className={styles.pmRow}>*/}
-                {/*        <div className={styles.pmLeft}>*/}
-                {/*            <div className={styles.pmIcon}>*/}
-                {/*                <FaCcVisa />*/}
-                {/*            </div>*/}
-                {/*            <div>*/}
-                {/*                <p className={styles.pmNumber}>•••• •••• •••• 4242</p>*/}
-                {/*                <p className={styles.pmMeta}>Expires 12/26</p>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*        <button className={styles.ghostBtn}>Update</button>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-            </section>
+                    {/*    <div className={styles.pmRow}>*/}
+                    {/*        <div className={styles.pmLeft}>*/}
+                    {/*            <div className={styles.pmIcon}>*/}
+                    {/*                <FaCcVisa />*/}
+                    {/*            </div>*/}
+                    {/*            <div>*/}
+                    {/*                <p className={styles.pmNumber}>•••• •••• •••• 4242</p>*/}
+                    {/*                <p className={styles.pmMeta}>Expires 12/26</p>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+                    {/*        <button className={styles.ghostBtn}>Update</button>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+                </section>
+            )}
             <Plans/>
             <Group gap="xs" justify="right">
                 <Button
