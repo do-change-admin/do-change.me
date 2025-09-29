@@ -33,7 +33,7 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) 
                 <div className={styles.intro}>
                     <div className={styles.reportsAvailable}>
                         <FaCheckCircle className={styles.checkIcon} />
-                        <span>{reportsLeft.toString()} Reports Available</span>
+                        <span>Reports Available</span>
                     </div>
                     <p>Choose your preferred vehicle history provider</p>
                 </div>
