@@ -1,4 +1,5 @@
 .card {
+    position: relative;
     background: var(--bg);
     width: 100%;
     border: 1px solid var(--border);
@@ -6,6 +7,12 @@
     padding: 24px;
     margin-bottom: 24px;
     box-shadow: var(--shadow);
+}
+
+.cardAuction {
+    box-shadow: none;
+    border: none;
+    padding: 0;
 }
 
 .cardHeader {

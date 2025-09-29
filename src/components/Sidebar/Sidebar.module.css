@@ -94,7 +94,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     padding: 2rem;
     gap: 1rem;

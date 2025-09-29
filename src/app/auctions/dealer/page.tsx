@@ -26,7 +26,7 @@ const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
 }
 
 export default function Page() {
-    const [activeStep, setActiveStep] = useState(0);
+    const [activeStep, setActiveStep] = useState(1);
     const [waitingForAdmin, setWaitingForAdmin] = useState(false)
     const {data, isLoading} = useAuctionAccessRequest()
     const {data: profileData} = useProfile()

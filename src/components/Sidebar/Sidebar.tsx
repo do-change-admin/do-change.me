@@ -2,23 +2,27 @@
 
 import React from "react";
 import cn from "classnames";
-import { signOut } from "next-auth/react";
 import styles from "./Sidebar.module.css";
-import {FaSignOutAlt} from "react-icons/fa";
 import {usePathname} from "next/navigation";
-import { AuctionsServicesCards} from "@/components";
+import {AuctionAccess, AuctionsServicesCards} from "@/components";
 import {useSlideMenu} from "@/contexts";
 import {useNavMenu, useProfile} from "@/hooks";
-import {Avatar} from "@mantine/core";
+import {ActionIcon, Avatar, Image} from "@mantine/core";
 
 
 export const Sidebar = () => {
-    const { openMenu } = useSlideMenu();
+    const { openMenu, isOpen, closeMenu } = useSlideMenu();
     const { data: profileData } = useProfile()
 
     const handleOpenMenu = () => {
         openMenu(<AuctionsServicesCards/>);
     };
+
+
+    const handleOpenAuctionAccess = () => {
+        openMenu(<AuctionAccess/>);
+    };
+
     const { navLinks, handleClick } = useNavMenu(handleOpenMenu);
     const pathname = usePathname();
 
@@ -52,7 +56,12 @@ export const Sidebar = () => {
                                     ? pathname === "/" // главная строго
                                     : pathname.startsWith(link.href),
                             })}
-                            onClick={() => handleClick(link)}
+                            onClick={() => {
+                                handleClick(link)
+                                if (isOpen) {
+                                    closeMenu()
+                                }
+                            }}
                             role="button"
                             tabIndex={0}
                         >
@@ -64,12 +73,21 @@ export const Sidebar = () => {
 
                 {/* Footer */}
                 <div className={styles.footer}>
-                    <button
-                      className={styles.logout}
-                      onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                    {/*<button*/}
+                    {/*  className={styles.logout}*/}
+                    {/*  onClick={() => signOut({ callbackUrl: "/auth/login" })}*/}
+                    {/*>*/}
+                    {/*    <FaSignOutAlt/>*/}
+                    {/*</button>*/}
+                    <ActionIcon
+                        className={styles.auctionButton}
+                        onClick={handleOpenAuctionAccess}
+                        p="lg"
+                        radius="lg"
+                        bg="white"
                     >
-                        <FaSignOutAlt/>
-                    </button>
+                        <Image src="/auctionAccessIcon.png" w={40} h={40}/>
+                    </ActionIcon>
                 </div>
             </div>
         </>
