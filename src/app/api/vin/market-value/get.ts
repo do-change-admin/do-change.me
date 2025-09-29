@@ -79,13 +79,15 @@ export const method = zodApiMethod(schemas, {
             })
 
         }
-        await ActionsHistoryService.Register({
-            target: "market value", payload: {
-                vin: requestPayload.vin,
-                mileage: requestPayload.mileage,
-                result: { market_prices: result.market_prices }
-            }
-        })
+        if (!isDemoVin({ payload: requestPayload })) {
+            await ActionsHistoryService.Register({
+                target: "market value", payload: {
+                    vin: requestPayload.vin,
+                    mileage: requestPayload.mileage,
+                    result: { market_prices: result.market_prices }
+                }
+            })
+        }
     },
     beforehandler: noSubscriptionsGuard,
     ignoreBeforeHandler: isDemoVin

@@ -62,13 +62,14 @@ export const method = zodApiMethod(schemas, {
         return { salvageWasFound }
     },
     onSuccess: async ({ flags, result, requestPayload }) => {
-        console.log(result, 'result')
         if (!flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE]) {
             await prismaClient.salvageInfo.create({
                 data: { salvageWasFound: result.salvageWasFound, vin: requestPayload.vin }
             })
         }
-        await ActionsHistoryService.Register({ target: "salvage", payload: { vin: requestPayload.vin, result: result.salvageWasFound } })
+        if (!isDemoVin({ payload: requestPayload })) {
+            await ActionsHistoryService.Register({ target: "salvage", payload: { vin: requestPayload.vin, result: result.salvageWasFound } })
+        }
     },
     beforehandler: noSubscriptionsGuard,
     ignoreBeforeHandler: isDemoVin
