@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from "./SubscriptionPlans.module.css";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 import {
     FaCar,
     FaCheck,
@@ -15,9 +15,9 @@ import {
     FaShieldAlt,
     FaStar, FaUnlock
 } from "react-icons/fa";
-import {Badge, Text} from "@mantine/core";
-import {useRouter} from "next/navigation";
-import {usePlans, useSubscriptionCreation} from "@/hooks";
+import { Badge, Text } from "@mantine/core";
+import { useRouter } from "next/navigation";
+import { usePlans, useSubscriptionCreation } from "@/hooks";
 
 export const Plans = () => {
     const router = useRouter()
@@ -59,7 +59,7 @@ export const Plans = () => {
                             <FaCheck className={styles.checkGreen} />
                             <div>
                                 <strong>Market Value</strong> — <Badge size="lg"
-                                                                       variant="light">Unlimited</Badge>
+                                    variant="light">Unlimited</Badge>
                                 <p className={styles.featureNote}>Get accurate market pricing for any
                                     vehicle</p>
                             </div>
@@ -68,7 +68,7 @@ export const Plans = () => {
                             <FaCheck className={styles.checkGreen} />
                             <div>
                                 <strong>Total Loss Check</strong> — <Badge size="lg"
-                                                                           variant="light">Unlimited</Badge>
+                                    variant="light">Unlimited</Badge>
                                 <p className={styles.featureNote}>Verify if vehicle was declared a total
                                     loss</p>
                             </div>
@@ -77,7 +77,7 @@ export const Plans = () => {
                             <FaFileAlt className={styles.iconBlue} />
                             <div>
                                 <strong>Vehicle History Reports</strong> — <Badge size="lg"
-                                                                                  variant="light">Unlimited</Badge>
+                                    variant="light">Unlimited</Badge>
                                 <p className={styles.featureNote}>The best report options, such as Carfax
                                     and AutoCheck.</p>
                                 {/*<p className={styles.featureNote}>Additional reports: $0.95 each</p>*/}
@@ -170,7 +170,7 @@ export const Plans = () => {
                             <FaFileAlt className={styles.iconBlue} />
                             <div>
                                 <strong>Vehicle History Reports</strong> — <Badge size="lg"
-                                                                                  variant="light">Unlimited</Badge>
+                                    variant="light">Unlimited</Badge>
                                 <p className={styles.featureNote}>The best report options, such as Carfax
                                     and AutoCheck.</p>
                                 {/*<p className={styles.featureNote}>Additional reports: $0.95 each</p>*/}
@@ -190,16 +190,18 @@ export const Plans = () => {
                         </p>
                     </div>
 
-                    <button className={styles.buttonPurple} onClick={async () => {
-                        const { url } = await subscribe({
-                            body: {
-                                planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
-                                priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
-                            }
-                        })
-                        if (url) {
-                            router.push(url)
-                        }
+                    <button className={styles.buttonPurple} onClick={() => {
+                        router.push('/auctions/dealer')
+
+                        // const { url } = await subscribe({
+                        //     body: {
+                        //         planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
+                        //         priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
+                        //     }
+                        // })
+                        // if (url) {
+                        //     router.push(url)
+                        // }
                     }}>
                         <FaUnlock /> Get Access
                     </button>
