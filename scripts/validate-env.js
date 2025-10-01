@@ -1,11 +1,7 @@
 require("dotenv").config();
 const { z, ZodError } = require("zod");
 
-const buildEnvSchema = z.object({
-  NEXT_PUBLIC_BASIC_PRICE_ID: z.string().min(1, "Cannot be empty"),
-  NEXT_PUBLIC_PRO_PRICE_ID: z.string().min(1, "Cannot be empty"),
-  NEXT_PUBLIC_ENTERPRISE_PRICE_ID: z.string().min(1, "Cannot be empty"),
-});
+const buildEnvSchema = z.object();
 
 const runtimeEnvSchema = z.object({
   GOOGLE_CLIENT_ID: z.string().min(1, "Cannot be empty"),
@@ -18,7 +14,8 @@ const runtimeEnvSchema = z.object({
   NEXTAUTH_URL: z.url(),
   DATABASE_URL: z.string(),
   ADMIN_EMAILS: z.string(),
-  DEMO_VIN: z.string()
+  DEMO_VIN: z.string(),
+  BLOB_READ_WRITE_TOKEN: z.string()
 })
 
 function validateBuildEnv() {
