@@ -155,8 +155,26 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
 
     const handleSubmitApplocation = async (e: FormEvent) => {
         e.preventDefault();
-        await handleSave(e);
-        await createAuctionAccessRequest({});
+        await modifyProfile(
+            {body: {bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode}},
+            {
+                onSuccess: () => {
+                    notifications.show({
+                        title: 'Success',
+                        message: 'New profile data was successfully saved!',
+                        color: 'green',
+                    });
+                },
+                onError: (e) => {
+                    notifications.show({
+                        title: 'Error',
+                        message: `Error while saving`,
+                        color: 'red',
+                    });
+                },
+            }
+        );
+        createAuctionAccessRequest({})
     };
 
     if (
@@ -166,36 +184,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
         return <ProfileFormSkeleton />;
     }
 
-    const requiredFields = [
-        "firstName",
-        "lastName",
-        "phone",
-        "email",
-        "state",
-        "zipCode",
-        "address",
-        "photoLink",
-    ] as const;
-
-    const validateUser = requiredFields?.every((key) => {
-        if (profileData) {
-            const value =
-                profileData[key] ||
-                {
-                    firstName,
-                    lastName,
-                    phone,
-                    bio,
-                    birthDate,
-                    address,
-                    state,
-                    zipCode,
-                    email: profileData.email,
-                    photoLink: profileData.photoLink,
-                }[key];
-            return value !== null && value !== "" && value !== undefined;
-        }
-    });
+    const validateUser = !firstName || !lastName || !phone || !bio || !address || !state || !zipCode ;
 
     return (
         <section
@@ -512,7 +501,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
             {isApplicationForm && (
                 <Button
                     onClick={handleSubmitApplocation}
-                    disabled={!validateUser}
+                    disabled={validateUser}
                     fullWidth
                     radius="lg"
                     h={50}
