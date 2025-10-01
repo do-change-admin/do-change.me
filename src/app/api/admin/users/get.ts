@@ -11,7 +11,11 @@ const schemas = {
             z.object({
                 id: z.string(),
                 email: z.email(),
-                downloadedReports: z.number()
+                downloadedReports: z.number(),
+                subscription: z.object({
+                    type: z.enum(['auction access', 'basic']),
+                    isActive: z.boolean()
+                }).nullable()
             })
         )
     })
@@ -21,6 +25,7 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async () => {
+        const allUsers = await prismaClient.user.findMany({ include: { userPlan: { include: { plan: true } } } })
         const data = await prismaClient.usageAggregate.findMany({
             where: { featureKey: FeatureKey.Report },
             include: { user: true }
@@ -37,11 +42,15 @@ export const method = zodApiMethod(schemas, {
         }, {} as Record<string, { email: string, usage: number }>)
 
         return {
-            users: Object.entries(usageData).map(([id, data]) => {
+            users: allUsers.map((x) => {
                 return {
-                    id,
-                    email: data.email,
-                    downloadedReports: data.usage
+                    id: x.id,
+                    email: x.email,
+                    downloadedReports: usageData[x.id]?.usage ?? 0,
+                    subscription: x.userPlan?.[0] ? {
+                        isActive: x.userPlan?.[0].status === 'active',
+                        type: x.userPlan?.[0].plan.slug as any
+                    } : null
                 }
             })
         }
