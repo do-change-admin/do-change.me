@@ -1,13 +1,25 @@
-'use client'
+"use client";
 
-import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import styles from "./ProfileForm.module.css";
-import { Avatar, Button, Loader, LoadingOverlay, Select, Text } from "@mantine/core";
+import {
+    Avatar,
+    Button,
+    Loader,
+    LoadingOverlay,
+    Select,
+    Text,
+} from "@mantine/core";
 import { FaArrowRight, FaCamera } from "react-icons/fa";
-import { useAuctionAccessRequestCreation, useProfile, useProfileModifying, useUploadPhoto } from "@/hooks";
+import {
+    useAuctionAccessRequestCreation,
+    useProfile,
+    useProfileModifying,
+    useUploadPhoto,
+} from "@/hooks";
 import { notifications } from "@mantine/notifications";
 import { ProfileFormSkeleton } from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
-import { DateInput } from '@mantine/dates';
+import { DateInput } from "@mantine/dates";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import cn from "classnames";
 import { ProfileData } from "@/services";
@@ -65,19 +77,24 @@ export const STATES = [
     { value: "WY", label: "Wyoming (WY)" },
 ];
 
-export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplicationForm = false }) => {
+export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
+    isApplicationForm = false,
+}) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [bio, setBio] = useState("");
     const [birthDate, setBirthDate] = useState<Date>();
-    const [address, setAddress] = useState<string | null>(null)
-    const [state, setState] = useState<string | null>(null)
-    const [zipCode, setZipCode] = useState<string | null>(null)
+    const [address, setAddress] = useState<string | null>(null);
+    const [state, setState] = useState<string | null>(null);
+    const [zipCode, setZipCode] = useState<string | null>(null);
     const { data: profileData, isLoading: profileIsLoading } = useProfile();
-    const { mutate: modifyProfile, isPending: profileIsModifying } = useProfileModifying();
-    const { mutate: uploadPhoto, isPending: isPendingUploadPhoto } = useUploadPhoto();
-    const { mutate: createAuctionAccessRequest, isPending } = useAuctionAccessRequestCreation()
+    const { mutateAsync: modifyProfile, isPending: profileIsModifying } =
+        useProfileModifying();
+    const { mutate: uploadPhoto, isPending: isPendingUploadPhoto } =
+        useUploadPhoto();
+    const { mutateAsync: createAuctionAccessRequest, isPending } =
+        useAuctionAccessRequestCreation();
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files?.length) return;
@@ -89,37 +106,47 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
 
     useEffect(() => {
         if (!profileIsLoading && profileData) {
-            setFirstName(profileData.firstName)
-            setLastName(profileData.lastName)
-            setPhone(profileData.phone)
-            setBio(profileData.bio)
-            setState(profileData.state)
-            setAddress(profileData.address)
-            setZipCode(profileData.zipCode)
+            setFirstName(profileData.firstName);
+            setLastName(profileData.lastName);
+            setPhone(profileData.phone);
+            setBio(profileData.bio);
+            setState(profileData.state);
+            setAddress(profileData.address);
+            setZipCode(profileData.zipCode);
             if (profileData.birthDate) {
-                setBirthDate(new Date(profileData.birthDate))
+                setBirthDate(new Date(profileData.birthDate));
             }
         }
-    }, [profileIsLoading])
+    }, [profileIsLoading]);
 
-
-    const handleSave = (e: FormEvent) => {
+    const handleSave = async (e: FormEvent) => {
         e.preventDefault();
-        modifyProfile(
-            { body: { bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode } },
+        await modifyProfile(
+            {
+                body: {
+                    bio,
+                    firstName,
+                    lastName,
+                    phone,
+                    birthDate: birthDate!,
+                    address,
+                    state,
+                    zipCode,
+                },
+            },
             {
                 onSuccess: () => {
                     notifications.show({
-                        title: 'Success',
-                        message: 'New profile data was successfully saved!',
-                        color: 'green',
+                        title: "Success",
+                        message: "New profile data was successfully saved!",
+                        color: "green",
                     });
                 },
                 onError: (e) => {
                     notifications.show({
-                        title: 'Error',
+                        title: "Error",
                         message: `Error while saving`,
-                        color: 'red',
+                        color: "red",
                     });
                 },
             }
@@ -128,15 +155,16 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
 
     const handleSubmitApplocation = async (e: FormEvent) => {
         e.preventDefault();
-        await handleSave(e)
-        await createAuctionAccessRequest({})
+        await handleSave(e);
+        await createAuctionAccessRequest({});
     };
 
-
-    if (!isApplicationForm && (isPending || profileIsLoading || profileIsModifying)) {
-        return <ProfileFormSkeleton />
+    if (
+        !isApplicationForm &&
+        (isPending || profileIsLoading || profileIsModifying)
+    ) {
+        return <ProfileFormSkeleton />;
     }
-
 
     const requiredFields = [
         "firstName",
@@ -147,40 +175,56 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
         "zipCode",
         "address",
         "photoLink",
-    ] as const
+    ] as const;
 
     const validateUser = requiredFields?.every((key) => {
         if (profileData) {
-            const value = profileData[key] || ({
-                firstName,
-                lastName,
-                phone,
-                bio,
-                birthDate,
-                address,
-                state,
-                zipCode,
-                email: profileData.email,
-                photoLink: profileData.photoLink
-            })[key];
+            const value =
+                profileData[key] ||
+                {
+                    firstName,
+                    lastName,
+                    phone,
+                    bio,
+                    birthDate,
+                    address,
+                    state,
+                    zipCode,
+                    email: profileData.email,
+                    photoLink: profileData.photoLink,
+                }[key];
             return value !== null && value !== "" && value !== undefined;
         }
     });
 
     return (
-        <section className={cn(styles.card, {
-            [styles.cardAuction]: isApplicationForm
-        })}>
-            <LoadingOverlay visible={isApplicationForm && (isPending || profileIsLoading || profileIsModifying)} zIndex={1000} overlayProps={{ radius: "lg", blur: 2 }} loaderProps={{ color: 'pink', type: 'bars' }} />
+        <section
+            className={cn(styles.card, {
+                [styles.cardAuction]: isApplicationForm,
+            })}
+        >
+            <LoadingOverlay
+                visible={
+                    isApplicationForm &&
+                    (isPending || profileIsLoading || profileIsModifying)
+                }
+                zIndex={1000}
+                overlayProps={{ radius: "lg", blur: 2 }}
+                loaderProps={{ color: "pink", type: "bars" }}
+            />
             <div className={styles.cardHeader}>
                 <h2 className={styles.cardTitle}>Profile Information</h2>
                 {!isApplicationForm && (
                     <Button
                         onClick={handleSave}
                         disabled={profileIsModifying}
-                        leftSection={profileIsModifying ? <Loader size="xs" color="white" /> : null}
+                        leftSection={
+                            profileIsModifying ? (
+                                <Loader size="xs" color="white" />
+                            ) : null
+                        }
                     >
-                        {profileIsModifying ? 'Saving...' : 'Save'}
+                        {profileIsModifying ? "Saving..." : "Save"}
                     </Button>
                 )}
             </div>
@@ -191,20 +235,38 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         alt="User avatar"
                         className={styles.avatar}
                     />
-                    <button className={styles.avatarBtn} aria-label="Change photo">
+                    <button
+                        className={styles.avatarBtn}
+                        aria-label="Change photo"
+                    >
                         <FaCamera className={styles.avatarIcon} />
                     </button>
                 </div>
 
                 <div className={styles.avatarInfo}>
-                    <h3 className={styles.userName}>{profileData?.firstName} {profileData?.lastName}</h3>
+                    <h3 className={styles.userName}>
+                        {profileData?.firstName} {profileData?.lastName}
+                    </h3>
                     <p className={styles.userEmail}>{profileData?.email}</p>
-                    <label htmlFor='photo-upload'>
+                    <label htmlFor="photo-upload">
                         <p className={styles.linkBtn}>Change Avatar</p>
                     </label>
-                    <input style={{ display: 'none' }} id='photo-upload' type='file' onChange={handleFileChange} />
-                    {(isApplicationForm && !Boolean(profileData?.photoLink)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <input
+                        style={{ display: "none" }}
+                        id="photo-upload"
+                        type="file"
+                        onChange={handleFileChange}
+                    />
+                    {isApplicationForm && !Boolean(profileData?.photoLink) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -220,8 +282,16 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                     />
-                    {(isApplicationForm && !Boolean(firstName)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(firstName) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -235,8 +305,16 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         value={profileData?.lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
-                    {(isApplicationForm && !Boolean(lastName)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(lastName) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -247,7 +325,11 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                     <label className={styles.label}>Date of birth</label>
                     <DateInput
                         placeholder="Pick date"
-                        value={birthDate ? birthDate.toISOString().split("T")[0] : null}
+                        value={
+                            birthDate
+                                ? birthDate.toISOString().split("T")[0]
+                                : null
+                        }
                         onChange={(x) => setBirthDate(new Date(x!))}
                         classNames={{
                             input: styles.inputDateInput,
@@ -257,8 +339,16 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         m={0}
                         p={0}
                     />
-                    {(isApplicationForm && !Boolean(birthDate)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(birthDate) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -274,8 +364,16 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         value={profileData?.email}
                         disabled
                     />
-                    {(isApplicationForm && !Boolean(profileData?.email)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(profileData?.email) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -290,8 +388,16 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                     />
-                    {(isApplicationForm && !Boolean(phone)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(phone) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -304,11 +410,19 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         type="tel"
                         className={styles.input}
                         placeholder="Enter your street address"
-                        value={address || ''}
+                        value={address || ""}
                         onChange={(e) => setAddress(e.target.value)}
                     />
-                    {(isApplicationForm && !Boolean(address)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(address) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -321,11 +435,19 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         type="tel"
                         className={styles.input}
                         placeholder="Enter Zip Code"
-                        value={zipCode || ''}
+                        value={zipCode || ""}
                         onChange={(e) => setZipCode(e.target.value)}
                     />
-                    {(isApplicationForm && !Boolean(zipCode)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(zipCode) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -347,8 +469,16 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                             input: styles.inputDateInput,
                         }}
                     />
-                    {(isApplicationForm && !Boolean(state)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(state) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -363,8 +493,16 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
                     />
-                    {(isApplicationForm && !Boolean(bio)) && (
-                        <Text c="red" size="sm" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {isApplicationForm && !Boolean(bio) && (
+                        <Text
+                            c="red"
+                            size="sm"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 5,
+                            }}
+                        >
                             <AiOutlineExclamationCircle />
                             This field is required
                         </Text>
@@ -379,7 +517,11 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({ isApplication
                     radius="lg"
                     h={50}
                     mt={32}
-                    leftSection={(profileIsModifying || isPending) ? <Loader size="xs" color="white" /> : null}
+                    leftSection={
+                        profileIsModifying || isPending ? (
+                            <Loader size="xs" color="white" />
+                        ) : null
+                    }
                 >
                     Save & Submit Application <FaArrowRight />
                 </Button>
