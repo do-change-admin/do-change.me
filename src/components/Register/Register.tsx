@@ -186,7 +186,7 @@ export const Register = () => {
                                 />
                                 <span>
                                     I agree to{" "}
-                                    <Link href="/terms" className={styles.link}>
+                                    <Link href="/terms" target="_blank" rel="noopener noreferrer" className={styles.link}>
                                         Terms and Privacy
                                     </Link>
                                 </span>

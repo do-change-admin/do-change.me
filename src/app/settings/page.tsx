@@ -3,18 +3,18 @@
 import styles from "./page.module.css";
 import { FaCheck, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { ProfileForm } from "./(ProfileForm)/ProfileForm";
-import {Button, Group, Modal, Text} from "@mantine/core";
+import { Button, Group, Modal, Text } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import { useDisclosure } from "@mantine/hooks";
 import { useProfile, useSubscriptionDeletion } from "@/hooks";
-import {Plans} from "@/components/SubscriptionPlans/Plans";
+import { Plans } from "@/components/SubscriptionPlans/Plans";
 
 export default function SettingsContent() {
     const [opened, { open, close }] = useDisclosure(false);
     const { data: profileData, isLoading: profileIsLoading } = useProfile();
     const { mutate: cancel } = useSubscriptionDeletion();
 
-    const formattedDate = profileData?.subscription?.currentPeriodEnd ?  new Date(profileData?.subscription?.currentPeriodEnd).toLocaleDateString("en-US", {
+    const formattedDate = profileData?.subscription?.currentPeriodEnd ? new Date(profileData?.subscription?.currentPeriodEnd).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -46,6 +46,10 @@ export default function SettingsContent() {
                                     profileData?.subscription?.id ||
                                     0,
                             },
+                        }, {
+                            onSuccess: () => {
+                                close()
+                            }
                         })}>
                         Yes
                     </Button>
@@ -67,15 +71,15 @@ export default function SettingsContent() {
                                         {profileData?.subscription?.planName}
                                     </h3>
                                     <span className={styles.planBadge}>
-                                    Current
-                                </span>
+                                        Current
+                                    </span>
                                 </div>
                                 <div className={styles.planMeta}>
                                     <div>
                                         {profileData?.subscription?.amount}/month
                                     </div>
                                     <div>
-                                        Next billing:{" "}
+                                        {profileData.subscription.cancelAtPeriodEnd ? 'Subscription ends' : 'Next billing'}:{" "}
                                         {formattedDate}
                                     </div>
 
@@ -84,14 +88,14 @@ export default function SettingsContent() {
 
                             <div className={styles.actionsCol}>
                                 {/*<button className={styles.ghostBtn}>Change Plan</button>*/}
-                                <Button
+                                {profileData?.subscription?.status === 'active' ? <Button
                                     variant="light"
                                     c="red"
                                     leftSection={<FaTimes />}
                                     onClick={open}
                                 >
                                     Cancel
-                                </Button>
+                                </Button> : <></>}
                             </div>
                         </div>
                     </div>
@@ -125,7 +129,7 @@ export default function SettingsContent() {
                     {/*</div>*/}
                 </section>
             )}
-            <Plans/>
+            {profileData?.subscription && profileData?.subscription.status === 'active' ? <></> : <Plans />}
             <Group gap="xs" justify="right" mt="2rem">
                 <Button
                     leftSection={<FaSignOutAlt />}
