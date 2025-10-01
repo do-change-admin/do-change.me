@@ -174,7 +174,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                 },
             }
         );
-        createAuctionAccessRequest({})
+        await createAuctionAccessRequest({})
     };
 
     if (
