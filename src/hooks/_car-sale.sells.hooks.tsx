@@ -9,7 +9,7 @@ type API = CarSaleSellsAPI
 type DetailsAPI = CarSaleSellsDetailAPI
 
 const apiURL = '/api/car-sale/sells'
-const detailsApiURL = '/api/car-sale/sells'
+const detailsApiURL = '/api/car-sale/sells/details'
 
 export const useCarsForSaleSellsList = (pagination: PaginationModel, filters?: {
     userId?: string, status?: CarSaleStatus

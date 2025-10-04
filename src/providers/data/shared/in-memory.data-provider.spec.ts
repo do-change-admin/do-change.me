@@ -8,7 +8,7 @@ type List = { id: string, name: string }
 
 type InMemoryDataProvider = DataCRUDProvider<
     CRUDModels<List, Detail>,
-    CRUDSearchPayload<{}, { id: string }>,
+    CRUDSearchPayload<{}, { id: string, name: string }>,
     CRUDActionsPayload<{ name: string, extraField: string }, { extraField: string }>
 >
 
@@ -27,7 +27,7 @@ test('empty by default', async () => {
 
 test('can find added item by id', async () => {
     const { id } = await provider.create({ name: 'hello', extraField: 'world' })
-    const data = await provider.details({ id })
+    const data = await provider.details({ id, name: 'hello' })
     expect(data).toBeTruthy()
     expect(data!.name).toBe('hello')
     expect(data!.extraField).toBe('world')
@@ -47,4 +47,9 @@ test('pagination', async () => {
     expect(thirdPage.length).toBe(0)
     const secondPageOfThree = await provider.list({ name: undefined }, { pageSize: 1, zeroBasedIndex: 3 })
     expect(secondPageOfThree.length).toBe(1)
+
+    const { id } = await provider.create({ name: 'sup', extraField: 'af' })
+    const data = await provider.details({ id, name: 'sup' })
+    expect(data).toBeTruthy()
+    expect(data!.extraField).toBe('af')
 })

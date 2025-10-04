@@ -24,7 +24,8 @@ export class CarSaleSellsService {
                 id: x.id,
                 licencePlate: x.licencePlate,
                 status: x.status,
-                userMail: x.userMail
+                userMail: x.userMail,
+                userId: x.userId
             }
         })
     }
