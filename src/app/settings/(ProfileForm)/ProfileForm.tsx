@@ -184,7 +184,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
         return <ProfileFormSkeleton />;
     }
 
-    const validateUser = !firstName || !lastName || !phone || !bio || !address || !state || !zipCode;
+    const validateUser = !firstName || !lastName || !phone || !bio || !address || !state || !zipCode || !profileData?.photoLink;
 
     return (
         <section

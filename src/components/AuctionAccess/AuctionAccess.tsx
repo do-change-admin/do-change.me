@@ -2,11 +2,11 @@
 
 import styles from "./AuctionAccess.module.css";
 import { FaQrcode, FaHashtag } from "react-icons/fa";
-import {useProfile, useProfileModifying} from "@/hooks";
-import {Avatar, Button, FileInput, Modal, Text, TextInput, Title} from "@mantine/core";
-import { useState} from "react";
-import {useRouter} from "next/navigation";
-import {useSlideMenu} from "@/contexts";
+import { useProfile } from "@/hooks";
+import { Avatar, Button, FileInput, Modal, Text, TextInput, Title } from "@mantine/core";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSlideMenu } from "@/contexts";
 
 
 export const AuctionAccess = () => {
@@ -57,18 +57,22 @@ export const AuctionAccess = () => {
                 </form>
             </Modal>
             {/* QR Section */}
-            <Avatar radius="lg"  w="100%" h={200} className={styles.photo} src={profileData?.photoLink || ''} alt=""/>
+            <Avatar radius="lg" w="100%" h={200} className={styles.photo} src={profileData?.photoLink || ''} alt="" />
             <Text fw="bold" fs="lg">{profileData?.firstName} {profileData?.lastName}</Text>
             <div className={styles.accessNumber}>
                 <p className={styles.accessLabel}>Auction Access Number</p>
                 <p className={styles.accessValue}>{profileData?.auctionAccessNumber ?? "__-____-____"}</p>
             </div>
             <div className={styles.qrBox}>
-                {profileData?.auctionAccessQRLink ?? <FaQrcode className={styles.qrIcon} />}
+                {profileData?.auctionAccessQRLink ? <img
+                    className={styles.qrIcon}
+                    src={profileData?.auctionAccessQRLink}
+                    alt="Profile auction access QR code"
+                /> : <FaQrcode className={styles.qrIcon} />}
             </div>
             {!profileData?.auctionAccessNumber && (
                 <>
-                    <Button h={40} mt={10}  radius="lg" fullWidth bg="pink" onClick={() => {
+                    <Button h={40} mt={10} radius="lg" fullWidth bg="pink" onClick={() => {
                         router.push('/auctions/dealer')
                         closeMenu()
                     }}>Get Access</Button>
