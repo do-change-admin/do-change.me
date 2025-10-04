@@ -1,5 +1,4 @@
 import { carSaleStatusSchema } from "@/entities";
-import { createCarForSalePayloadSchema } from "@/providers";
 import { paginationSchema } from "@/value-objects";
 import z from "zod";
 

@@ -1,17 +1,14 @@
 import z from "zod";
-import { carForSaleAdminDetailSchema, carForSaleAdminListSchema, carSaleStatusSchema } from "@/entities";
+import { carForSaleSellsDetailSchema, carForSaleSellsListSchema, carSaleStatusSchema } from "@/entities";
 import { CRUDActionsPayload, CRUDModels, CRUDSearchPayload, DataCRUDProvider } from "../shared";
 
-export const carForSaleDetailDataLayerSchema = carForSaleAdminDetailSchema.omit({
-    userMail: true,
+export const carForSaleDetailDataLayerSchema = carForSaleSellsDetailSchema.omit({
     photoLink: true
 }).extend({
     photoId: z.string().nonempty()
 })
 
-export const carForSaleListDataLayerSchema = carForSaleAdminListSchema.omit({
-    userMail: true,
-}).extend({
+export const carForSaleListDataLayerSchema = carForSaleSellsListSchema.extend({
     userId: z.string().nonempty()
 })
 
@@ -25,7 +22,7 @@ export const findCarsForSaleListPayloadSchema = z.object({
     status: carSaleStatusSchema.optional()
 })
 
-export const createCarForSalePayloadSchema = carForSaleAdminDetailSchema.omit({
+export const createCarForSalePayloadSchema = carForSaleSellsDetailSchema.omit({
     userMail: true,
     id: true,
     status: true,

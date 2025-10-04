@@ -61,7 +61,8 @@ export class CarSaleUserService {
             licencePlate: payload.licencePlate,
             mileage: payload.mileage,
             photoId: photoId,
-            userId: this.userId
+            userId: this.userId,
+
         })
     }
 }

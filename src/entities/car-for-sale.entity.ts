@@ -20,12 +20,12 @@ export const carForSaleUserListSchema = carForSaleUserDetailSchema.pick({
     status: true
 })
 
-export const carForSaleAdminDetailSchema = carForSaleUserDetailSchema.extend({
+export const carForSaleSellsDetailSchema = carForSaleUserDetailSchema.extend({
     userId: z.string().nonempty(),
     userMail: z.email(),
 })
 
-export const carForSaleAdminListSchema = carForSaleAdminDetailSchema.pick({
+export const carForSaleSellsListSchema = carForSaleSellsDetailSchema.pick({
     id: true,
     licencePlate: true,
     status: true,
@@ -33,7 +33,9 @@ export const carForSaleAdminListSchema = carForSaleAdminDetailSchema.pick({
 })
 
 export type CarSaleStatus = z.infer<typeof carSaleStatusSchema>
+
 export type CarForSaleUserDetailModel = z.infer<typeof carForSaleUserDetailSchema>
 export type CarForSaleUserListModel = z.infer<typeof carForSaleUserListSchema>
-export type CarForSaleAdminDetailModel = z.infer<typeof carForSaleAdminDetailSchema>
-export type CarForSaleAdminListModel = z.infer<typeof carForSaleAdminListSchema>
+
+export type CarForSaleSellsDetailModel = z.infer<typeof carForSaleSellsDetailSchema>
+export type CarForSaleSellsListModel = z.infer<typeof carForSaleSellsListSchema>

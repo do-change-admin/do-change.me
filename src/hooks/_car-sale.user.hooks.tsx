@@ -45,7 +45,7 @@ export const useCarForSaleUserPosting = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['cars-for-sale', 'user', 'list']
+                queryKey: ['cars-for-sale', 'user']
             })
         }
     })

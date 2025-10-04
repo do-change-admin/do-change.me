@@ -5,13 +5,15 @@ import { generateInMemoryCRUDProvider } from "../../shared";
 const CarsForSaleInMemoryDataProvider = generateInMemoryCRUDProvider<CarsForSaleDataProvider>({
     mappers: {
         createPayloadToDetail: (x) => {
+            const id = v4()
             return {
-                id: v4(),
+                id,
                 licencePlate: x.licencePlate,
                 photoId: x.photoId,
                 status: 'review',
                 userId: x.userId,
-                mileage: x.mileage
+                mileage: x.mileage,
+                userMail: `${id}@test.test`
             }
         }
     }
