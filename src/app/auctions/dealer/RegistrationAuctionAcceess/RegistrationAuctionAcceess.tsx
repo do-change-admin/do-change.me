@@ -176,7 +176,7 @@ export const RegistrationSteps = () => {
                                 </label>
                                 {license?.name}
                                 <label className={styles.uploadZone} htmlFor="license_upload">
-                                    <FaCloudUploadAlt size={40} className={styles.iconGray} />
+                                    {license?.name ? <></> : <FaCloudUploadAlt size={40} className={styles.iconGray} />}
                                     <div>
                                         <p>{license?.name ? 'You successfully uploaded your license! Click to change image.' : 'Click to upload or drag and drop'}</p>
                                     </div>
@@ -203,7 +203,7 @@ export const RegistrationSteps = () => {
                                         2. Sign it
                                     </div></> : <></>}
                                 <label className={styles.uploadZone} htmlFor="agreement_upload">
-                                    <FaCloudUploadAlt size={40} className={styles.iconGray} />
+                                    {agreement?.name ? <></> : <FaCloudUploadAlt size={40} className={styles.iconGray} />}
                                     <div>
                                         <p> {agreement?.name ? 'You successfully uploaded signed agreement! Click to change image.' : '3. Upload signed agreement by clicking or dragging it here'}</p>
                                     </div>

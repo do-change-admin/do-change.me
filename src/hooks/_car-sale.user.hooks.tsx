@@ -3,7 +3,7 @@ import { CarSaleUserAPI } from "@/app/api/car-sale/user/route";
 import { CarSaleStatus } from "@/entities";
 import { apiRequest } from "@/lib/apiFetch";
 import { PaginationModel } from "@/value-objects";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type API = CarSaleUserAPI
 type DetailsAPI = CarSaleUserDetailsAPI
@@ -13,7 +13,7 @@ const detailsApiURL = '/api/car-sale/user/details'
 
 export const useCarsForSaleUserList = (pagination: PaginationModel, status?: CarSaleStatus) => {
     return useQuery<API['GET']['response'], API['GET']['error']>({
-        queryKey: ['cars-for-sale', 'user', 'list', status, pagination.zeroBasedIndex, pagination.pageSize],
+        queryKey: ['cars-for-sale', 'user', 'list', status || 'all', pagination.zeroBasedIndex, pagination.pageSize],
         queryFn: () => {
             return apiRequest(apiURL, 'GET')({
                 query: {
@@ -27,6 +27,7 @@ export const useCarsForSaleUserList = (pagination: PaginationModel, status?: Car
 }
 
 export const useCarForSaleUserPosting = () => {
+    const queryClient = useQueryClient()
     return useMutation<void, API['POST']['error'], {
         mileage: number;
         licencePlate: string;
@@ -37,9 +38,14 @@ export const useCarForSaleUserPosting = () => {
 
             formData.set("photo", payload.photo)
 
-            await fetch(`${apiURL}?mileage=${payload.mileage}&licencePlatem=${payload.licencePlate}`, {
+            await fetch(`${apiURL}?mileage=${payload.mileage}&licencePlate=${payload.licencePlate}`, {
                 body: formData,
                 method: "POST"
+            })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['cars-for-sale', 'user', 'list']
             })
         }
     })
