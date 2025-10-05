@@ -9,7 +9,8 @@ export const FunctionalProviderTokens = {
 }
 
 export const ServicesTokens = {
-    carSaleUserFactory: Symbol.for('CAR-SALE-USER-SERVICE-FACTORY')
+    carSaleUserFactory: Symbol.for('CAR-SALE-USER-SERVICE-FACTORY'),
+    carSaleSells: Symbol.for('CAR-SALE-SELLS-SERVICE')
 }
 
 export type CarSaleUserServiceFactory = (userId: string) => CarSaleUserService

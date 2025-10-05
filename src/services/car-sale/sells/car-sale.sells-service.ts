@@ -1,13 +1,16 @@
-import { CarsForSaleDataProvider } from "@/providers";
+import { type CarsForSaleDataProvider } from "@/providers";
 import { FindCarsForSaleSellsServicePayload, FindSpecificCarForSaleSellsServicePayload, SetCarSaleStatusSellsServicePayload } from "./car-sale.sells-service.models";
 import { CarForSaleSellsDetailModel, CarForSaleSellsListModel } from "@/entities";
 import { businessError } from "@/lib/errors";
-import { FileSystemProvider } from "@/providers/contracts";
+import { type FileSystemProvider } from "@/providers/contracts";
+import { inject, injectable } from "inversify";
+import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
 
+@injectable()
 export class CarSaleSellsService {
     public constructor(
-        private readonly dataProvider: CarsForSaleDataProvider,
-        private readonly fileSystemProvider: FileSystemProvider
+        @inject(DataProviderTokens.carsForSale) private readonly dataProvider: CarsForSaleDataProvider,
+        @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider
     ) { }
 
     list = async (payload: FindCarsForSaleSellsServicePayload): Promise<CarForSaleSellsListModel[]> => {

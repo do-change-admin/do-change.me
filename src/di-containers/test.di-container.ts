@@ -3,14 +3,16 @@ import { Container } from 'inversify'
 import { CarSaleUserServiceFactory, DataProviderTokens, FunctionalProviderTokens, ServicesTokens } from './tokens.di-container'
 import { FileSystemProvider } from '@/providers/contracts'
 import { PublicFolderFileSystemProvider } from '@/providers/implementations'
-import { CarSaleUserService } from '@/services'
+import { CarSaleSellsService, CarSaleUserService } from '@/services'
 
 const container = new Container()
 
 const registerDataProviders = () => {
+    const carsForSaleInMemoryDataProvider = new CarsForSaleInMemoryDataProvider()
+
     container
         .bind<CarsForSaleDataProvider>(DataProviderTokens.carsForSale)
-        .to(CarsForSaleInMemoryDataProvider).inSingletonScope()
+        .toConstantValue(carsForSaleInMemoryDataProvider)
 }
 
 const registerFunctionalProviders = () => {
@@ -33,6 +35,9 @@ const registerServices = () => {
                 )
             }
         })
+    container
+        .bind<CarSaleSellsService>(ServicesTokens.carSaleSells)
+        .to(CarSaleSellsService)
 }
 
 registerDataProviders()
