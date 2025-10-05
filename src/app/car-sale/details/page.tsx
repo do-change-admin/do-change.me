@@ -10,7 +10,7 @@ export default function () {
     const router = useRouter()
 
     if (isFetching) {
-        return <>Loading...</>
+        return <>Thinking...</>
     }
 
     if (!data) {
