@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { FaCheck } from "react-icons/fa";
-import styles from "./page.module.css";
+import styles from "./plug.module.css";
+import {Image} from "@mantine/core";
 
 export default function Sell() {
     return (
@@ -32,7 +33,7 @@ export default function Sell() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <img
+                        <Image
                             className={styles.image}
                             src="https://storage.googleapis.com/uxpilot-auth.appspot.com/b657407fff-b0a7a6e3676de140b0e2.png"
                             alt="Toyota car connected to marketplaces"
