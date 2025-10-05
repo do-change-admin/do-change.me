@@ -11,20 +11,13 @@ type DetailsAPI = CarSaleSellsDetailAPI
 const apiURL = '/api/car-sale/admin'
 const detailsApiURL = '/api/car-sale/admin/details'
 
-export const useCarsForSaleAdminList = (pagination: PaginationModel, filters?: {
-    userId?: string, status?: CarSaleStatus
-}) => {
+export const useCarsForSaleAdminList = (queryPayload: API['GET']['payload']['query']) => {
     return useQuery<API['GET']['response'], API['GET']['error']>({
         queryKey: ['cars-for-sale', 'sells', 'list'],
         queryFn: () => {
             return apiRequest(apiURL, 'GET')({
-                query: {
-                    pageSize: pagination.pageSize,
-                    zeroBasedIndex: pagination.zeroBasedIndex,
-                    status: filters?.status,
-                    userId: filters?.userId
-                }
-            } satisfies API['GET']['payload'])
+                query: queryPayload
+            })
         }
     })
 }

@@ -8,12 +8,17 @@ const CarsForSaleInMemoryDataProvider = generateInMemoryCRUDProvider<CarsForSale
             const id = v4()
             return {
                 id,
-                licencePlate: x.licencePlate,
-                photoId: x.photoId,
+                vin: x.vin,
+                photoIds: x.photoIds,
                 status: 'pending publisher',
                 userId: x.userId,
                 mileage: x.mileage,
                 userMail: `${id}@test.test`,
+                make: x.make,
+                marketplaceLinks: [],
+                model: x.model,
+                price: x.price,
+                year: x.year
             }
         }
     }

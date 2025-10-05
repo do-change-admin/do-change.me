@@ -1,3 +1,4 @@
+import { VinSchema } from "@/schemas";
 import z from "zod";
 
 export const carSaleStatusSchema = z.enum([
@@ -10,17 +11,18 @@ export const carSaleStatusSchema = z.enum([
 
 export const carForSaleUserDetailSchema = z.object({
     id: z.string().nonempty(),
-    photoLink: z.url(),
-    licencePlate: z.string(),
+    photoLinks: z.array(z.url()),
+    vin: VinSchema,
     status: carSaleStatusSchema,
-    mileage: z.number()
+    mileage: z.number(),
+    price: z.number(),
+    make: z.string().nonempty(),
+    year: z.number(),
+    model: z.string().nonempty(),
+    marketplaceLinks: z.array(z.url())
 })
 
-export const carForSaleUserListSchema = carForSaleUserDetailSchema.pick({
-    id: true,
-    licencePlate: true,
-    status: true
-})
+export const carForSaleUserListSchema = carForSaleUserDetailSchema
 
 export const carForSaleAdminDetailSchema = carForSaleUserDetailSchema.extend({
     userId: z.string().nonempty(),
@@ -29,10 +31,11 @@ export const carForSaleAdminDetailSchema = carForSaleUserDetailSchema.extend({
 
 export const carForSaleAdminListSchema = carForSaleAdminDetailSchema.pick({
     id: true,
-    licencePlate: true,
+    vin: true,
     status: true,
     userMail: true,
-    userId: true
+    userId: true,
+    price: true
 })
 
 export type CarSaleStatus = z.infer<typeof carSaleStatusSchema>

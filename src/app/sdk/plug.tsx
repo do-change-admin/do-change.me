@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { FaCheck } from "react-icons/fa";
 import styles from "./plug.module.css";
-import {Image} from "@mantine/core";
+import { Image } from "@mantine/core";
 
 export default function Sell() {
     return (

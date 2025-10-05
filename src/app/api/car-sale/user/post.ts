@@ -14,12 +14,11 @@ export type Method = ZodAPIMethod<typeof schemas>
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload, activeUser, req }) => {
         const formData = await req.formData()
-        const photo = formData.get('photo') as File
+        const photos = formData.getAll('photos') as File[]
         const service = testContainer.get<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)(activeUser.id)
         await service.post({
-            photo,
-            licencePlate: payload.licencePlate,
-            mileage: payload.mileage
+            ...payload,
+            photos
         })
     }
 })

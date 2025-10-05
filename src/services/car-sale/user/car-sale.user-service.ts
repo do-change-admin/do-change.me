@@ -1,11 +1,11 @@
 import { type CarsForSaleDataProvider } from "@/providers";
-import { FindCarsForSaleUserServicePayload, FindSpecificCarForSaleUserServicePayload, PostCarForSaleUserServicePayload } from "./car-sale.user-service.models";
-import { CarForSaleUserDetailModel, CarForSaleUserListModel } from "@/entities";
-import { businessError } from "@/lib/errors";
+import { FindCarsForSaleUserServicePayload, PostCarForSaleUserServicePayload } from "./car-sale.user-service.models";
+import { CarForSaleUserListModel } from "@/entities";
 import { type FileSystemProvider } from "@/providers/contracts";
 import { v4 } from "uuid";
 import { inject, injectable } from "inversify";
 import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
+import { mapCarForSaleListDataLayerToUserEntity } from "./car-sale.user-service.mappers";
 
 @injectable()
 export class CarSaleUserService {
@@ -20,52 +20,49 @@ export class CarSaleUserService {
     public findList = async (payload: FindCarsForSaleUserServicePayload): Promise<CarForSaleUserListModel[]> => {
         const result = await this.dataProvider.list({
             userId: this.userId,
-            status: payload.status
+            status: payload.status,
+            make: payload.make,
+            model: payload.model
         }, {
             pageSize: payload.pageSize,
-            zeroBasedIndex: payload.zeroBasedIndex
+            zeroBasedIndex: payload.zeroBasedIndex,
         })
 
-        return result.map((x) => {
-            return {
-                id: x.id,
-                licencePlate: x.licencePlate,
-                status: x.status,
+        const items = await Promise.all(result.map(async (x) => {
+            let photoLinks: string[] = []
+
+            for (const photoId of x.photoIds) {
+                const photoLink = await this.fileSystemProvider.obtainDownloadLink(photoId);
+                if (photoLink) {
+                    photoLinks = [photoLink, ...photoLinks]
+                }
             }
-        })
+
+            return mapCarForSaleListDataLayerToUserEntity(x, photoLinks)
+        }))
+
+        return items
     }
 
-    public details = async (payload: FindSpecificCarForSaleUserServicePayload): Promise<CarForSaleUserDetailModel> => {
-        const result = await this.dataProvider.details({
-            id: payload.id,
-            userId: this.userId
-        })
-
-        if (!result) {
-            throw businessError('No according car for sale was found', undefined, 404)
-        }
-
-        const photoLink = await this.fileSystemProvider.obtainDownloadLink(result.photoId)
-
-        return {
-            id: result.id,
-            licencePlate: result.licencePlate,
-            mileage: result.mileage,
-            photoLink: photoLink!,
-            status: result.status
-        }
-    }
 
     public post = async (payload: PostCarForSaleUserServicePayload) => {
-        const photoId = `${v4()}-${payload.photo.name}`;
-        await this.fileSystemProvider.upload(payload.photo, photoId, payload.photo.name)
+        let photoIds: string[] = []
+
+        for (const photo of payload.photos) {
+            const id = `${v4()}-${photo.name}`
+            await this.fileSystemProvider.upload(photo, id, photo.name)
+            photoIds.push(id)
+        }
 
         await this.dataProvider.create({
-            licencePlate: payload.licencePlate,
+            make: payload.make,
             mileage: payload.mileage,
-            photoId: photoId,
+            model: payload.model,
+            photoIds,
+            price: payload.price,
+            vin: payload.vin,
             userId: this.userId,
-
+            year: payload.year
         })
     }
 }

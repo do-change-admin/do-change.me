@@ -12,7 +12,7 @@ export default function () {
         <table>
             <thead>
                 <tr>
-                    <td>Licence plate</td>
+                    <td>VIN</td>
                     <td>User email</td>
                     <td>Status</td>
                     <td>Actions</td>
@@ -23,7 +23,7 @@ export default function () {
                     data?.items.map((x) => {
                         return (
                             <tr key={x.id}>
-                                <td>{x.licencePlate}</td>
+                                <td>{x.vin}</td>
                                 <td>{x.userMail}</td>
                                 <td>{x.status}</td>
                                 <td>

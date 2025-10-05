@@ -51,8 +51,8 @@ export default function () {
         <table>
             <tbody>
                 <tr>
-                    <td>Licence plate</td>
-                    <td>{data.licencePlate}</td>
+                    <td>VIN</td>
+                    <td>{data.vin}</td>
                 </tr>
                 <tr>
                     <td>Mileage</td>
@@ -81,7 +81,7 @@ export default function () {
                 </tr>
                 <tr>
                     <td>Photo</td>
-                    <td><img src={data.photoLink} /></td>
+                    <td><img src={data.photoLinks[0]} /></td>
                 </tr>
             </tbody>
         </table>

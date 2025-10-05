@@ -9,7 +9,11 @@ import { useState } from "react"
 export default function () {
     const router = useRouter()
     const [status, setStatus] = useState<CarSaleStatus | 'all'>()
-    const { data, isFetching } = useCarsForSaleUserList({ pageSize: 100, zeroBasedIndex: 0 }, status === 'all' ? undefined : status)
+    const { data, isFetching } = useCarsForSaleUserList({
+        pageSize: 100,
+        zeroBasedIndex: 0,
+        status: status === 'all' ? undefined : status
+    })
 
     return <div>
         <Select
@@ -23,7 +27,7 @@ export default function () {
         {isFetching ? <>Loading...</> : data?.items?.length ? <table>
             <thead>
                 <tr>
-                    <td>Licence plate</td>
+                    <td>VIN</td>
                     <td>Status</td>
                     <td>Actions</td>
                 </tr>
@@ -33,7 +37,7 @@ export default function () {
                     data?.items.map((x) => {
                         return (
                             <tr key={x.id}>
-                                <td>{x.licencePlate}</td>
+                                <td>{x.vin}</td>
                                 <td>{x.status}</td>
                                 <td>
                                     <Button onClick={() => {

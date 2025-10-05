@@ -144,16 +144,16 @@ export default function VehiclesPage() {
             <Tabs value={activeTab} onChange={(value) => setActiveTab(value as any)} mb="lg">
                 <Tabs.List>
                     <Tabs.Tab value="Active">
-                        Active <Badge color="blue" variant="light" ml={5}>{vehicles.filter(v => v.status==='Active').length}</Badge>
+                        Active <Badge color="blue" variant="light" ml={5}>{vehicles.filter(v => v.status === 'Active').length}</Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="Pending">
-                        Pending Publisher <Badge color="orange" variant="light" ml={5}>{vehicles.filter(v => v.status==='Pending').length}</Badge>
+                        Pending Publisher <Badge color="orange" variant="light" ml={5}>{vehicles.filter(v => v.status === 'Pending').length}</Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="Sold">
-                        Sold <Badge color="green" variant="light" ml={5}>{vehicles.filter(v => v.status==='Sold').length}</Badge>
+                        Sold <Badge color="green" variant="light" ml={5}>{vehicles.filter(v => v.status === 'Sold').length}</Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="Draft">
-                        Draft <Badge color="gray" variant="light" ml={5}>{vehicles.filter(v => v.status==='Draft').length}</Badge>
+                        Draft <Badge color="gray" variant="light" ml={5}>{vehicles.filter(v => v.status === 'Draft').length}</Badge>
                     </Tabs.Tab>
                 </Tabs.List>
             </Tabs>
@@ -173,6 +173,7 @@ export default function VehiclesPage() {
                             label="Makes"
                             placeholder="All Makes"
                             value={make}
+                            // @ts-ignore
                             onChange={setMake}
                             data={Array.from(new Set(vehicles.map(v => v.make)))}
                             rightSection={<FaChevronDown />}
@@ -181,13 +182,14 @@ export default function VehiclesPage() {
                             label="Models"
                             placeholder="All Models"
                             value={model}
+                            // @ts-ignore
                             onChange={setModel}
                             data={Array.from(new Set(vehicles.map(v => v.model)))}
                             rightSection={<FaChevronDown />}
                         />
                     </Group>
                     <Group align="right">
-                        <Button variant="outline" color="gray" leftSection={<FaTimes />} onClick={() => {setVin(''); setMake(''); setModel('');}}>
+                        <Button variant="outline" color="gray" leftSection={<FaTimes />} onClick={() => { setVin(''); setMake(''); setModel(''); }}>
                             Clear Filters
                         </Button>
                     </Group>
@@ -197,36 +199,36 @@ export default function VehiclesPage() {
             {/* Vehicles Grid */}
             <div className={styles.vehicleGrid}>
                 {filteredVehicles.map((v) => (
-                        <Card shadow="sm" radius="md" withBorder className={styles.vehicleCard}>
-                            <Card.Section style={{ position: 'relative' }}>
-                                <Image src={v.img} alt={v.alt} className={styles.vehicleImg} />
-                                <Badge
-                                    color={v.status === 'Active' ? 'green' : v.status === 'Pending' ? 'orange' : v.status==='Sold'?'blue':'gray'}
-                                    className={styles.statusBadge}
-                                >
-                                    {v.status}
-                                </Badge>
-                            </Card.Section>
-                            <Stack mt="sm">
-                                <Text fw={600}>{v.name}</Text>
-                                <Text size="sm" c="dimmed">{v.make}</Text>
-                                <Text size="xs" c="dimmed" style={{ fontFamily: 'monospace' }}>VIN: {v.vin}</Text>
-                                <Stack gap="xs" mt="xs">
-                                    {v.links.map((link) => (
-                                        <Button
-                                            key={link.label}
-                                            variant="light"
-                                            color={link.color}
-                                            fullWidth
-                                            rightSection={<FaLink />}
-                                            styles={{ root: { justifyContent: 'space-between' } }}
-                                        >
-                                            {link.label}
-                                        </Button>
-                                    ))}
-                                </Stack>
+                    <Card shadow="sm" radius="md" withBorder className={styles.vehicleCard}>
+                        <Card.Section style={{ position: 'relative' }}>
+                            <Image src={v.img} alt={v.alt} className={styles.vehicleImg} />
+                            <Badge
+                                color={v.status === 'Active' ? 'green' : v.status === 'Pending' ? 'orange' : v.status === 'Sold' ? 'blue' : 'gray'}
+                                className={styles.statusBadge}
+                            >
+                                {v.status}
+                            </Badge>
+                        </Card.Section>
+                        <Stack mt="sm">
+                            <Text fw={600}>{v.name}</Text>
+                            <Text size="sm" c="dimmed">{v.make}</Text>
+                            <Text size="xs" c="dimmed" style={{ fontFamily: 'monospace' }}>VIN: {v.vin}</Text>
+                            <Stack gap="xs" mt="xs">
+                                {v.links.map((link) => (
+                                    <Button
+                                        key={link.label}
+                                        variant="light"
+                                        color={link.color}
+                                        fullWidth
+                                        rightSection={<FaLink />}
+                                        styles={{ root: { justifyContent: 'space-between' } }}
+                                    >
+                                        {link.label}
+                                    </Button>
+                                ))}
                             </Stack>
-                        </Card>
+                        </Stack>
+                    </Card>
                 ))}
             </div>
         </main>
