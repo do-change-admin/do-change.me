@@ -8,7 +8,7 @@ export const FunctionalProviderTokens = {
     fileSystem: Symbol.for("FILE-SYSTEM-FUNCTIONAL-PROVIDER")
 }
 
-export const ServicesTokens = {
+export const ServiceTokens = {
     carSaleUserFactory: Symbol.for('CAR-SALE-USER-SERVICE-FACTORY'),
     carSaleAdmin: Symbol.for('CAR-SALE-ADMIN-SERVICE')
 }

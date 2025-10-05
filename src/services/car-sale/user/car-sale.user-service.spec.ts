@@ -1,14 +1,14 @@
 import { test, expect, beforeEach } from 'vitest'
 import { CarSaleUserService } from './car-sale.user-service'
 import { testContainer } from '@/di-containers'
-import { CarSaleUserServiceFactory, ServicesTokens } from '@/di-containers/tokens.di-container'
+import { CarSaleUserServiceFactory, ServiceTokens } from '@/di-containers/tokens.di-container'
 import { v4 } from 'uuid'
 
 let service: CarSaleUserService
 
 beforeEach(() => {
     const userId = v4()
-    service = testContainer.get<CarSaleUserServiceFactory>(ServicesTokens.carSaleUserFactory)(userId)
+    service = testContainer.get<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)(userId)
 })
 
 test('empty by default', async () => {

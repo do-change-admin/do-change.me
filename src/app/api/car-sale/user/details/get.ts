@@ -1,6 +1,6 @@
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "@/app/api/zod-api-methods";
 import { testContainer } from "@/di-containers";
-import { CarSaleUserServiceFactory, ServicesTokens } from "@/di-containers/tokens.di-container";
+import { CarSaleUserServiceFactory, ServiceTokens } from "@/di-containers/tokens.di-container";
 import { carForSaleUserDetailSchema } from "@/entities";
 import { findSpecificCarForSaleUserServicePayloadSchema } from "@/services";
 
@@ -14,7 +14,7 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ activeUser, payload }) => {
-        const service = testContainer.get<CarSaleUserServiceFactory>(ServicesTokens.carSaleUserFactory)(activeUser.id)
+        const service = testContainer.get<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)(activeUser.id)
         const detailedItem = await service.details(payload)
         return detailedItem
     }
