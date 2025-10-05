@@ -2,8 +2,6 @@ import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "@/app/api/zod-api-met
 import { testContainer } from "@/di-containers";
 import { ServicesTokens } from "@/di-containers/tokens.di-container";
 import { carForSaleSellsDetailSchema } from "@/entities";
-import { carsForSaleInMemoryDataProvider } from "@/providers";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 import { CarSaleSellsService, findSpecificCarForSaleSellsServicePayloadSchema } from "@/services";
 
 const schemas = {

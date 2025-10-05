@@ -1,7 +1,5 @@
 import { CarSaleSellsService, setCarSaleStatusSellsServicePayloadSchema } from "@/services";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { carsForSaleInMemoryDataProvider } from "@/providers";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
 import { testContainer } from "@/di-containers";
 import { ServicesTokens } from "@/di-containers/tokens.di-container";
 
