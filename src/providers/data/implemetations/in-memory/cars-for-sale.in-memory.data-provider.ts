@@ -10,10 +10,10 @@ const CarsForSaleInMemoryDataProvider = generateInMemoryCRUDProvider<CarsForSale
                 id,
                 licencePlate: x.licencePlate,
                 photoId: x.photoId,
-                status: 'review',
+                status: 'pending publisher',
                 userId: x.userId,
                 mileage: x.mileage,
-                userMail: `${id}@test.test`
+                userMail: `${id}@test.test`,
             }
         }
     }

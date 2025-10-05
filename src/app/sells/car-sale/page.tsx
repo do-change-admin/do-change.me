@@ -1,11 +1,11 @@
 'use client'
 
-import { useCarsForSaleSellsList } from "@/hooks"
+import { useCarsForSaleAdminList } from "@/hooks"
 import { Button } from "@mantine/core"
 import { useRouter } from "next/navigation"
 
 export default function () {
-    const { data } = useCarsForSaleSellsList({ pageSize: 1000, zeroBasedIndex: 0 })
+    const { data } = useCarsForSaleAdminList({ pageSize: 1000, zeroBasedIndex: 0 })
     const router = useRouter()
 
     return <div>

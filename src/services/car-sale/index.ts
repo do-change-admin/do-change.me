@@ -1,2 +1,2 @@
 export * from './user'
-export * from './sells'
+export * from './admin'

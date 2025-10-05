@@ -1,17 +1,15 @@
 'use client'
 
 import { CarSaleStatus } from "@/entities"
-import { useCarForSaleUserPosting, useCarsForSaleUserList } from "@/hooks/_car-sale.user.hooks"
+import { useCarsForSaleUserList } from "@/hooks/_car-sale.user.hooks"
 import { Button, Select } from "@mantine/core"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { v4 } from "uuid"
+import { useState } from "react"
 
 export default function () {
     const router = useRouter()
     const [status, setStatus] = useState<CarSaleStatus | 'all'>()
     const { data, isFetching } = useCarsForSaleUserList({ pageSize: 100, zeroBasedIndex: 0 }, status === 'all' ? undefined : status)
-
 
     return <div>
         <Select
@@ -19,7 +17,7 @@ export default function () {
                 setStatus(x as CarSaleStatus || 'all')
             }}
             value={status}
-            data={['all', 'published', 'review', 'sold'] as (CarSaleStatus | 'all')[]}
+            data={['all', 'active', 'draft', 'pending publisher', 'pending sales', 'sold'] as (CarSaleStatus | 'all')[]}
         />
 
         {isFetching ? <>Loading...</> : data?.items?.length ? <table>

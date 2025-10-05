@@ -1,7 +1,7 @@
 'use client'
 
 import { CarSaleStatus } from "@/entities"
-import { useCarForSaleSellsDetail, useCarSaleStatusChange } from "@/hooks"
+import { useCarForSaleAdminDetail, useCarSaleStatusChange } from "@/hooks"
 import { Button, Select } from "@mantine/core"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -11,10 +11,10 @@ export default function () {
     const router = useRouter()
     const id = searchParams.get('id')
     const userId = searchParams.get('userId')
-    const [status, setStatus] = useState<CarSaleStatus>('review')
+    const [status, setStatus] = useState<CarSaleStatus>('active')
     const { mutate: changeStatus, isPending } = useCarSaleStatusChange()
 
-    const { data, isFetching, isFetched } = useCarForSaleSellsDetail(id!, userId!)
+    const { data, isFetching, isFetched } = useCarForSaleAdminDetail(id!, userId!)
 
     useEffect(() => {
         if (isFetched && data) {
@@ -64,7 +64,7 @@ export default function () {
                         <Select
                             disabled={isPending}
                             value={status}
-                            data={['published', 'review', 'sold'] as CarSaleStatus[]}
+                            data={['active', 'pending publisher', 'pending sales', 'sold'] as CarSaleStatus[]}
                             onChange={(x) => {
                                 if (!x) {
                                     return;

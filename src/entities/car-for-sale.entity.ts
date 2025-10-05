@@ -1,8 +1,10 @@
 import z from "zod";
 
 export const carSaleStatusSchema = z.enum([
-    'review',
-    'published',
+    'draft',
+    'pending publisher',
+    'active',
+    'pending sales',
     'sold'
 ])
 
@@ -20,12 +22,12 @@ export const carForSaleUserListSchema = carForSaleUserDetailSchema.pick({
     status: true
 })
 
-export const carForSaleSellsDetailSchema = carForSaleUserDetailSchema.extend({
+export const carForSaleAdminDetailSchema = carForSaleUserDetailSchema.extend({
     userId: z.string().nonempty(),
     userMail: z.email(),
 })
 
-export const carForSaleSellsListSchema = carForSaleSellsDetailSchema.pick({
+export const carForSaleAdminListSchema = carForSaleAdminDetailSchema.pick({
     id: true,
     licencePlate: true,
     status: true,
@@ -38,5 +40,5 @@ export type CarSaleStatus = z.infer<typeof carSaleStatusSchema>
 export type CarForSaleUserDetailModel = z.infer<typeof carForSaleUserDetailSchema>
 export type CarForSaleUserListModel = z.infer<typeof carForSaleUserListSchema>
 
-export type CarForSaleSellsDetailModel = z.infer<typeof carForSaleSellsDetailSchema>
-export type CarForSaleSellsListModel = z.infer<typeof carForSaleSellsListSchema>
+export type CarForSaleAdminDetailModel = z.infer<typeof carForSaleAdminDetailSchema>
+export type CarForSaleAdminListModel = z.infer<typeof carForSaleAdminListSchema>

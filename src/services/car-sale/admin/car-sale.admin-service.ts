@@ -1,19 +1,19 @@
 import { type CarsForSaleDataProvider } from "@/providers";
-import { FindCarsForSaleSellsServicePayload, FindSpecificCarForSaleSellsServicePayload, SetCarSaleStatusSellsServicePayload } from "./car-sale.sells-service.models";
-import { CarForSaleSellsDetailModel, CarForSaleSellsListModel } from "@/entities";
+import { FindCarsForSaleAdminServicePayload, FindSpecificCarForSaleAdminServicePayload, SetCarSaleStatusAdminServicePayload } from "./car-sale.admin-service.models";
+import { CarForSaleAdminDetailModel, CarForSaleAdminListModel } from "@/entities";
 import { businessError } from "@/lib/errors";
 import { type FileSystemProvider } from "@/providers/contracts";
 import { inject, injectable } from "inversify";
 import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
 
 @injectable()
-export class CarSaleSellsService {
+export class CarSaleAdminService {
     public constructor(
         @inject(DataProviderTokens.carsForSale) private readonly dataProvider: CarsForSaleDataProvider,
         @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider
     ) { }
 
-    list = async (payload: FindCarsForSaleSellsServicePayload): Promise<CarForSaleSellsListModel[]> => {
+    list = async (payload: FindCarsForSaleAdminServicePayload): Promise<CarForSaleAdminListModel[]> => {
         const items = await this.dataProvider.list({
             status: payload.status,
             userId: payload.userId
@@ -33,7 +33,7 @@ export class CarSaleSellsService {
         })
     }
 
-    details = async (payload: FindSpecificCarForSaleSellsServicePayload): Promise<CarForSaleSellsDetailModel> => {
+    details = async (payload: FindSpecificCarForSaleAdminServicePayload): Promise<CarForSaleAdminDetailModel> => {
         const details = await this.dataProvider.details({
             id: payload.id,
             userId: payload.userId
@@ -56,7 +56,7 @@ export class CarSaleSellsService {
         }
     }
 
-    setStatus = async (payload: SetCarSaleStatusSellsServicePayload) => {
+    setStatus = async (payload: SetCarSaleStatusAdminServicePayload) => {
         await this.dataProvider.updateOne({
             id: payload.carId,
             userId: payload.userId

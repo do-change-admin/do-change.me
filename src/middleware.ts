@@ -32,16 +32,6 @@ export async function middleware(req: NextRequest) {
         return NextResponse.next()
     }
 
-    if (pathname.startsWith('/sells')) {
-        if (!user) {
-            return NextResponse.redirect(new URL("/auth/login", req.url));
-        }
-        if (!(process.env.SELLS_EMAILS?.split(',') ?? []).includes(user.email)) {
-            return NextResponse.redirect(new URL("/", req.url));
-        }
-        return NextResponse.next()
-    }
-
     const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
 
     // Забираем токен из cookie (NextAuth хранит в `next-auth.session-token`)

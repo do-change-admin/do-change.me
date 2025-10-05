@@ -1,15 +1,15 @@
-import { CarSaleSellsService, findCarsForSaleSellsServicePayloadSchema } from "@/services";
+import { CarSaleAdminService, findCarsForSaleAdminServicePayloadSchema } from "@/services";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
 import z from "zod";
-import { carForSaleSellsListSchema } from "@/entities";
+import { carForSaleAdminListSchema } from "@/entities";
 import { testContainer } from "@/di-containers";
 import { ServicesTokens } from "@/di-containers/tokens.di-container";
 
 const schemas = {
     body: undefined,
-    query: findCarsForSaleSellsServicePayloadSchema,
+    query: findCarsForSaleAdminServicePayloadSchema,
     response: z.object({
-        items: z.array(carForSaleSellsListSchema)
+        items: z.array(carForSaleAdminListSchema)
     })
 } satisfies ZodAPISchemas
 
@@ -17,7 +17,7 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload }) => {
-        const service = testContainer.get<CarSaleSellsService>(ServicesTokens.carSaleSells)
+        const service = testContainer.get<CarSaleAdminService>(ServicesTokens.carSaleAdmin)
         const items = await service.list(payload)
         return { items }
     }
