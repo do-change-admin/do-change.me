@@ -1,3 +1,4 @@
+import { injectable } from "inversify";
 import { DataCRUDProvider } from "./shared-types.data-providers";
 import { v4 } from "uuid";
 
@@ -27,7 +28,8 @@ export const generateInMemoryCRUDProvider = <DataProvider>(options?: {
         updatePayloadToDetail?: (prevValue: ExtractCRUDParams<DataProvider>['Models']['detail'], update: ExtractCRUDParams<DataProvider>['ActionsPayload']['update']) => ExtractCRUDParams<DataProvider>['Models']['detail']
     }
 }) => {
-    return class InMemoryCRUDProvider implements DataCRUDProvider<ExtractCRUDParams<DataProvider>['Models'], ExtractCRUDParams<DataProvider>['SearchPayload'], ExtractCRUDParams<DataProvider>['ActionsPayload']> {
+    @injectable()
+    class InMemoryCRUDProvider implements DataCRUDProvider<ExtractCRUDParams<DataProvider>['Models'], ExtractCRUDParams<DataProvider>['SearchPayload'], ExtractCRUDParams<DataProvider>['ActionsPayload']> {
         protected data = [] as Array<ExtractCRUDParams<DataProvider>['Models']['detail']>
 
         protected listSearchLogic = (entity: ExtractCRUDParams<DataProvider>['Models']['detail'], pattern: ExtractCRUDParams<DataProvider>['SearchPayload']['list']) => {
@@ -139,6 +141,6 @@ export const generateInMemoryCRUDProvider = <DataProvider>(options?: {
 
             return { wasFoundBeforeDeletion: index > -1 }
         }
-
     }
+    return InMemoryCRUDProvider
 }

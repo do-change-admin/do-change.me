@@ -1,6 +1,8 @@
-import { FileSystemProvider } from "@/providers/contracts";
-import { put, getDownloadUrl, head } from '@vercel/blob'
+import { type FileSystemProvider } from "@/providers/contracts";
+import { put, head } from '@vercel/blob'
+import { injectable } from "inversify";
 
+@injectable()
 export class VercelBlobFileSystemProvider implements FileSystemProvider {
     async upload(file: File, id: string, originalFileName: string): Promise<{ success: boolean; }> {
         try {

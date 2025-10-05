@@ -19,6 +19,7 @@ const CarsForSaleInMemoryDataProvider = generateInMemoryCRUDProvider<CarsForSale
     }
 })
 
-const carsForSaleInMemoryDataProvider = new CarsForSaleInMemoryDataProvider()
 
-export { CarsForSaleInMemoryDataProvider, carsForSaleInMemoryDataProvider }
+export { CarsForSaleInMemoryDataProvider }
+
+export const carsForSaleInMemoryDataProvider = new CarsForSaleInMemoryDataProvider()

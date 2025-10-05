@@ -37,6 +37,7 @@
         "dotenv": "^17.2.1",
         "embla-carousel-autoplay": "^8.6.0",
         "framer-motion": "^12.23.12",
+        "inversify": "^7.10.2",
         "jose": "^6.1.0",
         "jsonwebtoken": "^9.0.2",
         "next": "15.4.4",

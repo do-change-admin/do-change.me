@@ -1,14 +1,17 @@
-import { CarsForSaleDataProvider } from "@/providers";
+import { type CarsForSaleDataProvider } from "@/providers";
 import { FindCarsForSaleUserServicePayload, FindSpecificCarForSaleUserServicePayload, PostCarForSaleUserServicePayload } from "./car-sale.user-service.models";
 import { CarForSaleUserDetailModel, CarForSaleUserListModel } from "@/entities";
 import { businessError } from "@/lib/errors";
-import { FileSystemProvider } from "@/providers/contracts";
+import { type FileSystemProvider } from "@/providers/contracts";
 import { v4 } from "uuid";
+import { inject, injectable } from "inversify";
+import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
 
+@injectable()
 export class CarSaleUserService {
     public constructor(
-        private readonly dataProvider: CarsForSaleDataProvider,
-        private readonly fileSystemProvider: FileSystemProvider,
+        @inject(DataProviderTokens.carsForSale) private readonly dataProvider: CarsForSaleDataProvider,
+        @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider,
         private readonly userId: string
     ) {
 

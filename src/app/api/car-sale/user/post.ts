@@ -1,7 +1,7 @@
-import { CarSaleUserService, postCarForSaleUserServicePayloadSchema } from "@/services";
+import { postCarForSaleUserServicePayloadSchema } from "@/services";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { carsForSaleInMemoryDataProvider, CarsForSaleInMemoryDataProvider } from "@/providers";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
+import { testContainer } from "@/di-containers";
+import { CarSaleUserServiceFactory, ServicesTokens } from "@/di-containers/tokens.di-container";
 
 const schemas = {
     body: undefined,
@@ -15,7 +15,7 @@ export const method = zodApiMethod(schemas, {
     handler: async ({ payload, activeUser, req }) => {
         const formData = await req.formData()
         const photo = formData.get('photo') as File
-        const service = new CarSaleUserService(carsForSaleInMemoryDataProvider, new VercelBlobFileSystemProvider(), activeUser.id)
+        const service = testContainer.get<CarSaleUserServiceFactory>(ServicesTokens.carSaleUserFactory)(activeUser.id)
         await service.post({
             photo,
             licencePlate: payload.licencePlate,

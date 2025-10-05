@@ -1,9 +1,9 @@
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
 import z from "zod";
 import { carForSaleUserListSchema } from "@/entities";
-import { CarSaleUserService, findCarsForSaleUserServicePayloadSchema } from "@/services";
-import { carsForSaleInMemoryDataProvider } from "@/providers";
-import { PublicFolderFileSystemProvider, VercelBlobFileSystemProvider } from "@/providers/implementations";
+import { findCarsForSaleUserServicePayloadSchema } from "@/services";
+import { testContainer } from "@/di-containers";
+import { CarSaleUserServiceFactory, ServicesTokens } from "@/di-containers/tokens.di-container";
 
 const schemas = {
     body: undefined,
@@ -17,7 +17,7 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload, activeUser }) => {
-        const service = new CarSaleUserService(carsForSaleInMemoryDataProvider, new VercelBlobFileSystemProvider(), activeUser.id)
+        const service = testContainer.get<CarSaleUserServiceFactory>(ServicesTokens.carSaleUserFactory)(activeUser.id)
         const items = await service.findList(payload)
         return { items }
     }
