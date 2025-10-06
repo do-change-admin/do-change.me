@@ -26,7 +26,8 @@ export const generateInMemoryCRUDProvider = <DataProvider>(options?: {
         detailToList?: (details: ExtractCRUDParams<DataProvider>['Models']['detail']) => ExtractCRUDParams<DataProvider>['Models']['list'],
         createPayloadToDetail?: (details: ExtractCRUDParams<DataProvider>['ActionsPayload']['create']) => ExtractCRUDParams<DataProvider>['Models']['detail'],
         updatePayloadToDetail?: (prevValue: ExtractCRUDParams<DataProvider>['Models']['detail'], update: ExtractCRUDParams<DataProvider>['ActionsPayload']['update']) => ExtractCRUDParams<DataProvider>['Models']['detail']
-    }
+    },
+    initialData?: Array<ExtractCRUDParams<DataProvider>['Models']['detail']>
 }) => {
     @injectable()
     class InMemoryCRUDProvider implements DataCRUDProvider<ExtractCRUDParams<DataProvider>['Models'], ExtractCRUDParams<DataProvider>['SearchPayload'], ExtractCRUDParams<DataProvider>['ActionsPayload']> {
@@ -93,6 +94,10 @@ export const generateInMemoryCRUDProvider = <DataProvider>(options?: {
                 if (options.mappers.updatePayloadToDetail) {
                     this.mapUpdatePayloadToDetail = options.mappers.updatePayloadToDetail
                 }
+            }
+
+            if (options.initialData) {
+                this.data = [...options.initialData]
             }
         }
 

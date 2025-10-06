@@ -53,3 +53,13 @@ test('pagination', async () => {
     expect(data).toBeTruthy()
     expect(data!.extraField).toBe('af')
 })
+
+test('with initial data', async () => {
+    const inMemoryProviderWithData = generateInMemoryCRUDProvider<InMemoryDataProvider>({
+        initialData: [{ extraField: '', id: '', name: 'asfsaf' }]
+    })
+
+    const dataProvider = new inMemoryProviderWithData()
+    const data = await dataProvider.list({}, { pageSize: 1000, zeroBasedIndex: 0 })
+    expect(data.length).toBe(1)
+})
