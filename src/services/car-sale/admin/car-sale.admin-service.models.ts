@@ -17,7 +17,14 @@ export const findSpecificCarForSaleAdminServicePayloadSchema = z.object({
 export const setCarSaleStatusAdminServicePayloadSchema = z.object({
     userId: z.string().nonempty(),
     carId: z.string().nonempty(),
-    newStatus: carSaleStatusSchema
+    payload: z.union([
+        z.object({
+            status: carSaleStatusSchema
+        }),
+        z.object({
+            marketplaceLinks: z.array(z.url()).nonempty()
+        })
+    ])
 })
 
 export type FindSpecificCarForSaleAdminServicePayload = z.infer<typeof findSpecificCarForSaleAdminServicePayloadSchema>

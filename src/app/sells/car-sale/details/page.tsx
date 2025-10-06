@@ -31,8 +31,10 @@ export default function () {
             changeStatus({
                 body: {
                     carId: data.id,
-                    newStatus: status,
-                    userId: data.userId
+                    userId: data.userId,
+                    payload: {
+                        status
+                    }
                 }
             })
         }

@@ -47,12 +47,10 @@ export class CarSaleAdminService {
         return mapCarForSaleDetailDataLayerToAdminEntity(details, photoLinks)
     }
 
-    setStatus = async (payload: SetCarSaleStatusAdminServicePayload) => {
+    setStatus = async ({ carId, payload, userId }: SetCarSaleStatusAdminServicePayload) => {
         await this.dataProvider.updateOne({
-            id: payload.carId,
-            userId: payload.userId
-        }, {
-            status: payload.newStatus
-        })
+            id: carId,
+            userId: userId
+        }, payload)
     }
 }

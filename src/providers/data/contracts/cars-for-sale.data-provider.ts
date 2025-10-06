@@ -40,7 +40,8 @@ export const createCarForSalePayloadSchema = carForSaleDetailDataLayerSchema.omi
 })
 
 export const updateCarForSalePayloadSchema = z.object({
-    status: carSaleStatusSchema
+    status: carSaleStatusSchema.optional(),
+    marketplaceLinks: z.array(z.url()).optional(),
 })
 
 export type CarForSaleDetailDataLayerModel = z.infer<typeof carForSaleDetailDataLayerSchema>
