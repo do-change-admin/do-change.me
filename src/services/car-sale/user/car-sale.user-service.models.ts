@@ -5,8 +5,9 @@ import z from "zod";
 
 export const findCarsForSaleUserServicePayloadSchema = paginationSchema.extend({
     status: carSaleStatusSchema.optional(),
-    make: carSaleStatusSchema.optional(),
-    model: carSaleStatusSchema.optional()
+    make: z.string().optional(),
+    model: z.string().optional(),
+    vin: z.string().optional()
 })
 
 export const findSpecificCarForSaleUserServicePayloadSchema = z.object({
