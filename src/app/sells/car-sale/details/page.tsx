@@ -1,7 +1,7 @@
 'use client'
 
 import { CarSaleStatus } from "@/entities"
-import { useCarForSaleAdminDetail, useCarSaleStatusChange } from "@/hooks"
+import { useCarForSaleAdminDetail, useCarForSaleUpdate } from "@/hooks"
 import { Button, Select } from "@mantine/core"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -12,7 +12,7 @@ export default function () {
     const id = searchParams.get('id')
     const userId = searchParams.get('userId')
     const [status, setStatus] = useState<CarSaleStatus>('active')
-    const { mutate: changeStatus, isPending } = useCarSaleStatusChange()
+    const { mutate: changeStatus, isPending } = useCarForSaleUpdate()
 
     const { data, isFetching, isFetched } = useCarForSaleAdminDetail(id!, userId!)
 

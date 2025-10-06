@@ -1,8 +1,6 @@
 import { CarSaleSellsDetailAPI } from "@/app/api/car-sale/admin/details/route";
 import { CarSaleSellsAPI } from "@/app/api/car-sale/admin/route";
-import { CarSaleStatus } from "@/entities";
 import { apiRequest } from "@/lib/apiFetch";
-import { PaginationModel } from "@/value-objects";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type API = CarSaleSellsAPI
@@ -36,7 +34,15 @@ export const useCarForSaleAdminDetail = (id: string, userId: string) => {
     })
 }
 
-export const useCarSaleStatusChange = () => {
+export const useCarsForSaleAdminFilters = () => {
+    return {
+        data: { models: ['Mustang', 'F-100'], makes: ['BMW', 'Audi'] },
+        isLoading: false,
+        isFetching: false
+    }
+}
+
+export const useCarForSaleUpdate = () => {
     const queryClient = useQueryClient()
 
     return useMutation<API['PATCH']['response'], API['PATCH']['error'], API['PATCH']['payload']>({

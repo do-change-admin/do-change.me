@@ -24,6 +24,21 @@ export const carForSaleUserDetailSchema = z.object({
 
 export const carForSaleUserListSchema = carForSaleUserDetailSchema
 
+export const carForSaleUserDraftSchema = carForSaleUserDetailSchema.partial({
+    make: true,
+    marketplaceLinks: true,
+    mileage: true,
+    model: true,
+    photoLinks: true,
+    price: true,
+    vin: true,
+    year: true
+}).omit({
+    status: true
+}).extend({
+    status: z.enum(['draft'])
+})
+
 export const carForSaleAdminDetailSchema = carForSaleUserDetailSchema.extend({
     userId: z.string().nonempty(),
     userMail: z.email(),
@@ -42,6 +57,7 @@ export type CarSaleStatus = z.infer<typeof carSaleStatusSchema>
 
 export type CarForSaleUserDetailModel = z.infer<typeof carForSaleUserDetailSchema>
 export type CarForSaleUserListModel = z.infer<typeof carForSaleUserListSchema>
+export type CarForSaleUserDraftModel = z.infer<typeof carForSaleUserDraftSchema>
 
 export type CarForSaleAdminDetailModel = z.infer<typeof carForSaleAdminDetailSchema>
 export type CarForSaleAdminListModel = z.infer<typeof carForSaleAdminListSchema>

@@ -1,11 +1,12 @@
 import { type CarsForSaleDataProvider } from "@/providers";
-import { FindCarsForSaleUserServicePayload, PostCarForSaleUserServicePayload } from "./car-sale.user-service.models";
-import { CarForSaleUserListModel } from "@/entities";
+import { CreateDraftCarForSaleUserServicePayload, FindCarsForSaleUserServicePayload, FindDraftCarForSaleUserServicePayload, PostCarForSaleUserServicePayload, UpdateDraftCarForSaleUserServicePayload } from "./car-sale.user-service.models";
+import { CarForSaleUserDetailModel, CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
 import { type FileSystemProvider } from "@/providers/contracts";
 import { v4 } from "uuid";
 import { inject, injectable } from "inversify";
 import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
-import { mapCarForSaleListDataLayerToUserEntity } from "./car-sale.user-service.mappers";
+import { mapCarForSaleDetailDataLayerToUserDraftEntity, mapCarForSaleListDataLayerToUserEntity } from "./car-sale.user-service.mappers";
+import { businessError } from "@/lib/errors";
 
 @injectable()
 export class CarSaleUserService {
@@ -36,7 +37,7 @@ export class CarSaleUserService {
             for (const photoId of x.photoIds) {
                 const photoLink = await this.fileSystemProvider.obtainDownloadLink(photoId);
                 if (photoLink) {
-                    photoLinks = [photoLink, ...photoLinks]
+                    photoLinks.push(photoLink)
                 }
             }
 
@@ -66,5 +67,59 @@ export class CarSaleUserService {
             userId: this.userId,
             year: payload.year
         })
+
+        if (payload.draftId) {
+            await this.dataProvider.deleteOne({
+                id: payload.draftId,
+                userId: this.userId
+            })
+        }
+    }
+
+    public findDraft = async (payload: FindDraftCarForSaleUserServicePayload): Promise<CarForSaleUserDraftModel> => {
+        const data = await this.dataProvider.details({ id: payload.id, userId: this.userId })
+        if (!data || data.status !== 'draft') {
+            throw businessError('No such draft was found', undefined, 404)
+        }
+        let photoLinks: string[] | undefined = []
+        if (!data.photoIds || !data.photoIds.length) {
+            photoLinks = undefined
+        }
+
+        for (const photoId of (data.photoIds || [])) {
+            const link = await this.fileSystemProvider.obtainDownloadLink(photoId)
+            if (link) {
+                photoLinks!.push(link)
+            }
+        }
+
+        return mapCarForSaleDetailDataLayerToUserDraftEntity(data, photoLinks)
+    }
+
+    public createDraft = async (payload: CreateDraftCarForSaleUserServicePayload) => {
+        let photoIds = []
+
+        if (payload.photos && payload.photos.length) {
+            for (const photo of payload.photos) {
+                const id = `${v4()}-${photo.name}`
+                await this.fileSystemProvider.upload(photo, id, photo.name)
+                photoIds.push(id)
+            }
+        }
+
+        await this.dataProvider.create({
+            make: payload.make || '',
+            mileage: payload.mileage || 0,
+            model: payload.model || '',
+            photoIds,
+            price: payload.price || 0,
+            userId: this.userId,
+            vin: payload.vin || '',
+            year: payload.year || 0
+        })
+    }
+
+    public updateDraft = async (payload: UpdateDraftCarForSaleUserServicePayload) => {
+
     }
 }

@@ -1,5 +1,5 @@
-import { CarForSaleUserListModel } from "@/entities";
-import { CarForSaleListDataLayerModel } from "@/providers";
+import { CarForSaleUserDetailModel, CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
+import { CarForSaleDetailDataLayerModel, CarForSaleListDataLayerModel } from "@/providers";
 
 export const mapCarForSaleListDataLayerToUserEntity = (
     source: CarForSaleListDataLayerModel,
@@ -16,5 +16,23 @@ export const mapCarForSaleListDataLayerToUserEntity = (
         status: source.status,
         vin: source.vin,
         year: source.year
+    }
+}
+
+export const mapCarForSaleDetailDataLayerToUserDraftEntity = (
+    source: CarForSaleDetailDataLayerModel,
+    photoLinks: string[] | undefined
+): CarForSaleUserDraftModel => {
+    return {
+        id: source.id,
+        photoLinks,
+        make: source.make || undefined,
+        marketplaceLinks: source.marketplaceLinks || undefined,
+        mileage: source.mileage || undefined,
+        model: source.model || undefined,
+        price: source.price || undefined,
+        status: 'draft',
+        vin: source.vin || undefined,
+        year: source.year || undefined
     }
 }
