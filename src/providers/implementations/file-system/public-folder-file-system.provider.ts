@@ -1,7 +1,8 @@
 import { ProvidesFileLink, ProvidesFileUploading } from '../../contracts'
-import { mkdir, writeFile, access } from 'fs/promises';
+import { mkdir, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
+import { faker } from '@faker-js/faker';
 
 export class PublicFolderFileSystemProvider implements ProvidesFileLink, ProvidesFileUploading {
     private uploadDir = path.resolve(process.cwd(), 'public', 'uploads');
@@ -25,14 +26,15 @@ export class PublicFolderFileSystemProvider implements ProvidesFileLink, Provide
     }
 
     async obtainDownloadLink(id: string): Promise<string | null> {
-        const filePath = path.join(this.uploadDir, id);
+        return faker.image.url()
+        // const filePath = path.join(this.uploadDir, id);
 
-        try {
-            await access(filePath);
-            return 'http://localhost:3000/uploads/' + id;
-        } catch (err) {
-            return null;
-        }
+        // try {
+        //     await access(filePath);
+        //     return 'http://localhost:3000/uploads/' + id;
+        // } catch (err) {
+        //     return null;
+        // }
     }
 
 }

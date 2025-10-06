@@ -22,10 +22,12 @@ export class CarSaleUserService {
             userId: this.userId,
             status: payload.status,
             make: payload.make,
-            model: payload.model
+            model: payload.model,
+            vin: payload.vin
         }, {
             pageSize: payload.pageSize,
             zeroBasedIndex: payload.zeroBasedIndex,
+
         })
 
         const items = await Promise.all(result.map(async (x) => {

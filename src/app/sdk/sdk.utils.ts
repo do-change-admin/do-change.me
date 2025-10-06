@@ -1,6 +1,5 @@
-import { CarForSaleUserListModel, CarSaleStatus } from "@/entities";
+import { CarSaleStatus } from "@/entities";
 import { DefaultMantineColor } from "@mantine/core";
-import { v4 } from "uuid";
 
 export const getColorByCarSaleStatus = (status: CarSaleStatus): DefaultMantineColor => {
     switch (status) {
@@ -29,21 +28,3 @@ export const getVisualDataByCarSaleMarketplaceLink = (link: string): { label: st
     }
     return { label: link, color: 'gray' }
 }
-
-export const mockVehiclesForSale: CarForSaleUserListModel[] = [
-    {
-        id: v4(),
-        make: 'BMW',
-        model: '3 Series',
-        vin: '1HGCM82633A123456',
-        status: 'active',
-        photoLinks: ['https://storage.googleapis.com/uxpilot-auth.appspot.com/c75ec488ca-7683147cb5c26bb93038.png'],
-        marketplaceLinks: [
-            'http://localhost:3000/marketplace/blablabla'
-        ],
-        mileage: 10000,
-        price: 241,
-        year: 2000
-    },
-
-]

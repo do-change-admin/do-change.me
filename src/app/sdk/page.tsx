@@ -15,7 +15,8 @@ import {
 } from '@mantine/core';
 import { FaPlus, FaSearch, FaLink, FaTimes, FaChevronDown } from 'react-icons/fa';
 import styles from './page.module.css';
-import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink, mockVehiclesForSale } from './sdk.utils';
+import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from './sdk.utils';
+import { useCarsForSaleUserList } from '@/hooks';
 
 export default function VehiclesPage() {
     const [vin, setVin] = useState('');
@@ -23,22 +24,18 @@ export default function VehiclesPage() {
     const [model, setModel] = useState('');
     const [activeTab, setActiveTab] = useState<CarSaleStatus>('active');
 
-    // const { data, isFetching } = useCarsForSaleUserList({ 
-    //     pageSize: 100, 
-    //     zeroBasedIndex: 0, 
-    //     make, 
-    //     model, 
-    //     status: activeTab, 
-    //     vin 
-    // })
+    const { data, isFetching } = useCarsForSaleUserList({
+        pageSize: 10,
+        zeroBasedIndex: 0,
+        make,
+        model,
+        status: activeTab,
+        vin
+    })
 
-    // if (isFetching) {
-    //     return <>loading...</>
-    // }
 
-    // const vehicles = data?.items
+    const vehicles = data?.items ?? []
 
-    const vehicles = mockVehiclesForSale
 
     return (
         <main className={styles.container}>
@@ -52,18 +49,22 @@ export default function VehiclesPage() {
             {/* Tabs */}
             <Tabs value={activeTab} onChange={(value) => setActiveTab(value as any)} mb="lg">
                 <Tabs.List>
-                    <Tabs.Tab value="Active">
-                        Active <Badge color="blue" variant="light" ml={5}>{/*vehicles.filter(v => v.status === 'Active').length*/}</Badge>
+                    <Tabs.Tab value="draft">
+                        Draft <Badge color="blue" variant="light" ml={5}>{/*vehicles.filter(v => v.status === 'Active').length*/}</Badge>
                     </Tabs.Tab>
-                    <Tabs.Tab value="Pending">
+                    <Tabs.Tab value="pending publisher">
                         Pending Publisher <Badge color="orange" variant="light" ml={5}>{/*vehicles.filter(v => v.status === 'Pending').length*/}</Badge>
                     </Tabs.Tab>
-                    <Tabs.Tab value="Sold">
-                        Sold <Badge color="green" variant="light" ml={5}>{/*vehicles.filter(v => v.status === 'Sold').length*/}</Badge>
+                    <Tabs.Tab value="active">
+                        Active <Badge color="green" variant="light" ml={5}>{/*vehicles.filter(v => v.status === 'Sold').length*/}</Badge>
                     </Tabs.Tab>
-                    <Tabs.Tab value="Draft">
-                        Draft <Badge color="gray" variant="light" ml={5}>{/*vehicles.filter(v => v.status === 'Draft').length*/}</Badge>
+                    <Tabs.Tab value="pending sales">
+                        Pending Sales <Badge color="gray" variant="light" ml={5}>{/*vehicles.filter(v => v.status === 'Draft').length*/}</Badge>
                     </Tabs.Tab>
+                    <Tabs.Tab value="sold">
+                        Sold <Badge color="gray" variant="light" ml={5}>{/*vehicles.filter(v => v.status === 'Draft').length*/}</Badge>
+                    </Tabs.Tab>
+
                 </Tabs.List>
             </Tabs>
 
@@ -111,7 +112,7 @@ export default function VehiclesPage() {
                     <Card shadow="sm" radius="md" withBorder className={styles.vehicleCard}>
                         <Card.Section style={{ position: 'relative' }}>
                             {
-                                v.photoLinks.map((src) => {
+                                [v.photoLinks].map((src) => {
                                     return <Image key={`car-photo-${src}`} src={src} alt={'Car photo'} className={styles.vehicleImg} />
                                 })
                             }

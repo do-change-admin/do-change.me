@@ -46,7 +46,9 @@ export default function () {
             disabled={!photo || !mileage || !licencePlate}
             onClick={() => {
                 // @ts-expect-error all fields must be here
-                postNewCar({}, {
+                postNewCar({
+
+                }, {
                     onSuccess: () => {
                         router.push('/car-sale')
                     }
