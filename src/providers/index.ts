@@ -1,1 +1,1 @@
-export * from './data'
+export * as DataProviders from './data'

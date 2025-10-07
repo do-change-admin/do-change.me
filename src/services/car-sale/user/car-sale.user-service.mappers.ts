@@ -1,8 +1,9 @@
 import { CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
-import { CarForSaleDetailDataLayerModel, CarForSaleListDataLayerModel } from "@/providers";
+import { DataProviders } from "@/providers";
+
 
 export const mapListDataLayerToDomain = (
-    source: CarForSaleListDataLayerModel,
+    source: DataProviders.CarsForSale.ListModel,
     photoLinks: string[]
 ): CarForSaleUserListModel => {
     return {
@@ -20,7 +21,7 @@ export const mapListDataLayerToDomain = (
 }
 
 export const mapDetailDataLayerToDraft = (
-    source: CarForSaleDetailDataLayerModel,
+    source: DataProviders.CarsForSale.Details,
     photoLinks: string[] | undefined
 ): CarForSaleUserDraftModel => {
     return {

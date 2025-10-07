@@ -1,8 +1,8 @@
 import { CarForSaleAdminDetailModel, CarForSaleAdminListModel } from "@/entities";
-import { CarForSaleDetailDataLayerModel, CarForSaleListDataLayerModel } from "@/providers";
+import { DataProviders } from "@/providers";
 
-export const mapCarForSaleDetailDataLayerToAdminEntity = (
-    source: CarForSaleDetailDataLayerModel,
+export const mapDetailDataLayerToAdminEntity = (
+    source: DataProviders.CarsForSale.Details,
     photoLinks: string[]
 ): CarForSaleAdminDetailModel => {
     return {
@@ -22,7 +22,7 @@ export const mapCarForSaleDetailDataLayerToAdminEntity = (
 }
 
 export const mapCarForSaleListDataLayerToAdminEntity = (
-    source: CarForSaleListDataLayerModel
+    source: DataProviders.CarsForSale.ListModel
 ): CarForSaleAdminListModel => {
     return {
         id: source.id,

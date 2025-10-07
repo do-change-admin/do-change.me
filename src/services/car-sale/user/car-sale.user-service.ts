@@ -1,4 +1,4 @@
-import { type CarsForSaleDataProvider } from "@/providers";
+import { type DataProviders } from "@/providers";
 import { CreateDraftPayload, FindCarsPayload, FindDraftPayload, PostCarPayload, UpdateDraftPayload } from "./car-sale.user-service.models";
 import { CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
 import { type FileSystemProvider } from "@/providers/contracts";
@@ -11,7 +11,7 @@ import { businessError } from "@/lib/errors";
 @injectable()
 export class Instance {
     public constructor(
-        @inject(DataProviderTokens.carsForSale) private readonly dataProvider: CarsForSaleDataProvider,
+        @inject(DataProviderTokens.carsForSale) private readonly dataProvider: DataProviders.CarsForSale.Interface,
         @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider,
         private readonly userId: string
     ) {

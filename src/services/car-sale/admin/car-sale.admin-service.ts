@@ -1,16 +1,16 @@
 import { inject, injectable } from "inversify";
-import { type CarsForSaleDataProvider } from "@/providers";
+import { type DataProviders } from "@/providers";
 import { FindListPayload, FindDetailsPayload, UpdatePayload } from "./car-sale.admin-service.models";
 import { CarForSaleAdminDetailModel, CarForSaleAdminListModel } from "@/entities";
 import { businessError } from "@/lib/errors";
 import { type FileSystemProvider } from "@/providers/contracts";
 import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
-import { mapCarForSaleDetailDataLayerToAdminEntity, mapCarForSaleListDataLayerToAdminEntity } from "./car-sale.admin-service.mappers";
+import { mapDetailDataLayerToAdminEntity, mapCarForSaleListDataLayerToAdminEntity } from "./car-sale.admin-service.mappers";
 
 @injectable()
 export class Instance {
     public constructor(
-        @inject(DataProviderTokens.carsForSale) private readonly dataProvider: CarsForSaleDataProvider,
+        @inject(DataProviderTokens.carsForSale) private readonly dataProvider: DataProviders.CarsForSale.Interface,
         @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider
     ) { }
 
@@ -44,7 +44,7 @@ export class Instance {
             }
         }
 
-        return mapCarForSaleDetailDataLayerToAdminEntity(details, photoLinks)
+        return mapDetailDataLayerToAdminEntity(details, photoLinks)
     }
 
     update = async ({ carId, payload, userId }: UpdatePayload) => {

@@ -1,9 +1,8 @@
 import { v4 } from "uuid";
-import { CarsForSaleDataProvider } from "../../contracts";
+import type { Interface } from "../../contracts/cars-for-sale.data-provider";
 import { generateInMemoryCRUDProvider } from "../../shared";
 import { faker } from '@faker-js/faker';
 import { CarSaleStatus } from "@/entities";
-
 
 const userId = '7fe2bdf5-e449-4691-b5c1-51de46c1952c'
 
@@ -24,77 +23,7 @@ const getFakeCarForSale = () => {
     }
 }
 
-// const getInitialData = (userId: string) => {
-//     faker.
-//         return[
-//         {
-//             id: v4(),
-//             make: 'BMW',
-//             model: '3 Series',
-//             vin: '1HGCM82633A123456',
-//             status: 'active' as const,
-//             photoIds: [],
-//             marketplaceLinks: [
-//                 'http://localhost:3000/marketplace/blablabla'
-//             ],
-//             mileage: 10000,
-//             price: 241,
-//             year: 2000,
-//             userId,
-//             userMail: 'test-user@mail.mail'
-//         },
-//         {
-//             id: v4(),
-//             make: 'BMW',
-//             model: '3 Series',
-//             vin: '1HGCM82633A123456',
-//             status: 'draft' as const,
-//             photoIds: [],
-//             marketplaceLinks: [
-//                 'http://localhost:3000/marketplace/blablabla'
-//             ],
-//             mileage: 10000,
-//             price: 241,
-//             year: 2000,
-//             userId,
-//             userMail: 'test-user@mail.mail'
-//         },
-//         {
-//             id: v4(),
-//             make: 'BMW',
-//             model: '3 Series',
-//             vin: '1HGCM82633A123456',
-//             status: 'pending publisher' as const,
-//             photoIds: [],
-//             marketplaceLinks: [
-//                 'http://localhost:3000/marketplace/blablabla'
-//             ],
-//             mileage: 1242142,
-//             price: 241,
-//             year: 2000,
-//             userId,
-//             userMail: 'test-user@mail.mail'
-//         },
-//         {
-//             id: v4(),
-//             make: 'BMW',
-//             model: '3 Series',
-//             vin: '1HGCM82633A123456',
-//             status: 'pending sales' as const,
-//             photoIds: [],
-//             marketplaceLinks: [
-//                 'http://localhost:3000/marketplace/blablabla'
-//             ],
-//             mileage: 10000,
-//             price: 2412,
-//             year: 1990,
-//             userId,
-//             userMail: 'test-user@mail.mail'
-//         },
-//     ]
-// }
-
-const CarsForSaleInMemoryDataProvider = generateInMemoryCRUDProvider<CarsForSaleDataProvider>({
+const CarsForSale = generateInMemoryCRUDProvider<Interface>({
     mappers: {
         createPayloadToDetail: (x) => {
             const id = v4()
@@ -118,6 +47,4 @@ const CarsForSaleInMemoryDataProvider = generateInMemoryCRUDProvider<CarsForSale
 })
 
 
-export { CarsForSaleInMemoryDataProvider }
-
-export const carsForSaleInMemoryDataProvider = new CarsForSaleInMemoryDataProvider()
+export { CarsForSale }

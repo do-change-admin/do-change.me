@@ -1,5 +1,5 @@
 import { carSaleStatusSchema } from "@/entities";
-import { createCarForSalePayloadSchema } from "@/providers";
+import { DataProviders } from "@/providers";
 import { paginationSchema } from "@/value-objects";
 import z from "zod";
 
@@ -14,7 +14,7 @@ export const findDraftPayloadSchema = z.object({
     id: z.string().nonempty()
 })
 
-export const postCarPayloadSchema = createCarForSalePayloadSchema.omit({
+export const postCarPayloadSchema = DataProviders.CarsForSale.createPayloadSchema.omit({
     userId: true,
     photoIds: true
 }).extend({

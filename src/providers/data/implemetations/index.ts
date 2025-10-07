@@ -1,1 +1,1 @@
-export * from './in-memory'
+export * as InMemory from './in-memory'

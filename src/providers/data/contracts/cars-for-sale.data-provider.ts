@@ -3,7 +3,7 @@ import { carSaleStatusSchema } from "@/entities";
 import { CRUDActionsPayload, CRUDModels, CRUDSearchPayload, DataCRUDProvider } from "../shared";
 import { VinSchema } from "@/schemas";
 
-export const carForSaleDetailDataLayerSchema = z.object({
+export const detailsSchema = z.object({
     userId: z.string().nonempty(),
     userMail: z.email(),
     id: z.string().nonempty(),
@@ -18,14 +18,14 @@ export const carForSaleDetailDataLayerSchema = z.object({
     photoIds: z.array(z.string().nonempty())
 })
 
-export const carForSaleListDataLayerSchema = carForSaleDetailDataLayerSchema
+export const listSchema = detailsSchema
 
-export const findSpecificCarForSalePayloadSchema = z.object({
+export const findOnePayloadSchema = z.object({
     id: z.string().nonempty(),
     userId: z.string().nonempty()
 })
 
-export const findCarsForSaleListPayloadSchema = z.object({
+export const findListPayloadSchema = z.object({
     userId: z.string().optional(),
     status: carSaleStatusSchema.optional(),
     make: z.string().optional(),
@@ -33,29 +33,29 @@ export const findCarsForSaleListPayloadSchema = z.object({
     vin: z.string().optional()
 })
 
-export const createCarForSalePayloadSchema = carForSaleDetailDataLayerSchema.omit({
+export const createPayloadSchema = detailsSchema.omit({
     userMail: true,
     marketplaceLinks: true,
     id: true,
     status: true,
 })
 
-export const updateCarForSalePayloadSchema = z.object({
+export const updatePayloadSchema = z.object({
     status: carSaleStatusSchema.optional(),
     marketplaceLinks: z.array(z.url()).optional(),
 })
 
-export type CarForSaleDetailDataLayerModel = z.infer<typeof carForSaleDetailDataLayerSchema>
-export type CarForSaleListDataLayerModel = z.infer<typeof carForSaleListDataLayerSchema>
+export type Details = z.infer<typeof detailsSchema>
+export type ListModel = z.infer<typeof listSchema>
 
-export type FindSpecificCarForSalePayload = z.infer<typeof findSpecificCarForSalePayloadSchema>
-export type FindCarsForSaleListPayload = z.infer<typeof findCarsForSaleListPayloadSchema>
+export type FindOnePayload = z.infer<typeof findOnePayloadSchema>
+export type FindListPayload = z.infer<typeof findListPayloadSchema>
 
-export type CreateCarForSalePayload = z.infer<typeof createCarForSalePayloadSchema>
-export type UpdateCarForSalePayload = z.infer<typeof updateCarForSalePayloadSchema>
+export type CreatePayload = z.infer<typeof createPayloadSchema>
+export type UpdatePayload = z.infer<typeof updatePayloadSchema>
 
-export type CarsForSaleDataProvider = DataCRUDProvider<
-    CRUDModels<CarForSaleListDataLayerModel, CarForSaleDetailDataLayerModel>,
-    CRUDSearchPayload<FindCarsForSaleListPayload, FindSpecificCarForSalePayload>,
-    CRUDActionsPayload<CreateCarForSalePayload, UpdateCarForSalePayload>
+export type Interface = DataCRUDProvider<
+    CRUDModels<ListModel, Details>,
+    CRUDSearchPayload<FindListPayload, FindOnePayload>,
+    CRUDActionsPayload<CreatePayload, UpdatePayload>
 >

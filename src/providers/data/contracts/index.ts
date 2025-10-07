@@ -1,1 +1,1 @@
-export * from './cars-for-sale.data-provider'
+export * as CarsForSale from './cars-for-sale.data-provider'
