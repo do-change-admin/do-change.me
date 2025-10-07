@@ -1,4 +1,4 @@
-import { type CarSaleUserService } from "@/services"
+import type { Services } from '@/services'
 
 export const DataProviderTokens = {
     carsForSale: Symbol.for("CARS-FOR-SALE-DATA-PROVIDER")
@@ -13,4 +13,4 @@ export const ServiceTokens = {
     carSaleAdmin: Symbol.for('CAR-SALE-ADMIN-SERVICE')
 }
 
-export type CarSaleUserServiceFactory = (userId: string) => CarSaleUserService
+export type CarSaleUserServiceFactory = (userId: string) => Services.CarSaleUser.Instance

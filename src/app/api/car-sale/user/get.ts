@@ -1,13 +1,13 @@
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
 import z from "zod";
 import { carForSaleUserListSchema } from "@/entities";
-import { findCarsForSaleUserServicePayloadSchema } from "@/services";
 import { testContainer } from "@/di-containers";
 import { CarSaleUserServiceFactory, ServiceTokens } from "@/di-containers/tokens.di-container";
+import { Services } from "@/services";
 
 const schemas = {
     body: undefined,
-    query: findCarsForSaleUserServicePayloadSchema,
+    query: Services.CarSaleUser.findCarsPayloadSchema,
     response: z.object({
         items: z.array(carForSaleUserListSchema)
     })

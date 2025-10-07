@@ -1,10 +1,10 @@
 import { test, expect, beforeEach } from 'vitest'
-import { CarSaleUserService } from './car-sale.user-service'
+import { Instance } from './car-sale.user-service'
 import { testContainer } from '@/di-containers'
 import { CarSaleUserServiceFactory, ServiceTokens } from '@/di-containers/tokens.di-container'
 import { v4 } from 'uuid'
 
-let service: CarSaleUserService
+let service: Instance
 
 beforeEach(() => {
     const userId = v4()

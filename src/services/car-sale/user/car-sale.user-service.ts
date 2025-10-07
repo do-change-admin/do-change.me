@@ -1,15 +1,15 @@
 import { type CarsForSaleDataProvider } from "@/providers";
-import { CreateDraftCarForSaleUserServicePayload, FindCarsForSaleUserServicePayload, FindDraftCarForSaleUserServicePayload, PostCarForSaleUserServicePayload, UpdateDraftCarForSaleUserServicePayload } from "./car-sale.user-service.models";
-import { CarForSaleUserDetailModel, CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
+import { CreateDraftPayload, FindCarsPayload, FindDraftPayload, PostCarPayload, UpdateDraftPayload } from "./car-sale.user-service.models";
+import { CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
 import { type FileSystemProvider } from "@/providers/contracts";
 import { v4 } from "uuid";
 import { inject, injectable } from "inversify";
 import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
-import { mapCarForSaleDetailDataLayerToUserDraftEntity, mapCarForSaleListDataLayerToUserEntity } from "./car-sale.user-service.mappers";
+import { mapDetailDataLayerToDraft, mapListDataLayerToDomain } from "./car-sale.user-service.mappers";
 import { businessError } from "@/lib/errors";
 
 @injectable()
-export class CarSaleUserService {
+export class Instance {
     public constructor(
         @inject(DataProviderTokens.carsForSale) private readonly dataProvider: CarsForSaleDataProvider,
         @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider,
@@ -18,7 +18,7 @@ export class CarSaleUserService {
 
     }
 
-    public findList = async (payload: FindCarsForSaleUserServicePayload): Promise<CarForSaleUserListModel[]> => {
+    public findList = async (payload: FindCarsPayload): Promise<CarForSaleUserListModel[]> => {
         const result = await this.dataProvider.list({
             userId: this.userId,
             status: payload.status,
@@ -41,14 +41,14 @@ export class CarSaleUserService {
                 }
             }
 
-            return mapCarForSaleListDataLayerToUserEntity(x, photoLinks)
+            return mapListDataLayerToDomain(x, photoLinks)
         }))
 
         return items
     }
 
 
-    public post = async (payload: PostCarForSaleUserServicePayload) => {
+    public post = async (payload: PostCarPayload) => {
         let photoIds: string[] = []
 
         for (const photo of payload.photos) {
@@ -76,7 +76,7 @@ export class CarSaleUserService {
         }
     }
 
-    public findDraft = async (payload: FindDraftCarForSaleUserServicePayload): Promise<CarForSaleUserDraftModel> => {
+    public findDraft = async (payload: FindDraftPayload): Promise<CarForSaleUserDraftModel> => {
         const data = await this.dataProvider.details({ id: payload.id, userId: this.userId })
         if (!data || data.status !== 'draft') {
             throw businessError('No such draft was found', undefined, 404)
@@ -93,10 +93,10 @@ export class CarSaleUserService {
             }
         }
 
-        return mapCarForSaleDetailDataLayerToUserDraftEntity(data, photoLinks)
+        return mapDetailDataLayerToDraft(data, photoLinks)
     }
 
-    public createDraft = async (payload: CreateDraftCarForSaleUserServicePayload) => {
+    public createDraft = async (payload: CreateDraftPayload) => {
         let photoIds = []
 
         if (payload.photos && payload.photos.length) {
@@ -119,7 +119,7 @@ export class CarSaleUserService {
         })
     }
 
-    public updateDraft = async (payload: UpdateDraftCarForSaleUserServicePayload) => {
+    public updateDraft = async (payload: UpdateDraftPayload) => {
 
     }
 }

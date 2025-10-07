@@ -3,7 +3,7 @@ import { Container } from 'inversify'
 import { CarSaleUserServiceFactory, DataProviderTokens, FunctionalProviderTokens, ServiceTokens } from './tokens.di-container'
 import { FileSystemProvider } from '@/providers/contracts'
 import { PublicFolderFileSystemProvider } from '@/providers/implementations'
-import { CarSaleAdminService, CarSaleUserService } from '@/services'
+import { Services } from '@/services'
 
 const container = new Container()
 
@@ -28,7 +28,7 @@ const registerServices = () => {
             return (userId) => {
                 const dataProvider = ctx.get<CarsForSaleDataProvider>(DataProviderTokens.carsForSale)
                 const fileSystemProvider = ctx.get<FileSystemProvider>(FunctionalProviderTokens.fileSystem)
-                return new CarSaleUserService(
+                return new Services.CarSaleUser.Instance(
                     dataProvider,
                     fileSystemProvider,
                     userId
@@ -36,8 +36,8 @@ const registerServices = () => {
             }
         })
     container
-        .bind<CarSaleAdminService>(ServiceTokens.carSaleAdmin)
-        .to(CarSaleAdminService)
+        .bind<Services.CarSaleAdmin.Instance>(ServiceTokens.carSaleAdmin)
+        .to(Services.CarSaleAdmin.Instance)
 }
 
 registerDataProviders()

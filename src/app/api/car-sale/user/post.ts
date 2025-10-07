@@ -1,11 +1,11 @@
-import { postCarForSaleUserServicePayloadSchema } from "@/services";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
 import { testContainer } from "@/di-containers";
 import { CarSaleUserServiceFactory, ServiceTokens } from "@/di-containers/tokens.di-container";
+import { Services } from "@/services";
 
 const schemas = {
     body: undefined,
-    query: postCarForSaleUserServicePayloadSchema,
+    query: Services.CarSaleUser.postCarPayloadSchema,
     response: undefined
 } satisfies ZodAPISchemas
 

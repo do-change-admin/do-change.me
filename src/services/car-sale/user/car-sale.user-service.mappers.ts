@@ -1,7 +1,7 @@
-import { CarForSaleUserDetailModel, CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
+import { CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
 import { CarForSaleDetailDataLayerModel, CarForSaleListDataLayerModel } from "@/providers";
 
-export const mapCarForSaleListDataLayerToUserEntity = (
+export const mapListDataLayerToDomain = (
     source: CarForSaleListDataLayerModel,
     photoLinks: string[]
 ): CarForSaleUserListModel => {
@@ -19,7 +19,7 @@ export const mapCarForSaleListDataLayerToUserEntity = (
     }
 }
 
-export const mapCarForSaleDetailDataLayerToUserDraftEntity = (
+export const mapDetailDataLayerToDraft = (
     source: CarForSaleDetailDataLayerModel,
     photoLinks: string[] | undefined
 ): CarForSaleUserDraftModel => {

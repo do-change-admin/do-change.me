@@ -1,7 +1,7 @@
 import type { CarSaleUserDraftDetailsAPI } from "@/app/api/car-sale/user/drafts/route";
 import type { CarSaleUserAPI } from "@/app/api/car-sale/user/route";
 import { apiRequest, buildQueryString } from "@/lib/apiFetch";
-import { CreateDraftCarForSaleUserServicePayload, PostCarForSaleUserServicePayload, UpdateDraftCarForSaleUserServicePayload } from "@/services";
+import type { Services } from "@/services";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type API = CarSaleUserAPI
@@ -23,7 +23,7 @@ export const useCarsForSaleUserList = (queryPayload: API['GET']['payload']['quer
 
 export const useCarForSaleUserPosting = () => {
     const queryClient = useQueryClient()
-    return useMutation<void, API['POST']['error'], PostCarForSaleUserServicePayload>({
+    return useMutation<void, API['POST']['error'], Services.CarSaleUser.PostCarPayload>({
         mutationFn: async (payload) => {
             const formData = new FormData()
 
@@ -63,7 +63,7 @@ export const useCarForSaleDraftDetail = (query: DraftsAPI['GET']['payload']['que
 }
 
 export const useCarForSaleDraftCreation = () => {
-    return useMutation<void, DraftsAPI['POST']['error'], CreateDraftCarForSaleUserServicePayload>({
+    return useMutation<void, DraftsAPI['POST']['error'], Services.CarSaleUser.CreateDraftPayload>({
         mutationFn: async (variables) => {
             const formData = new FormData()
 
@@ -84,7 +84,7 @@ export const useCarForSaleDraftCreation = () => {
 }
 
 export const useCarForSaleDraftUpdate = () => {
-    return useMutation<void, DraftsAPI['PATCH']['error'], UpdateDraftCarForSaleUserServicePayload>({
+    return useMutation<void, DraftsAPI['PATCH']['error'], Services.CarSaleUser.UpdateDraftPayload>({
         mutationFn: async (variables) => {
             const formData = new FormData()
 

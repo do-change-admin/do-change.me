@@ -3,39 +3,39 @@ import { createCarForSalePayloadSchema } from "@/providers";
 import { paginationSchema } from "@/value-objects";
 import z from "zod";
 
-export const findCarsForSaleUserServicePayloadSchema = paginationSchema.extend({
+export const findCarsPayloadSchema = paginationSchema.extend({
     status: carSaleStatusSchema.optional(),
     make: z.string().optional(),
     model: z.string().optional(),
     vin: z.string().optional()
 })
 
-export const findDraftCarForSaleUserServicePayloadSchema = z.object({
+export const findDraftPayloadSchema = z.object({
     id: z.string().nonempty()
 })
 
-export const postCarForSaleUserServicePayloadSchema = createCarForSalePayloadSchema.omit({
+export const postCarPayloadSchema = createCarForSalePayloadSchema.omit({
     userId: true,
     photoIds: true
 }).extend({
     draftId: z.string().optional()
 })
 
-export const createDraftCarForSaleUserServicePayloadSchema = postCarForSaleUserServicePayloadSchema.partial().omit({
+export const createDraftPayloadSchema = postCarPayloadSchema.partial().omit({
     draftId: true
 })
-export const updateDraftCarForSaleUserServicePayloadSchema = createDraftCarForSaleUserServicePayloadSchema.extend({
+export const updateDraftPayloadSchema = createDraftPayloadSchema.extend({
     id: z.string().nonempty()
 })
 
-export type FindCarsForSaleUserServicePayload = z.infer<typeof findCarsForSaleUserServicePayloadSchema>
-export type FindDraftCarForSaleUserServicePayload = z.infer<typeof findDraftCarForSaleUserServicePayloadSchema>
-export type PostCarForSaleUserServicePayload = z.infer<typeof postCarForSaleUserServicePayloadSchema> & {
+export type FindCarsPayload = z.infer<typeof findCarsPayloadSchema>
+export type FindDraftPayload = z.infer<typeof findDraftPayloadSchema>
+export type PostCarPayload = z.infer<typeof postCarPayloadSchema> & {
     photos: File[]
 }
-export type CreateDraftCarForSaleUserServicePayload = z.infer<typeof createDraftCarForSaleUserServicePayloadSchema> & {
+export type CreateDraftPayload = z.infer<typeof createDraftPayloadSchema> & {
     photos: File[] | undefined
 }
-export type UpdateDraftCarForSaleUserServicePayload = z.infer<typeof updateDraftCarForSaleUserServicePayloadSchema> & {
+export type UpdateDraftPayload = z.infer<typeof updateDraftPayloadSchema> & {
     photos: File[] | undefined
 }
