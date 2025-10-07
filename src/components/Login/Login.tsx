@@ -142,9 +142,9 @@ export const Login = () => {
               </p>
             </div>
 
-            <form className={styles.loginForm} onSubmit={handleSubmit}>
+            <form data-testid='login-form' className={styles.loginForm} onSubmit={handleSubmit}>
               <div>
-                <label className={styles.label}>Email Address</label>
+                <label className={styles.label} data-testid='email-address-label'>Email Address</label>
                 <input
                   type="email"
                   className={styles.input}
@@ -156,7 +156,7 @@ export const Login = () => {
               </div>
 
               <div>
-                <label className={styles.label}>Password</label>
+                <label className={styles.label} data-testid='password-label'>Password</label>
                 <div className={styles.passwordWrapper}>
                   <input
                     type={showPassword ? "text" : "password"}
