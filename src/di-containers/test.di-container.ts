@@ -2,8 +2,8 @@ import { DataProviders } from '@/providers'
 import { Container } from 'inversify'
 import { CarSaleUserServiceFactory, DataProviderTokens, FunctionalProviderTokens, ServiceTokens } from './tokens.di-container'
 import { FileSystemProvider } from '@/providers/contracts'
-import { PublicFolderFileSystemProvider } from '@/providers/implementations'
 import { Services } from '@/services'
+import { MockPicturesProvider } from '@/providers/implementations/file-system/pictures.mock.data-provider'
 
 const container = new Container()
 
@@ -18,7 +18,7 @@ const registerDataProviders = () => {
 const registerFunctionalProviders = () => {
     container
         .bind<FileSystemProvider>(FunctionalProviderTokens.fileSystem)
-        .to(PublicFolderFileSystemProvider)
+        .to(MockPicturesProvider)
 }
 
 const registerServices = () => {
