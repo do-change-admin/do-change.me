@@ -13,6 +13,10 @@ const registerDataProviders = () => {
     container
         .bind<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
         .toConstantValue(carsForSaleInMemoryDataProvider)
+
+    container
+        .bind<DataProviders.VehicleHistoryReports.Interface>(DataProviderTokens.vehicleHistoryReports)
+        .to(DataProviders.Implementations.API.VehicleHistoryReports)
 }
 
 const registerFunctionalProviders = () => {

@@ -158,8 +158,8 @@ export const useReport = () => {
 
     return useMutation<ReportsAPI['GET']['response'], ReportsAPI['GET']['error'], ReportsAPI['GET']['payload']>({
         mutationFn: apiRequest('/api/vin/report', 'GET'),
-        onSuccess: ({ markup }) => {
-            sessionStorage.setItem("report", markup);
+        onSuccess: ({ htmlMarkup }) => {
+            sessionStorage.setItem("report", htmlMarkup);
             router.push("/report");
         }
     })

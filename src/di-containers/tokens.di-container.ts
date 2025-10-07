@@ -1,7 +1,8 @@
 import type { Services } from '@/services'
 
 export const DataProviderTokens = {
-    carsForSale: Symbol.for("CARS-FOR-SALE-DATA-PROVIDER")
+    carsForSale: Symbol.for("CARS-FOR-SALE-DATA-PROVIDER"),
+    vehicleHistoryReports: Symbol.for("VEHICLE-HISTORY-REPORTS")
 }
 
 export const FunctionalProviderTokens = {
