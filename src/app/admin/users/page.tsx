@@ -17,7 +17,7 @@ export default function () {
         {data.users.map((x) => {
             return (
                 <div>
-                    {x.id} ({x.email}) - {x.downloadedReports} reports
+                    {x.id} {x.subscription ? `(подписка - ${x.subscription.type} - ${x.subscription.isActive ? 'Активна' : 'Не активна'})` : ''}({x.email}) - {x.downloadedReports} reports
                 </div>
             )
         })}
