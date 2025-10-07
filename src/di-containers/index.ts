@@ -7,6 +7,11 @@ export const getDIContainer = () => {
         return testContainer
     }
 
+    if (process.env['IN_DEV']) {
+        // вернуть dev-контейнер для локальной разработки
+        return testContainer
+    }
+
     // вернуть боевой контейнер
     return testContainer
 }
