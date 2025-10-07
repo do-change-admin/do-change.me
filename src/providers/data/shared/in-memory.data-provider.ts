@@ -38,7 +38,7 @@ export const generateInMemoryCRUDProvider = <DataProvider>(options?: {
             const entityAsObject = entity as object
 
             return Object.entries(entityAsObject).filter(([key]) => patternKeys.includes(key)).every(([key, value]) => {
-                return value === (pattern as Record<string, any>)[key]
+                return value === (pattern as Record<string, any>)[key] || value?.toString()?.includes((pattern as Record<string, any>)[key]?.toString())
             })
         }
 
@@ -47,7 +47,7 @@ export const generateInMemoryCRUDProvider = <DataProvider>(options?: {
             const entityAsObject = entity as object
 
             return Object.entries(entityAsObject).filter(([key]) => patternKeys.includes(key)).every(([key, value]) => {
-                return value === (pattern as Record<string, any>)[key]
+                return value === (pattern as Record<string, any>)[key] || value?.toString()?.includes((pattern as Record<string, any>)[key]?.toString())
             })
         }
 
