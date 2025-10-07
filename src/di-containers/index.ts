@@ -1,3 +1,7 @@
 import 'reflect-metadata'
 
-export * from './test.di-container'
+import { testContainer } from './test.di-container'
+
+export const getContainer = () => {
+    return testContainer
+}

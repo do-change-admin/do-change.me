@@ -1,6 +1,6 @@
 import { test, expect, beforeEach } from 'vitest'
 import { Instance } from './car-sale.user-service'
-import { testContainer } from '@/di-containers'
+import { testContainer } from '@/di-containers/test.di-container'
 import { CarSaleUserServiceFactory, ServiceTokens } from '@/di-containers/tokens.di-container'
 import { v4 } from 'uuid'
 

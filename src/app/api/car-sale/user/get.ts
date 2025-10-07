@@ -1,7 +1,7 @@
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
 import z from "zod";
 import { carForSaleUserListSchema } from "@/entities";
-import { testContainer } from "@/di-containers";
+import { getContainer } from "@/di-containers";
 import { CarSaleUserServiceFactory, ServiceTokens } from "@/di-containers/tokens.di-container";
 import { Services } from "@/services";
 
@@ -17,7 +17,8 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload, activeUser }) => {
-        const service = testContainer.get<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)(activeUser.id)
+        const container = getContainer()
+        const service = container.get<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)(activeUser.id)
         const items = await service.findList(payload)
         return { items }
     }
