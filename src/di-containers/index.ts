@@ -1,17 +1,20 @@
 import 'reflect-metadata'
 
 import { testContainer } from './test.di-container'
+import { devContainer } from './dev.di-container'
+import { stageContainer } from './stage.di-container'
 
 export const getDIContainer = () => {
     if (process.env['IN_TEST']) {
+        // контейнер для тестового окружения
         return testContainer
     }
 
     if (process.env['IN_DEV']) {
-        // вернуть dev-контейнер для локальной разработки
-        return testContainer
+        // контейнер для локальной разработки
+        return devContainer
     }
 
-    // вернуть боевой контейнер
-    return testContainer
+    // контейнер для стейджа
+    return stageContainer
 }
