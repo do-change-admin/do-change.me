@@ -57,12 +57,9 @@ export const AuctionAccess = () => {
                 </form>
             </Modal>
             {/* QR Section */}
-            <Avatar radius="lg" w="100%" h={200} className={styles.photo} src={profileData?.photoLink || ''} alt="" />
-            <Text fw="bold" fs="lg">{profileData?.firstName} {profileData?.lastName}</Text>
-            <div className={styles.accessNumber}>
-                <p className={styles.accessLabel}>Auction Access Number</p>
-                <p className={styles.accessValue}>{profileData?.auctionAccessNumber ?? "__-____-____"}</p>
-            </div>
+            <Avatar radius="0" w="100%" h={300} className={styles.photo} src={profileData?.photoLink || ''} alt="" />
+            <Text fw="bold" style={{ fontSize: '1.5rem' }} c="#005BAA">{profileData?.firstName.toUpperCase()} {profileData?.lastName.toUpperCase()}</Text>
+            <Text fw="bold" fs="lg"c="#005BAA">{profileData?.auctionAccessNumber ?? "__-____-____"}</Text>
             <div className={styles.qrBox}>
                 {profileData?.auctionAccessQRLink ? <img
                     className={styles.qrIcon}
