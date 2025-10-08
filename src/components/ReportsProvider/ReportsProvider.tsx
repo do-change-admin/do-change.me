@@ -5,16 +5,17 @@ import styles from "./ReportsProvider.module.css";
 import { FaCheckCircle, FaRegFileAlt } from "react-icons/fa";
 import Image from "next/image";
 import React, { FC } from "react";
-import {useCheckRecords, useReport} from "@/hooks";
+import { useReport } from "@/hooks";
 import { FiRefreshCw } from "react-icons/fi";
+import { LoadingOverlay } from "@mantine/core";
 
 export interface IReportsProviderProp {
     vin: string;
-    reportsLeft: number;
 }
 
-export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) => {
-    const { mutate: getReport } = useReport();
+export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
+    const { mutate: getReport, isPending } = useReport();
+
     return (
         <motion.div
             className={styles.reportFooter}
@@ -22,13 +23,12 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) 
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
         >
-            {/* Header */}
-            {/*<div className={styles.header}>*/}
-            {/*    <h2>Get Detailed Vehicle History Report</h2>*/}
-            {/*    <p>Uncover hidden problems, accidents, and more with official reports</p>*/}
-            {/*</div>*/}
-
-            {/* Content */}
+            <LoadingOverlay
+                visible={isPending}
+                zIndex={1000}
+                overlayProps={{ radius: "sm", blur: 2 }}
+                loaderProps={{ color: "blue", size: "lg" }}
+            />
             <div className={styles.content}>
                 <div className={styles.intro}>
                     <div className={styles.reportsAvailable}>
@@ -38,52 +38,37 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) 
                     <p>Choose your preferred vehicle history provider</p>
                 </div>
 
-                {/* Grid */}
                 <div className={styles.grid}>
                     {/* CARFAX */}
-                    <motion.div
-                        whileHover={{ scale: 1.03 }}
-                        className={styles.cardBlue}
-                    >
+                    <motion.div whileHover={{ scale: 1.03 }} className={styles.cardBlue}>
+
                         <div className={styles.cardContent}>
                             <div className={styles.logoCircleBlue}>
-                                <Image width={100} height={60} src="/carfax.png" alt="Carfax" className={styles.logo} />
+                                <Image
+                                    width={100}
+                                    height={60}
+                                    src="/carfax.png"
+                                    alt="Carfax"
+                                    className={styles.logo}
+                                />
                             </div>
                             <h3>CARFAX Report</h3>
                             <p>Most comprehensive database with 22+ billion records</p>
-                            <button className={styles.btnBlue} onClick={() => getReport({
-                                query: {
-                                    vin,
-                                    provider: "carfax"
+                            <button
+                                className={styles.btnBlue}
+                                disabled={isPending}
+                                onClick={() =>
+                                    getReport({
+                                        query: { vin },
+                                    })
                                 }
-                            })}>Get Report</button>
-                            {/*<div className={styles.priceBlue}>Free</div>*/}
+                            >
+                                Get Report
+                            </button>
                         </div>
                     </motion.div>
-
-                    {/* AutoCheck */}
-                    {/*<motion.div*/}
-                    {/*    whileHover={{ scale: 1.03 }}*/}
-                    {/*    className={styles.cardOrange}*/}
-                    {/*>*/}
-                    {/*    <div className={styles.cardContent}>*/}
-                    {/*        <div className={styles.logoCircleOrange}>*/}
-                    {/*            <Image width={100} height={50} src='/autoCheck.png' alt="AutoCheck" className={styles.logo} />*/}
-                    {/*        </div>*/}
-                    {/*        <h3>AutoCheck Report</h3>*/}
-                    {/*        <p>Experian's trusted vehicle history service</p>*/}
-                    {/*        <button className={styles.btnOrange} onClick={() => getReport({*/}
-                    {/*            query: {*/}
-                    {/*                vin,*/}
-                    {/*                provider: "autocheck"*/}
-                    {/*            }*/}
-                    {/*        })}>Order AutoCheck Report</button>*/}
-                    {/*        <div className={styles.priceOrange}>$0.99</div>*/}
-                    {/*    </div>*/}
-                    {/*</motion.div>*/}
                 </div>
 
-                {/* Footer */}
                 <div className={styles.footer}>
                     <div>
                         <FaCheckCircle className={styles.iconGreen} />

@@ -20,7 +20,7 @@ const formatNumber = (num: number) => {
     return intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export const SampleResults: FC<ISampleResults> = ({ vin, reportsLeft, baseInfo }) => {
+export const SampleResults: FC<ISampleResults> = ({ vin, baseInfo }) => {
 
     const [averageMileage, setAverageMileage] = useState<number>(25);
     const { data: mileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(vin, averageMileage * 1000);
@@ -73,7 +73,7 @@ export const SampleResults: FC<ISampleResults> = ({ vin, reportsLeft, baseInfo }
                         </div>
                         <DistributionChart distribution={mileageData?.market_prices?.distribution ?? []} />
                     </div>
-                    <ReportsProvider vin={vin} reportsLeft={reportsLeft} />
+                    <ReportsProvider vin={vin} />
                 </div>
                 {baseInfo ? <CarInfo {...baseInfo} /> : <>Loading...</>}
             </div>
