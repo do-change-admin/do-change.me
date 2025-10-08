@@ -65,7 +65,8 @@ export class Instance {
             price: payload.price,
             vin: payload.vin,
             userId: this.userId,
-            year: payload.year
+            year: payload.year,
+            status: 'pending publisher'
         })
 
         if (payload.draftId) {
@@ -116,7 +117,8 @@ export class Instance {
             price: payload.price || 0,
             userId: this.userId,
             vin: payload.vin || '',
-            year: payload.year || 0
+            year: payload.year || 0,
+            status: 'draft'
         })
     }
 

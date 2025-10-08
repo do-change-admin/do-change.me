@@ -16,7 +16,8 @@ export const findDraftPayloadSchema = z.object({
 
 export const postCarPayloadSchema = DataProviders.CarsForSale.createPayloadSchema.omit({
     userId: true,
-    photoIds: true
+    photoIds: true,
+    status: true
 }).extend({
     draftId: z.string().optional()
 })

@@ -31,7 +31,7 @@ const CarsForSale = generateInMemoryCRUDProvider<Interface>({
                 id,
                 vin: x.vin,
                 photoIds: x.photoIds,
-                status: 'pending publisher',
+                status: x.status,
                 userId: x.userId,
                 mileage: x.mileage,
                 userMail: `${id}@test.test`,

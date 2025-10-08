@@ -38,6 +38,8 @@ export const createPayloadSchema = detailsSchema.omit({
     marketplaceLinks: true,
     id: true,
     status: true,
+}).extend({
+    status: z.enum(['draft', 'pending publisher'])
 })
 
 export const updatePayloadSchema = z.object({
