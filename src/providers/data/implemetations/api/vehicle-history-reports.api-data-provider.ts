@@ -14,6 +14,7 @@ export class VehicleHistoryReports implements Interface {
                 "X-API-Key": process.env.REPORT_KEY!,
             },
         });
+
         if (!response.ok) {
             throw businessError('Error on report obtaining')
         }

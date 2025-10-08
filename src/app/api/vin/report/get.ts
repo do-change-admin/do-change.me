@@ -35,5 +35,5 @@ export const method = zodApiMethod(schemas, {
         const service = new RequestsMeteringService(activeUser.id)
         await service.incrementUsage(FeatureKey.Report)
     },
-    beforehandler: noSubscriptionsGuard
+    // beforehandler: noSubscriptionsGuard
 })
