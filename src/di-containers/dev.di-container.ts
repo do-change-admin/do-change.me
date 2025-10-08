@@ -1,14 +1,12 @@
-import { DataProviders } from '@/providers'
+import { DataProviders, DataProvidersImplemetations } from '@/providers'
 import { Container } from 'inversify'
-import { CarSaleUserServiceFactory, DataProviderTokens, FunctionalProviderTokens, ServiceTokens } from './tokens.di-container'
-import { FileSystemProvider } from '@/providers/contracts'
+import { CarSaleUserServiceFactory, DataProviderTokens, ServiceTokens } from './tokens.di-container'
 import { Services } from '@/services'
-import { PublicFolderFileSystemProvider } from '@/providers/implementations'
 
 const container = new Container()
 
 const registerDataProviders = () => {
-    const carsForSaleInMemoryDataProvider = new DataProviders.Implementations.InMemory.CarsForSale()
+    const carsForSaleInMemoryDataProvider = new DataProvidersImplemetations.InMemory.CarsForSale()
 
     container
         .bind<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
@@ -16,11 +14,11 @@ const registerDataProviders = () => {
 
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DataProviderTokens.vehicleHistoryReports)
-        .to(DataProviders.Implementations.API.VehicleHistoryReports)
+        .to(DataProvidersImplemetations.API.VehicleHistoryReports)
 
     container
         .bind<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
-        .to(DataProviders.Implementations.API.PicturesInPublicFolder)
+        .to(DataProvidersImplemetations.API.PicturesInPublicFolder)
 }
 
 const registerFunctionalProviders = () => {
