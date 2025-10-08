@@ -7,7 +7,7 @@ export class Instance {
         return crypto.createHash("sha256").update(this.rawValue).digest("hex");
     }
 
-    areSame(s: Instance): boolean {
-        return s.rawValue === this.rawValue
+    isSame(hash: Instance): boolean {
+        return this.rawValue === hash.rawValue
     }
 }
