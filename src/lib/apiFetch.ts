@@ -22,7 +22,7 @@ export async function apiFetch<T>(
 
 export const apiRequest = (url: string, method: "GET" | "POST" | "DELETE" | "PATCH" | "PUT") => {
     return async (payload: { body?: Object, query?: Object }) => {
-        const actualURL = payload?.query ? `${url}?${Object.entries(payload.query).map(x => `${x[0]}=${x[1]}`).join('&')}` : url
+        const actualURL = payload?.query ? `${url}?${Object.entries(payload.query).filter(x => x[1] !== undefined && x[1] !== null).map(x => `${x[0]}=${x[1]}`).join('&')}` : url
         const result = await fetch(actualURL, {
             method,
             headers: {

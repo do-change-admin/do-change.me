@@ -1,5 +1,5 @@
 import { ProvidesFileLink, ProvidesFileUploading } from '../../contracts'
-import { mkdir, writeFile, readFile, access } from 'fs/promises';
+import { mkdir, writeFile, access } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 
@@ -29,7 +29,7 @@ export class PublicFolderFileSystemProvider implements ProvidesFileLink, Provide
 
         try {
             await access(filePath);
-            return '/uploads/' + id;
+            return 'http://localhost:3000/uploads/' + id;
         } catch (err) {
             return null;
         }

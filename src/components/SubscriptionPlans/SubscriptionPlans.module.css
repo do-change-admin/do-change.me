@@ -1,64 +1,85 @@
 .section {
     padding: 2rem 1rem 2rem 5rem;
 }
+
+@media (max-width: 700px) {
+    .section {
+        padding: 1rem 1rem 1rem 1rem;
+    }
+}
+
 .container {
     width: 100%;
     margin: 0 auto;
 }
+
 .header {
     text-align: center;
     margin-bottom: 3rem;
 }
+
 .title {
     font-size: 2.5rem;
     font-weight: bold;
     color: #111827;
     margin-bottom: 1rem;
 }
+
 .subtitle {
     font-size: 1.125rem;
     color: #4b5563;
     max-width: 700px;
     margin: 0 auto;
 }
+
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
     gap: 2rem;
 }
+
 @media (max-width: 700px) {
     .grid {
         grid-template-columns: 1fr;
     }
 }
+
 .card {
     position: relative;
     background: #fff;
     border-radius: 2rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     border: 1px solid #e5e7eb;
     transition: all 0.3s ease;
 }
+
 .cardPremium {
     composes: card;
     background: #fff;
     border-radius: 2rem;
     border: 1px solid #ec4899;
 }
+
 .cardLineBlue {
     position: absolute;
-    top: 0; left: 1rem; right: 0;
+    top: 0;
+    left: 1rem;
+    right: 0;
     width: 90%;
     height: 4px;
     background: linear-gradient(to right, #3b82f6, #6366f1);
 }
+
 .cardLinePurple {
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 4px;
     background: linear-gradient(to right, #a855f7, #ec4899);
 }
+
 .ribbon {
     position: absolute;
     top: -12px;
@@ -71,52 +92,64 @@
     border-radius: 9999px;
     transform: rotate(12deg);
 }
+
 .cardContent {
     padding: 2rem;
 }
+
 .cardHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
 }
+
 .cardTitle {
     font-size: 1.5rem;
     font-weight: bold;
     color: #111827;
 }
+
 .cardText {
     color: #6b7280;
     margin-top: 0.25rem;
 }
-.iconBlue, .iconPurpleBg {
+
+.iconBlue,
+.iconPurpleBg {
     background: #eff6ff;
     padding: 0.75rem;
     border-radius: 9999px;
     font-size: 1.25rem;
 }
+
 .iconPurpleBg {
     background: #f5f3ff;
     color: #9333ea;
 }
+
 .priceBlock {
     margin-bottom: 2rem;
 }
+
 .priceRow {
     display: flex;
     align-items: baseline;
 }
+
 .price {
     font-size: 2.5rem;
     font-weight: bold;
     color: #111827;
 }
+
 .oldPrice {
     margin-left: 0.75rem;
     font-size: 1.5rem;
     text-decoration: line-through;
     color: #9ca3af;
 }
+
 .discountBlue {
     display: inline-block;
     background: #dbeafe;
@@ -127,6 +160,7 @@
     border-radius: 9999px;
     margin-top: 0.5rem;
 }
+
 .discountPurple {
     display: inline-block;
     background: #f3e8ff;
@@ -137,25 +171,58 @@
     border-radius: 9999px;
     margin-top: 0.5rem;
 }
+
 .features {
     margin-bottom: 2rem;
 }
+
 .feature {
     display: flex;
     align-items: flex-start;
     margin-bottom: 1rem;
 }
+
 .featureNote {
     font-size: 0.875rem;
     color: #6b7280;
     margin-top: 0.25rem;
 }
-.checkGreen { color: #10b981; margin-right: 0.75rem; margin-top: 0.25rem; }
-.iconBlue { color: #2563eb; margin-right: 0.75rem; margin-top: 0.25rem; }
-.iconPurple { color: #9333ea; margin-right: 0.75rem; margin-top: 0.25rem; }
-.iconOrange { color: #f97316; margin-right: 0.75rem; margin-top: 0.25rem; }
-.iconPink { color: #ec4899; margin-right: 0.75rem; margin-top: 0.25rem; }
-.iconYellow { color: #facc15; margin-right: 0.5rem; }
+
+.checkGreen {
+    color: #10b981;
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.iconBlue {
+    color: #2563eb;
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.iconPurple {
+    color: #9333ea;
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.iconOrange {
+    color: #f97316;
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.iconPink {
+    color: #ec4899;
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.iconYellow {
+    color: #facc15;
+    margin-right: 0.5rem;
+}
+
 .extraNote {
     background: #f9fafb;
     padding: 0.75rem 1rem;
@@ -167,6 +234,7 @@
     display: flex;
     align-items: center;
 }
+
 .auctionBox {
     background: linear-gradient(to right, #faf5ff, #fdf2f8);
     border: 1px solid #e9d5ff;
@@ -174,6 +242,7 @@
     padding: 1.5rem;
     margin-bottom: 1.5rem;
 }
+
 .auctionTitle {
     font-weight: 600;
     color: #111827;
@@ -181,12 +250,15 @@
     display: flex;
     align-items: center;
 }
+
 .auctionText {
     font-size: 0.875rem;
     color: #4b5563;
     line-height: 1.5;
 }
-.buttonBlue, .buttonPurple {
+
+.buttonBlue,
+.buttonPurple {
     width: 100%;
     font-weight: 600;
     font-size: 1rem;
@@ -200,22 +272,27 @@
     align-items: center;
     gap: 0.5rem;
     transition: transform 0.2s ease, background 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
+
 .buttonBlue {
     background: linear-gradient(to right, #2563eb, #4f46e5);
 }
+
 .buttonBlue:hover {
     background: linear-gradient(to right, #1d4ed8, #4338ca);
     transform: scale(1.05);
 }
+
 .buttonPurple {
     background: linear-gradient(to right, #9333ea, #ec4899);
 }
+
 .buttonPurple:hover {
     background: linear-gradient(to right, #7e22ce, #db2777);
     transform: scale(1.05);
 }
+
 .footerNote {
     margin-top: 3rem;
     text-align: center;

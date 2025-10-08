@@ -14,6 +14,7 @@ const runtimeEnvSchema = z.object({
   NEXTAUTH_URL: z.url(),
   DATABASE_URL: z.string(),
   ADMIN_EMAILS: z.string(),
+  SELLS_EMAILS: z.string(),
   DEMO_VIN: z.string(),
   BLOB_READ_WRITE_TOKEN: z.string()
 })

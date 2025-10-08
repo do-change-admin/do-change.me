@@ -285,6 +285,31 @@
 
 
 @media (max-width: 900px) {
+
+    .title {
+        font-size: 1.5rem; /* было 2.25rem */
+    }
+
+    .description {
+        font-size: 1rem; /* было 1.125rem */
+    }
+
+    .infoTitle {
+        font-size: 1rem; /* было 1.125rem */
+    }
+
+    .calendarTitle {
+        font-size: 1.5rem; /* было 1.875rem */
+    }
+
+    .timeTitle {
+        font-size: 1.125rem; /* было 1.25rem */
+    }
+
+    .dateButtonDay {
+        font-size: 1.125rem; /* было 1.25rem */
+    }
+
     .schedulerGrid {
         grid-template-columns: 1fr;
     }

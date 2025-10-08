@@ -1,0 +1,92 @@
+'use client'
+
+import { CarSaleStatus } from "@/entities"
+import { useCarForSaleSellsDetail, useCarSaleStatusChange } from "@/hooks"
+import { Button, Select } from "@mantine/core"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
+
+export default function () {
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const id = searchParams.get('id')
+    const userId = searchParams.get('userId')
+    const [status, setStatus] = useState<CarSaleStatus>('review')
+    const { mutate: changeStatus, isPending } = useCarSaleStatusChange()
+
+    const { data, isFetching, isFetched } = useCarForSaleSellsDetail(id!, userId!)
+
+    useEffect(() => {
+        if (isFetched && data) {
+            setStatus(data.status)
+        }
+    }, [isFetched])
+
+    useEffect(() => {
+        if (!data) {
+            return
+        }
+
+        if (status !== data.status) {
+            changeStatus({
+                body: {
+                    carId: data.id,
+                    newStatus: status,
+                    userId: data.userId
+                }
+            })
+        }
+    }, [status, data])
+
+
+    if (isFetching) {
+        return <>Thinking...</>
+    }
+
+    if (!data) {
+        return <>No according car for sale was found</>
+    }
+
+    return <div>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Licence plate</td>
+                    <td>{data.licencePlate}</td>
+                </tr>
+                <tr>
+                    <td>Mileage</td>
+                    <td>{data.mileage}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>
+                        <Select
+                            disabled={isPending}
+                            value={status}
+                            data={['published', 'review', 'sold'] as CarSaleStatus[]}
+                            onChange={(x) => {
+                                if (!x) {
+                                    return;
+                                }
+
+                                setStatus(x as CarSaleStatus)
+                            }}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td>User</td>
+                    <td>{data.userMail}</td>
+                </tr>
+                <tr>
+                    <td>Photo</td>
+                    <td><img src={data.photoLink} /></td>
+                </tr>
+            </tbody>
+        </table>
+        <Button onClick={() => {
+            router.push('/sells/car-sale')
+        }}>Go to list</Button>
+    </div>
+}

@@ -88,7 +88,7 @@ export default function SettingsContent() {
 
                             <div className={styles.actionsCol}>
                                 {/*<button className={styles.ghostBtn}>Change Plan</button>*/}
-                                {profileData?.subscription?.status === 'active' ? <Button
+                                {!profileData?.subscription?.cancelAtPeriodEnd ? <Button
                                     variant="light"
                                     c="red"
                                     leftSection={<FaTimes />}

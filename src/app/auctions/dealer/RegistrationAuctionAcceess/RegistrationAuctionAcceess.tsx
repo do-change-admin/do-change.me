@@ -8,10 +8,10 @@ import {
     FaCheckCircle, FaArrowDown, FaApple, FaGooglePlay, FaCheck, FaFileAlt,
 } from "react-icons/fa";
 import styles from './RegistrationAuctionAcceess.module.css';
-import {Button, Image} from "@mantine/core";
-import { ChangeEvent, useState } from "react";
-import {useAuctionAccessDock} from "@/hooks";
-import {notifications} from "@mantine/notifications";
+import { Button, Image } from "@mantine/core";
+import { ChangeEvent } from "react";
+import { useAuctionAccessDock } from "@/hooks";
+import { notifications } from "@mantine/notifications";
 
 const handleFileChange = (
     setFile: (file: File) => void) =>
@@ -176,9 +176,9 @@ export const RegistrationSteps = () => {
                                 </label>
                                 {license?.name}
                                 <label className={styles.uploadZone} htmlFor="license_upload">
-                                    <FaCloudUploadAlt size={40} className={styles.iconGray} />
+                                    {license?.name ? <></> : <FaCloudUploadAlt size={40} className={styles.iconGray} />}
                                     <div>
-                                        <p>Click to upload or drag and drop</p>
+                                        <p>{license?.name ? 'You successfully uploaded your license! Click to change image.' : 'Click to upload or drag and drop'}</p>
                                     </div>
                                     <input id="license_upload" type="file" onChange={handleFileChange(setLicense)} accept=".png,.jpg,.jpeg,.pdf" />
                                 </label>
@@ -190,7 +190,7 @@ export const RegistrationSteps = () => {
                                     Agreement
                                 </label>
                                 {agreement?.name}
-                                <div>
+                                {!agreement?.name ? <><div>
                                     1. <b><a href="/your-individual-agreement.pdf"
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -199,13 +199,13 @@ export const RegistrationSteps = () => {
                                         onClick={(e) => { e.stopPropagation() }}
                                     >Download agreement</a></b>
                                 </div>
-                                <div>
-                                    2. Sign it
-                                </div>
-                                <label className={styles.uploadZone} htmlFor="agreement_upload">
-                                    <FaCloudUploadAlt size={40} className={styles.iconGray} />
                                     <div>
-                                        <p> 3. Upload signed agreement by clicking or dragging it here</p>
+                                        2. Sign it
+                                    </div></> : <></>}
+                                <label className={styles.uploadZone} htmlFor="agreement_upload">
+                                    {agreement?.name ? <></> : <FaCloudUploadAlt size={40} className={styles.iconGray} />}
+                                    <div>
+                                        <p> {agreement?.name ? 'You successfully uploaded signed agreement! Click to change image.' : '3. Upload signed agreement by clicking or dragging it here'}</p>
                                     </div>
                                     <input id="agreement_upload" onChange={handleFileChange(setAgreement)} type="file" accept=".png,.jpg,.jpeg,.pdf" />
                                 </label>

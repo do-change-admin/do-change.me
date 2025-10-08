@@ -2,23 +2,23 @@
 
 import React, {useEffect, useState} from "react";
 import { Button, Group, Paper, Text } from "@mantine/core";
-import styles from "@/components/Register/Register.module.css";
 import Link from "next/link";
+import { getCookie, setCookie } from "cookies-next";
 
 export const CookieBanner = () => {
   const [visible, setVisible] = useState(false);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const accepted = localStorage.getItem("cookieAccepted");
+    setChecked(true);
+    const accepted = getCookie("cookieAccepted");
     if (!accepted) {
       setVisible(true);
     }
-    setChecked(true);
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem("cookieAccepted", "true");
+    setCookie('cookieAccepted', 'true', { maxAge: 60 * 60 * 24 * 365});
     setVisible(false);
   };
 

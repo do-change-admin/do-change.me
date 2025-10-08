@@ -5,6 +5,7 @@
 
 .sidebar {
     background: #fafafa;
+    border-right: 1px solid #eee;
     height: 100vh;
     display: flex;
     flex-direction: column;

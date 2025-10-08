@@ -156,7 +156,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
     const handleSubmitApplocation = async (e: FormEvent) => {
         e.preventDefault();
         await modifyProfile(
-            {body: {bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode}},
+            { body: { bio, firstName, lastName, phone, birthDate: birthDate!, address, state, zipCode } },
             {
                 onSuccess: () => {
                     notifications.show({
@@ -184,7 +184,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
         return <ProfileFormSkeleton />;
     }
 
-    const validateUser = !firstName || !lastName || !phone || !bio || !address || !state || !zipCode ;
+    const validateUser = !firstName || !lastName || !phone || !bio || !address || !state || !zipCode || !profileData?.photoLink;
 
     return (
         <section
@@ -291,7 +291,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                     <input
                         type="text"
                         className={styles.input}
-                        value={profileData?.lastName}
+                        value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
                     {isApplicationForm && !Boolean(lastName) && (
