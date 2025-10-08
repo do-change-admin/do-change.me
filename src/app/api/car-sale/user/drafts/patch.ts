@@ -10,9 +10,9 @@ const schemas = {
         price: true,
         year: true
     }).extend({
-        mileage: z.coerce.number(),
-        price: z.coerce.number(),
-        year: z.coerce.number()
+        mileage: z.coerce.number().optional(),
+        price: z.coerce.number().optional(),
+        year: z.coerce.number().optional()
     }),
     response: undefined
 } satisfies ZodAPISchemas
