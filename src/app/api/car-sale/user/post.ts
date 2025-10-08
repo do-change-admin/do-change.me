@@ -1,6 +1,5 @@
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { getDIContainer } from "@/di-containers";
-import { CarSaleUserServiceFactory, ServiceTokens } from "@/di-containers/tokens.di-container";
+import { DIContainer } from "@/di-containers";
 import { Services } from "@/services";
 import z from "zod";
 
@@ -24,8 +23,7 @@ export const method = zodApiMethod(schemas, {
     handler: async ({ payload, activeUser, req }) => {
         const formData = await req.formData()
         const photos = formData.getAll('photos') as File[]
-        const container = getDIContainer()
-        const service = container.get<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)(activeUser.id)
+        const service = DIContainer().CarSaleUserService(activeUser.id)
         await service.post({
             ...payload,
             photos

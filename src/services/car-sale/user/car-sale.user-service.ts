@@ -81,7 +81,7 @@ export class Instance {
         if (!data || data.status !== 'draft') {
             throw businessError('No such draft was found', undefined, 404)
         }
-        let photoLinks: string[] | undefined = []
+        let photoLinks: { id: string; url: string; }[] | undefined = []
         if (!data.photoIds || !data.photoIds.length) {
             photoLinks = undefined
         }
@@ -89,7 +89,7 @@ export class Instance {
         for (const photoId of (data.photoIds || [])) {
             const link = await this.fileSystemProvider.obtainDownloadLink(photoId)
             if (link) {
-                photoLinks!.push(link)
+                photoLinks!.push({ id: photoId, url: link })
             }
         }
 

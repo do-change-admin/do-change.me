@@ -29,14 +29,20 @@ export const carForSaleUserDraftSchema = carForSaleUserDetailSchema.partial({
     marketplaceLinks: true,
     mileage: true,
     model: true,
-    photoLinks: true,
     price: true,
     vin: true,
     year: true
 }).omit({
-    status: true
+    status: true,
+    photoLinks: true
 }).extend({
-    status: z.enum(['draft'])
+    status: z.enum(['draft']),
+    currentPhotos: z.array(
+        z.object({
+            id: z.string().nonempty(),
+            url: z.url()
+        })
+    ).optional()
 })
 
 export const carForSaleAdminDetailSchema = carForSaleUserDetailSchema.extend({

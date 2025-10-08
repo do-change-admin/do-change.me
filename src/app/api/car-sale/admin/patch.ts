@@ -1,7 +1,6 @@
 import { Services } from "@/services";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { getDIContainer } from "@/di-containers";
-import { ServiceTokens } from "@/di-containers/tokens.di-container";
+import { DIContainer } from "@/di-containers";
 
 const schemas = {
     query: undefined,
@@ -13,8 +12,7 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload }) => {
-        const container = getDIContainer()
-        const service = container.get<Services.CarSaleAdmin.Instance>(ServiceTokens.carSaleAdmin)
+        const service = DIContainer().CarSaleAdminService()
         await service.update(payload)
     }
 })

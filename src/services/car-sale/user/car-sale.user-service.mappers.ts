@@ -22,11 +22,14 @@ export const mapListDataLayerToDomain = (
 
 export const mapDetailDataLayerToDraft = (
     source: DataProviders.CarsForSale.Details,
-    photoLinks: string[] | undefined
+    currentPhotos: {
+        id: string;
+        url: string;
+    }[] | undefined
 ): CarForSaleUserDraftModel => {
     return {
         id: source.id,
-        photoLinks,
+        currentPhotos,
         make: source.make || undefined,
         marketplaceLinks: source.marketplaceLinks || undefined,
         mileage: source.mileage || undefined,

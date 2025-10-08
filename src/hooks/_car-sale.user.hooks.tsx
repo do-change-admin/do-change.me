@@ -88,8 +88,8 @@ export const useCarForSaleDraftUpdate = () => {
         mutationFn: async (variables) => {
             const formData = new FormData()
 
-            if (variables.photos && variables.photos.length) {
-                for (const photo of variables.photos) {
+            if (variables.newPhotos && variables.newPhotos.length) {
+                for (const photo of variables.newPhotos) {
                     formData.append('photos', photo)
                 }
 

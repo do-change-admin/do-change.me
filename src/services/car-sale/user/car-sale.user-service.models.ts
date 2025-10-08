@@ -25,7 +25,8 @@ export const createDraftPayloadSchema = postCarPayloadSchema.partial().omit({
     draftId: true
 })
 export const updateDraftPayloadSchema = createDraftPayloadSchema.extend({
-    id: z.string().nonempty()
+    id: z.string().nonempty(),
+    removedPhotoIds: z.array(z.string())
 })
 
 export type FindCarsPayload = z.infer<typeof findCarsPayloadSchema>
@@ -37,5 +38,5 @@ export type CreateDraftPayload = z.infer<typeof createDraftPayloadSchema> & {
     photos: File[] | undefined
 }
 export type UpdateDraftPayload = z.infer<typeof updateDraftPayloadSchema> & {
-    photos: File[] | undefined
+    newPhotos: File[] | undefined
 }
