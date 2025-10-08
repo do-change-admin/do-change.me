@@ -1,0 +1,76 @@
+.modalContent {
+  border-radius: 1rem;
+}
+
+.modalHeader {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modalBody {
+  padding: 1rem;
+}
+
+.input {
+  border-radius: 0.5rem;
+}
+
+.readonlyInput {
+  background: #f9fafb;
+}
+
+.iconBlue {
+  color: #2563eb;
+}
+.iconGreen {
+  color: #16a34a;
+}
+.iconPurple {
+  color: #9333ea;
+}
+
+.uploadArea {
+  border: 2px dashed #d1d5db;
+  text-align: center;
+  padding: 2rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+  &:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+  }
+}
+
+.uploadContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.uploadIcon {
+  font-size: 2.5rem;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+}
+
+.photoItem {
+  position: relative;
+  overflow: hidden;
+}
+
+.photoImage {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.photoIndex {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0 4px;
+  border-radius: 4px;
+}
