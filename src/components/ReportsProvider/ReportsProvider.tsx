@@ -56,8 +56,8 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin, reportsLeft }) 
                                     vin,
                                     provider: "carfax"
                                 }
-                            })}>Order CARFAX Report</button>
-                            <div className={styles.priceBlue}>Free</div>
+                            })}>Get Report</button>
+                            {/*<div className={styles.priceBlue}>Free</div>*/}
                         </div>
                     </motion.div>
 
