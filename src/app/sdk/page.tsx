@@ -38,7 +38,7 @@ export default function VehiclesPage() {
 
 
     return (
-        <main className={styles.container}>
+        <div className={styles.container}>
             {/* Add Vehicle Button */}
             <Group mb="lg">
                 <Button leftSection={<FaPlus />} color="blue" radius="md" className={styles.addButton}>
@@ -146,6 +146,6 @@ export default function VehiclesPage() {
                     </Card>
                 ))}
             </div>
-        </main>
+        </div>
     );
 }
