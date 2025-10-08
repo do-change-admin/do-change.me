@@ -1,1 +1,1 @@
-export * from './pagination.value-object'
+export * as ValueObjects from './exports'

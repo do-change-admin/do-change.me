@@ -25,7 +25,7 @@ export const method = zodApiMethod(schemas, {
         const reportsDataProvider = DIContainer()._context.get<DataProviders.VehicleHistoryReports.Interface>(
             DataProviderTokens.vehicleHistoryReports
         )
-        const report = await reportsDataProvider.findReport({ vin })
+        const report = await reportsDataProvider.findOne({ vin })
         return {
             htmlMarkup: report.htmlMarkup
         }

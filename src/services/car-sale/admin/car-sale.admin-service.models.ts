@@ -1,8 +1,8 @@
 import { carSaleStatusSchema } from "@/entities";
-import { paginationSchema } from "@/value-objects";
+import { ValueObjects } from "@/value-objects";
 import z from "zod";
 
-export const findListPayloadSchema = paginationSchema.extend({
+export const findListPayloadSchema = ValueObjects.Pagination.schema.extend({
     userId: z.string().optional(),
     status: carSaleStatusSchema.optional(),
     model: z.string().optional(),

@@ -3,15 +3,14 @@ import { type DataProviders } from "@/providers";
 import { FindListPayload, FindDetailsPayload, UpdatePayload } from "./car-sale.admin-service.models";
 import { CarForSaleAdminDetailModel, CarForSaleAdminListModel } from "@/entities";
 import { businessError } from "@/lib/errors";
-import { type FileSystemProvider } from "@/providers/contracts";
-import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
+import { DataProviderTokens } from "@/di-containers/tokens.di-container";
 import { mapDetailDataLayerToAdminEntity, mapCarForSaleListDataLayerToAdminEntity } from "./car-sale.admin-service.mappers";
 
 @injectable()
 export class Instance {
     public constructor(
         @inject(DataProviderTokens.carsForSale) private readonly dataProvider: DataProviders.CarsForSale.Interface,
-        @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider
+        @inject(DataProviderTokens.pictures) private readonly picturesDataProvider: DataProviders.Pictures.Interface
     ) { }
 
     list = async (payload: FindListPayload): Promise<CarForSaleAdminListModel[]> => {
@@ -38,9 +37,9 @@ export class Instance {
         let photoLinks: string[] = []
 
         for (const photoId of details.photoIds) {
-            const link = await this.fileSystemProvider.obtainDownloadLink(photoId)
-            if (link) {
-                photoLinks = [link, ...photoLinks]
+            const picture = await this.picturesDataProvider.findOne(photoId)
+            if (picture) {
+                photoLinks.push(picture.src)
             }
         }
 

@@ -1,17 +1,17 @@
 import { VinSchema } from "@/schemas";
 import z from "zod";
 
-export const reportSchema = z.object({
+export const itemSchema = z.object({
     htmlMarkup: z.string().nonempty()
 })
 
-export const findReportPayloadSchema = z.object({
+export const findOnePayloadSchema = z.object({
     vin: VinSchema
 })
 
-export type Report = z.infer<typeof reportSchema>
-export type FindReportPayload = z.infer<typeof findReportPayloadSchema>
+export type Item = z.infer<typeof itemSchema>
+export type FindOnePayload = z.infer<typeof findOnePayloadSchema>
 
 export type Interface = {
-    findReport: (payload: FindReportPayload) => Promise<Report>
+    findOne: (payload: FindOnePayload) => Promise<Item>
 }

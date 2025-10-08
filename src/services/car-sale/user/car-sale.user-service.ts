@@ -1,7 +1,6 @@
-import { type DataProviders } from "@/providers";
+import type { DataProviders } from "@/providers";
 import { CreateDraftPayload, FindCarsPayload, FindDraftPayload, PostCarPayload, UpdateDraftPayload } from "./car-sale.user-service.models";
 import { CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
-import { type FileSystemProvider } from "@/providers/contracts";
 import { v4 } from "uuid";
 import { inject, injectable } from "inversify";
 import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
@@ -12,7 +11,7 @@ import { businessError } from "@/lib/errors";
 export class Instance {
     public constructor(
         @inject(DataProviderTokens.carsForSale) private readonly dataProvider: DataProviders.CarsForSale.Interface,
-        @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider,
+        @inject(DataProviderTokens.pictures) private readonly picturesDataProvider: DataProviders.Pictures.Interface,
         private readonly userId: string
     ) {
 
@@ -35,9 +34,9 @@ export class Instance {
             let photoLinks: string[] = []
 
             for (const photoId of x.photoIds) {
-                const photoLink = await this.fileSystemProvider.obtainDownloadLink(photoId);
-                if (photoLink) {
-                    photoLinks.push(photoLink)
+                const photo = await this.picturesDataProvider.findOne(photoId);
+                if (photo) {
+                    photoLinks.push(photo.src)
                 }
             }
 
@@ -52,9 +51,10 @@ export class Instance {
         let photoIds: string[] = []
 
         for (const photo of payload.photos) {
-            const id = `${v4()}-${photo.name}`
-            await this.fileSystemProvider.upload(photo, id, photo.name)
-            photoIds.push(id)
+            const { id, success } = await this.picturesDataProvider.add(photo)
+            if (success) {
+                photoIds.push(id)
+            }
         }
 
         await this.dataProvider.create({
@@ -87,9 +87,9 @@ export class Instance {
         }
 
         for (const photoId of (data.photoIds || [])) {
-            const link = await this.fileSystemProvider.obtainDownloadLink(photoId)
-            if (link) {
-                photoLinks!.push({ id: photoId, url: link })
+            const photo = await this.picturesDataProvider.findOne(photoId)
+            if (photo) {
+                photoLinks!.push({ id: photo.id, url: photo.src })
             }
         }
 
@@ -101,9 +101,10 @@ export class Instance {
 
         if (payload.photos && payload.photos.length) {
             for (const photo of payload.photos) {
-                const id = `${v4()}-${photo.name}`
-                await this.fileSystemProvider.upload(photo, id, photo.name)
-                photoIds.push(id)
+                const { id, success } = await this.picturesDataProvider.add(photo)
+                if (success) {
+                    photoIds.push(id)
+                }
             }
         }
 

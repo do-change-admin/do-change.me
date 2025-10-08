@@ -12,7 +12,8 @@
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:prod": "prisma migrate deploy",
     "test:e2e": "cross-env IN_TEST=true playwright test",
-    "test:unit": "cross-env IN_TEST=true vitest run --reporter verbose --coverage",
+    "test:unit": "cross-env IN_TEST=true vitest run",
+    "test:unit:coverage": "cross-env IN_TEST=true vitest run --reporter verbose --coverage",
     "test": "npm run test:unit && npm run test:e2e"
   },
   "dependencies": {

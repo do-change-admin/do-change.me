@@ -17,6 +17,10 @@ const registerDataProviders = () => {
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DataProviderTokens.vehicleHistoryReports)
         .to(DataProviders.Implementations.Mock.VehicleHistoryReports)
+
+    container
+        .bind<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
+        .to(DataProviders.Implementations.Mock.Pictures)
 }
 
 const registerFunctionalProviders = () => {
@@ -31,10 +35,10 @@ const registerServices = () => {
         .toFactory(ctx => {
             return (userId) => {
                 const dataProvider = ctx.get<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
-                const fileSystemProvider = ctx.get<FileSystemProvider>(FunctionalProviderTokens.fileSystem)
+                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(FunctionalProviderTokens.fileSystem)
                 return new Services.CarSaleUser.Instance(
                     dataProvider,
-                    fileSystemProvider,
+                    picturesDataProvider,
                     userId
                 )
             }

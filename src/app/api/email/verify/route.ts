@@ -8,7 +8,7 @@ import { EmailService } from "@/services/email/email.service";
 import { verificationEmail } from "@/infrastructure/email/templates/verification-email";
 import { prismaClient } from "@/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
-import { StringHash } from "@/value-objects/string-hash.vo";
+import { ValueObjects } from "@/value-objects";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
         return redirect("/auth/login?error=INVALID_TOKEN");
     }
 
-    const tokenHash = new StringHash(rawToken).value();
+    const tokenHash = new ValueObjects.StringHash.Instance(rawToken).value();
 
     const tokenEntity = await prismaClient.emailVerificationToken.findUnique({
         where: { tokenHash },
