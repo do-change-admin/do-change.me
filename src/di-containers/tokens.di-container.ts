@@ -7,7 +7,7 @@ export const DataProviderTokens = {
 }
 
 export const FunctionalProviderTokens = {
-    fileSystem: Symbol.for("FILE-SYSTEM-FUNCTIONAL-PROVIDER") // заменить на pictures data provider
+    email: Symbol.for("EMAIL-FUNCTIONAL-PROVIDER")
 }
 
 export const ServiceTokens = {

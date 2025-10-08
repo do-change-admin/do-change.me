@@ -24,9 +24,7 @@ const registerDataProviders = () => {
 }
 
 const registerFunctionalProviders = () => {
-    container
-        .bind<FileSystemProvider>(FunctionalProviderTokens.fileSystem)
-        .to(VercelBlobFileSystemProvider)
+
 }
 
 const registerServices = () => {
@@ -35,7 +33,7 @@ const registerServices = () => {
         .toFactory(ctx => {
             return (userId) => {
                 const dataProvider = ctx.get<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
-                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(FunctionalProviderTokens.fileSystem)
+                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
                 return new Services.CarSaleUser.Instance(
                     dataProvider,
                     picturesDataProvider,

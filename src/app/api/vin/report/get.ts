@@ -6,6 +6,7 @@ import { FeatureKey } from "@/value-objects/feature-key.vo";
 import { DIContainer } from "@/di-containers";
 import { DataProviders } from "@/providers";
 import { DataProviderTokens } from "@/di-containers/tokens.di-container";
+import { noSubscriptionsGuard } from "@/api-guards";
 
 const schemas = {
     body: undefined,
@@ -34,5 +35,5 @@ export const method = zodApiMethod(schemas, {
         const service = new RequestsMeteringService(activeUser.id)
         await service.incrementUsage(FeatureKey.Report)
     },
-    // beforehandler: noSubscriptionsGuard
+    beforehandler: noSubscriptionsGuard
 })
