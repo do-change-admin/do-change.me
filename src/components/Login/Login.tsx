@@ -224,6 +224,7 @@ export const Login = () => {
                 <Link
                   href="/auth/register"
                   className={styles.signupText}
+                  data-testid={"sign-up"}
                 >
                   Sign up
                 </Link>

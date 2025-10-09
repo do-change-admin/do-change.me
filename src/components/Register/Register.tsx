@@ -119,6 +119,7 @@ export const Register = () => {
                                 <input
                                     type="text"
                                     placeholder="John"
+                                    data-testid={"first-name"}
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
                                 />
