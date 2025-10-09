@@ -9,7 +9,7 @@ import {Avatar} from "@mantine/core";
 export const ApprovedAccess = () => {
     const {data: profileData} = useProfile()
     return (
-        <main id="auction-access-main" className={styles.main}>
+        <div id="auction-access-main" className={styles.main}>
             <div id="access-card" className={styles.card}>
                 {/* Статус */}
                 <div id="status-section" className={styles.statusSection}>
@@ -44,6 +44,6 @@ export const ApprovedAccess = () => {
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

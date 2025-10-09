@@ -8,9 +8,9 @@ import { useDisclosure } from "@mantine/hooks";
 export default function Reports() {
     const [opened, { open, close }] = useDisclosure(false);
     return (
-        <main id="main-content" className={styles.main}>
+        <div id="main-content" className={styles.main}>
             <SubscriptionPlans opened={opened} close={close} />
             <SearchSection openSubscription={open} />
-        </main>
+        </div>
     );
 };

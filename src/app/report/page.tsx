@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import styles from  './page.module.css';
 
 export default function ReportPage() {
     const [reportHtml, setReportHtml] = useState<string | null>(null);
@@ -13,10 +14,6 @@ export default function ReportPage() {
     if (!reportHtml) return <p>Loading report...</p>;
 
     return (
-        <iframe
-            style={{ width: "100%", minHeight: "100vh" }}
-            srcDoc={reportHtml}
-            title="Carfax Report"
-        />
+        <div className={styles.container} dangerouslySetInnerHTML={{ __html: reportHtml! }} />
     );
 }
