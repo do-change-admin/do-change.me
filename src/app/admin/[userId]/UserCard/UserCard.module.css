@@ -13,6 +13,7 @@
     background: var(--text-texas-blue);
     padding: 2rem;
     color: #fff;
+    position: relative;
 }
 
 .headerContent {
@@ -55,12 +56,12 @@
     color: #dbeafe;
 }
 
-.body {
+.content {
     padding: 2rem;
 }
 
 .section {
-    margin-bottom: 2rem;
+    margin: 2rem 0;
 }
 
 .sectionHeader {

@@ -14,7 +14,7 @@ import {
     FaEye,
     FaDownload,
     FaFileContract, FaCheck,
-    FaCopy,
+    FaCopy, FaEyeSlash,
 } from "react-icons/fa";
 
 import styles from "./UserCard.module.css";
@@ -23,13 +23,13 @@ import {Schedule, SchedulePicker} from "@/components/_admin/SchedulePicker/Sched
 import {
     useAdminAuctionAccessFinalizing,
     useAdminAuctionAccessRequest,
-    useAdminAuctionAccessRequestUpdate,
+    useAdminAuctionAccessRequestUpdate, useAdminAuctionAccessStatusSetting,
     useDatesMapping
 } from "@/hooks";
 import {useRouter} from "next/navigation";
 import {
     Avatar,
-    Badge,
+    LoadingOverlay,
     Button,
     Loader,
     Text,
@@ -38,19 +38,18 @@ import {
     Tooltip,
     Card,
     TextInput,
-    FileInput
+    FileInput, Select
 } from "@mantine/core";
-import dayjs from "dayjs";
-import cn from "classnames";
 import {AiOutlineArrowLeft} from "react-icons/ai";
 
+
+export type  NewStatusType = "review" | "approved" | "rejected" | "awaiting user confirmation" | "call scheduling" | "call completed" | "awaiting documents upload" | "documents under review" | "corrections required" | "ready for auction access" | "subscription ended";
 export interface UserCardProps {
     applicationId: string;
 }
 
 export const UserCard: FC<UserCardProps> = ({applicationId}) => {
     const [schedule, setSchedule] = useState<Schedule>({})
-
     const [formData, setFormData] = useState<{
         number: string;
         qrFile: File | null;
@@ -60,10 +59,13 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
     });
     const {datesFromSchedule, scheduleFromDates} = useDatesMapping()
     const {data: requestInfo} = useAdminAuctionAccessRequest({id: applicationId})
-    const {mutate: update} = useAdminAuctionAccessRequestUpdate()
-    const {mutate: addAuctionAccess} = useAdminAuctionAccessFinalizing()
+    const {mutate: update, isPending: isUpdating} = useAdminAuctionAccessRequestUpdate()
+    const {mutate: updateStatus, isPending: isUpdatingStatus} = useAdminAuctionAccessStatusSetting()
+    const {mutate: addAuctionAccess, data: auctionAccess} = useAdminAuctionAccessFinalizing()
     const router = useRouter();
+    const [applicationStatus, setApplicationStatus] = useState<NewStatusType | null>(requestInfo?.status || null);
 
+    console.log('auctionAccess', auctionAccess)
     useEffect(() => {
         const slots = requestInfo?.timeSlots
         if (!slots) {
@@ -90,12 +92,26 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                 availableTimeSlots: dates.length ? dates.map(x => ({date: x})) : undefined
             }
         })
+        setApplicationStatus(null)
     }
 
+    const handleSetStatus = () => {
+        updateStatus({
+            query: { id: applicationId },
+            body: {
+              newStatus: applicationStatus || 'approved',
+            }
+        })
+        setApplicationStatus(null)
+    }
 
-    const handleSubmit = () => {
-        console.log("Collected data:", formData);
-        addAuctionAccess({id: applicationId, qr: formData.qrFile, auctionAccessNumber: formData.number})
+    const handleSubmit = (isShow: boolean = false) => {
+        if (isShow) {
+            addAuctionAccess({id: applicationId, qr: formData.qrFile, auctionAccessNumber: formData.number})
+            return
+        }
+
+        addAuctionAccess({id: applicationId, qr: formData.qrFile, auctionAccessNumber: ''})
     };
 
     return (
@@ -108,15 +124,27 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
             >
                 {/* Header */}
                 <div className={styles.header}>
-                    <Button
-                        variant="light"
-                        color="white"
-                        mb={16}
-                        leftSection={<AiOutlineArrowLeft size={18}/>}
-                        onClick={() => router.push("/admin")}
-                    >
-                        Back
-                    </Button>
+                    <LoadingOverlay visible={isUpdatingStatus || isUpdating}/>
+                    <Group justify="space-between">
+                        <Button
+                            variant="light"
+                            color="white"
+                            mb={16}
+                            leftSection={<AiOutlineArrowLeft size={18}/>}
+                            onClick={() => router.push("/admin")}
+                        >
+                            Back
+                        </Button>
+                        {/* Buttons */}
+                        <section className={styles.buttons}>
+                            <button className={styles.rejectBtn} onClick={handleReject}>
+                                <FaTimes/> Reject
+                            </button>
+                            <button className={styles.continueBtn} onClick={handleContinue}>
+                                <FaArrowRight/> Continue
+                            </button>
+                        </section>
+                    </Group>
                     <div className={styles.headerContent}>
                         <div className={styles.userPhoto}>
                             <Avatar
@@ -143,19 +171,6 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                             </div>
                         </div>
                     </div>
-                </div>
-                {/* Body */}
-                <div className={styles.body}>
-                    {/* About */}
-                    <section className={styles.section}>
-                        <div className={styles.sectionHeader}>
-                            <FaUserCircle className={styles.sectionIcon}/>
-                            <h2>About</h2>
-                        </div>
-                        <p className={styles.text}>
-                            {requestInfo.bio}
-                        </p>
-                    </section>
 
                     {/* Status */}
                     <section className={styles.section}>
@@ -166,22 +181,45 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                         <div className={styles.statusBox}>
                             <div className={styles.statusRow}>
                                 <div className={styles.pulseDot}></div>
-                                <span className={styles.pending}>Pending Review</span>
+                                <span className={styles.pending}>{requestInfo?.status as NewStatusType}</span>
                             </div>
-                            <p className={styles.pendingText}>
-                                {requestInfo.status}
-                            </p>
+                            <Select
+                                placeholder="set new status"
+                                data={[
+                                    { value: "review", label: "Review" },
+                                    { value: "approved", label: "Approved" },
+                                    { value: "rejected", label: "Rejected" },
+                                    { value: "awaiting user confirmation", label: "Awaiting User Confirmation" },
+                                    { value: "call scheduling", label: "Call Scheduling" },
+                                    { value: "call completed", label: "Call Completed" },
+                                    { value: "awaiting documents upload", label: "Awaiting Documents Upload" },
+                                    { value: "documents under review", label: "Documents Under Review" },
+                                    { value: "corrections required", label: "Corrections Required" },
+                                    { value: "ready for auction access", label: "Ready for Auction Access" },
+                                    { value: "subscription ended", label: "Subscription Ended" },
+                                ]}
+                                value={applicationStatus as NewStatusType}
+                                onChange={(value) => setApplicationStatus(value as NewStatusType)}
+                                mb="lg"
+                                mt="lg"
+                                radius="lg"
+                            />
+                            <Button onClick={handleSetStatus}>Update</Button>
                         </div>
                     </section>
 
-                    {/* Buttons */}
-                    <section className={styles.buttons}>
-                        <button className={styles.rejectBtn} onClick={handleReject}>
-                            <FaTimes/> Reject
-                        </button>
-                        <button className={styles.continueBtn} onClick={handleContinue}>
-                            <FaArrowRight/> Continue
-                        </button>
+                </div>
+                {/* Body */}
+                <div className={styles.content}>
+                    {/* About */}
+                    <section className={styles.section}>
+                        <div className={styles.sectionHeader}>
+                            <FaUserCircle className={styles.sectionIcon}/>
+                            <h2>About</h2>
+                        </div>
+                        <p className={styles.text}>
+                            {requestInfo.bio}
+                        </p>
                     </section>
 
                     <div className={styles.grid}>
@@ -336,36 +374,44 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                         <Text size="sm" color="dimmed">
                                             Click the badge or the button to copy your auction access number.
                                         </Text>
+
+                                        <div>
+                                            <Group>
+                                                <TextInput
+                                                    label="Auction Access Number"
+                                                    placeholder="Enter your number"
+                                                    value={formData?.number}
+                                                    onChange={(e) =>
+                                                        setFormData((prev) => ({...prev, number: e?.currentTarget?.value}))
+                                                    }
+                                                    mb="md"
+                                                />
+
+                                                <FileInput
+                                                    label="Upload QR Code"
+                                                    placeholder="Choose file"
+                                                    accept="image/*"
+                                                    value={formData?.qrFile}
+                                                    onChange={(file) =>
+                                                        setFormData((prev) => ({...prev, qrFile: file}))
+                                                    }
+                                                    mb="md"
+                                                />
+                                                <Button
+                                                    bg="pink"
+                                                    leftSection={<FaEye />}
+                                                    onClick={() => handleSubmit(true)}
+                                                >
+                                                    Show to User
+                                                </Button>
+                                            </Group>
+                                        </div>
                                     </Group>
                                 )}
                             </section>
                         )}
                     </div>
-                    <div>
-                        <Group>
-                            <TextInput
-                                label="Auction Access Number"
-                                placeholder="Enter your number"
-                                value={formData?.number}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({...prev, number: e?.currentTarget?.value}))
-                                }
-                                mb="md"
-                            />
 
-                            <FileInput
-                                label="Upload QR Code"
-                                placeholder="Choose file"
-                                accept="image/*"
-                                value={formData?.qrFile}
-                                onChange={(file) =>
-                                    setFormData((prev) => ({...prev, qrFile: file}))
-                                }
-                                mb="md"
-                            />
-                        </Group>
-                        <Button bg="pink" onClick={handleSubmit}>Save</Button>
-                    </div>
                 </div>
             </motion.div>
         </div>

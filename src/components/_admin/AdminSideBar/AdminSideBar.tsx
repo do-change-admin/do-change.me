@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Stack, Box } from "@mantine/core";
+import { Stack, Box, Group, Text } from "@mantine/core";
+import { FaTachometerAlt, FaLayerGroup, FaClipboardList } from "react-icons/fa";
 import styles from "./AdminSideBar.module.css";
 
 const links = [
-    { label: "Auction Access", href: "/admin" },
-    { label: "Syndication", href: "/admin/syndication" },
+    { label: "Dashboard", href: "/admin/dashboard", icon: <FaTachometerAlt /> },
+    { label: "Auction Access", href: "/admin", icon: <FaClipboardList /> },
+    { label: "SDK", href: "/admin/sdk", icon: <FaLayerGroup /> },
 ];
 
 export const AdminSideBar = () => {
@@ -25,10 +27,13 @@ export const AdminSideBar = () => {
                             pathname === link.href ? styles.active : ""
                         }`}
                     >
-                        {link.label}
+                        <Group gap="sm">
+                            {link.icon}
+                            <Text>{link.label}</Text>
+                        </Group>
                     </Link>
                 ))}
             </Stack>
         </Box>
     );
-}
+};

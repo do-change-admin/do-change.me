@@ -3,7 +3,7 @@
 import styles from "./AuctionAccess.module.css";
 import { FaQrcode, FaHashtag } from "react-icons/fa";
 import { useProfile } from "@/hooks";
-import { Avatar, Button, FileInput, Modal, Text, TextInput, Title } from "@mantine/core";
+import {Avatar, Button, FileInput, Image, Modal, Text, TextInput, Title} from "@mantine/core";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSlideMenu } from "@/contexts";
@@ -57,16 +57,19 @@ export const AuctionAccess = () => {
                 </form>
             </Modal>
             {/* QR Section */}
-            <Avatar radius="0" w="100%" h={300} className={styles.photo} src={profileData?.photoLink || ''} alt="" />
+            <Avatar radius="0" w="100%" h={200} className={styles.photo} src={profileData?.photoLink || ''} alt="" />
             <Text fw="bold" style={{ fontSize: '1.5rem' }} c="#005BAA">{profileData?.firstName.toUpperCase()} {profileData?.lastName.toUpperCase()}</Text>
             <Text fw="bold" fs="lg"c="#005BAA">{profileData?.auctionAccessNumber ?? "__-____-____"}</Text>
-            <div className={styles.qrBox}>
-                {profileData?.auctionAccessQRLink ? <img
+            {profileData?.auctionAccessQRLink ? <Image
+                    height={300}
+                    width={300}
                     className={styles.qrIcon}
                     src={profileData?.auctionAccessQRLink}
                     alt="Profile auction access QR code"
-                /> : <FaQrcode className={styles.qrIcon} />}
-            </div>
+                /> :
+            <div className={styles.qrBox}>
+                 <FaQrcode className={styles.qrIcon} />
+            </div>}
             {!profileData?.auctionAccessNumber && (
                 <>
                     <Button h={40} mt={10} radius="lg" fullWidth bg="pink" onClick={() => {

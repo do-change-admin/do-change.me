@@ -17,6 +17,36 @@
     z-index: 1000;
 }
 
+
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tabButton {
+    padding: 0.75rem 2rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+    color: var(--texas-blue);
+}
+
+.tabButton.active {
+    background-color: #2457aa;
+    color: white;
+}
+
+.tabButton:hover {
+    background-color: #60a5fa;
+    color: white;
+}
+
 /* HEADER */
 .header {
     background: rgba(237, 237, 237, 0);

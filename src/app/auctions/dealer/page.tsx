@@ -11,7 +11,6 @@ import { ApplicationForm } from "./ApplicationForm/ApplicationForm";
 import { RegistrationSteps } from "./RegistrationAuctionAcceess/RegistrationAuctionAcceess";
 import { useAuctionAccessRequest, useProfile } from "@/hooks";
 import type { UserAuctionAccessSchemaSteps } from "@/services";
-import { ApplicationSuccesses } from "./ApplicationForm/ApplicationSuccesses";
 import { AccessMainStep } from "./AccessMainStep/AccessMainStep";
 import { SubscriptionStep } from "@/app/auctions/dealer/SubscriptionStep/SubscriptionStep";
 import { SuccessCard } from "@/app/auctions/dealer/SuccessPage/SuccessCard";
