@@ -1,44 +1,36 @@
 "use client";
 
 import { useState } from "react";
-import { type CarSaleStatus } from "@/entities";
-import {
-    Button,
-    Tabs,
-    TextInput,
-    Select,
-    Card,
-    Badge,
-    Group,
-    Text,
-    Stack,
-    Image,
-} from "@mantine/core";
-import {
-    FaPlus,
-    FaSearch,
-    FaLink,
-    FaTimes,
-    FaChevronDown,
-} from "react-icons/fa";
+
 import styles from "./page.module.css";
+import {
+    Badge,
+    Button,
+    Card,
+    Group,
+    Image,
+    Select,
+    Stack,
+    Tabs,
+    Text,
+    TextInput,
+} from "@mantine/core";
+import { FaChevronDown, FaLink, FaPlus } from "react-icons/fa6";
+import { CarSaleStatus } from "@/entities";
+import { FaSearch, FaTimes } from "react-icons/fa";
+import { useCarsForSaleAdminFilters, useCarsForSaleAdminList } from "@/hooks";
 import {
     getColorByCarSaleStatus,
     getVisualDataByCarSaleMarketplaceLink,
-} from "./sdk.utils";
-import { useCarsForSaleUserFilters, useCarsForSaleUserList } from "@/hooks";
-import { CarAdder } from "@/components/CarAdder/CarAdder";
-import { useDisclosure } from "@mantine/hooks";
+} from "@/app/sdk/sdk.utils";
 
 export default function VehiclesPage() {
-    const [opened, { open, close }] = useDisclosure(false);
     const [vin, setVin] = useState("");
     const [make, setMake] = useState("");
     const [model, setModel] = useState("");
-    const [editingId, setEditingId] = useState<string | undefined>();
     const [activeTab, setActiveTab] = useState<CarSaleStatus>("active");
 
-    const { data } = useCarsForSaleUserList({
+    const { data } = useCarsForSaleAdminList({
         pageSize: 10,
         zeroBasedIndex: 0,
         make,
@@ -47,50 +39,20 @@ export default function VehiclesPage() {
         vin,
     });
 
-    const { data: filters } = useCarsForSaleUserFilters();
+    const { data: filters } = useCarsForSaleAdminFilters();
 
     const vehicles = data?.items ?? [];
 
-    const handleEdit = (id: string) => {
-        setEditingId(id);
-        open();
-    };
-
-    const handleClose = () => {
-        setEditingId(undefined);
-        close();
-    };
-
     return (
         <div className={styles.container}>
-            {/* Add Vehicle Button */}
-            <Group mb="lg">
-                <Button
-                    leftSection={<FaPlus />}
-                    color="blue"
-                    radius="md"
-                    className={styles.addButton}
-                    onClick={open}
-                >
-                    Add Vehicle
-                </Button>
-            </Group>
-
-            {/* Tabs */}
             <Tabs
                 value={activeTab}
                 onChange={(value) => setActiveTab(value as any)}
                 mb="lg"
             >
                 <Tabs.List>
-                    <Tabs.Tab value="draft">
-                        Draft{" "}
-                        <Badge color="blue" variant="light" ml={5}>
-                            {/*vehicles.filter(v => v.status === 'Active').length*/}
-                        </Badge>
-                    </Tabs.Tab>
                     <Tabs.Tab value="pending publisher">
-                        Pending Publisher{" "}
+                        Pending Review{" "}
                         <Badge color="orange" variant="light" ml={5}>
                             {/*vehicles.filter(v => v.status === 'Pending').length*/}
                         </Badge>
@@ -116,7 +78,6 @@ export default function VehiclesPage() {
                 </Tabs.List>
             </Tabs>
 
-            {/* Filters */}
             <Card
                 shadow="sm"
                 radius="md"
@@ -168,7 +129,6 @@ export default function VehiclesPage() {
                 </Stack>
             </Card>
 
-            {/* Vehicles Grid */}
             <div className={styles.vehicleGrid}>
                 {(vehicles ?? []).map((v) => (
                     <Card
@@ -243,14 +203,6 @@ export default function VehiclesPage() {
                     </Card>
                 ))}
             </div>
-
-            {opened && (
-                <CarAdder
-                    draftId={editingId}
-                    opened={opened}
-                    onClose={handleClose}
-                />
-            )}
         </div>
     );
 }
