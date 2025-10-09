@@ -56,7 +56,9 @@ export const carForSaleAdminListSchema = carForSaleAdminDetailSchema.pick({
     status: true,
     userMail: true,
     userId: true,
-    price: true
+    price: true,
+    make: true,
+    model: true
 })
 
 export type CarSaleStatus = z.infer<typeof carSaleStatusSchema>

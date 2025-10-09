@@ -30,6 +30,8 @@ export const mapCarForSaleListDataLayerToAdminEntity = (
         status: source.status,
         userId: source.userId,
         userMail: source.userMail,
-        vin: source.vin
+        vin: source.vin,
+        make: source.make,
+        model: source.model
     }
 }
