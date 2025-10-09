@@ -7,6 +7,35 @@ test.describe('Login Page', () => {
     await page.goto('/auth/login');
   });
 
+  test('Пользователь может залогиниться после API-регистрации', async ({ page, request }) => {
+    const randomId = Date.now();
+    const email = `user${randomId}@test.com`;
+    const password = 'Password123';
+
+    const apiResponse = await request.post('/api/auth/register', {
+      data: {
+        email,
+        password,
+        firstName: 'Auto',
+        lastName: 'Tester',
+      },
+    });
+
+    console.log('📩 API регистрация:', apiResponse.status(), await apiResponse.json());
+
+    expect(apiResponse.status()).toBe(201);
+
+    await page.getByTestId('email').fill(email);
+    await page.getByTestId('password').fill(password);
+
+    await Promise.all([
+      page.waitForURL('/'),
+      page.click('button:has-text("Sign In")'),
+    ]);
+
+    await expect(page).toHaveURL('/');
+  });
+
   test('Форма логина отображается', async ({ page }) => {
     const form = page.getByTestId('login-form');
     await expect(form).toBeVisible();

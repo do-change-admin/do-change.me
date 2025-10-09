@@ -149,6 +149,7 @@ export const Login = () => {
                   type="email"
                   className={styles.input}
                   value={email}
+                  data-testid='email'
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
@@ -162,6 +163,7 @@ export const Login = () => {
                     type={showPassword ? "text" : "password"}
                     className={styles.input + " " + styles.passwordInput}
                     value={password}
+                    data-testid='password'
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     required
