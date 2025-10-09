@@ -6,7 +6,8 @@ export const findListPayloadSchema = ValueObjects.Pagination.schema.extend({
     userId: z.string().optional(),
     status: carSaleStatusSchema.optional(),
     model: z.string().optional(),
-    make: z.string().optional()
+    make: z.string().optional(),
+    vin: z.string().optional()
 })
 
 export const findDetailsPayloadSchema = z.object({

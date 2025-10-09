@@ -18,7 +18,8 @@ export class Instance {
             status: payload.status,
             userId: payload.userId,
             model: payload.model,
-            make: payload.make
+            make: payload.make,
+            vin: payload.vin
         }, {
             pageSize: payload.pageSize,
             zeroBasedIndex: payload.zeroBasedIndex
