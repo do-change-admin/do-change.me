@@ -5,8 +5,6 @@ import { injectable } from 'inversify';
 @injectable()
 export class VehicleHistoryReports implements Interface {
     findOne: Interface['findOne'] = async ({ vin }) => {
-        console.log(vin)
-        vin = 'KNDMB5C17H6313102'
         const url = `${process.env.REPORT_ENDPOINT}/vhr/${vin}`;
         const response = await fetch(url, {
             method: "GET",
