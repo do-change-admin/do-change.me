@@ -178,7 +178,7 @@ export default function VehiclesPage() {
                         className={styles.vehicleCard}
                     >
                         <Card.Section style={{ position: "relative" }}>
-                            {[v.photoLinks].map((src) => {
+                            {[v?.photoLinks].map((src) => {
                                 return (
                                     <Image
                                         key={`car-photo-${src}`}
