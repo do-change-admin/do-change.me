@@ -16,6 +16,7 @@ export function Layout({children}: { children: React.ReactNode }) {
     const isAuthPage = pathname.startsWith("/auth");
     const isTermsPage = pathname.includes("/terms");
     const isAdminPage = pathname.includes("/admin");
+    const isReportPage = pathname.includes("/report");
   const { openMenu, isOpen, closeMenu } = useSlideMenu();
   const {data} = useProfile()
 
@@ -55,14 +56,16 @@ export function Layout({children}: { children: React.ReactNode }) {
                   >
                     <Image src="/auctionAccessIcon.png" w={50} h={50}/>
                   </ActionIcon>
-                    <header className={styles.header}>
-                        <Header/>
-                    </header>
-                    <main className={styles.main}>
+                    {!isReportPage && (
+                        <header className={styles.header}>
+                            <Header/>
+                        </header>
+                    )}
+                    <div className={styles.main}>
                         <NextIntlClientProvider locale={locale} messages={messages}>
                             {children}
                         </NextIntlClientProvider>
-                    </main>
+                    </div>
                     <MobileBottomNav/>
                 </div>
             </div>

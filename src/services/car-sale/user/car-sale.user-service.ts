@@ -1,71 +1,128 @@
-import { type CarsForSaleDataProvider } from "@/providers";
-import { FindCarsForSaleUserServicePayload, FindSpecificCarForSaleUserServicePayload, PostCarForSaleUserServicePayload } from "./car-sale.user-service.models";
-import { CarForSaleUserDetailModel, CarForSaleUserListModel } from "@/entities";
-import { businessError } from "@/lib/errors";
-import { type FileSystemProvider } from "@/providers/contracts";
+import type { DataProviders } from "@/providers";
+import { CreateDraftPayload, FindCarsPayload, FindDraftPayload, PostCarPayload, UpdateDraftPayload } from "./car-sale.user-service.models";
+import { CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
 import { v4 } from "uuid";
 import { inject, injectable } from "inversify";
 import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
+import { mapDetailDataLayerToDraft, mapListDataLayerToDomain } from "./car-sale.user-service.mappers";
+import { businessError } from "@/lib/errors";
 
 @injectable()
-export class CarSaleUserService {
+export class Instance {
     public constructor(
-        @inject(DataProviderTokens.carsForSale) private readonly dataProvider: CarsForSaleDataProvider,
-        @inject(FunctionalProviderTokens.fileSystem) private readonly fileSystemProvider: FileSystemProvider,
+        @inject(DataProviderTokens.carsForSale) private readonly dataProvider: DataProviders.CarsForSale.Interface,
+        @inject(DataProviderTokens.pictures) private readonly picturesDataProvider: DataProviders.Pictures.Interface,
         private readonly userId: string
     ) {
 
     }
 
-    public findList = async (payload: FindCarsForSaleUserServicePayload): Promise<CarForSaleUserListModel[]> => {
+    public findList = async (payload: FindCarsPayload): Promise<CarForSaleUserListModel[]> => {
         const result = await this.dataProvider.list({
             userId: this.userId,
-            status: payload.status
+            status: payload.status,
+            make: payload.make,
+            model: payload.model,
+            vin: payload.vin
         }, {
             pageSize: payload.pageSize,
-            zeroBasedIndex: payload.zeroBasedIndex
+            zeroBasedIndex: payload.zeroBasedIndex,
+
         })
 
-        return result.map((x) => {
-            return {
-                id: x.id,
-                licencePlate: x.licencePlate,
-                status: x.status,
+        const items = await Promise.all(result.map(async (x) => {
+            let photoLinks: string[] = []
+
+            for (const photoId of x.photoIds) {
+                const photo = await this.picturesDataProvider.findOne(photoId);
+                if (photo) {
+                    photoLinks.push(photo.src)
+                }
             }
-        })
+
+            return mapListDataLayerToDomain(x, photoLinks)
+        }))
+
+        return items
     }
 
-    public details = async (payload: FindSpecificCarForSaleUserServicePayload): Promise<CarForSaleUserDetailModel> => {
-        const result = await this.dataProvider.details({
-            id: payload.id,
-            userId: this.userId
-        })
 
-        if (!result) {
-            throw businessError('No according car for sale was found', undefined, 404)
+    public post = async (payload: PostCarPayload) => {
+        let photoIds: string[] = []
+
+        for (const photo of payload.photos) {
+            const { id, success } = await this.picturesDataProvider.add(photo)
+            if (success) {
+                photoIds.push(id)
+            }
         }
-
-        const photoLink = await this.fileSystemProvider.obtainDownloadLink(result.photoId)
-
-        return {
-            id: result.id,
-            licencePlate: result.licencePlate,
-            mileage: result.mileage,
-            photoLink: photoLink!,
-            status: result.status
-        }
-    }
-
-    public post = async (payload: PostCarForSaleUserServicePayload) => {
-        const photoId = `${v4()}-${payload.photo.name}`;
-        await this.fileSystemProvider.upload(payload.photo, photoId, payload.photo.name)
 
         await this.dataProvider.create({
-            licencePlate: payload.licencePlate,
+            make: payload.make,
             mileage: payload.mileage,
-            photoId: photoId,
+            model: payload.model,
+            photoIds,
+            price: payload.price,
+            vin: payload.vin,
             userId: this.userId,
-
+            year: payload.year,
+            status: 'pending publisher'
         })
+
+        if (payload.draftId) {
+            await this.dataProvider.deleteOne({
+                id: payload.draftId,
+                userId: this.userId
+            })
+        }
+    }
+
+    public findDraft = async (payload: FindDraftPayload): Promise<CarForSaleUserDraftModel> => {
+        const data = await this.dataProvider.details({ id: payload.id, userId: this.userId })
+        if (!data || data.status !== 'draft') {
+            throw businessError('No such draft was found', undefined, 404)
+        }
+        let photoLinks: { id: string; url: string; }[] | undefined = []
+        if (!data.photoIds || !data.photoIds.length) {
+            photoLinks = undefined
+        }
+
+        for (const photoId of (data.photoIds || [])) {
+            const photo = await this.picturesDataProvider.findOne(photoId)
+            if (photo) {
+                photoLinks!.push({ id: photo.id, url: photo.src })
+            }
+        }
+
+        return mapDetailDataLayerToDraft(data, photoLinks)
+    }
+
+    public createDraft = async (payload: CreateDraftPayload) => {
+        let photoIds = []
+
+        if (payload.photos && payload.photos.length) {
+            for (const photo of payload.photos) {
+                const { id, success } = await this.picturesDataProvider.add(photo)
+                if (success) {
+                    photoIds.push(id)
+                }
+            }
+        }
+
+        await this.dataProvider.create({
+            make: payload.make || '',
+            mileage: payload.mileage || 0,
+            model: payload.model || '',
+            photoIds,
+            price: payload.price || 0,
+            userId: this.userId,
+            vin: payload.vin || '',
+            year: payload.year || 0,
+            status: 'draft'
+        })
+    }
+
+    public updateDraft = async (payload: UpdateDraftPayload) => {
+
     }
 }

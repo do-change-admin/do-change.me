@@ -20,7 +20,7 @@ export const AuctionAccess = () => {
 
 
     return (
-        <main className={styles.main}>
+        <div className={styles.main}>
             <Modal
                 radius="lg"
                 opened={opened}
@@ -78,6 +78,6 @@ export const AuctionAccess = () => {
                     }}>Get Access</Button>
                 </>
             )}
-        </main>
+        </div>
     );
 }

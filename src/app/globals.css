@@ -82,6 +82,36 @@ select {
   bottom: 1rem !important;
 }
 
+/*report*/
+.name-in-lights-snackbar{
+  display: none !important;
+}
+
+.header-hat{
+  display: none !important;
+}
+
+#top-bar {
+  display: none !important;
+}
+
+#banner-and-header-spacing-wrapper {
+  display: none !important;
+}
+
+#vehicle-history-report {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+.vhr-tabs {
+  max-width: 100% !important;
+}
+
+main {
+  max-width: max-content !important;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

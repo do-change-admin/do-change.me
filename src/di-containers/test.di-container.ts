@@ -1,43 +1,47 @@
-import { CarsForSaleDataProvider, CarsForSaleInMemoryDataProvider } from '@/providers'
+import { DataProviders, DataProvidersImplemetations } from '@/providers'
 import { Container } from 'inversify'
-import { CarSaleUserServiceFactory, DataProviderTokens, FunctionalProviderTokens, ServicesTokens } from './tokens.di-container'
-import { FileSystemProvider } from '@/providers/contracts'
-import { PublicFolderFileSystemProvider } from '@/providers/implementations'
-import { CarSaleSellsService, CarSaleUserService } from '@/services'
+import { CarSaleUserServiceFactory, DataProviderTokens, ServiceTokens } from './tokens.di-container'
+import { Services } from '@/services'
 
 const container = new Container()
 
 const registerDataProviders = () => {
-    const carsForSaleInMemoryDataProvider = new CarsForSaleInMemoryDataProvider()
+    const carsForSaleInMemoryDataProvider = new DataProvidersImplemetations.InMemory.CarsForSale()
 
     container
-        .bind<CarsForSaleDataProvider>(DataProviderTokens.carsForSale)
+        .bind<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
         .toConstantValue(carsForSaleInMemoryDataProvider)
+
+    container
+        .bind<DataProviders.VehicleHistoryReports.Interface>(DataProviderTokens.vehicleHistoryReports)
+        .to(DataProvidersImplemetations.Mock.VehicleHistoryReports)
+
+    container
+        .bind<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
+        .to(DataProvidersImplemetations.Mock.Pictures)
 }
 
 const registerFunctionalProviders = () => {
-    container
-        .bind<FileSystemProvider>(FunctionalProviderTokens.fileSystem)
-        .to(PublicFolderFileSystemProvider)
+
 }
 
 const registerServices = () => {
     container.
-        bind<CarSaleUserServiceFactory>(ServicesTokens.carSaleUserFactory)
+        bind<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)
         .toFactory(ctx => {
             return (userId) => {
-                const dataProvider = ctx.get<CarsForSaleDataProvider>(DataProviderTokens.carsForSale)
-                const fileSystemProvider = ctx.get<FileSystemProvider>(FunctionalProviderTokens.fileSystem)
-                return new CarSaleUserService(
+                const dataProvider = ctx.get<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
+                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
+                return new Services.CarSaleUser.Instance(
                     dataProvider,
-                    fileSystemProvider,
+                    picturesDataProvider,
                     userId
                 )
             }
         })
     container
-        .bind<CarSaleSellsService>(ServicesTokens.carSaleSells)
-        .to(CarSaleSellsService)
+        .bind<Services.CarSaleAdmin.Instance>(ServiceTokens.carSaleAdmin)
+        .to(Services.CarSaleAdmin.Instance)
 }
 
 registerDataProviders()

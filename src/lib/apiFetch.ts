@@ -38,3 +38,7 @@ export const apiRequest = (url: string, method: "GET" | "POST" | "DELETE" | "PAT
         return await result.json()
     }
 }
+
+export const buildQueryString = (data: Object) => {
+    return `?${Object.entries(data).filter(x => x[1] !== undefined && x[1] !== null).map(x => `${x[0]}=${Array.isArray(x[1]) ? x[1].map(x => `${x}`).join(',') : x[1]}`).join('&')}`
+}

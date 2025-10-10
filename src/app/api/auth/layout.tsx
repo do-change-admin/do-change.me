@@ -35,7 +35,7 @@ export default function SpaceLayout({children}: { children: React.ReactNode }) {
         >
         <Suspense>
             <Providers>
-                <main>{children}</main>
+                <div>{children}</div>
             </Providers>
         </Suspense>
         </body>

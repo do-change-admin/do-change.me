@@ -39,7 +39,7 @@ export const AuctionsServicesCards = () => {
     const router = useRouter();
     const { closeMenu } = useSlideMenu();
     return (
-        <main className={styles.main}>
+        <div className={styles.main}>
             <div className={styles.menuOptions}>
                 {/* Dealer Auctions */}
                 <motion.div
@@ -86,6 +86,6 @@ export const AuctionsServicesCards = () => {
                     </div>
                 </motion.div>
             </div>
-        </main>
+        </div>
     );
 }

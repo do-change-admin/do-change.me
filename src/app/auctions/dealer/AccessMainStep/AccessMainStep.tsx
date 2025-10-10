@@ -12,7 +12,7 @@ interface AccessMainStepProps {
 }
 
 export const AccessMainStep: FC<AccessMainStepProps> = ({onStart}) => (
-    <main className={styles.main}>
+    <div className={styles.main}>
         <AuctionHowItWorks/>
         <motion.div
             className={styles.ctaSection}
@@ -30,5 +30,5 @@ export const AccessMainStep: FC<AccessMainStepProps> = ({onStart}) => (
                 Get Access
             </motion.button>
         </motion.div>
-    </main>
+    </div>
 );
