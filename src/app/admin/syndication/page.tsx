@@ -129,80 +129,80 @@ export default function VehiclesPage() {
                 </Stack>
             </Card>
 
-            <div className={styles.vehicleGrid}>
-                {(vehicles ?? []).map((v) => (
-                    <Card
-                        shadow="sm"
-                        radius="md"
-                        withBorder
-                        className={styles.vehicleCard}
-                    >
-                        <Card.Section style={{ position: "relative" }}>
-                            {[v.photoLinks].map((src) => {
-                                return (
-                                    <Image
-                                        key={`car-photo-${src}`}
-                                        src={src}
-                                        alt={"Car photo"}
-                                        className={styles.vehicleImg}
-                                    />
-                                );
-                            })}
-                            <Badge
-                                color={getColorByCarSaleStatus(v.status)}
-                                className={styles.statusBadge}
-                            >
-                                {v.status}
-                            </Badge>
-                        </Card.Section>
-                        <Stack mt="sm">
-                            <Text fw={600}>{v.make}</Text>
-                            <Text size="sm" c="dimmed">
-                                {v.model} ({v.year})
-                            </Text>
-                            <Text
-                                size="xs"
-                                c="dimmed"
-                                style={{ fontFamily: "monospace" }}
-                            >
-                                VIN: {v.vin}
-                            </Text>
-                            <Stack gap="xs" mt="xs">
-                                {v.marketplaceLinks.map((link) => {
-                                    const { color, label } =
-                                        getVisualDataByCarSaleMarketplaceLink(
-                                            link
-                                        );
-                                    return (
-                                        <Button
-                                            key={link}
-                                            variant="light"
-                                            color={color}
-                                            fullWidth
-                                            rightSection={<FaLink />}
-                                            styles={{
-                                                root: {
-                                                    justifyContent:
-                                                        "space-between",
-                                                },
-                                            }}
-                                        >
-                                            {label}
-                                        </Button>
-                                    );
-                                })}
-                            </Stack>
-                            <Stack>
-                                {v.status === "draft" && (
-                                    <Button onClick={() => handleEdit(v.id)}>
-                                        Edit
-                                    </Button>
-                                )}
-                            </Stack>
-                        </Stack>
-                    </Card>
-                ))}
-            </div>
+            {/*<div className={styles.vehicleGrid}>*/}
+            {/*    {(vehicles ?? []).map((v) => (*/}
+            {/*        <Card*/}
+            {/*            shadow="sm"*/}
+            {/*            radius="md"*/}
+            {/*            withBorder*/}
+            {/*            className={styles.vehicleCard}*/}
+            {/*        >*/}
+            {/*            <Card.Section style={{ position: "relative" }}>*/}
+            {/*                /!*{[v?.photoLinks].map((src) => {*!/*/}
+            {/*                /!*    return (*!/*/}
+            {/*                /!*        <Image*!/*/}
+            {/*                /!*            key={`car-photo-${src}`}*!/*/}
+            {/*                /!*            src={src}*!/*/}
+            {/*                /!*            alt={"Car photo"}*!/*/}
+            {/*                /!*            className={styles.vehicleImg}*!/*/}
+            {/*                /!*        />*!/*/}
+            {/*                /!*    );*!/*/}
+            {/*                /!*})}*!/*/}
+            {/*                <Badge*/}
+            {/*                    color={getColorByCarSaleStatus(v.status)}*/}
+            {/*                    className={styles.statusBadge}*/}
+            {/*                >*/}
+            {/*                    {v.status}*/}
+            {/*                </Badge>*/}
+            {/*            </Card.Section>*/}
+            {/*            <Stack mt="sm">*/}
+            {/*                <Text fw={600}>{v.make}</Text>*/}
+            {/*                <Text size="sm" c="dimmed">*/}
+            {/*                    {v.model} ({v.year})*/}
+            {/*                </Text>*/}
+            {/*                <Text*/}
+            {/*                    size="xs"*/}
+            {/*                    c="dimmed"*/}
+            {/*                    style={{ fontFamily: "monospace" }}*/}
+            {/*                >*/}
+            {/*                    VIN: {v.vin}*/}
+            {/*                </Text>*/}
+            {/*                <Stack gap="xs" mt="xs">*/}
+            {/*                    {v.marketplaceLinks.map((link) => {*/}
+            {/*                        const { color, label } =*/}
+            {/*                            getVisualDataByCarSaleMarketplaceLink(*/}
+            {/*                                link*/}
+            {/*                            );*/}
+            {/*                        return (*/}
+            {/*                            <Button*/}
+            {/*                                key={link}*/}
+            {/*                                variant="light"*/}
+            {/*                                color={color}*/}
+            {/*                                fullWidth*/}
+            {/*                                rightSection={<FaLink />}*/}
+            {/*                                styles={{*/}
+            {/*                                    root: {*/}
+            {/*                                        justifyContent:*/}
+            {/*                                            "space-between",*/}
+            {/*                                    },*/}
+            {/*                                }}*/}
+            {/*                            >*/}
+            {/*                                {label}*/}
+            {/*                            </Button>*/}
+            {/*                        );*/}
+            {/*                    })}*/}
+            {/*                </Stack>*/}
+            {/*                <Stack>*/}
+            {/*                    {v.status === "draft" && (*/}
+            {/*                        <Button onClick={() => handleEdit(v.id)}>*/}
+            {/*                            Edit*/}
+            {/*                        </Button>*/}
+            {/*                    )}*/}
+            {/*                </Stack>*/}
+            {/*            </Stack>*/}
+            {/*        </Card>*/}
+            {/*    ))}*/}
+            {/*</div>*/}
         </div>
     );
 }
