@@ -11,7 +11,7 @@
     flex-direction: column;
     width: 80px;
     position: fixed;
-    z-index: 9999999999999999;
+    z-index: 52;
 }
 
 .header {

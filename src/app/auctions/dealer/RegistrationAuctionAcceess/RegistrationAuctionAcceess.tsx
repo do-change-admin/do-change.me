@@ -46,7 +46,7 @@ export const RegistrationSteps = () => {
 
 
     return (
-        <main className={styles.container}>
+        <div className={styles.container}>
             {/* Steps Section */}
             <section className={styles.stepsSection}>
                 <div className={styles.stepsContainer}>
@@ -233,6 +233,6 @@ export const RegistrationSteps = () => {
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     );
 }

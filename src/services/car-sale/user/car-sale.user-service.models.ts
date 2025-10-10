@@ -1,23 +1,43 @@
 import { carSaleStatusSchema } from "@/entities";
-import { paginationSchema } from "@/value-objects";
+import { DataProviders } from "@/providers";
+import { ValueObjects } from "@/value-objects";
 import z from "zod";
 
-export const findCarsForSaleUserServicePayloadSchema = paginationSchema.extend({
-    status: carSaleStatusSchema.optional()
+export const findCarsPayloadSchema = ValueObjects.Pagination.schema.extend({
+    status: carSaleStatusSchema.optional(),
+    make: z.string().optional(),
+    model: z.string().optional(),
+    vin: z.string().optional()
 })
 
-export const findSpecificCarForSaleUserServicePayloadSchema = z.object({
+export const findDraftPayloadSchema = z.object({
     id: z.string().nonempty()
 })
 
-export const postCarForSaleUserServicePayloadSchema = z.object({
-    mileage: z.coerce.number(),
-    licencePlate: z.string()
+export const postCarPayloadSchema = DataProviders.CarsForSale.createPayloadSchema.omit({
+    userId: true,
+    photoIds: true,
+    status: true
+}).extend({
+    draftId: z.string().optional()
 })
 
+export const createDraftPayloadSchema = postCarPayloadSchema.partial().omit({
+    draftId: true
+})
+export const updateDraftPayloadSchema = createDraftPayloadSchema.extend({
+    id: z.string().nonempty(),
+    removedPhotoIds: z.array(z.string())
+})
 
-export type FindCarsForSaleUserServicePayload = z.infer<typeof findCarsForSaleUserServicePayloadSchema>
-export type FindSpecificCarForSaleUserServicePayload = z.infer<typeof findSpecificCarForSaleUserServicePayloadSchema>
-export type PostCarForSaleUserServicePayload = z.infer<typeof postCarForSaleUserServicePayloadSchema> & {
-    photo: File
+export type FindCarsPayload = z.infer<typeof findCarsPayloadSchema>
+export type FindDraftPayload = z.infer<typeof findDraftPayloadSchema>
+export type PostCarPayload = z.infer<typeof postCarPayloadSchema> & {
+    photos: File[]
+}
+export type CreateDraftPayload = z.infer<typeof createDraftPayloadSchema> & {
+    photos: File[] | undefined
+}
+export type UpdateDraftPayload = z.infer<typeof updateDraftPayloadSchema> & {
+    newPhotos: File[] | undefined
 }

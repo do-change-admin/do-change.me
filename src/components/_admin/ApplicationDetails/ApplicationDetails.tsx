@@ -37,7 +37,7 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
     }
 
     return (
-        <main className={styles.main}>
+        <div className={styles.main}>
             <div className={styles.container}>
                 <Button
                     variant="light"
@@ -115,6 +115,6 @@ export const ApplicationDetails: FC<ApplicationDetailsProps> = ({ applicationId 
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

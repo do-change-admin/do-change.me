@@ -23,7 +23,7 @@ export const Salvage:FC<ISalvage> = ({hasSalvage, isPending}) => {
                     [styles.green]: !hasSalvage,
                 })}>
                     <span className={styles.text}>
-                        {hasSalvage ? "Total loss" : "Clean VIN"}
+                        {hasSalvage ? "Salvage" : "Clean VIN"}
                     </span>
                     <span className={styles.icon}>
             {hasSalvage ? <AiOutlineClose size={18} /> : <AiOutlineCheck size={18} />}

@@ -1,2 +1,2 @@
-export * from './user'
-export * from './sells'
+export * as CarSaleUser from './user'
+export * as CarSaleAdmin from './admin'

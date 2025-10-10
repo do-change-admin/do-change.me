@@ -142,13 +142,14 @@ export const Login = () => {
               </p>
             </div>
 
-            <form className={styles.loginForm} onSubmit={handleSubmit}>
+            <form data-testid='login-form' className={styles.loginForm} onSubmit={handleSubmit}>
               <div>
-                <label className={styles.label}>Email Address</label>
+                <label className={styles.label} data-testid='email-address-label'>Email Address</label>
                 <input
                   type="email"
                   className={styles.input}
                   value={email}
+                  data-testid='email'
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
@@ -156,12 +157,13 @@ export const Login = () => {
               </div>
 
               <div>
-                <label className={styles.label}>Password</label>
+                <label className={styles.label} data-testid='password-label'>Password</label>
                 <div className={styles.passwordWrapper}>
                   <input
                     type={showPassword ? "text" : "password"}
                     className={styles.input + " " + styles.passwordInput}
                     value={password}
+                    data-testid='password'
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     required
@@ -224,6 +226,7 @@ export const Login = () => {
                 <Link
                   href="/auth/register"
                   className={styles.signupText}
+                  data-testid={"sign-up"}
                 >
                   Sign up
                 </Link>

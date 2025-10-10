@@ -44,7 +44,7 @@ export const method = zodApiMethod(schemas, {
 
         if (cachedData) {
             flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE] = true
-            return cachedData
+            return { market_prices: cachedData }
         }
 
         const apiAnswer = await fetch(
@@ -56,13 +56,15 @@ export const method = zodApiMethod(schemas, {
                 }
             }
         );
+
+
         const json = await apiAnswer.json();
         const marketPrices = json?.market_prices;
         if (!marketPrices) {
             throw businessError('No prices were found for this car', undefined, 404)
         }
 
-        return marketPrices
+        return { market_prices: marketPrices }
     },
 
     onSuccess: async ({ result, requestPayload, flags }) => {

@@ -45,10 +45,9 @@ export default function () {
         <Button
             disabled={!photo || !mileage || !licencePlate}
             onClick={() => {
+                // @ts-expect-error all fields must be here
                 postNewCar({
-                    licencePlate,
-                    mileage: +mileage,
-                    photo: photo!,
+
                 }, {
                     onSuccess: () => {
                         router.push('/car-sale')

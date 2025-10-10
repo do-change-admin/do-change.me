@@ -1,8 +1,12 @@
 import z from "zod";
 
-export const paginationSchema = z.object({
+export const schema = z.object({
     zeroBasedIndex: z.coerce.number().nonnegative(),
     pageSize: z.coerce.number().positive()
 })
 
-export type PaginationModel = z.infer<typeof paginationSchema>
+export type Model = z.infer<typeof schema>
+
+export const areSame = (a: Model, b: Model) => {
+    return a.pageSize === b.pageSize && a.zeroBasedIndex === b.zeroBasedIndex
+}

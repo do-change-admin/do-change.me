@@ -33,7 +33,7 @@ export const CallSchedule = () => {
 
 
     return (
-        <main id="interview-scheduler" className={styles.schedulerWrapper}>
+        <div id="interview-scheduler" className={styles.schedulerWrapper}>
             <div className={styles.schedulerContainer}>
                 <div className={styles.schedulerCard}>
                     <div className={styles.schedulerGrid}>
@@ -150,6 +150,6 @@ export const CallSchedule = () => {
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

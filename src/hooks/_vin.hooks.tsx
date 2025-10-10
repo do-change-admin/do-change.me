@@ -1,64 +1,69 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { VehicleBaseInfoDTO } from '@/app/api/vin/base-info/models';
-import { ActionsHistoryService } from '@/services';
-import { PaginationSchemaType, VinSchema } from '@/schemas';
-import { CachedData_GET_Response } from '@/app/api/vin/cached-data/models';
-import { MarketValueAPI } from '@/app/api/vin/market-value/route';
-import { apiRequest } from '@/lib/apiFetch';
-import { ReportsAPI } from '@/app/api/vin/report/route';
-import { SalvageAPI } from '@/app/api/vin/salvage/route';
+import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
+import { ActionsHistoryService } from "@/services";
+import { PaginationSchemaType, VinSchema } from "@/schemas";
+import { CachedData_GET_Response } from "@/app/api/vin/cached-data/models";
+import { MarketValueAPI } from "@/app/api/vin/market-value/route";
+import { apiRequest } from "@/lib/apiFetch";
+import { ReportsAPI } from "@/app/api/vin/report/route";
+import { SalvageAPI } from "@/app/api/vin/salvage/route";
 
 const VIN_LENGTH = 17;
 
-export const useBaseInfoByVIN = (
-    vin: string | null,
-) => {
+export const useBaseInfoByVIN = (vin: string | null) => {
+    const isEnabled = VinSchema.safeParse(vin).success;
+
     return useQuery<VehicleBaseInfoDTO>({
-        queryKey: ['vinCheck', vin],
+        queryKey: ["vinCheck", vin],
         queryFn: async () => {
             if (!vin) {
-                throw new Error('VIN was not provided')
+                throw new Error("VIN was not provided");
             }
             if (vin.length !== VIN_LENGTH) {
-                throw new Error('VIN length must be 17 symbols');
+                throw new Error("VIN length must be 17 symbols");
             }
 
             const response = await fetch(`/api/vin/base-info?vin=${vin}`);
             if (!response.ok) {
-                throw new Error(`Request failed with status ${response.status}`);
+                throw new Error(
+                    `Request failed with status ${response.status}`
+                );
             }
 
-            return (await response.json());
+            return await response.json();
         },
-        enabled: () => {
-            const { success } = VinSchema.safeParse(vin)
-            return success
-        },
+        enabled: isEnabled,
         retry: false,
         staleTime: 5 * 60 * 1000,
     });
 };
 
-
 export const useMileagePriceQuery = (
     vin: string | null,
-    mileage: number | undefined,
+    mileage: number | undefined
 ) => {
-    return useQuery<MarketValueAPI['GET']['response'], MarketValueAPI['GET']['error']>({
-        queryKey: ['mileagePrice', vin, mileage],
-        queryFn: () => apiRequest('/api/vin/market-value', 'GET')({ query: { vin, mileage } }),
+    return useQuery<
+        MarketValueAPI["GET"]["response"],
+        MarketValueAPI["GET"]["error"]
+    >({
+        queryKey: ["mileagePrice", vin, mileage],
+        queryFn: () =>
+            apiRequest(
+                "/api/vin/market-value",
+                "GET"
+            )({ query: { vin, mileage } }),
         enabled: () => {
             if (!mileage) {
-                return false
+                return false;
             }
 
-            const { success } = VinSchema.safeParse(vin)
+            const { success } = VinSchema.safeParse(vin);
             if (!success) {
-                return false
+                return false;
             }
 
-            return true
+            return true;
         },
         staleTime: 5 * 60 * 1000,
         refetchOnWindowFocus: false,
@@ -71,7 +76,9 @@ export function useCheckRecords(vin: string) {
 
     return useMutation({
         mutationFn: async (service: string) => {
-            const res = await fetch(`/api/checkrecords?vin=${vin}&service=${service}`);
+            const res = await fetch(
+                `/api/checkrecords?vin=${vin}&service=${service}`
+            );
             const data = await res.json();
 
             if (data.error) {
@@ -86,23 +93,25 @@ export function useCheckRecords(vin: string) {
             }
 
             return data;
-        }
+        },
     });
 }
 
 export const useActionsHistory = (pagination: PaginationSchemaType) => {
     return useQuery<ActionsHistoryService.VinAnalysisResult>({
-        queryKey: ['actions-history', pagination.skip, pagination.take],
+        queryKey: ["actions-history", pagination.skip, pagination.take],
         queryFn: async () => {
-            const response = await fetch(`/api/actions-history?skip=${pagination.skip}&take=${pagination.take}`)
-            const json = await response.json()
+            const response = await fetch(
+                `/api/actions-history?skip=${pagination.skip}&take=${pagination.take}`
+            );
+            const json = await response.json();
             return json.data as ActionsHistoryService.VinAnalysisResult;
         },
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         staleTime: 5 * 60 * 1000,
-    })
-}
+    });
+};
 
 export function usePhotoHook(vin: string) {
     return useQuery({
@@ -113,54 +122,100 @@ export function usePhotoHook(vin: string) {
             return res.json();
         },
         enabled: () => {
-            const { success } = VinSchema.safeParse(vin)
-            return success
-        }
+            const { success } = VinSchema.safeParse(vin);
+            return success;
+        },
     });
 }
 
 export const useSalvageCheck = (vin: string | null) => {
-    return useQuery<SalvageAPI['GET']['response'], SalvageAPI['GET']['error']>({
+    return useQuery<SalvageAPI["GET"]["response"], SalvageAPI["GET"]["error"]>({
         queryKey: ["salvage", vin],
         queryFn: () => {
-            return apiRequest('/api/vin/salvage', 'GET')({ query: { vin } } as SalvageAPI['GET']['payload'])
+            return apiRequest(
+                "/api/vin/salvage",
+                "GET"
+            )({ query: { vin } } as SalvageAPI["GET"]["payload"]);
         },
         enabled: () => {
-            const { success } = VinSchema.safeParse(vin)
-            return success
+            const { success } = VinSchema.safeParse(vin);
+            return success;
         },
     });
 };
 
 export const useCachedInfo = (vin: string | null) => {
     return useQuery<CachedData_GET_Response>({
-        queryKey: ['cached-data', vin],
+        queryKey: ["cached-data", vin],
         queryFn: async () => {
-            const res = await fetch('/api/vin/cached-data?vin=' + vin)
+            const res = await fetch("/api/vin/cached-data?vin=" + vin);
             if (!res.ok) {
                 const errorData = await res.json().catch(() => ({}));
                 throw new Error(errorData?.message);
             }
-            return res.json()
+            return res.json();
         },
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         staleTime: 5 * 60 * 1000,
         enabled: () => {
-            const { success } = VinSchema.safeParse(vin)
-            return success
-        }
-    })
-}
+            const { success } = VinSchema.safeParse(vin);
+            return success;
+        },
+    });
+};
 
 export const useReport = () => {
-    const router = useRouter()
+    const router = useRouter();
 
-    return useMutation<ReportsAPI['GET']['response'], ReportsAPI['GET']['error'], ReportsAPI['GET']['payload']>({
-        mutationFn: apiRequest('/api/vin/report', 'GET'),
-        onSuccess: ({ markup }) => {
-            sessionStorage.setItem("report", markup);
+    return useMutation<
+        ReportsAPI["GET"]["response"],
+        ReportsAPI["GET"]["error"],
+        ReportsAPI["GET"]["payload"]
+    >({
+        mutationFn: apiRequest("/api/vin/report", "GET"),
+        onSuccess: ({ htmlMarkup }) => {
+            sessionStorage.setItem("report", htmlMarkup);
             router.push("/report");
+        },
+    });
+};
+
+//TODO: переписать
+export interface StatsResponse {
+    user_info: {
+        email: string;
+        plan: string;
+        total_requests: number;
+        account_created: string;
+        last_request: string;
+    };
+    current_usage: {
+        requests_this_hour: number;
+        requests_today: number;
+    };
+    rate_limits: {
+        requests_per_hour: number;
+        requests_per_day: number;
+        remaining_this_hour: number;
+        remaining_today: number;
+    };
+    status: {
+        active: boolean;
+        within_hourly_limit: boolean;
+        within_daily_limit: boolean;
+    };
+}
+
+export const useStats= () => {
+    return useQuery<StatsResponse, Error>({
+        queryKey: ["stats"],
+        queryFn: async () => {
+            const res = await fetch("/api/vin/stats");
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
         }
-    })
+    });
 }

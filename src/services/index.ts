@@ -1,4 +1,4 @@
-export * as ActionsHistoryService from './actions-history'
-export * from './auction-access-requests'
-export * from './profile'
-export * from './car-sale'
+// пока поддерживаем пока старый формат, чтобы приложение работало
+export * from './services-export'
+
+export * as Services from './services-export'
