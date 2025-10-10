@@ -164,3 +164,43 @@ export const useReport = () => {
         }
     })
 }
+
+
+//TODO: переписать
+export interface StatsResponse {
+    user_info: {
+        email: string;
+        plan: string;
+        total_requests: number;
+        account_created: string;
+        last_request: string;
+    };
+    current_usage: {
+        requests_this_hour: number;
+        requests_today: number;
+    };
+    rate_limits: {
+        requests_per_hour: number;
+        requests_per_day: number;
+        remaining_this_hour: number;
+        remaining_today: number;
+    };
+    status: {
+        active: boolean;
+        within_hourly_limit: boolean;
+        within_daily_limit: boolean;
+    };
+}
+
+export const useStats= () => {
+    return useQuery<StatsResponse, Error>({
+        queryKey: ["stats"],
+        queryFn: async () => {
+            const res = await fetch("/api/vin/stats");
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+        }
+    });
+}

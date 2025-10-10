@@ -5,6 +5,7 @@ import { FaIdCard, FaEnvelope, FaDownload } from "react-icons/fa";
 import { Progress, Badge } from "@mantine/core";
 import { useAdminUsersInfo } from "@/hooks/_admin-users.hooks";
 import {useEffect, useState} from "react";
+import {useStats} from "@/hooks";
 
 type StatsResponse = {
     user_info: {
@@ -39,40 +40,8 @@ const baseURL = process.env.REPORT_ENDPOINT;
 
 export default function UsersTable() {
     const { data, isFetching } = useAdminUsersInfo();
-    // const [stats, setStats] = useState<StatsResponse | null>(null);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState<string | null>(null);
-    //
-    // useEffect(() => {
-    //     async function fetchStats() {
-    //         try {
-    //             const response = await fetch(`${baseURL}/api/stats`, {
-    //                 headers: {
-    //                     "X-API-Key": apiKey,
-    //                     "Content-Type": "application/json",
-    //                 },
-    //             });
-    //
-    //             if (!response.ok) {
-    //                 throw new Error(`HTTP error! status: ${response.status}`);
-    //             }
-    //
-    //             const data: StatsResponse = await response.json();
-    //             setStats(data);
-    //         } catch (err: any) {
-    //             setError(err.message);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     }
-    //
-    //     fetchStats();
-    // }, []);
-    //
-    // console.log(stats);
-    //
-    // if (loading) return <p>Loading stats...</p>;
-    // if (error) return <p>Error: {error}</p>;
+    const { data: stats, isLoading, error } = useStats();
+    console.log(stats)
     if (isFetching) return <>Loading...</>;
     if (!data?.users.length) return <>No reports usage was detected</>;
 
@@ -116,7 +85,7 @@ export default function UsersTable() {
                     </tr>
                     </thead>
                     <tbody>
-                    {data.users.map((user) => {
+                    {data.users.sort((a, b) => b.downloadedReports - a.downloadedReports).map((user) => {
                         const isHigh = user.downloadedReports > MAX_REPORTS;
                         return (
                             <tr key={user.id} >

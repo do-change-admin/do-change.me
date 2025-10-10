@@ -10,7 +10,7 @@
 }
 
 .header {
-    background: var(--text-texas-blue);
+    background: linear-gradient(to right, #4f46e5, #a855f7);
     padding: 2rem;
     color: #fff;
     position: relative;
@@ -76,7 +76,7 @@
 }
 
 .sectionIconOrange {
-    color: #f97316;
+    color: var(--cl-secondary);
 }
 
 .sectionIconBlue {
@@ -147,7 +147,7 @@
 }
 
 .rejectBtn {
-    background: var(--texas-red);
+    background: var(--cl-primary);
 }
 
 .rejectBtn:hover {
@@ -155,13 +155,16 @@
 }
 
 .continueBtn {
-    background: #16a34a;
+    background: var(--cl-secondary);
 }
 
 .continueBtn:hover {
-    background: #15803d;
+    background: var(--cl-secondary);
 }
 
+.updateButton {
+    background: var(--cl-primary);
+}
 .grid {
     display: grid;
     gap: 2rem;

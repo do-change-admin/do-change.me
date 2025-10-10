@@ -1,12 +1,12 @@
 .subMenu {
-    padding-left: 5rem;
+    margin-left: 5rem;
     position: fixed;
     left: -400px;
     border-right: 1px solid rgba(237, 237, 237, 0.69);
-    z-index: 9999999999999999;
+    z-index: 51;
     background: white;
     height: 100vh;
-    transition: all 0.2s ease-out;
+    transition: left 0.2s ease-in-out;
 }
 
 .subMenuOpen {
@@ -62,7 +62,7 @@
         display: flex;
     }
     .subMenu {
-        padding: 0;
+        margin: 0;
     }
 
     .subMenuOpen {

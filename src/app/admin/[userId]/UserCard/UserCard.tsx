@@ -204,7 +204,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                 mt="lg"
                                 radius="lg"
                             />
-                            <Button onClick={handleSetStatus}>Update</Button>
+                            <Button radius="lg" onClick={handleSetStatus} className={styles.updateButton}>Update</Button>
                         </div>
                     </section>
 
