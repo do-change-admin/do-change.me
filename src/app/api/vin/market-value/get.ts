@@ -42,9 +42,9 @@ export const method = zodApiMethod(schemas, {
             where: { vin: payload.vin, mileage: payload.mileage }
         })
 
-        if (cachedData) {
+        if (cachedData.length) {
             flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE] = true
-            return { market_prices: cachedData }
+            return { market_prices: cachedData[0] }
         }
 
         const apiAnswer = await fetch(
