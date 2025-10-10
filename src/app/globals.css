@@ -109,7 +109,7 @@ select {
 }
 
 main {
-  max-width: max-content !important;
+  max-width: 100%;
 }
 
 * {

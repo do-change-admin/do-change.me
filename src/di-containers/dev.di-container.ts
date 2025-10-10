@@ -14,7 +14,7 @@ const registerDataProviders = () => {
 
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DataProviderTokens.vehicleHistoryReports)
-        .to(DataProvidersImplemetations.API.VehicleHistoryReports)
+        .to(DataProvidersImplemetations.Mock.VehicleHistoryReports)
 
     container
         .bind<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
