@@ -8,11 +8,13 @@ const schemas = {
     query: Services.CarSaleUser.updateDraftPayloadSchema.omit({
         mileage: true,
         price: true,
-        year: true
+        year: true,
+        removedPhotoIds: true
     }).extend({
         mileage: z.coerce.number().optional(),
         price: z.coerce.number().optional(),
-        year: z.coerce.number().optional()
+        year: z.coerce.number().optional(),
+        removedPhotoIds: z.string().transform(x => x.split(',').map(x => x.trim()))
     }),
     response: undefined
 } satisfies ZodAPISchemas
