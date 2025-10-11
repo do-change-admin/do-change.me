@@ -22,7 +22,7 @@ export const MileageButtons: FC<MileageButtonsProps> = ({ onMileageChange, value
 
     const actualValues = (values ?? DEFAULT_VALUES).sort((a, b) => a.down - b.down)
     return <div className={styles.mileageRange}>
-        <h3 className={styles.label}>Mileage Range</h3>
+        {/*<h3 className={styles.label}>Mileage Range</h3>*/}
         <div className={styles.mileageButtons}>
             {actualValues.map((range) => {
                 const stringRepresentation = rangeAsString(range, 'k')

@@ -29,6 +29,9 @@ import {
 import { useCarsForSaleUserFilters, useCarsForSaleUserList } from "@/hooks";
 import { CarAdder } from "@/components/CarAdder/CarAdder";
 import { useDisclosure } from "@mantine/hooks";
+import Sell from "@/app/sdk/plug";
+
+const isDEV = process.env.NODE_ENV === "development";
 
 export default function VehiclesPage() {
     const [opened, { open, close }] = useDisclosure(false);
@@ -60,6 +63,14 @@ export default function VehiclesPage() {
         setEditingId(undefined);
         close();
     };
+
+    if (isDEV) {
+        return (
+            <div className={styles.container}>
+                <Sell/>
+            </div>
+        )
+    }
 
     return (
         <div className={styles.container}>

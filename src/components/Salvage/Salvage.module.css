@@ -1,9 +1,11 @@
+
 .container {
     display: inline-block;
     position: absolute;
-    top: -1rem;
-    left: 1rem;
+    top: 2rem;
+    right: -3rem;
     z-index: 11;
+    transform: rotate(45deg);
 }
 
 .wrapper {
@@ -12,22 +14,27 @@
     z-index: 1000;
     gap: 8px;
     padding: 6px 12px;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     font-weight: 600;
     font-size: 14px;
     color: white;
 }
 
 .red {
-    background: var(--cl-salvage);
+    background: var(--cl-primary);
+    width: 200px;
+    text-align: center;
 }
 
 .green {
-    background: var(--cl-clean-title);
+    background: #34d399;
+    width: 200px;
+    text-align: center;
 }
 
 .text {
     font-size: 14px;
+    width: 100%;
 }
 
 .icon {
@@ -52,8 +59,14 @@
 
 @media (max-width: 700px) {
     .container {
-        top: -1.2rem;
-        left: 1.2rem;
+        top: 1rem;
+        right: -4rem;
+    }
+
+    .red {
+        background: var(--cl-primary);
+        width: 200px;
+        text-align: center;
     }
 
     .text {

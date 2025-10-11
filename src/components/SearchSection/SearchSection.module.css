@@ -38,12 +38,16 @@
 }
 
 .tabButton.active {
-    background-color: #2457aa;
+    background-color: var(--text-texas-blue);
+    color: white;
+}
+
+.tabButton.active .icon{
     color: white;
 }
 
 .tabButton:hover {
-    background-color: #60a5fa;
+    background-color: #9bbdf4;
     color: white;
 }
 
@@ -76,6 +80,7 @@
 .textRight {
     text-align: right;
     color: rgba(255, 255, 255, 0.87);
+    z-index: 11;
 }
 
 .vin {
@@ -112,17 +117,18 @@
 
 .glass {
     position: relative;
-    border-radius: 2rem;
+    border-radius: 1rem;
     padding: 2rem;
     background: var(--text-texas-blue);
-}
-
-.bgClean {
-    background: var(--cl-clean-title);
+    overflow: hidden;
 }
 
 .bgSalvage {
-    background: var(--cl-salvage);
+    background: linear-gradient(
+            135deg,
+            var(--cl-primary) 0%,
+            var(--text-texas-blue) 100%
+    );
 }
 
 .broken {
@@ -130,7 +136,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    border-radius: 2rem;
+    border-radius: 1rem;
     object-fit: cover;
     /*opacity: 0.9;*/
 }
@@ -283,11 +289,11 @@
 
     .tabs {
         gap: 0.5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .tabButton {
-        padding: 1rem;
+        padding: 0.3rem 0.6rem;
         border-radius: 1rem;
         font-weight: 500;
         gap: 0.2rem;
@@ -320,7 +326,7 @@
     }
 
     .title {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 
     .country, .vin, .subtitle {

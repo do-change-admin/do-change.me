@@ -28,13 +28,13 @@ export const SampleResults: FC<ISampleResults> = ({ vin, baseInfo }) => {
     return (
         <section className={styles.sampleResults}>
             <div className={styles.card}>
-                <div className={styles.filters}>
-                    <MileageButtons onMileageChange={setAverageMileage} averageMileage={averageMileage} />
-                </div>
                 <div className={styles.grid}>
                     <div className={styles.valuationInfo}>
                         <div className={styles.infoCard}>
                             <h3>Market Valuation</h3>
+                            <div className={styles.filters}>
+                                <MileageButtons onMileageChange={setAverageMileage} averageMileage={averageMileage} />
+                            </div>
                             {isLoadingMileage ? (
                                 <div className={styles.valuationContent}>
                                     <div className={styles.estimatedValue}>
