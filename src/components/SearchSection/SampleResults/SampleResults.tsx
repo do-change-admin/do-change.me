@@ -71,11 +71,11 @@ export const SampleResults: FC<ISampleResults> = ({ vin, baseInfo }) => {
                                 </div>
                             )}
                         </div>
-                        <DistributionChart distribution={mileageData?.market_prices?.distribution ?? []} />
                     </div>
-                    <ReportsProvider vin={vin} />
+                    <DistributionChart distribution={mileageData?.market_prices?.distribution ?? []} />
                 </div>
                 {baseInfo ? <CarInfo {...baseInfo} /> : <>Loading...</>}
+                <ReportsProvider vin={vin} />
             </div>
         </section>
     );
