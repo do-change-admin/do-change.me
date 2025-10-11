@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useProfile } from "@/hooks";
 import { VinSearch } from "./VinSearch/VinSearch";
 import cn from "classnames";
+import {FaCar, FaHashtag} from "react-icons/fa";
 
 interface SearchSectionProps {
     openSubscription?: () => void
@@ -18,7 +19,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const searchParams = useSearchParams();
     const { data: profileData } = useProfile()
     const vin = searchParams.get("vin") || '1C6RD6FT1CS310366';
-    // const [activeTab, setActiveTab] = useState<"vin" | "plate">("vin");
+    const [activeTab, setActiveTab] = useState<"vin" | "plate">("vin");
 
     const actionsHistoryResponse = useActionsHistory({ skip: 0, take: 10 })
 
@@ -32,9 +33,9 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                     [styles.bgClean]: !salvageInfo?.salvageWasFound,
                     [styles.bgSalvage]: salvageInfo?.salvageWasFound,
                 })}>
-                    {/*<div className={styles.searchSectionHeader}>*/}
-                    {/*    <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />*/}
-                    {/*</div>*/}
+                    <div className={styles.searchSectionHeader}>
+                        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+                    </div>
                     <Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />
                     {(isLoading || salvageIsLoading) && <LoadingMinute label="We’re compiling the Vehicle History Report" />}
                     <div className={styles.searchSectionHeader}>
@@ -60,28 +61,28 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     );
 }
 
-// function Tabs({
-//                   activeTab,
-//                   setActiveTab,
-//               }: {
-//     activeTab: "vin" | "plate";
-//     setActiveTab: (tab: "vin" | "plate") => void;
-// }) {
-//     return (
-//         <div className={styles.tabs}>
-//             <button
-//                 className={`${styles.tabButton} ${activeTab === "vin" ? styles.active : ""}`}
-//                 onClick={() => setActiveTab("vin")}
-//             >
-//                 <FaHashtag className={styles.icon} /> VIN Number
-//             </button>
-//             <button
-//                 className={`${styles.tabButton} ${activeTab === "plate" ? styles.active : ""}`}
-//                 onClick={() => setActiveTab("plate")}
-//             >
-//                 <FaCar className={styles.icon} /> License Plate
-//             </button>
-//         </div>
-//     );
-// }
+function Tabs({
+                  activeTab,
+                  setActiveTab,
+              }: {
+    activeTab: "vin" | "plate";
+    setActiveTab: (tab: "vin" | "plate") => void;
+}) {
+    return (
+        <div className={styles.tabs}>
+            <button
+                className={`${styles.tabButton} ${activeTab === "vin" ? styles.active : ""}`}
+                onClick={() => setActiveTab("vin")}
+            >
+                <FaHashtag className={styles.icon} /> VIN Number
+            </button>
+            {/*<button*/}
+            {/*    className={`${styles.tabButton} ${activeTab === "plate" ? styles.active : ""}`}*/}
+            {/*    onClick={() => setActiveTab("plate")}*/}
+            {/*>*/}
+            {/*    <FaCar className={styles.icon} /> License Plate*/}
+            {/*</button>*/}
+        </div>
+    );
+}
 

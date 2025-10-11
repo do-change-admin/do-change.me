@@ -64,27 +64,27 @@ export const AuctionsServicesCards = () => {
                     </div>
                 </motion.div>
                 {/* Insurance Auctions */}
-                <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className={styles.card}
-                    onClick={() => {
-                        router.push("/auctions/insurance");
-                        closeMenu()
-                    }}
-                >
-                    <div className={styles.cardContent}>
-                        <div className={`${styles.iconBox} ${styles.blue}`}>
-                            <FaShieldAlt className={styles.icon} />
-                        </div>
-                        <div className={styles.cardText}>
-                            <h3 className={styles.cardTitle}>Insurance Auctions</h3>
-                            <p className={styles.cardDesc}>
-                                Copart, IAAI and 140+
-                            </p>
-                        </div>
-                        <FaChevronRight className={styles.chevron} />
-                    </div>
-                </motion.div>
+                {/*<motion.div*/}
+                {/*    whileHover={{ scale: 1.02 }}*/}
+                {/*    className={styles.card}*/}
+                {/*    onClick={() => {*/}
+                {/*        router.push("/auctions/insurance");*/}
+                {/*        closeMenu()*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    <div className={styles.cardContent}>*/}
+                {/*        <div className={`${styles.iconBox} ${styles.blue}`}>*/}
+                {/*            <FaShieldAlt className={styles.icon} />*/}
+                {/*        </div>*/}
+                {/*        <div className={styles.cardText}>*/}
+                {/*            <h3 className={styles.cardTitle}>Insurance Auctions</h3>*/}
+                {/*            <p className={styles.cardDesc}>*/}
+                {/*                Copart, IAAI and 140+*/}
+                {/*            </p>*/}
+                {/*        </div>*/}
+                {/*        <FaChevronRight className={styles.chevron} />*/}
+                {/*    </div>*/}
+                {/*</motion.div>*/}
             </div>
         </div>
     );

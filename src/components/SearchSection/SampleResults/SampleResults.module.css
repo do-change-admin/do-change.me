@@ -4,7 +4,7 @@
 
 .card {
     position: relative;
-    border-radius: 2rem;
+    border-radius: 1rem;
 }
 
 .carShortInfo {
@@ -26,13 +26,13 @@
     gap: 1rem;
     grid-template-columns: 1fr 1fr;
 
-    border-radius: 2rem 2rem 0 0;
+    border-radius: 1rem 1rem 0 0;
     background: #ffffff;
     padding: 2rem;
 }
 
 .infoCard {
-    padding: 2rem;
+    padding: 1rem;
     text-align: center;
 }
 
