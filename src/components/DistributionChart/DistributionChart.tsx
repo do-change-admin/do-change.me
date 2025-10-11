@@ -36,11 +36,11 @@ export const DistributionChart: FC<DistributionChartProps> = ({ distribution }) 
             <h3 className={styles.title}>Active Listings Prices</h3>
             <div className={styles.chartWrapper}>
                 <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data} margin={{ top: 20, right: 20, left: 5, bottom: 40 }}>
+                    <BarChart data={data?.slice(0, 6)} margin={{ top: 20, right: 20, left: 5, bottom: 0 }}>
                         <CartesianGrid  vertical={false} horizontal={false} strokeDasharray="3 3" stroke="#3b82f6" />
-                        <XAxis dataKey="name" tick={false}>
-                            <Label value="Price Range ($)" offset={-10} position="insideBottom" />
-                        </XAxis>
+                        {/*<XAxis dataKey="name" tick={false}>*/}
+                        {/*    <Label value="Price Range ($)" offset={-5} position="insideBottom" />*/}
+                        {/*</XAxis>*/}
                         <YAxis tick={{ fontSize: 10 }}>
                             <Label
                                 value="Number of Cars"
