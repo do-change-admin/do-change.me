@@ -173,7 +173,7 @@
 .filters {
     display: flex;
     color: var(--texas-blue);
-    justify-content: space-between;
+    justify-content: center;
     align-items: end;
     margin: 1rem 0;
 }

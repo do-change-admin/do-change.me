@@ -1,11 +1,13 @@
 
 
 .mileageButtons {
+    width: 100%;
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     gap: 0.5rem;
     align-items: center;
+    justify-content: center;
 }
 
 .mileageButtons button {
@@ -45,12 +47,26 @@
     gap: 0.5rem;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
     .mileageButtons {
         margin-bottom: 1rem;
     }
     .mileageButtons button {
         padding: 0.3rem 0.8rem;
+    }
+
+}
+
+@media (max-width: 430px) {
+    .mileageButtons {
+        margin-bottom: 0.7rem;
+    }
+    .mileageButtons button {
+        padding: 0.2rem 0.7rem;
+    }
+
+    .mileageButtons button {
+        font-size: 0.8rem;
     }
 
 }

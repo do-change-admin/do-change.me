@@ -37,7 +37,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                         <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
                     </div>
                     <Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />
-                    {(isLoading || salvageIsLoading) && <LoadingMinute label="We’re compiling the Vehicle History Report" />}
+                    {(isLoading || salvageIsLoading) && <LoadingMinute label="" />}
                     <div className={styles.searchSectionHeader}>
                         <div className={styles.header}>
                             <div className={styles.headerFlex}>
