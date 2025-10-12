@@ -8,6 +8,8 @@ import React, { FC } from "react";
 import { useReport } from "@/hooks";
 import { FiRefreshCw } from "react-icons/fi";
 import { LoadingOverlay } from "@mantine/core";
+import {notifications} from "@mantine/notifications";
+import {LoadingMinute} from "@/components";
 
 export interface IReportsProviderProp {
     vin: string;
@@ -15,6 +17,26 @@ export interface IReportsProviderProp {
 
 export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
     const { mutate: getReport, isPending } = useReport();
+    const handleGetReport = () => {
+        getReport(
+            { query: { vin } },
+            {
+                onError: (error: any) => {
+                    const message =
+                        error?.response?.data?.message ||
+                        error?.error.message ||
+                        "An error occurred while fetching the report";
+
+                    notifications.show({
+                        title: "Error",
+                        message,
+                        color: "red",
+                    });
+                },
+            }
+        );
+    };
+
 
     return (
         <motion.div
@@ -23,12 +45,7 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
         >
-            <LoadingOverlay
-                visible={isPending}
-                zIndex={1000}
-                overlayProps={{ radius: "sm", blur: 2 }}
-                loaderProps={{ color: "blue", size: "lg" }}
-            />
+            {isPending &&  <LoadingMinute label="We’re compiling the Vehicle History Report" />}
             <div className={styles.content}>
                 <div className={styles.intro}>
                     <div className={styles.reportsAvailable}>
@@ -57,11 +74,7 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
                             <button
                                 className={styles.btnBlue}
                                 disabled={isPending}
-                                onClick={() =>
-                                    getReport({
-                                        query: { vin },
-                                    })
-                                }
+                                onClick={handleGetReport}
                             >
                                 Get Report
                             </button>

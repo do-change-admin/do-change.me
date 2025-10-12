@@ -100,7 +100,7 @@ select {
 }
 
 #vehicle-history-report {
-  max-width: 100% !important;
+  max-width: 100vw !important;
   padding: 0 !important;
 }
 
@@ -111,6 +111,8 @@ select {
 main {
   max-width: 100%;
 }
+
+
 
 * {
   box-sizing: border-box;
