@@ -117,7 +117,7 @@
 
 .glass {
     position: relative;
-    border-radius: 1rem;
+    border-radius: 2rem;
     padding: 2rem;
     background: var(--text-texas-blue);
     overflow: hidden;

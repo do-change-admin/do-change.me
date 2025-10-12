@@ -27,7 +27,8 @@
 
 .header {
   margin-left: 5rem;
-  display: none;
+  border-bottom: 1px solid #ededed;
+  /*display: none;*/
 }
 
 .auctionButton {

@@ -36,7 +36,7 @@
     overflow: hidden;
     transition: all 0.3s ease-in-out;
     background: white;
-    border-radius: 0 0 1rem 1rem;
+    border-radius: 2rem;
     padding: 2rem;
 }
 

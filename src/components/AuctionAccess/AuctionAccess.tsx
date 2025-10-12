@@ -17,8 +17,6 @@ export const AuctionAccess = () => {
     const [qrFile, setQrFile] = useState<File | null>(null);
     const [number, setNumber] = useState("");
 
-
-
     return (
         <div className={styles.main}>
             <Modal
@@ -71,12 +69,12 @@ export const AuctionAccess = () => {
                  <FaQrcode className={styles.qrIcon} />
             </div>}
             {(!profileData?.auctionAccessNumber! && !profileData?.auctionAccessQRLink) && (
-                <>
-                    <Button h={40} mt={10} radius="lg" fullWidth bg="pink" onClick={() => {
-                        router.push('/auctions/dealer')
-                        closeMenu()
-                    }}>Get Access</Button>
-                </>
+                <Button h={40} mt={10} radius="lg" fullWidth bg="pink" onClick={() => {
+                    router.push('/auctions/dealer')
+                    closeMenu()
+                }}>
+                    Get Access
+                </Button>
             )}
         </div>
     );

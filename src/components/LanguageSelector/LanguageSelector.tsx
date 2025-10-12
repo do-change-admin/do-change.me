@@ -16,7 +16,7 @@ type LangOption = {
 const LANGUAGES: LangOption[] = [
     { code: 'en', countryCode: 'US', name: 'English' },
     { code: 'es', countryCode: 'ES', name: 'Español' },
-    { code: 'hy', countryCode: 'AM', name: 'Հայերեն' },
+    // { code: 'hy', countryCode: 'AM', name: 'Հայերեն' },
     { code: 'ru', countryCode: 'RU', name: 'Русский' },
 ];
 
