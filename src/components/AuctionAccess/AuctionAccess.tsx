@@ -17,8 +17,6 @@ export const AuctionAccess = () => {
     const [qrFile, setQrFile] = useState<File | null>(null);
     const [number, setNumber] = useState("");
 
-
-
     return (
         <div className={styles.main}>
             <Modal
@@ -57,9 +55,9 @@ export const AuctionAccess = () => {
                 </form>
             </Modal>
             {/* QR Section */}
-            <Avatar radius="0" w="100%" h={200} className={styles.photo} src={profileData?.photoLink || ''} alt="" />
+            <Avatar radius="0" w={250} h={200} className={styles.photo} src={profileData?.photoLink || ''} alt="" />
             <Text fw="bold" style={{ fontSize: '1.5rem' }} c="#005BAA">{profileData?.firstName.toUpperCase()} {profileData?.lastName.toUpperCase()}</Text>
-            <Text fw="bold" fs="lg"c="#005BAA">{profileData?.auctionAccessNumber ?? "__-____-____"}</Text>
+            <Text mb="xl" fw="bold" fs="lg"c="#005BAA">{profileData?.auctionAccessNumber ?? "__-____-____"}</Text>
             {profileData?.auctionAccessQRLink ? <Image
                     height={300}
                     width={300}
@@ -70,13 +68,13 @@ export const AuctionAccess = () => {
             <div className={styles.qrBox}>
                  <FaQrcode className={styles.qrIcon} />
             </div>}
-            {!profileData?.auctionAccessNumber && (
-                <>
-                    <Button h={40} mt={10} radius="lg" fullWidth bg="pink" onClick={() => {
-                        router.push('/auctions/dealer')
-                        closeMenu()
-                    }}>Get Access</Button>
-                </>
+            {(!profileData?.auctionAccessNumber! && !profileData?.auctionAccessQRLink) && (
+                <Button h={40} mt={10} radius="lg" fullWidth bg="pink" onClick={() => {
+                    router.push('/auctions/dealer')
+                    closeMenu()
+                }}>
+                    Get Access
+                </Button>
             )}
         </div>
     );

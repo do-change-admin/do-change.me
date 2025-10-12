@@ -1,5 +1,5 @@
 .searchHistory {
-    margin: 3rem 0;
+    margin: 1rem 0 3rem;
 }
 
 .card {
@@ -9,7 +9,6 @@
 
 .header {
     padding: 1.5rem 1.5rem;
-    border-bottom: 1px solid #e5e7eb;
 }
 
 .header h2 {

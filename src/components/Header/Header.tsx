@@ -7,15 +7,24 @@ import React from "react";
 
 export const Header = () => {
     const pathname = usePathname();
-    const showLanguage = false;
 
     return (
         <header className={styles.header}>
-            <h1 className={styles.title}>do-change</h1>
+            <h1 className={styles.name}>do-change</h1>
             <div className={styles.right}>
-                {showLanguage && (
-                    <LanguageSelector />
-                )}
+                {/*<Tooltip label="Notifications" position="bottom" transitionProps={{ duration: 150 }}>*/}
+                {/*    <ActionIcon*/}
+                {/*        variant="light"*/}
+                {/*        color="blue"*/}
+                {/*        radius="xl"*/}
+                {/*        size="lg"*/}
+                {/*        className={styles.notificationButton}*/}
+                {/*        onClick={() => console.log("Open notifications")}*/}
+                {/*    >*/}
+                {/*        <FaBell  size={22} />*/}
+                {/*    </ActionIcon>*/}
+                {/*</Tooltip>*/}
+                <LanguageSelector />
             </div>
         </header>
     );

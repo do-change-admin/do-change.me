@@ -38,12 +38,11 @@ export const DistributionChart: FC<DistributionChartProps> = ({ distribution }) 
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data?.slice(0, 6)} margin={{ top: 20, right: 20, left: 5, bottom: 0 }}>
                         <CartesianGrid  vertical={false} horizontal={false} strokeDasharray="3 3" stroke="#3b82f6" />
-                        {/*<XAxis dataKey="name" tick={false}>*/}
-                        {/*    <Label value="Price Range ($)" offset={-5} position="insideBottom" />*/}
-                        {/*</XAxis>*/}
+                        <XAxis dataKey="name" tick={false}>
+                            <Label offset={-5} position="insideBottom" />
+                        </XAxis>
                         <YAxis tick={{ fontSize: 10 }}>
                             <Label
-                                value="Number of Cars"
                                 angle={-90}
                                 position="insideLeft"
                                 style={{ textAnchor: "middle" }}
