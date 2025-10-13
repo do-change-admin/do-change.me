@@ -19,7 +19,7 @@ export const authOptions: AuthOptions = {
                     );
 
                 const user = await prismaClient.user.findUnique({
-                    where: { email: credentials.email },
+                    where: { email: credentials.email.toLowerCase() },
                     include: { accounts: true },
                 });
 
@@ -68,7 +68,7 @@ export const authOptions: AuthOptions = {
     callbacks: {
         async signIn({ user, account }) {
             let dbUser = await prismaClient.user.findUnique({
-                where: { email: user.email! },
+                where: { email: user.email?.toLowerCase()! },
                 include: { accounts: true },
             });
 
