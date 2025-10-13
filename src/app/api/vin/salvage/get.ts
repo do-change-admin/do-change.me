@@ -58,7 +58,6 @@ export const method = zodApiMethod(schemas, {
             salvageWasFound = true
         }
 
-        console.log(salvageWasFound, 'salvage')
         return { salvageWasFound }
     },
     onSuccess: async ({ flags, result, requestPayload }) => {
@@ -67,7 +66,8 @@ export const method = zodApiMethod(schemas, {
                 data: { salvageWasFound: result.salvageWasFound, vin: requestPayload.vin }
             })
         }
-        if (!isDemoVin({ payload: requestPayload })) {
+        const isDemo = isDemoVin({ payload: requestPayload })
+        if (!isDemo) {
             await ActionsHistoryService.Register({ target: "salvage", payload: { vin: requestPayload.vin, result: result.salvageWasFound } })
         }
     },
