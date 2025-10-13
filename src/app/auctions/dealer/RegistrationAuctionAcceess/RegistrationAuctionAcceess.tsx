@@ -191,7 +191,7 @@ export const RegistrationSteps = () => {
                                 </label>
                                 {agreement?.name}
                                 {!agreement?.name ? <><div>
-                                    1. <b><a href="/your-individual-agreement.pdf"
+                                    1. <b><a href="/AGENT_AGREEMENT.pdf"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={styles.link}
