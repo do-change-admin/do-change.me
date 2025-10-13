@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import assert from 'assert';
+import {v4} from "uuid";
 
 test.describe('Login Page', () => {
 
@@ -8,8 +9,8 @@ test.describe('Login Page', () => {
   });
 
   test('Пользователь может залогиниться после API-регистрации', async ({ page, request }) => {
-    const randomId = Date.now();
-    const email = `user${randomId}@test.com`;
+    const randomId = v4();
+    const email = `User${randomId}@test.com`;
     const password = 'Password123';
 
     const apiResponse = await request.post('/api/auth/register', {
@@ -73,8 +74,8 @@ test.describe('Register User Flow', () => {
   test('Пользователь может зарегистрироваться', async ({ page }) => {
     await page.goto('/auth/register');
 
-    const randomId = Date.now();
-    const email = `user${randomId}@test.com`;
+    const randomId = v4();
+    const email = `User${randomId}@test.com`;
 
     const registerResponsePromise = page.waitForResponse((response) =>
       response.url().includes('/api/auth/register')
