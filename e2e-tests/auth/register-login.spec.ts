@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import assert from 'assert';
+import {v4} from "uuid";
 
 test.describe('Login Page', () => {
 
@@ -8,7 +9,7 @@ test.describe('Login Page', () => {
   });
 
   test('Пользователь может залогиниться после API-регистрации', async ({ page, request }) => {
-    const randomId = Date.now();
+    const randomId = v4();
     const email = `User${randomId}@test.com`;
     const password = 'Password123';
 
