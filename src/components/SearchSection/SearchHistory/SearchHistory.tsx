@@ -87,14 +87,14 @@ export const SearchHistory: FC<SearchHistoryProps> = ({ searches, isLoading }) =
                         </tbody>
                     </table>
                 </div>
-
+                {/* 
                  <div className={styles.footer}>
                     <div className={styles.resultsInfo}>Showing 3 of 15 results</div>
                     <div className={styles.pagination}>
                         <button>Previous</button>
                         <button>Next</button>
                     </div>
-                </div>
+                </div> */}
             </div>
         </section>
     );
