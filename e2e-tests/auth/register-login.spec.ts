@@ -9,7 +9,7 @@ test.describe('Login Page', () => {
 
   test('Пользователь может залогиниться после API-регистрации', async ({ page, request }) => {
     const randomId = Date.now();
-    const email = `user${randomId}@test.com`;
+    const email = `User${randomId}@test.com`;
     const password = 'Password123';
 
     const apiResponse = await request.post('/api/auth/register', {
