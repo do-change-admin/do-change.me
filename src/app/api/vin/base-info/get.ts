@@ -43,13 +43,15 @@ export const method = zodApiMethod(schemas, {
         if (!flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE]) {
             await prismaClient.vinCheckResult.create({ data: result }) ?? [];
         }
-        if (!isDemoVin({ payload: requestPayload })) {
+        const isDemo = await isDemoVin({ payload: { vin: requestPayload.vin } })
+        if (!isDemo) {
             await ActionsHistoryService.Register({
                 target: "base info",
                 payload: { vin: requestPayload.vin, result }
             })
         }
     },
+
     beforehandler: noSubscriptionsGuard,
     ignoreBeforeHandler: isDemoVin
 })

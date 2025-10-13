@@ -3,11 +3,10 @@ import styles from './SuccessCard.module.css';
 import { motion } from 'framer-motion';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
 import { MdEmail, MdUpdate } from 'react-icons/md';
-import {router} from "next/client";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export const SuccessCard: FC = () => {
-   const router = useRouter()
+    const router = useRouter()
     return (
         <div className={styles.card}>
 

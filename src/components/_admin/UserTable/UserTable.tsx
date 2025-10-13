@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import type { AuctionAccessRequestListItem } from '@/services'
 import { FC } from "react";
 import { motion } from "framer-motion";
-import {FaInbox} from "react-icons/fa";
+import { FaInbox } from "react-icons/fa";
 
 export type UserTableProps = {
     requests: AuctionAccessRequestListItem[]
@@ -51,7 +51,7 @@ export const UserTable: FC<UserTableProps> = ({ requests }) => {
                                         <img src={request.photoLink} alt={request.firstName} className={styles.avatar} />
                                     </td>
                                     <td className={styles.td}>
-                                        <div>{request.firstName} {request.lastName}</div>
+                                        <div>{request.firstName} {request.lastName} ({request.withSubscription ? 'With subscription' : 'Without subscription'})</div>
                                         <div className={styles.email}>{request.email}</div>
                                     </td>
                                     <td className={styles.td}>{new Date(request.birthDate).toDateString()}</td>

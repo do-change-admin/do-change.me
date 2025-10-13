@@ -81,7 +81,8 @@ export const method = zodApiMethod(schemas, {
             })
 
         }
-        if (!isDemoVin({ payload: requestPayload })) {
+        const isDemo = await isDemoVin({ payload: requestPayload })
+        if (!isDemo) {
             await ActionsHistoryService.Register({
                 target: "market value", payload: {
                     vin: requestPayload.vin,
