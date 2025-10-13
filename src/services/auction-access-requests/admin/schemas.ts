@@ -21,7 +21,7 @@ export const auctionAccessRequestStatusSchema = z.enum([
     'call completed',
     'awaiting documents upload',
     'documents under review',
-    'awaiting for payment',
+    'corrections required',
     'ready for auction access',
     'subscription ended'
 ])
@@ -37,8 +37,7 @@ export const auctionAccessRequestListSchema = z.object({
     lastName: z.string(),
     birthDate: z.date(),
     photoLink: z.string(),
-    status: auctionAccessRequestStatusSchema,
-    withSubscription: z.boolean()
+    status: auctionAccessRequestStatusSchema
 })
 
 /**

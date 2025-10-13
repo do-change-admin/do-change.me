@@ -23,9 +23,9 @@ export const handler = zodApiMethod_DEPRECATED(undefined, undefined, responseSch
             'awaiting documents upload',
             'awaiting user confirmation',
             'approved',
-            'rejected',
-            'awaiting for payment'
+            'rejected'
         ]
+
 
         const getStep = (status: AuctionAccessRequestStatus) => {
             const callStatuses: AuctionAccessRequestStatus[] = [
@@ -37,6 +37,7 @@ export const handler = zodApiMethod_DEPRECATED(undefined, undefined, responseSch
             const documentsStatuses: AuctionAccessRequestStatus[] = [
                 'awaiting documents upload',
                 'documents under review',
+                'corrections required',
                 'ready for auction access'
             ]
 
@@ -44,10 +45,6 @@ export const handler = zodApiMethod_DEPRECATED(undefined, undefined, responseSch
                 'approved',
                 'rejected'
             ]
-
-            if (status === 'awaiting for payment') {
-                return 'awaiting for payment' as const
-            }
 
             if (callStatuses.includes(status)) {
                 return 'call' as const
@@ -73,5 +70,5 @@ export const handler = zodApiMethod_DEPRECATED(undefined, undefined, responseSch
             step: getStep(request.status as AuctionAccessRequestStatus),
             activeTimeSlot: request.activeSlot,
             timeSlots: request.timeSlots
-        } satisfies UserAuctionAccessSchema
+        } as UserAuctionAccessSchema
     })
