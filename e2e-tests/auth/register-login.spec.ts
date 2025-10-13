@@ -74,8 +74,8 @@ test.describe('Register User Flow', () => {
   test('Пользователь может зарегистрироваться', async ({ page }) => {
     await page.goto('/auth/register');
 
-    const randomId = Date.now();
-    const email = `user${randomId}@test.com`;
+    const randomId = v4();
+    const email = `User${randomId}@test.com`;
 
     const registerResponsePromise = page.waitForResponse((response) =>
       response.url().includes('/api/auth/register')
