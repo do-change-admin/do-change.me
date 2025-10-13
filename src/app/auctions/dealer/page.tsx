@@ -20,10 +20,8 @@ const stepMapping: Record<UserAuctionAccessSchemaSteps, number> = {
     application: 0,
     call: 2,
     documents: 3,
-    "awaiting for payment": 4,
-    approved: 5,
-    rejected: 6,
-
+    approved: 4,
+    rejected: 5,
 };
 
 export default function Page() {
@@ -84,19 +82,15 @@ export default function Page() {
             </>
         );
     }
-
-    if (
-        profileData?.subscription?.planSlug === "auction access" &&
-        data?.step === "approved"
-    ) {
-        return <ApprovedAccess />;
+    if (activeStep === 0 && !waitingForAdmin) {
+        return <AccessMainStep onStart={() => setActiveStep(1)} />;
     }
 
     if (
         profileData?.subscription?.planSlug === "auction access" &&
-        data?.step === 'awaiting for payment'
+        data?.step !== "rejected"
     ) {
-        return <SuccessCard />
+        return <ApprovedAccess />;
     }
 
     return (
@@ -154,11 +148,8 @@ export default function Page() {
                                     <RegistrationSteps />
                                 </div>
                             )}
-                            {activeStep === 4 && (
-                                <SubscriptionStep />
-                            )}
-                            {activeStep === 5 && <SubscriptionStep />}
-                            {activeStep === 6 && (
+                            {activeStep === 4 && <SubscriptionStep />}
+                            {activeStep === 5 && (
                                 <SubscriptionStep isRejected />
                             )}
                         </>
