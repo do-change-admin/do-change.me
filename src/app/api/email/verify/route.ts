@@ -6,7 +6,7 @@ import { serverError, validationError } from "@/lib/errors";
 import { verificationEmail } from "@/infrastructure/email/templates/verification-email";
 import { prismaClient } from "@/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
-import { ValueObjects } from "@/value-objects";
+import { VO } from "@/value-objects";
 import { DIContainer } from "@/di-containers";
 
 export async function POST(req: NextRequest) {
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
         return redirect("/auth/login?error=INVALID_TOKEN");
     }
 
-    const tokenHash = new ValueObjects.StringHash.Instance(rawToken).value();
+    const tokenHash = new VO.StringHash.Instance(rawToken).value();
 
     const tokenEntity = await prismaClient.emailVerificationToken.findUnique({
         where: { tokenHash },

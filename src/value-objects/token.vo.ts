@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { ValueObjects } from ".";
+import { VO } from ".";
 
 export class Token {
     private constructor(
@@ -14,7 +14,7 @@ export class Token {
 
     static withTimeToLive = (ms: number): Token => {
         const raw = crypto.randomBytes(32).toString("hex");
-        const hash = new ValueObjects.StringHash.Instance(raw).value();
+        const hash = new VO.StringHash.Instance(raw).value();
         const expiresAt = new Date(Date.now() + ms);
 
         return new Token(raw, hash, expiresAt);

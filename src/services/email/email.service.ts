@@ -1,19 +1,19 @@
 import { FunctionProviderTokens } from "@/di-containers/tokens.di-container";
 import { FunctionProviders } from "@/providers";
-import { ValueObjects } from "@/value-objects";
+import { VO } from "@/value-objects";
 import { inject, injectable } from "inversify";
 
-const errorGenerator = ValueObjects.Errors.InService("email")
+const errorGenerator = VO.Errors.InService("email")
 
 @injectable()
 export class Instance {
     constructor(@inject(FunctionProviderTokens.email) private readonly mailProvider: FunctionProviders.Email.Interface) { }
 
-    sendEmail = async (payload: ValueObjects.EmailMessage.Model): ValueObjects.Response.Service => {
+    sendEmail = async (payload: VO.EmailMessage.Model): VO.Response.Service => {
         const getError = errorGenerator("sendEmail")
 
         try {
-            ValueObjects.EmailMessage.schema.parse(payload)
+            VO.EmailMessage.schema.parse(payload)
         }
         catch (error) {
             return {

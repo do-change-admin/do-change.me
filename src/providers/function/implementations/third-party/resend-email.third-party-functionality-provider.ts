@@ -1,9 +1,9 @@
 import { Interface } from "../../contracts/email.functionality-provider";
-import { ValueObjects } from "@/value-objects";
+import { VO } from "@/value-objects";
 import { injectable } from "inversify";
 import { Resend } from "resend";
 
-const errorGenerator = ValueObjects.Errors.InProvider('email (resend)', 'backend functionality provider')
+const errorGenerator = VO.Errors.InProvider('email (resend)', 'backend functionality provider')
 
 @injectable()
 export class ResendEmail implements Interface {

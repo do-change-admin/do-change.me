@@ -1,11 +1,11 @@
-import {ValueObjects} from "@/value-objects"
+import { VO } from "@/value-objects"
 
 export type DataCRUDProvider<
     Models extends { list: unknown, detail: unknown },
     SearchPayload extends { list: unknown, specific: unknown },
     ActionsPayload extends { create: unknown, update: unknown }
 > = {
-    list: (searchPayload: SearchPayload['list'], pagination: ValueObjects.Pagination.Model) => Promise<Models['list'][]>,
+    list: (searchPayload: SearchPayload['list'], pagination: VO.Pagination.Model) => Promise<Models['list'][]>,
     details: (searchPayload: SearchPayload['specific']) => Promise<Models['detail'] | null>
     create: (creationPayload: ActionsPayload['create']) => Promise<{ id: string }>,
     updateOne: (searchPayload: SearchPayload['specific'], updatePayload: ActionsPayload['update']) => Promise<{ success: boolean }>,

@@ -1,4 +1,4 @@
-import { ValueObjects } from "@/value-objects";
+import { VO } from "@/value-objects";
 import { User } from "@prisma/client";
 
 export function passwordReset(user: User, tokenRaw: string) {
@@ -15,5 +15,5 @@ export function passwordReset(user: User, tokenRaw: string) {
           <p><a href="${resetUrl}">Reset password</a></p>
           <p>If you didn't request this, just ignore this email.</p>
         `,
-  } satisfies ValueObjects.EmailMessage.Model;
+  } satisfies VO.EmailMessage.Model;
 }

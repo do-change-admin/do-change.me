@@ -1,4 +1,4 @@
-import { ValueObjects } from "@/value-objects";
+import { VO } from "@/value-objects";
 import type { User } from "@prisma/client";
 
 export function verificationEmail(user: User, tokenRow: string) {
@@ -15,5 +15,5 @@ export function verificationEmail(user: User, tokenRow: string) {
               <a href="${verifyUrl}">Confirm email</a>
               <p>If you didn't request this, just ignore this email.</p>
             `,
-    } satisfies ValueObjects.EmailMessage.Model;
+    } satisfies VO.EmailMessage.Model;
 }
