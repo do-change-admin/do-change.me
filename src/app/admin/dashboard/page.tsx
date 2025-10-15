@@ -47,7 +47,7 @@ export default function UsersTable() {
 
     return (
         <div className={styles.tableContainer}>
-            {/* Header */}
+            {/* HeaderWeb */}
             <div className={styles.tableHeader}>
                 <div className={styles.flexRow}>
                     <FaIdCard size={24} />

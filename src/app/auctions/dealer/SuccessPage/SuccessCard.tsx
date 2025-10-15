@@ -21,7 +21,7 @@ export const SuccessCard: FC = () => {
                 <div className={styles.successPing}></div>
             </motion.div>
 
-            {/* Header */}
+            {/* HeaderWeb */}
             <motion.h1
                 className={styles.header}
                 initial={{ opacity: 0, y: 20 }}

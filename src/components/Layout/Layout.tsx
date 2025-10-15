@@ -1,7 +1,7 @@
 "use client";
 
 import {usePathname} from "next/navigation";
-import {MobileBottomNav, Sidebar, Header, SlideMenu, Scanner, AuctionAccess, Chat} from "@/components";
+import {MobileBottomNav, Sidebar, HeaderWeb, SlideMenu, Scanner, AuctionAccess, Chat} from "@/components";
 import styles from "./Layout.module.css";
 import React from "react";
 import {useLocale} from "@/contexts/_locale.context";
@@ -17,13 +17,15 @@ export function Layout({children}: { children: React.ReactNode }) {
     const isTermsPage = pathname.includes("/terms");
     const isAdminPage = pathname.includes("/admin");
     const isReportPage = pathname.includes("/report");
+    const isHome = pathname.includes("/home");
+    const isLegal = pathname.includes("/legal");
   const { openMenu, isOpen, closeMenu } = useSlideMenu();
   const {data} = useProfile()
 
     const {locale} = useLocale();
     const messages = allMessages[locale] || allMessages["en"];
 
-    if (isAuthPage || isTermsPage || isAdminPage) {
+    if (isAuthPage || isTermsPage || isAdminPage || isHome || isLegal) {
         return <>{children}</>;
     }
 
@@ -58,7 +60,7 @@ export function Layout({children}: { children: React.ReactNode }) {
                   </ActionIcon>
                     {!isReportPage && (
                         <header className={styles.header}>
-                            <Header/>
+                            <HeaderWeb/>
                         </header>
                     )}
                     <div className={styles.main}>

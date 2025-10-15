@@ -1,0 +1,148 @@
+.header {
+    width: 100%;
+    top: 0;
+    z-index: 50;
+    position: fixed;
+    background: none;
+}
+
+.bg {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: var(--text-texas-blue);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1.5rem;
+    transition: width 0.2s ease;
+    overflow: hidden;
+}
+
+.bg.active {
+    width: 5%;
+}
+
+.bg.active.open {
+    width: 50%;
+    justify-content: right;
+    padding-right: 2rem;
+}
+
+.container {
+    max-width: 80rem; /* ~1280px */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.iconBox {
+    background-color: #0ea5e9; /* soft-blue-500 */
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin-right: 0.75rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827; /* text-gray-900 */
+}
+
+.nav {
+    display: flex;
+    gap: 2rem;
+    z-index: 11;
+}
+
+
+.link {
+    display: flex;
+    align-items: center;
+    color: var(--cl-text);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    gap: 0.3rem;
+}
+
+
+.link:hover {
+    color: rgba(211, 209, 209, 0.27);
+}
+
+
+.button {
+    background-color: var(--text-texas-blue);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    border: none;
+    color: white;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 1.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.link.scrolled {
+    color: white;
+    display: none;
+}
+.link.open {
+    display: block;
+}
+
+.button:hover {
+    background-color: #0284c7;
+}
+
+
+.arrow {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 700px) {
+    .nav {
+        gap: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .bg {
+
+    }
+
+    .bg.active {
+        width: 20%;
+    }
+
+    .bg.open.active {
+        width: 80%;
+        padding-right: 1rem;
+    }
+
+    .arrow {
+        font-size: 1.2rem;
+    }
+}
