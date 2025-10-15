@@ -4,7 +4,7 @@ export const DataProviderTokens = {
     pictures: Symbol.for("PICTURES-DATA-PROVIDER")
 }
 
-export const FunctionalProviderTokens = {
+export const FunctionProviderTokens = {
     email: Symbol.for("EMAIL-FUNCTIONAL-PROVIDER")
 }
 

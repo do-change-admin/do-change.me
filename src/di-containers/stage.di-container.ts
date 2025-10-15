@@ -1,6 +1,6 @@
-import { DataProviders, DataProvidersImplemetations, FunctionalityProviders, FunctionalityProvidersImplementations } from '@/providers'
+import { DataProviders, DataProvidersImplemetations, FunctionProviders, FunctionProvidersImplementations } from '@/providers'
 import { Container } from 'inversify'
-import { DataProviderTokens, FunctionalProviderTokens } from './tokens.di-container'
+import { DataProviderTokens, FunctionProviderTokens } from './tokens.di-container'
 import { registerServices } from './register-services'
 
 const container = new Container()
@@ -21,15 +21,15 @@ const registerDataProviders = () => {
         .to(DataProvidersImplemetations.API.PicturesInVercelBlob)
 }
 
-const registerFunctionalProviders = () => {
+const registerFunctionProviders = () => {
     container
-        .bind<FunctionalityProviders.Email.Interface>(FunctionalProviderTokens.email)
-        .to(FunctionalityProvidersImplementations.Mock.Email)
+        .bind<FunctionProviders.Email.Interface>(FunctionProviderTokens.email)
+        .to(FunctionProvidersImplementations.Mock.Email)
 }
 
 
 registerDataProviders()
-registerFunctionalProviders()
+registerFunctionProviders()
 registerServices(container)
 
 export { container as stageContainer }

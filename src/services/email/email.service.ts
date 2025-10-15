@@ -1,5 +1,5 @@
-import { FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
-import { FunctionalityProviders } from "@/providers";
+import { FunctionProviderTokens } from "@/di-containers/tokens.di-container";
+import { FunctionProviders } from "@/providers";
 import { ValueObjects } from "@/value-objects";
 import { inject, injectable } from "inversify";
 
@@ -7,7 +7,7 @@ const errorGenerator = ValueObjects.Errors.InService("email")
 
 @injectable()
 export class Instance {
-    constructor(@inject(FunctionalProviderTokens.email) private readonly mailProvider: FunctionalityProviders.Email.Interface) { }
+    constructor(@inject(FunctionProviderTokens.email) private readonly mailProvider: FunctionProviders.Email.Interface) { }
 
     sendEmail = async (payload: ValueObjects.EmailMessage.Model): ValueObjects.SafeResponse.ServiceAsync => {
         const getError = errorGenerator("sendEmail")
