@@ -8,7 +8,7 @@ beforeEach(() => {
     service = DIContainer().EmailService()
 })
 
-test('Expect to fail on wrong email', async () => {
+test('Fail on wrong emails', async () => {
     const result = await service.sendEmail({
         content: 'hello',
         from: 'sup',
@@ -22,4 +22,14 @@ test('Expect to fail on wrong email', async () => {
     expect(result.error.cause).toBe(null)
     expect(result.error.side).toBe('client')
     expect(result.error.code).toBe('validation')
+})
+
+test('Work on valid emails', async () => {
+    const result = await service.sendEmail({
+        content: 'hello',
+        from: 'sup@sup.com',
+        subject: 'sup',
+        to: 'sup@sup.com'
+    })
+    expect(result.success).toBe(true)
 })
