@@ -76,7 +76,7 @@ export default function SettingsContent() {
                                 </div>
                                 <div className={styles.planMeta}>
                                     <div>
-                                        {profileData?.subscription?.amount}/month
+                                        ${(profileData?.subscription?.amount / 100).toFixed(2)}/month
                                     </div>
                                     <div>
                                         {profileData.subscription.cancelAtPeriodEnd ? 'Subscription ends' : 'Next billing'}:{" "}
