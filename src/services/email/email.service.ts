@@ -1,5 +1,5 @@
 import { FunctionProviderTokens } from "@/di-containers/tokens.di-container";
-import { FunctionProviders } from "@/providers";
+import type { FunctionProviders } from "@/providers";
 import { VO } from "@/value-objects";
 import { inject, injectable } from "inversify";
 
