@@ -17,12 +17,17 @@ export class ResendEmail implements Interface {
         const getError = errorGenerator('send')
 
         try {
-            await this.sender.emails.send({
+            const { error } = await this.sender.emails.send({
                 from: payload.from,
                 to: payload.to,
                 subject: payload.subject,
                 text: payload.content
             });
+            if (error) {
+                const errorToThrow = new Error(error.message)
+                errorToThrow.name = error.name
+                throw errorToThrow
+            }
         }
         catch (error) {
             return {
