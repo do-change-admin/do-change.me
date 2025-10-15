@@ -5,7 +5,7 @@ import { DIContainer } from '@/di-containers'
 let service: Instance
 
 beforeEach(() => {
-    service = DIContainer().EmailService()
+    service = DIContainer()._EmailService()
 })
 
 test('Fail on wrong emails', async () => {

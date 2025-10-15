@@ -1,10 +1,10 @@
 import type { CarSaleUserDraftDetailsAPI } from "@/app/api/car-sale/user/drafts/route";
-import type { CarSaleUserAPI } from "@/app/api/car-sale/user/route";
+import type { Controllers } from "@/controllers";
 import { apiRequest, buildQueryString } from "@/lib/apiFetch";
 import type { Services } from "@/services";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-type API = CarSaleUserAPI;
+type API = Controllers.CarSale.User.API;
 type DraftsAPI = CarSaleUserDraftDetailsAPI;
 
 const apiURL = "/api/car-sale/user";

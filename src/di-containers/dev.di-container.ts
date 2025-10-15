@@ -2,6 +2,7 @@ import { DataProviders, DataProvidersImplemetations, FunctionProviders, Function
 import { Container } from 'inversify'
 import { DataProviderTokens, FunctionProviderTokens } from './tokens.di-container'
 import { registerServices } from './register-services'
+import { registerControllers } from './register-controllers'
 
 const container = new Container()
 
@@ -30,5 +31,6 @@ const registerFunctionProviders = () => {
 registerDataProviders()
 registerFunctionProviders()
 registerServices(container)
+registerControllers(container)
 
 export { container as devContainer }

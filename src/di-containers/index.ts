@@ -3,9 +3,10 @@ import 'reflect-metadata'
 import { testContainer } from './test.di-container'
 import { devContainer } from './dev.di-container'
 import { stageContainer } from './stage.di-container'
-import { ServiceTokens } from './tokens.di-container'
+import { ControllerTokens, ServiceTokens } from './tokens.di-container'
 import { Services } from '@/services'
 import { CarSaleUserServiceFactory } from './register-services'
+import { Controllers } from '@/controllers'
 
 const getDIContainer = () => {
     if (process.env['IN_TEST']) {
@@ -33,14 +34,26 @@ export const DIContainer = () => {
          * Использовать только для временных решений
          */
         _context: container,
-        CarSaleUserService: (userId: string) => {
+        /**
+         * Использовать только для временных решений
+         */
+        _CarSaleUserService: (userId: string) => {
             return container.get<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)(userId)
         },
-        CarSaleAdminService: () => {
+        /**
+        * Использовать только для временных решений
+        */
+        _CarSaleAdminService: () => {
             return container.get<Services.CarSaleAdmin.Instance>(ServiceTokens.carSaleAdmin)
         },
-        EmailService: () => {
+        /**
+         * Использовать только для временных решений
+         */
+        _EmailService: () => {
             return container.get<Services.Email.Instance>(ServiceTokens.email)
+        },
+        CarSaleUserController: () => {
+            return container.get<Controllers.CarSale.User.Instance>(ControllerTokens.carSaleUser)
         }
     }
 }

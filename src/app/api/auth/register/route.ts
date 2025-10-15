@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         });
 
         after(() => {
-            const emailService = DIContainer().EmailService();
+            const emailService = DIContainer()._EmailService();
             const email = verificationEmail(user, token.raw);
             emailService.sendEmail(email);
         });

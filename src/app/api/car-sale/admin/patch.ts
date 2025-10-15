@@ -12,7 +12,7 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload }) => {
-        const service = DIContainer().CarSaleAdminService()
+        const service = DIContainer()._CarSaleAdminService()
         await service.update(payload)
     }
 })

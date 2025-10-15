@@ -14,3 +14,6 @@ export const ServiceTokens = {
     email: Symbol.for('EMAIL-SERVICE')
 }
 
+export const ControllerTokens = {
+    carSaleUser: Symbol.for("CAR-SALE-USER-CONTROLLER")
+}
