@@ -9,6 +9,15 @@ import { useDisclosure } from "@mantine/hooks";
 import { useProfile, useSubscriptionDeletion } from "@/hooks";
 import { Plans } from "@/components/SubscriptionPlans/Plans";
 
+function formatCentsToUSD(cents: number): string {
+    const dollars = cents / 100;
+    return dollars.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
+}
+
+
 export default function SettingsContent() {
     const [opened, { open, close }] = useDisclosure(false);
     const { data: profileData, isLoading: profileIsLoading } = useProfile();
@@ -76,7 +85,7 @@ export default function SettingsContent() {
                                 </div>
                                 <div className={styles.planMeta}>
                                     <div>
-                                        {profileData?.subscription?.amount}/month
+                                        {formatCentsToUSD(profileData?.subscription?.amount ?? 0)}/month
                                     </div>
                                     <div>
                                         {profileData.subscription.cancelAtPeriodEnd ? 'Subscription ends' : 'Next billing'}:{" "}
