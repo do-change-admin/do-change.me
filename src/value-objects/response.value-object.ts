@@ -21,31 +21,31 @@ type ProviderStatusSchema = z.infer<typeof providerStatusSchema>
 type ServiceStatusSchema = z.infer<typeof serviceStatusSchema>
 type ControllerStatusSchema = z.infer<typeof controllerStatusSchema>
 
-export type Provider<Response = undefined> =
+export type ProviderSync<Response = undefined> =
     | (Extract<ProviderStatusSchema, { success: true }> & { response: Response })
     | Extract<ProviderStatusSchema, { success: false }>;
 
-export type Service<Response = undefined> =
+export type ServiceSync<Response = undefined> =
     | (Extract<ServiceStatusSchema, { success: true }> & { response: Response })
     | Extract<ServiceStatusSchema, { success: false }>;
 
-export type Controller<Response = undefined> =
+export type ControllerSync<Response = undefined> =
     | (Extract<ControllerStatusSchema, { success: true }> & { response: Response })
     | Extract<ControllerStatusSchema, { success: false }>;
 
-export type ProviderAsync<Response = undefined> =
+export type Provider<Response = undefined> =
     Promise<
         | (Extract<ProviderStatusSchema, { success: true }> & { response: Response })
         | Extract<ProviderStatusSchema, { success: false }>
     >;
 
-export type ServiceAsync<Response = undefined> =
+export type Service<Response = undefined> =
     Promise<
         | (Extract<ServiceStatusSchema, { success: true }> & { response: Response })
         | Extract<ServiceStatusSchema, { success: false }>
     >;
 
-export type ControllerAsync<Response = undefined> =
+export type Controller<Response = undefined> =
     Promise<
         | (Extract<ControllerStatusSchema, { success: true }> & { response: Response })
         | Extract<ControllerStatusSchema, { success: false }>

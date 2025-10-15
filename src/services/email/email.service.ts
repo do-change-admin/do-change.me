@@ -9,7 +9,7 @@ const errorGenerator = ValueObjects.Errors.InService("email")
 export class Instance {
     constructor(@inject(FunctionProviderTokens.email) private readonly mailProvider: FunctionProviders.Email.Interface) { }
 
-    sendEmail = async (payload: ValueObjects.EmailMessage.Model): ValueObjects.SafeResponse.ServiceAsync => {
+    sendEmail = async (payload: ValueObjects.EmailMessage.Model): ValueObjects.Response.Service => {
         const getError = errorGenerator("sendEmail")
 
         try {
