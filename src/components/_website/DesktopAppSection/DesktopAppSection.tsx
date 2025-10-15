@@ -20,30 +20,30 @@ export const DesktopAppSection = () => {
                 </motion.div>
 
                 {/* Laptop Mockup */}
-                <motion.div
-                    className={styles.laptopWrapper}
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 1 }}
-                >
-                    <div className={styles.laptopTop}>
-                        <div className={styles.screen}>
-                            <div className={styles.desktopApp}>
-                                <video
-                                    src="/video.mp4"
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    className={styles.video}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles.laptopBase}>
-                        <div className={styles.laptopStand}></div>
-                    </div>
-                </motion.div>
+                {/*<motion.div*/}
+                {/*    className={styles.laptopWrapper}*/}
+                {/*    initial={{ scale: 0.9, opacity: 0 }}*/}
+                {/*    whileInView={{ scale: 1, opacity: 1 }}*/}
+                {/*    transition={{ duration: 1 }}*/}
+                {/*>*/}
+                {/*    <div className={styles.laptopTop}>*/}
+                {/*        <div className={styles.screen}>*/}
+                {/*            <div className={styles.desktopApp}>*/}
+                {/*                <video*/}
+                {/*                    src="/video.mp4"*/}
+                {/*                    autoPlay*/}
+                {/*                    loop*/}
+                {/*                    muted*/}
+                {/*                    playsInline*/}
+                {/*                    className={styles.video}*/}
+                {/*                />*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*    <div className={styles.laptopBase}>*/}
+                {/*        <div className={styles.laptopStand}></div>*/}
+                {/*    </div>*/}
+                {/*</motion.div>*/}
 
                 {/* Features */}
                 <motion.div
@@ -54,20 +54,20 @@ export const DesktopAppSection = () => {
                 >
                     <div className={styles.featureCard}>
                         <FaGavel className={styles.featureIcon} />
-                        <h3>Live Auction Access</h3>
-                        <p>Participate in real-time vehicle auctions with professional tools</p>
+                        <h3>Smart Vehicle Tools</h3>
+                        <p>Access a powerful and user-friendly platform designed to simplify vehicle research and management.</p>
                     </div>
 
                     <div className={styles.featureCard}>
                         <FaChartLine className={styles.featureIcon} />
                         <h3>Analytics Dashboard</h3>
-                        <p>Advanced reporting and analytics for tracking sales and trends</p>
+                        <p>Track your performance with a sleek, easy-to-use dashboard featuring powerful analytics and insights.</p>
                     </div>
 
                     <div className={styles.featureCard}>
                         <FaDesktop className={styles.featureIcon} />
-                        <h3>Cross-Platform Support</h3>
-                        <p>Available on Windows, Mac, and Linux with synchronized data</p>
+                        <h3>Quick Vehicle Check</h3>
+                        <p>Instantly verify any vehicle’s history and market value — fast, accurate, and accessible anywhere.</p>
                     </div>
                 </motion.div>
             </div>

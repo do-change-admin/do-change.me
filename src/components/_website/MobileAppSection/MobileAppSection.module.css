@@ -39,7 +39,7 @@
 .title {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: var(--text-texas-blue);
+    color: var(--texas-blue);
     text-align: center;
 }
 
@@ -139,19 +139,23 @@
 }
 
 .phoneOuter {
-    background: #000;
     border-radius: 3rem;
     padding: 0.5rem;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    object-fit: cover;
 }
 
 .phoneScreen {
-    background: #fff;
+    background: var(--texas-blue);
     border-radius: 2.5rem;
     width: 16rem;
-    height: 30rem;
+    height: 27rem;
     overflow: hidden;
     position: relative;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    padding: 0 0.2rem;
 }
 
 .phoneHeader {

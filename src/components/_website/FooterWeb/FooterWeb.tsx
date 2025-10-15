@@ -9,10 +9,7 @@ export const FooterWeb =() => {
                 <div className={styles.grid}>
                     <div className={styles.brand}>
                         <div className={styles.brandHeader}>
-                            <div className={styles.iconWrapper}>
-                                <FaCar className={styles.icon} />
-                            </div>
-                            <h3 className={styles.brandTitle}>LotSpace</h3>
+                            <h3 className={styles.brandTitle}>do-change</h3>
                         </div>
                         <p className={styles.description}>
                             The most trusted VIN scanning and vehicle report platform for professionals.
@@ -29,7 +26,6 @@ export const FooterWeb =() => {
                         <ul className={styles.linkList}>
                             <li><span>Features</span></li>
                             <li><span>Pricing</span></li>
-                            <li><span>API</span></li>
                             <li><span>Mobile App</span></li>
                         </ul>
                     </div>
@@ -37,10 +33,7 @@ export const FooterWeb =() => {
                     <div className={styles.section}>
                         <h4 className={styles.sectionTitle}>Support</h4>
                         <ul className={styles.linkList}>
-                            <li><span>Help Center</span></li>
-                            <li><span>Contact Us</span></li>
-                            <li><span>Status</span></li>
-                            <li><span>Documentation</span></li>
+                            <li><span>admin@do-change.com</span></li>
                         </ul>
                     </div>
 
@@ -56,7 +49,7 @@ export const FooterWeb =() => {
                 </div>
 
                 <div className={styles.bottom}>
-                    <p>&copy; 2024 LotSpace. All rights reserved.</p>
+                    <p>&copy; 2025 do-change. All rights reserved.</p>
                 </div>
             </div>
         </footer>

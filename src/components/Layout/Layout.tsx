@@ -1,7 +1,7 @@
 "use client";
 
 import {usePathname} from "next/navigation";
-import {MobileBottomNav, Sidebar, HeaderWeb, SlideMenu, Scanner, AuctionAccess, Chat} from "@/components";
+import {MobileBottomNav, Sidebar, SlideMenu, Scanner, AuctionAccess, Chat, Header} from "@/components";
 import styles from "./Layout.module.css";
 import React from "react";
 import {useLocale} from "@/contexts/_locale.context";
@@ -60,7 +60,7 @@ export function Layout({children}: { children: React.ReactNode }) {
                   </ActionIcon>
                     {!isReportPage && (
                         <header className={styles.header}>
-                            <HeaderWeb/>
+                            <Header/>
                         </header>
                     )}
                     <div className={styles.main}>

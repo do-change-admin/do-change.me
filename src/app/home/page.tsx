@@ -1,11 +1,9 @@
 import {
-    HeaderWeb,
     HeroSection,
-    PricingSection,
     HowItWorksSection,
     CTASection,
     FooterWeb,
-    MobileAppSection, DesktopAppSection
+    MobileAppSection, DesktopAppSection, HeaderWeb, PricingSection
 } from "@/components";
 import {Plans} from "@/components";
 
@@ -17,9 +15,7 @@ export default function Home() {
         <HowItWorksSection />
         <DesktopAppSection/>
         <MobileAppSection/>
-          <div id="pricing" style={{padding: "5rem 1rem"}}>
-              <Plans/>
-          </div>
+        <PricingSection/>
         <CTASection />
         <FooterWeb />
       </>

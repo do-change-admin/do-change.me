@@ -19,7 +19,7 @@
 
 .header h2 {
     font-size: 3rem;
-    color: var(--text-texas-blue);
+    color: var(--texas-blue);
     margin-bottom: 1rem;
 }
 
@@ -76,7 +76,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: var(--text-texas-blue);
+    background: var(--texas-blue);
     color: white;
     font-size: 2rem;
 }
@@ -105,10 +105,10 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: #fff;
-    color: var(--text-texas-blue);
+    background: linear-gradient(to right, #facc15, #f97316);
+    color: white;
+    border: none;
     padding: 1rem 2rem;
-    border: 3px solid var(--text-texas-blue);
     border-radius: 1rem;
     font-size: 1.25rem;
     font-weight: 600;

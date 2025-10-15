@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { FaCheck, FaStar, FaShieldAlt, FaHeadset, FaClock } from "react-icons/fa";
 import styles from "./PricingSection.module.css";
+import {Plans} from "@/components";
 
 export const PricingSection= () => {
     return (
@@ -18,114 +19,7 @@ export const PricingSection= () => {
 
                 {/* Pricing Cards */}
                 <div className={styles.cards}>
-                    {/* Basic */}
-                    <div className={styles.card}>
-                        <div className={styles.cardHeader}>
-                            <h3 className={styles.planTitle}>Basic</h3>
-                            <div className={styles.priceRow}>
-                                <span className={styles.oldPrice}>$70</span>
-                                <span className={styles.price}>$50</span>
-                            </div>
-                            <div className={styles.badgeSave}>Save $20</div>
-                        </div>
-
-                        <div className={styles.features}>
-                            <Feature text="Market Value" badge="Unlimited"/>
-                            <Feature text="Smart VIN Scanner" badge="Unlimited"/>
-                            <Feature text="Salvage check" badge="Unlimited"/>
-                            <Feature text="Auction Access" badge="Beta" />
-                            <div className={styles.reportWrapper}>
-                                <Feature text="25 CarFax or AutoCheck reports"/>
-                                <div className={styles.additional}>Additional reports – $0.80 each</div>
-                            </div>
-                        </div>
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className={styles.basicBtn}
-                        >
-                            Get Started
-                        </motion.button>
-                    </div>
-
-                    {/* Professional */}
-                    <div className={`${styles.card} ${styles.professional}`}>
-                        <div className={styles.popularBadge}>Most Popular</div>
-
-                        <div className={styles.cardHeader}>
-                            <h3 className={styles.planTitle}>Professional</h3>
-                            <div className={styles.priceRow}>
-                                <span className={styles.oldPrice}>$80</span>
-                                <span className={styles.price}>$75</span>
-                            </div>
-                            <div className={styles.badgeSave}>Save $5</div>
-                        </div>
-
-                        <div className={styles.features}>
-                            <Feature text="Market Value" badge="Unlimited"/>
-                            <Feature text="Smart VIN Scanner" badge="Unlimited"/>
-                            <Feature text="Salvage check" badge="Unlimited"/>
-                            <Feature text="Auction Access" badge="Beta" />
-                            <div className={styles.reportWrapper}>
-                                <Feature text="40 CarFax or AutoCheck reports" />
-                                <div className={styles.additional}>Additional reports – $0.75 each</div>
-                            </div>
-
-                            <div className={styles.subFeatures}>
-                                <div className={styles.subTitle}>Professional Features:</div>
-                                <SubFeature text="Listing on all major marketplaces" />
-                                <SubFeature text="Our marketplace listing" />
-                                <SubFeature text="AI image processing & video" />
-                            </div>
-                        </div>
-
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className={styles.professionalBtn}
-                        >
-                            Get Started
-                        </motion.button>
-                    </div>
-
-                    {/* Enterprise */}
-                    <div className={styles.card}>
-                        <div className={styles.cardHeader}>
-                            <h3 className={styles.planTitle}>Enterprise</h3>
-                            <div className={styles.priceRow}>
-                                <span className={styles.oldPrice}>$200</span>
-                                <span className={styles.price}>$99</span>
-                            </div>
-                            <div className={styles.badgeSave}>Save $100</div>
-                        </div>
-
-                        <div className={styles.features}>
-                            <Feature text="Auction Access" badge="Beta" />
-                            <Feature text="Market Value" badge="Unlimited"/>
-                            <Feature text="Smart VIN Scanner" badge="Unlimited"/>
-                            <Feature text="Salvage check" badge="Unlimited"/>
-                            <Feature text="Auction Access" badge="Beta" />
-                            <div className={styles.reportWrapper}>
-                                <Feature text="70 CarFax or AutoCheck reports" />
-                                <div className={styles.additional}>Additional reports – $0.70 each</div>
-                            </div>
-
-                            <div className={styles.subFeatures}>
-                                <div className={styles.subTitle}>Enterprise Features:</div>
-                                <SubFeature text="Listing on all major marketplaces" />
-                                <SubFeature text="Our marketplace listing" />
-                                <SubFeature text="AI image processing & video" />
-                            </div>
-                        </div>
-
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className={styles.enterpriseBtn}
-                        >
-                            Get Started
-                        </motion.button>
-                    </div>
+                    <Plans/>
                 </div>
 
                 {/* FooterWeb */}

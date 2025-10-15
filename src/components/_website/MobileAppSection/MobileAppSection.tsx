@@ -13,7 +13,7 @@ import {
     FaGooglePlay,
     FaList
 } from 'react-icons/fa';
-import Image from "next/image";
+import {Image} from "@mantine/core";
 
 export const MobileAppSection = ()=> {
     return (
@@ -81,7 +81,7 @@ export const MobileAppSection = ()=> {
                         <div className={styles.phoneOuter}>
                             <div className={styles.phoneInner}>
                                 <div className={styles.phoneScreen}>
-                                    <Image src={MobileLogo} alt="mob" width={290} height={580}/>
+                                    <Image src={MobileLogo} alt="mob"/>
                                 </div>
                             </div>
                         </div>

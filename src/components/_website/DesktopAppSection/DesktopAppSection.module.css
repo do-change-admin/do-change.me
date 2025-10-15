@@ -19,7 +19,7 @@
 .header h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: var(--text-texas-blue);
+    color: var(--texas-blue);
 }
 .header p {
     font-size: 1.25rem;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "./HeaderWeb.module.css";
 import {FaArrowLeft, FaArrowRight, FaPowerOff} from "react-icons/fa";
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 export const HeaderWeb = () => {
     const router = useRouter();
@@ -28,6 +28,7 @@ export const HeaderWeb = () => {
             <div className={styles.container}>
                 <div className={styles.wrapper}>
                     <nav className={styles.nav}>
+                        <Link href="/home" className={`${styles.name} ${scrolled ? styles.scrolled : ""} ${isOpen ? styles.open : ""}`}>do-change</Link>
                         <Link href="#how-it-works" className={`${styles.link} ${scrolled ? styles.scrolled : ""} ${isOpen ? styles.open : ""}`}>
                             How It Works
                         </Link>
@@ -38,7 +39,7 @@ export const HeaderWeb = () => {
                             Contact
                         </Link>
                     </nav>
-                    <button onClick={() => router.push('/space/reports')} className={styles.button}>
+                    <button onClick={() => router.push('/auth/login')} className={styles.button}>
                         <FaPowerOff size={20} color="white" />
                     </button>
                 </div>
