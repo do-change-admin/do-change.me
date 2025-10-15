@@ -1,0 +1,1 @@
+export * from './resend-email.third-party-functionality-provider'

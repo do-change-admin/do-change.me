@@ -1,5 +1,3 @@
-import type { Services } from '@/services'
-
 export const DataProviderTokens = {
     carsForSale: Symbol.for("CARS-FOR-SALE-DATA-PROVIDER"),
     vehicleHistoryReports: Symbol.for("VEHICLE-HISTORY-REPORTS-DATA-PROVIDER"),
@@ -12,7 +10,7 @@ export const FunctionalProviderTokens = {
 
 export const ServiceTokens = {
     carSaleUserFactory: Symbol.for('CAR-SALE-USER-SERVICE-FACTORY'),
-    carSaleAdmin: Symbol.for('CAR-SALE-ADMIN-SERVICE')
+    carSaleAdmin: Symbol.for('CAR-SALE-ADMIN-SERVICE'),
+    email: Symbol.for('EMAIL-SERVICE')
 }
 
-export type CarSaleUserServiceFactory = (userId: string) => Services.CarSaleUser.Instance

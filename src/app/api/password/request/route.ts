@@ -2,11 +2,10 @@ import { after, NextRequest, NextResponse } from "next/server";
 import { RequestPassword } from "./models";
 import z from "zod";
 import { serverError, validationError } from "@/lib/errors";
-import { ResendEmailProvider } from "@/providers/implementations/email/resend-email.provider";
-import { EmailService } from "@/services/email/email.service";
 import { passwordReset } from "@/infrastructure/email/templates/password-reset";
 import { prismaClient } from "@/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
+import { DIContainer } from "@/di-containers";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -48,10 +47,7 @@ export async function POST(req: NextRequest) {
         });
 
         after(() => {
-            const resendProvider = new ResendEmailProvider(
-                process.env.RESEND_API_KEY!
-            );
-            const emailService = new EmailService(resendProvider);
+            const emailService = DIContainer().EmailService();
             const email = passwordReset(user, token.raw);
             emailService.sendEmail(email);
         });

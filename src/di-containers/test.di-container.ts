@@ -1,7 +1,7 @@
-import { DataProviders, DataProvidersImplemetations } from '@/providers'
+import { DataProviders, DataProvidersImplemetations, FunctionalityProviders, FunctionalityProvidersImplementations } from '@/providers'
 import { Container } from 'inversify'
-import { CarSaleUserServiceFactory, DataProviderTokens, ServiceTokens } from './tokens.di-container'
-import { Services } from '@/services'
+import { DataProviderTokens, FunctionalProviderTokens } from './tokens.di-container'
+import { registerServices } from './register-services'
 
 const container = new Container()
 
@@ -22,30 +22,13 @@ const registerDataProviders = () => {
 }
 
 const registerFunctionalProviders = () => {
-
-}
-
-const registerServices = () => {
-    container.
-        bind<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)
-        .toFactory(ctx => {
-            return (userId) => {
-                const dataProvider = ctx.get<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
-                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
-                return new Services.CarSaleUser.Instance(
-                    dataProvider,
-                    picturesDataProvider,
-                    userId
-                )
-            }
-        })
     container
-        .bind<Services.CarSaleAdmin.Instance>(ServiceTokens.carSaleAdmin)
-        .to(Services.CarSaleAdmin.Instance)
+        .bind<FunctionalityProviders.Email.Interface>(FunctionalProviderTokens.email)
+        .to(FunctionalityProvidersImplementations.Mock.Email)
 }
 
 registerDataProviders()
 registerFunctionalProviders()
-registerServices()
+registerServices(container)
 
 export { container as testContainer }

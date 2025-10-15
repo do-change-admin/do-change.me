@@ -1,16 +1,47 @@
-import { ProvidesEmailSending } from "@/providers/contracts";
-import { EmailMessage } from "@/value-objects/email-message.vo";
+import { FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
+import { FunctionalityProviders } from "@/providers";
+import { ValueObjects } from "@/value-objects";
+import { inject, injectable } from "inversify";
 
-export class EmailService {
-    constructor(private readonly mailer: ProvidesEmailSending) { }
+const errorGenerator = ValueObjects.Errors.InService("email")
 
-    sendEmail = async (data: {
-        from: string;
-        to: string;
-        subject: string;
-        html: string;
-    }) => {
-        const email = EmailMessage.create(data);
-        await this.mailer.sendEmail(email);
+@injectable()
+export class Instance {
+    constructor(@inject(FunctionalProviderTokens.email) private readonly mailProvider: FunctionalityProviders.Email.Interface) { }
+
+    sendEmail = async (payload: ValueObjects.EmailMessage.Model): ValueObjects.SafeResponse.ServiceAsync => {
+        const getError = errorGenerator("sendEmail")
+
+        try {
+            ValueObjects.EmailMessage.schema.parse(payload)
+        }
+        catch (error) {
+            return {
+                success: false,
+                error: getError({
+                    side: 'client',
+                    code: 'validation',
+                    error
+                })
+            }
+        }
+
+        const sendResult = await this.mailProvider.send(payload);
+
+        if (!sendResult.success) {
+            return {
+                success: false,
+                error: getError({
+                    code: 'third party service error',
+                    error: new Error('Failed to send email'),
+                    providerError: sendResult.error
+                })
+            }
+        }
+
+        return {
+            success: true,
+            response: undefined
+        }
     };
 }

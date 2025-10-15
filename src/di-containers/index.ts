@@ -3,8 +3,9 @@ import 'reflect-metadata'
 import { testContainer } from './test.di-container'
 import { devContainer } from './dev.di-container'
 import { stageContainer } from './stage.di-container'
-import { CarSaleUserServiceFactory, ServiceTokens } from './tokens.di-container'
+import { ServiceTokens } from './tokens.di-container'
 import { Services } from '@/services'
+import { CarSaleUserServiceFactory } from './register-services'
 
 const getDIContainer = () => {
     if (process.env['IN_TEST']) {
@@ -38,5 +39,8 @@ export const DIContainer = () => {
         CarSaleAdminService: () => {
             return container.get<Services.CarSaleAdmin.Instance>(ServiceTokens.carSaleAdmin)
         },
+        EmailService: () => {
+            return container.get<Services.Email.Instance>(ServiceTokens.email)
+        }
     }
 }
