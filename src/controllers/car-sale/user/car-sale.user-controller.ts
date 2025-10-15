@@ -12,8 +12,7 @@ export class Instance {
 
     GET = zodApiMethod(GET_Schemas, {
         handler: async ({ payload, activeUser }) => {
-            const service = this.userServiceFactory(activeUser.id)
-            const items = await service.findList(payload)
+            const items = await this.userServiceFactory(activeUser.id).findList(payload)
             return { items }
         }
     })
@@ -22,8 +21,7 @@ export class Instance {
         handler: async ({ payload, activeUser, req }) => {
             const formData = await req.formData()
             const photos = formData.getAll('photos') as File[]
-            const service = this.userServiceFactory(activeUser.id)
-            await service.post({
+            await this.userServiceFactory(activeUser.id).post({
                 ...payload,
                 photos
             })
