@@ -3,9 +3,6 @@ import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestCountByStages, Auc
 import { prismaClient } from "@/infrastructure";
 import { businessError } from "@/lib/errors";
 import { ProvidesFileLink } from "@/providers/contracts";
-import { ProfileService } from "@/services/profile";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
-import { EmailAddress } from "@/value-objects/email-address.vo";
 
 type FindListQueryData = PaginationSchemaType & { status: AuctionAccessRequestStatus }
 
@@ -35,7 +32,7 @@ export class AuctionAccessRequestsAdminService {
                     in: [
                         'awaiting documents upload',
                         'documents under review',
-                        'awaiting for payment',
+                        'corrections required',
                         'ready for auction access'
                     ]
                 }
@@ -129,14 +126,6 @@ export class AuctionAccessRequestsAdminService {
             }
         })
 
-        let subscriptions: Record<string, boolean> = {}
-
-        for (let resultData of result) {
-            const profileService = new ProfileService(EmailAddress.create(resultData.email), new VercelBlobFileSystemProvider())
-            const { subscription } = await profileService.profileData()
-            subscriptions[resultData.id] = subscription?.planSlug === 'auction access'
-        }
-
         return result.map((dbItem) => {
             return {
                 applicationDate: dbItem.applicationDate,
@@ -147,7 +136,6 @@ export class AuctionAccessRequestsAdminService {
                 lastName: dbItem.lastName,
                 photoLink: dbItem.photoLink,
                 status: dbItem.status as AuctionAccessRequestStatus,
-                withSubscription: subscriptions[dbItem.id]
             }
         })
     }
@@ -164,8 +152,8 @@ export class AuctionAccessRequestsAdminService {
             'call scheduling': 'call completed',
             'call completed': 'awaiting documents upload',
             'awaiting documents upload': 'documents under review',
-            'documents under review': 'awaiting for payment',
-            'awaiting for payment': 'ready for auction access',
+            'documents under review': 'corrections required',
+            'corrections required': 'ready for auction access',
             'ready for auction access': 'approved'
         }
 

@@ -42,8 +42,8 @@ const subOnboardingTabs: Tab[] = [
         status: 'documents under review'
     },
     {
-        label: "Awaiting for payment",
-        status: 'awaiting for payment'
+        label: "Corrections Required",
+        status: 'corrections required'
     },
     {
         label: "Ready for Auction Access",
