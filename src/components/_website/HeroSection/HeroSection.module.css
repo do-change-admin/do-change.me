@@ -109,6 +109,12 @@
     align-items: center;
 }
 
+@media (max-width: 700px) {
+    .featureCard {
+        padding: 0.5rem 0.7rem;
+    }
+}
+
 .featureIcon {
     width: 2.5rem;
     height: 2.5rem;
