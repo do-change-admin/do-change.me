@@ -102,26 +102,23 @@ export const Plans:FC<IPlanProps> = ({isHome=false}) => {
                             </div>
                         </div>
                     </div>
-
-                    <button
-                        onClick={async () => {
-                            if (isHome) {
-                                router.push("/auth/login");
-                                return
-                            }
-                            const { url } = await subscribe({
-                                body: {
-                                    planId: onlyReportsPlan?.prices?.[0]?.planId?.toString() ?? "",
-                                    priceId: onlyReportsPlan?.prices?.[0].stripePriceId ?? ""
+                    {!isHome && (
+                        <button
+                            onClick={async () => {
+                                const { url } = await subscribe({
+                                    body: {
+                                        planId: onlyReportsPlan?.prices?.[0]?.planId?.toString() ?? "",
+                                        priceId: onlyReportsPlan?.prices?.[0].stripePriceId ?? ""
+                                    }
+                                })
+                                if (url) {
+                                    router.push(url)
                                 }
-                            })
-                            if (url) {
-                                router.push(url)
-                            }
-                        }}
-                        className={styles.buttonBlue}>
-                        <FaRocket /> Get Plan
-                    </button>
+                            }}
+                            className={styles.buttonBlue}>
+                            <FaRocket /> Get Plan
+                        </button>
+                    )}
                 </div>
             </motion.div>
 
@@ -196,26 +193,27 @@ export const Plans:FC<IPlanProps> = ({isHome=false}) => {
                             Access is approved.
                         </p>
                     </div>
+                    {!isHome && (
+                        <button className={styles.buttonPurple} onClick={() => {
+                            if (isHome) {
+                                router.push("/auth/login");
+                                return
+                            }
+                            router.push('/auctions/dealer')
 
-                    <button className={styles.buttonPurple} onClick={() => {
-                        if (isHome) {
-                            router.push("/auth/login");
-                            return
-                        }
-                        router.push('/auctions/dealer')
-
-                        // const { url } = await subscribe({
-                        //     body: {
-                        //         planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
-                        //         priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
-                        //     }
-                        // })
-                        // if (url) {
-                        //     router.push(url)
-                        // }
-                    }}>
-                        <FaUnlock /> Get Access
-                    </button>
+                            // const { url } = await subscribe({
+                            //     body: {
+                            //         planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
+                            //         priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
+                            //     }
+                            // })
+                            // if (url) {
+                            //     router.push(url)
+                            // }
+                        }}>
+                            <FaUnlock /> Get Access
+                        </button>
+                    )}
                 </div>
             </motion.div>
         </div>
