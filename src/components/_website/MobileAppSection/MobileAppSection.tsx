@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import styles from './MobileAppSection.module.css';
-import MobileLogo from './mobile.png'
 import {
     FaSearch,
     FaQrcode,
@@ -79,7 +78,7 @@ export const MobileAppSection = ()=> {
                         <div className={styles.phoneOuter}>
                             <div className={styles.phoneInner}>
                                 <div className={styles.phoneScreen}>
-                                    <Image src={MobileLogo.src} alt="mob"/>
+                                    <Image src='/images/mobile.png' alt="mob"/>
                                 </div>
                             </div>
                         </div>

@@ -14,10 +14,6 @@ export async function GET() {
                 },
             }
         );
-
-        console.log('url: ', url)
-        console.log(key)
-        console.log('response: ', response)
         if (!response.ok) {
             return NextResponse.json(
                 { error: `Remote API error: ${response.status}` },

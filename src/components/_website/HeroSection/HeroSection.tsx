@@ -13,9 +13,9 @@ import {
     FaDatabase,
     FaBarcode
 } from 'react-icons/fa';
-import heroImage from './img.png';
 import { motion } from 'framer-motion';
 import {useRouter} from "next/navigation";
+import {Image} from "@mantine/core";
 
 const features = [
     { icon: <FaChartLine />, title: 'Market Value', subtitle: 'Unlimited Access' },
@@ -96,9 +96,9 @@ export const HeroSection = ()=> {
                             animate={{ y: [0, -10, 0] }}
                             transition={{ duration: 3, repeat: Infinity }}
                         >
-                            <img
+                            <Image
                                 className={styles.heroImage}
-                                src={heroImage.src}
+                                src="/images/heroImage.png"
                                 alt=""
                             />
                         </motion.div>
