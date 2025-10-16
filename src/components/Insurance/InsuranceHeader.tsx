@@ -29,7 +29,7 @@ export const InsuranceHeader:FC<InsuranceHeaderProps> = ({openFilters}) => {
             <div className={styles.geoTop}></div>
             <div className={styles.geoBottom}></div>
 
-            {/* Header Content */}
+            {/* HeaderWeb Content */}
             <div className={styles.contentWrapper}>
                 <div className={styles.content}>
                     <div>

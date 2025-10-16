@@ -3,6 +3,7 @@ import type { Services } from '@/services'
 export const DataProviderTokens = {
     carsForSale: Symbol.for("CARS-FOR-SALE-DATA-PROVIDER"),
     vehicleHistoryReports: Symbol.for("VEHICLE-HISTORY-REPORTS-DATA-PROVIDER"),
+    vehicleHistoryReportsCache: Symbol.for("VEHICLE-HISTORY-REPORTS-CACHE-DATA-PROVIDER"),
     pictures: Symbol.for("PICTURES-DATA-PROVIDER")
 }
 

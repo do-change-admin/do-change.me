@@ -1,5 +1,6 @@
 export * from './_ui'
 export * from './_admin';
+export * from './_website';
 export * from './Header/Header'
 export * from './Login/Login'
 export * from './Register/Register'
@@ -14,6 +15,7 @@ export * from './Salvage/Salvage';
 export * from './AuctionsServicesCards/AuctionsServicesCards';
 export * from './AuctionHowItWorks/AuctionHowItWorks';
 export * from './SubscriptionPlans/SubscriptionPlans';
+export * from './SubscriptionPlans/Plans';
 export * from './CookieBanner/CookieBanner';
 export * from './AuctionAccess/AuctionAccess';
 export * from './Chat/Chat';

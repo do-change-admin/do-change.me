@@ -122,7 +122,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                 animate={{opacity: 1, y: 0}}
                 transition={{duration: 0.5}}
             >
-                {/* Header */}
+                {/* HeaderWeb */}
                 <div className={styles.header}>
                     <LoadingOverlay visible={isUpdatingStatus || isUpdating}/>
                     <Group justify="space-between">

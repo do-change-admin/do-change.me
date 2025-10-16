@@ -1,0 +1,125 @@
+.section {
+    position: relative;
+    padding: 5rem 2rem;
+    background: linear-gradient(to bottom right, #f9fafb, #f9fafb);
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.header h2 {
+    font-size: 3rem;
+    color: var(--texas-blue);
+    margin-bottom: 1rem;
+}
+
+.header p {
+    font-size: 1.25rem;
+    color: #6b7280;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media(min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    background: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.gradient1 {
+    color: var(--texas-blue);
+}
+
+.gradient2 {
+    color: var(--texas-blue);
+}
+
+.iconWrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--texas-blue);
+    color: white;
+    font-size: 2rem;
+}
+
+.meta {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280;
+}
+
+.cta {
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.cta h4 {
+    font-size: 2rem;
+    color: #111827;
+    margin-bottom: 1.5rem;
+}
+
+.cta button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(to right, #facc15, #f97316);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta button:hover {
+    transform: scale(1.1);
+}
+
+.buttonIcon {
+    font-size: 1.5rem;
+}

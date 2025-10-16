@@ -5,7 +5,7 @@
     position: relative;
 }
 
-/* Header */
+/* HeaderWeb */
 .header {
     background: linear-gradient(to right, #2563eb, #4f46e5);
     padding: 1.5rem;
@@ -133,7 +133,7 @@
     margin-top: 0.5rem;
 }
 
-/* Footer */
+/* FooterWeb */
 .footer {
     display: flex;
     justify-content: center;

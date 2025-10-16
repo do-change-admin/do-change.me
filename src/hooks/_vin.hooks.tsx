@@ -181,31 +181,57 @@ export const useReport = () => {
     });
 };
 
-//TODO: переписать
 export interface StatsResponse {
-    user_info: {
-        email: string;
-        plan: string;
-        total_requests: number;
-        account_created: string;
-        last_request: string;
-    };
-    current_usage: {
+    hourly_usage_24h: {
+        hour: string;
+        requests: number;
+    }[];
+    rate_limits: {
+        remaining_this_hour: number;
+        remaining_today: number;
+        requests_per_day: number;
+        requests_per_hour: number;
         requests_this_hour: number;
         requests_today: number;
     };
-    rate_limits: {
-        requests_per_hour: number;
-        requests_per_day: number;
-        remaining_this_hour: number;
-        remaining_today: number;
+    recent_requests: {
+        created_at: string;
+        endpoint: string;
+        error_message: string | null;
+        method: string;
+        response_time_ms: number;
+        search_type: string | null;
+        search_value: string | null;
+        status_code: number;
+    }[];
+    usage_statistics: {
+        last_30_days: {
+            avg_response_time_ms: string;
+            failed_requests: number;
+            plate_searches: number;
+            success_rate: number;
+            successful_requests: number;
+            total_requests: number;
+            vin_searches: number;
+        };
+        today: {
+            avg_response_time_ms: string;
+            failed_requests: number;
+            success_rate: number;
+            successful_requests: number;
+            total_requests: number;
+        };
+        total_requests_all_time: number;
     };
-    status: {
+    user: {
         active: boolean;
-        within_hourly_limit: boolean;
-        within_daily_limit: boolean;
+        created_at: string;
+        email: string;
+        last_request_at: string;
+        plan: string;
     };
 }
+
 
 export const useStats= () => {
     return useQuery<StatsResponse, Error>({

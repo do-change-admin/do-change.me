@@ -30,7 +30,7 @@ export const Sidebar = () => {
     return (
         <>
             <div className={styles.sidebar}>
-                {/* Header */}
+                {/* HeaderWeb */}
                 <div className={styles.header}>
                     <div className={styles.avatarWrapper}>
                         <Avatar
@@ -71,7 +71,7 @@ export const Sidebar = () => {
                     ))}
                 </div>
 
-                {/* Footer */}
+                {/* FooterWeb */}
                 <div className={styles.footer}>
                     {/*<button*/}
                     {/*  className={styles.logout}*/}

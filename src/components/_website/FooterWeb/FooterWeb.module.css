@@ -1,0 +1,111 @@
+.footer {
+    background-color: #111827;
+    color: white;
+    padding: 4rem 0;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.grid {
+    display: grid;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.brandHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.iconWrapper {
+    background-color: #3b82f6;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    color: white;
+    font-size: 1.25rem;
+}
+
+.brandTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.description {
+    color: #9ca3af;
+    margin-bottom: 1rem;
+}
+
+.socialIcons {
+    display: flex;
+    gap: 1rem;
+}
+
+.socialIcons svg {
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.socialIcons svg:hover {
+    color: #60a5fa;
+}
+
+.section {
+}
+
+.sectionTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.linkList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #9ca3af;
+}
+
+.linkList li {
+    margin-bottom: 0.5rem;
+}
+
+.linkList span {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.linkList span:hover {
+    color: white;
+}
+
+.bottom {
+    border-top: 1px solid #1f2937;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
