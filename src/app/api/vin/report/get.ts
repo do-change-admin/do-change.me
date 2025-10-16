@@ -49,7 +49,7 @@ export const method = zodApiMethod(schemas, {
         }
     },
     onSuccess: async ({ activeUser, flags }) => {
-        if (flags['FROM_CACHE_FLAG']) {
+        if (flags[FROM_CACHE_FLAG]) {
             return
         }
         const service = new RequestsMeteringService(activeUser.id)
