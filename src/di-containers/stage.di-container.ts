@@ -17,6 +17,10 @@ const registerDataProviders = () => {
         .to(DataProvidersImplemetations.API.VehicleHistoryReports)
 
     container
+        .bind<DataProviders.VehicleHistoryReports.CacheInterface>(DataProviderTokens.vehicleHistoryReportsCache)
+        .to(DataProvidersImplemetations.Prisma.VehicleHistoryReportsCache)
+
+    container
         .bind<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
         .to(DataProvidersImplemetations.API.PicturesInVercelBlob)
 }
