@@ -81,8 +81,7 @@ export const Plans:FC<IPlanProps> = ({isHome=false}) => {
                             <div>
                                 <strong>Vehicle History Reports</strong> — <Badge size="lg"
                                     variant="light">Unlimited</Badge>
-                                <p className={styles.featureNote}>The best report options, such as Carfax
-                                    and AutoCheck.</p>
+                                <p className={styles.featureNote}>The best report options.</p>
                                 {/*<p className={styles.featureNote}>Additional reports: $0.95 each</p>*/}
                             </div>
                         </div>
@@ -175,8 +174,7 @@ export const Plans:FC<IPlanProps> = ({isHome=false}) => {
                             <div>
                                 <strong>Vehicle History Reports</strong> — <Badge size="lg"
                                     variant="light">Unlimited</Badge>
-                                <p className={styles.featureNote}>The best report options, such as Carfax
-                                    and AutoCheck.</p>
+                                <p className={styles.featureNote}>The best report options.</p>
                                 {/*<p className={styles.featureNote}>Additional reports: $0.95 each</p>*/}
                             </div>
                         </div>
