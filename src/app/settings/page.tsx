@@ -136,7 +136,7 @@ export default function SettingsContent() {
                     color="red"
                     variant="light"
                     radius="lg"
-                    onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                    onClick={() => signOut({ callbackUrl: "/home" })}
                 >
                     Logout
                 </Button>
