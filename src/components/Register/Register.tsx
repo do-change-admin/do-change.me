@@ -65,7 +65,6 @@ export const Register = () => {
             });
 
             if (result?.ok) {
-                await new Promise(res => setTimeout(res, 1500));
                 router.push("/");
                 return;
             }
