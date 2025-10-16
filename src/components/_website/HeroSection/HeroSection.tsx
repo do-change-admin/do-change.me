@@ -45,27 +45,12 @@ export const HeroSection = ()=> {
                             {/*    <span>Trusted by Professionals</span>*/}
                             {/*</div>*/}
                             <h1 className={styles.heroTitle}>
-                                Complete Vehicle{' '}
-                                <span className={styles.gradientText}>Data Intelligence</span>
+                                Car Flipping Made Easy{' '}
+                                <span className={styles.gradientText}>Buy, check, sell</span>
                             </h1>
                             <p className={styles.heroSubtitle}>
-                                Access unlimited vehicle pricing and history reports with our comprehensive data tools - <strong> no dealer license required.</strong> Make informed decisions with real-time market intelligence.
+                                Get all the tools you need to buy, verify, and sell vehicles with confidence. Access dealer auctions, real-time market data, and detailed vehicle reports — <strong>all without a dealer license.</strong>
                             </p>
-                        </div>
-
-                        {/* Features */}
-                        <div className={styles.featuresGrid}>
-                            {features.map((f, i) => (
-                                <div key={i} className={styles.featureCard}>
-                                    <div className={styles.featureIcon}>
-                                        {f.icon}
-                                    </div>
-                                    <div>
-                                        <p className={styles.featureTitle}>{f.title}</p>
-                                        <p className={styles.featureSubtitle}>{f.subtitle}</p>
-                                    </div>
-                                </div>
-                            ))}
                         </div>
 
                         {/* CTA Buttons */}
@@ -98,6 +83,7 @@ export const HeroSection = ()=> {
                         >
                             <Image
                                 className={styles.heroImage}
+                                radius="lg"
                                 src="/images/heroImage.png"
                                 alt=""
                             />

@@ -84,6 +84,7 @@
     line-height: 1.75rem;
     color: var(--texas-blue);
     max-width: 28rem;
+    margin-top: 1rem;
 }
 
 .featuresGrid {
