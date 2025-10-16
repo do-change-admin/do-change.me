@@ -2,9 +2,7 @@
 
 import styles from './HeroSection.module.css';
 import {
-    FaStar,
     FaChartLine,
-    FaShieldAlt,
     FaHeadset,
     FaFileAlt,
     FaGavel,

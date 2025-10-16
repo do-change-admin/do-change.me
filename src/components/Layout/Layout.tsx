@@ -20,7 +20,6 @@ export function Layout({children}: { children: React.ReactNode }) {
     const isHome = pathname.includes("/home");
     const isLegal = pathname.includes("/legal");
   const { openMenu, isOpen, closeMenu } = useSlideMenu();
-  const {data} = useProfile()
 
     const {locale} = useLocale();
     const messages = allMessages[locale] || allMessages["en"];

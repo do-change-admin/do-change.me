@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { FaCheck, FaStar, FaShieldAlt, FaHeadset, FaClock } from "react-icons/fa";
+import { FaShieldAlt, FaHeadset, FaClock } from "react-icons/fa";
 import styles from "./PricingSection.module.css";
 import {Plans} from "@/components";
 

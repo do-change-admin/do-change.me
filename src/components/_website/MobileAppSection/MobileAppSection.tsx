@@ -4,9 +4,6 @@ import { motion } from "framer-motion";
 import styles from './MobileAppSection.module.css';
 import MobileLogo from './mobile.png'
 import {
-    FaMobileAlt,
-    FaCog,
-    FaKeyboard,
     FaSearch,
     FaQrcode,
     FaApple,
