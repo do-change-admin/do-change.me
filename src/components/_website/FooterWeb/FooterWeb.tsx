@@ -12,7 +12,7 @@ export const FooterWeb =() => {
                             <h3 className={styles.brandTitle}>do-change</h3>
                         </div>
                         <p className={styles.description}>
-                            The most trusted VIN scanning and vehicle report platform for professionals.
+                            Do-Change is your all-in-one platform for smart car ownership and trading. Instantly check real market values, scan VINs or license plates, explore detailed vehicle history reports, manage your profile and subscriptions, sell your cars, and access exclusive auctions — all in one convenient place.
                         </p>
                         <div className={styles.socialIcons}>
                             <FaTwitter />
@@ -24,9 +24,8 @@ export const FooterWeb =() => {
                     <div className={styles.section}>
                         <h4 className={styles.sectionTitle}>Product</h4>
                         <ul className={styles.linkList}>
-                            <li><span>Features</span></li>
-                            <li><span>Pricing</span></li>
-                            <li><span>Mobile App</span></li>
+                            <li><Link href="/#mob-section">Features</Link></li>
+                            <li><Link href="/#pricing">Pricing</Link></li>
                         </ul>
                     </div>
 

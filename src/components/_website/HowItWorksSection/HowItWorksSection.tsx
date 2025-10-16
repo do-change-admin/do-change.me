@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import styles from "./HowItWorksSection.module.css";
 import { FaUserPlus, FaClipboardList, FaKey, FaChartLine, FaClock, FaStar, FaTools, FaRocket } from "react-icons/fa";
+import {useRouter} from "next/navigation";
 
 const steps = [
     {
@@ -40,6 +41,9 @@ const steps = [
 ];
 
 export const HowItWorksSection = () =>  {
+    const router = useRouter();
+    const handleClick = () => router.push('/auth/login');
+
     return (
         <section id="how-it-works" className={styles.section}>
             <div className={styles.background}>
@@ -84,7 +88,7 @@ export const HowItWorksSection = () =>  {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.8 }}
                 >
-                    <button>
+                    <button onClick={handleClick}>
                         <FaRocket className={styles.buttonIcon} />
                         Launch Your Success Story
                     </button>

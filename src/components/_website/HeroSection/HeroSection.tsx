@@ -15,7 +15,9 @@ import {
     FaDatabase,
     FaBarcode
 } from 'react-icons/fa';
+import heroImage from './img.png';
 import { motion } from 'framer-motion';
+import {useRouter} from "next/navigation";
 
 const features = [
     { icon: <FaChartLine />, title: 'Market Value', subtitle: 'Unlimited Access' },
@@ -27,6 +29,9 @@ const features = [
 ];
 
 export const HeroSection = ()=> {
+    const router = useRouter();
+    const handleClick = () => router.push('/auth/login');
+
     return (
         <section id="hero-section" className={styles.heroSection}>
             <div className={styles.backgroundGradient}></div>
@@ -70,6 +75,7 @@ export const HeroSection = ()=> {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 className={styles.getPlanButton}
+                                onClick={handleClick}
                             >
                                 <FaRocket className={styles.buttonIcon} />
                                 Get Plan
@@ -77,6 +83,7 @@ export const HeroSection = ()=> {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 className={styles.learnMoreButton}
+                                onClick={handleClick}
                             >
                                 <FaInfoCircle className={styles.buttonIcon} />
                                 Learn More
@@ -93,7 +100,7 @@ export const HeroSection = ()=> {
                         >
                             <img
                                 className={styles.heroImage}
-                                src="https://storage.googleapis.com/uxpilot-auth.appspot.com/59ef177821-b34ad13602138611c226.png"
+                                src={heroImage.src}
                                 alt=""
                             />
                         </motion.div>

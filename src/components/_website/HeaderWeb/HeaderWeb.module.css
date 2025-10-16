@@ -113,13 +113,13 @@
 
 
 .button {
-    background-color: var(--text-texas-blue);
+    background-color: var(--texas-blue);
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     border: none;
     color: white;
     width: 3rem;
-    height: 2.6rem;
-    border-radius: 1.5rem;
+    height: 3rem;
+    border-radius: 50%;
     font-weight: 500;
     transition: background-color 0.3s ease;
     cursor: pointer;

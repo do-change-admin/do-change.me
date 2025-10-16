@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, {FC} from 'react';
 import styles from "./SubscriptionPlans.module.css";
 import { motion } from "framer-motion";
 import {
@@ -19,7 +19,10 @@ import { Badge, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { usePlans, useSubscriptionCreation } from "@/hooks";
 
-export const Plans = () => {
+interface IPlanProps {
+    isHome?: boolean;
+}
+export const Plans:FC<IPlanProps> = ({isHome=false}) => {
     const router = useRouter()
     const { data: plans } = usePlans()
     const { mutateAsync: subscribe } = useSubscriptionCreation()
@@ -102,6 +105,10 @@ export const Plans = () => {
 
                     <button
                         onClick={async () => {
+                            if (isHome) {
+                                router.push("/auth/login");
+                                return
+                            }
                             const { url } = await subscribe({
                                 body: {
                                     planId: onlyReportsPlan?.prices?.[0]?.planId?.toString() ?? "",
@@ -191,6 +198,10 @@ export const Plans = () => {
                     </div>
 
                     <button className={styles.buttonPurple} onClick={() => {
+                        if (isHome) {
+                            router.push("/auth/login");
+                            return
+                        }
                         router.push('/auctions/dealer')
 
                         // const { url } = await subscribe({

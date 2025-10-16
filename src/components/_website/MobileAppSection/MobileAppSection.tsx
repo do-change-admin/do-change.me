@@ -11,7 +11,8 @@ import {
     FaQrcode,
     FaApple,
     FaGooglePlay,
-    FaList
+    FaList,
+    FaUserCog, FaCarSide, FaGavel
 } from 'react-icons/fa';
 import {Image} from "@mantine/core";
 
@@ -38,21 +39,21 @@ export const MobileAppSection = ()=> {
                         {[
                             {
                                 number: "1",
-                                icon: <FaCog size={20} color="#fff" />,
-                                title: "Settings & Profile",
-                                text: "Manage your account preferences, notification settings, and personal information in one place."
+                                icon: <FaSearch size={20} color="#fff" />,
+                                title: "Market Value Check",
+                                text: "Get the most accurate and up-to-date market value for any vehicle with unlimited and convenient access."
                             },
                             {
                                 number: "2",
-                                icon: <FaKeyboard size={20} color="#fff" />,
-                                title: "VIN Decoder",
-                                text: "Scan VIN number for quick vehicle lookups and history reports.."
+                                icon: <FaQrcode size={20} color="#fff" />,
+                                title: "VIN & Plate Scanner",
+                                text: "Easily scan VIN numbers or license plates to instantly retrieve vehicle details and market valuation."
                             },
                             {
                                 number: "3",
-                                icon: <FaSearch size={20} color="#fff" />,
-                                title: "History Reports",
-                                text: "Easily access and review all your past vehicle reports in one place."
+                                icon: <FaList size={20} color="#fff" />,
+                                title: "Vehicle History Reports",
+                                text: "Access detailed vehicle history reports including ownership, accidents, mileage records, and more."
                             }
                         ].map((item, idx) => (
                             <motion.div
@@ -81,7 +82,7 @@ export const MobileAppSection = ()=> {
                         <div className={styles.phoneOuter}>
                             <div className={styles.phoneInner}>
                                 <div className={styles.phoneScreen}>
-                                    <Image src={MobileLogo} alt="mob"/>
+                                    <Image src={MobileLogo.src} alt="mob"/>
                                 </div>
                             </div>
                         </div>
@@ -92,21 +93,21 @@ export const MobileAppSection = ()=> {
                         {[
                             {
                                 number: "4",
-                                icon: <FaQrcode size={20} color="#fff" />,
-                                title: "Scanner Button",
-                                text: "Large, prominent scanner button in the footer for quick VIN barcode scanning access."
+                                icon: <FaUserCog size={20} color="#fff" />,
+                                title: "Profile Management",
+                                text: "Easily manage your personal profile, preferences, and account settings in one place."
                             },
                             {
                                 number: "5",
-                                icon: <FaList size={20} color="#fff" />,
-                                title: "Main Content",
-                                text: "Vehicle listings and search results displayed in the main content area with pricing information."
+                                icon: <FaCarSide size={20} color="#fff" />,
+                                title: "Sell Your Car",
+                                text: "Create listings and sell your vehicles directly through your account dashboard."
                             },
                             {
                                 number: "6",
-                                icon: <FaMobileAlt size={20} color="#fff" />,
-                                title: "Mobile Optimized",
-                                text: "Fully responsive design optimized for all mobile devices with touch-friendly interfaces."
+                                icon: <FaGavel size={20} color="#fff" />,
+                                title: "Auction Access",
+                                text: "Get access to auctions and explore a wide range of available vehicles."
                             }
                         ].map((item, idx) => (
                             <motion.div

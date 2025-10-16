@@ -7,7 +7,7 @@ import {Plans} from "@/components";
 
 export const PricingSection= () => {
     return (
-        <section id="pricing-section" className={styles.section}>
+        <section id="pricing" className={styles.section}>
             <div className={styles.container}>
                 {/* HeaderWeb */}
                 <div className={styles.header}>
@@ -19,7 +19,7 @@ export const PricingSection= () => {
 
                 {/* Pricing Cards */}
                 <div className={styles.cards}>
-                    <Plans/>
+                    <Plans isHome/>
                 </div>
 
                 {/* FooterWeb */}
@@ -38,25 +38,6 @@ export const PricingSection= () => {
     );
 }
 
-/* --- Reusable Components --- */
-function Feature({ text, badge }: { text: string; badge?: string }) {
-    return (
-        <div className={styles.feature}>
-            <FaCheck className={styles.check} />
-            <span>{text}</span>
-            {badge && <span className={styles.badge}>{badge}</span>}
-        </div>
-    );
-}
-
-function SubFeature({ text }: { text: string }) {
-    return (
-        <div className={styles.subFeature}>
-            <FaStar className={styles.star} />
-            <span>{text}</span>
-        </div>
-    );
-}
 
 function FooterIcon({ icon, text }: { icon: React.ReactNode; text: string }) {
     return (
