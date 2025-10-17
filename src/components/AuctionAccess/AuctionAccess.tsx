@@ -85,8 +85,8 @@ export const AuctionAccess = () => {
             </Text>
             {profileData?.auctionAccessQRLink ? (
                 <Image
-                    height={300}
-                    width={300}
+                    h={200}
+                    w={200}
                     className={styles.qrIcon}
                     src={profileData?.auctionAccessQRLink}
                     alt="Profile auction access QR code"

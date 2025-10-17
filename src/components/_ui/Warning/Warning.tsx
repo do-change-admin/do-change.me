@@ -21,6 +21,7 @@ export function Warning({
             color="yellow"
             radius="md"
             variant="light"
+            w={300}
             styles={{
                 root: {
                     border: withBorder
