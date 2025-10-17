@@ -1,6 +1,6 @@
-// components/PdfDownloader.tsx
-import { FC, useRef } from "react";
-import html2pdf from "html2pdf.js";
+'use client'
+
+import { useRef } from "react";
 import { Button } from "@mantine/core";
 
 export type Props = {
@@ -22,6 +22,7 @@ export default function PdfDownloader({ markup }: Props) {
         doc.close();
 
         iframe.onload = () => {
+            const html2pdf = require('html2pdf.js')
             const body = iframe.contentDocument?.body;
             if (!body) return;
 
