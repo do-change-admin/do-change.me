@@ -38,7 +38,6 @@ export const SearchHistory: FC<SearchHistoryProps> = ({ searches, isLoading }) =
                                 <th>Date</th>
                                 <th>Vehicle</th>
                                 <th>VIN/Plate</th>
-                                <th>Mileage</th>
                                 <th>Value</th>
                                 <th>Status</th>
                                 <th>Reports</th>
@@ -54,7 +53,6 @@ export const SearchHistory: FC<SearchHistoryProps> = ({ searches, isLoading }) =
                                             <div className={styles.vehicleTrim}>{data.baseInfo?.Trim}</div>
                                         </td>
                                         <td className={styles.vin}>{vin}</td>
-                                        <td>{data.mileage ? `${data.mileage}k` : 'Mileage was not set'}</td>
                                         <td className={styles.valueGreen}>{data.marketValue?.market_prices.average ? "$" + `${data.marketValue?.market_prices.average}` : 'Market value was not requested'}</td>
                                         <td>
                                             <span className={data.salvage ? styles.withSalvage : styles.noSalvage}>{data.salvage ? 'Salvage was found' : 'No salvage'}</span>
