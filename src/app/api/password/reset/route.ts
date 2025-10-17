@@ -5,7 +5,7 @@ import { generatePasswordHash } from "@/lib/password";
 import { businessError, serverError, validationError } from "@/lib/errors";
 import { prismaClient } from "@/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
-import { ValueObjects } from "@/value-objects";
+import { VO } from "@/value-objects";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const { password, token: rawToken } = data;
-        const tokenHash = new ValueObjects.StringHash.Instance(rawToken).value();
+        const tokenHash = new VO.StringHash.Instance(rawToken).value();
 
         const record = await prismaClient.passwordResetToken.findUnique({
             where: { tokenHash },

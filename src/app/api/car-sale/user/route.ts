@@ -1,10 +1,6 @@
-import * as Get from './get'
-import * as Post from './post'
+import { DIContainer } from '@/di-containers'
 
-export const GET = Get.method
-export const POST = Post.method
+const controller = DIContainer().CarSaleUserController()
 
-export type CarSaleUserAPI = {
-    GET: Get.Method,
-    POST: Post.Method
-}
+export const GET = controller.GET
+export const POST = controller.POST

@@ -7,6 +7,7 @@ import { DIContainer } from "@/di-containers";
 import { DataProviders } from "@/providers";
 import { DataProviderTokens } from "@/di-containers/tokens.di-container";
 import { noSubscriptionsGuard } from "@/api-guards";
+import { ActionsHistoryService } from "@/services";
 
 const FROM_CACHE_FLAG = 'FROM_CACHE'
 
@@ -48,12 +49,19 @@ export const method = zodApiMethod(schemas, {
             htmlMarkup: report.htmlMarkup
         }
     },
-    onSuccess: async ({ activeUser, flags }) => {
-        if (flags[FROM_CACHE_FLAG]) {
-            return
+    onSuccess: async ({ activeUser, flags, requestPayload, result }) => {
+        if (!flags[FROM_CACHE_FLAG]) {
+            const service = new RequestsMeteringService(activeUser.id)
+            await service.incrementUsage(FeatureKey.Report)
         }
-        const service = new RequestsMeteringService(activeUser.id)
-        await service.incrementUsage(FeatureKey.Report)
+        await ActionsHistoryService.Register({
+            target: 'report' as const,
+            payload: {
+                vin: requestPayload.vin,
+                service: 'carfax',
+                result: { type: 'html', data: result.htmlMarkup }
+            }
+        })
     },
     beforehandler: noSubscriptionsGuard
 })

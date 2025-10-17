@@ -1,1 +1,1 @@
-export * as ValueObjects from './exports'
+export * as VO from './_exports'

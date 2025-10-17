@@ -3,11 +3,10 @@ import { RegistreUser } from "./models";
 import { generatePasswordHash } from "@/lib/password";
 import { businessError, serverError, validationError } from "@/lib/errors";
 import z from "zod";
-import { ResendEmailProvider } from "@/providers/implementations/email/resend-email.provider";
-import { EmailService } from "@/services/email/email.service";
 import { verificationEmail } from "@/infrastructure/email/templates/verification-email";
 import { prismaClient } from "@/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
+import { DIContainer } from "@/di-containers";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -58,10 +57,7 @@ export async function POST(req: NextRequest) {
         });
 
         after(() => {
-            const resendProvider = new ResendEmailProvider(
-                process.env.RESEND_API_KEY!
-            );
-            const emailService = new EmailService(resendProvider);
+            const emailService = DIContainer()._EmailService();
             const email = verificationEmail(user, token.raw);
             emailService.sendEmail(email);
         });
