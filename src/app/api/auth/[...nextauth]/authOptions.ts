@@ -11,24 +11,22 @@ export const authOptions: AuthOptions = {
             name: "Credentials",
             credentials: { email: {}, password: {} },
             async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password)
+                if (!credentials?.email || !credentials?.password) {
                     throw new Error(
-                        JSON.stringify(
-                            businessError("Email and password are required")
-                        )
+                        JSON.stringify(businessError("Email and password are required"))
                     );
+                }
 
                 const user = await prismaClient.user.findUnique({
                     where: { email: credentials.email.toLowerCase() },
                     include: { accounts: true },
                 });
 
-                if (!user || !user.password)
+                if (!user || !user.password) {
                     throw new Error(
-                        JSON.stringify(
-                            businessError("Email or password is incorrect")
-                        )
+                        JSON.stringify(businessError("Email or password is incorrect"))
                     );
+                }
 
                 // if (!user.emailVerifiedAt) {
                 //     throw new Error(
@@ -41,17 +39,13 @@ export const authOptions: AuthOptions = {
                 //     );
                 // }
 
-                const valid = await compare(
-                    credentials.password,
-                    user.password
-                );
+                const valid = await compare(credentials.password, user.password);
 
-                if (!valid)
+                if (!valid) {
                     throw new Error(
-                        JSON.stringify(
-                            businessError("Email or password is incorrect")
-                        )
+                        JSON.stringify(businessError("Email or password is incorrect"))
                     );
+                }
 
                 return { id: user.id, email: user.email };
             },
@@ -124,14 +118,17 @@ export const authOptions: AuthOptions = {
             return session;
         },
 
+        // ✅ Новый callback: куда перенаправлять после логина
         async redirect({ url, baseUrl }) {
-
+            // После авторизации или регистрации → на главную (/)
             if (url.startsWith("/auth/login") || url.startsWith("/auth/register")) {
                 return baseUrl;
             }
 
+            // Если задан внутренний путь — вернуть туда
             if (url.startsWith("/")) return `${baseUrl}${url}`;
 
+            // Иначе — на корень
             return baseUrl;
         },
     },
