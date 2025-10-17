@@ -41,7 +41,7 @@ export default function PdfDownloader({ markup }: Props) {
 
     return (
         <>
-            <Button onClick={handleDownload}>📄 Download PDF</Button>
+            <Button radius={'lg'} onClick={handleDownload}>📄 Download PDF</Button>
             <iframe
                 ref={iframeRef}
                 style={{ display: "none" }}

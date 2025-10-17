@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import styles from './page.module.css';
-import { Button } from "@mantine/core";
+import { Button, Group } from "@mantine/core";
 import PdfDownloader from "./downloader";
 import { useRouter } from "next/navigation";
+import { FaBackspace } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa6";
 
 export default function ReportPage() {
     const [reportHtml, setReportHtml] = useState<string | null>(null);
@@ -19,10 +21,10 @@ export default function ReportPage() {
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '24px' }}>
+            <Group justify="space-between" p='lg'>
+                <Button leftSection={<FaArrowLeft />} radius={'lg'} variant="light" onClick={() => { router.back() }}>Go back</Button>
                 <PdfDownloader markup={reportHtml!} />
-                <Button variant="light" onClick={() => { router.back() }}>Go back</Button>
-            </div>
+            </Group>
 
             <div className={styles.container} dangerouslySetInnerHTML={{ __html: reportHtml! }} />
         </div>
