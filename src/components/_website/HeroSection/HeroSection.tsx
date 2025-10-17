@@ -45,8 +45,8 @@ export const HeroSection = ()=> {
                             {/*    <span>Trusted by Professionals</span>*/}
                             {/*</div>*/}
                             <h1 className={styles.heroTitle}>
-                                Car Flipping Made Easy{' '}
-                                <span className={styles.gradientText}>Buy, check, sell</span>
+                                Car Flipping Made Easy.{' '}
+                                <span className={styles.gradientText}>Buy & Sell</span>
                             </h1>
                             <p className={styles.heroSubtitle}>
                                 Get all the tools you need to buy, verify, and sell vehicles with confidence. Access dealer auctions, real-time market data, and detailed vehicle reports — <strong>all without a dealer license.</strong>

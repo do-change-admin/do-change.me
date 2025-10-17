@@ -7,7 +7,7 @@ let service: Instance
 
 beforeEach(() => {
     const userId = v4()
-    service = DIContainer().CarSaleUserService(userId)
+    service = DIContainer()._CarSaleUserService(userId)
 })
 
 test('empty by default', async () => {

@@ -3,7 +3,7 @@ import { CreateDraftPayload, FindCarsPayload, FindDraftPayload, PostCarPayload, 
 import { CarForSaleUserDraftModel, CarForSaleUserListModel } from "@/entities";
 import { v4 } from "uuid";
 import { inject, injectable } from "inversify";
-import { DataProviderTokens, FunctionalProviderTokens } from "@/di-containers/tokens.di-container";
+import { DataProviderTokens, FunctionProviderTokens } from "@/di-containers/tokens.di-container";
 import { mapDetailDataLayerToDraft, mapListDataLayerToDomain } from "./car-sale.user-service.mappers";
 import { businessError } from "@/lib/errors";
 

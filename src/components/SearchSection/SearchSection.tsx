@@ -1,15 +1,15 @@
 'use client'
 
-import React, {FC, useState} from "react";
+import React, { FC, useState } from "react";
 import styles from "./SearchSection.module.css";
 import { SearchHistory } from "./SearchHistory/SearchHistory";
 import { SampleResults } from "./SampleResults/SampleResults";
 import { LoadingMinute, Salvage } from "@/components";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useProfile } from "@/hooks";
 import { VinSearch } from "./VinSearch/VinSearch";
 import cn from "classnames";
-import {FaCar, FaHashtag} from "react-icons/fa";
+import { FaCar, FaHashtag } from "react-icons/fa";
 
 interface SearchSectionProps {
     openSubscription?: () => void
@@ -17,6 +17,7 @@ interface SearchSectionProps {
 
 export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const searchParams = useSearchParams();
+    const router = useRouter()
     const { data: profileData } = useProfile()
     const vin = searchParams.get("vin") || '1C6RD6FT1CS310366';
     const [activeTab, setActiveTab] = useState<"vin" | "plate">("vin");
@@ -25,6 +26,12 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
 
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(vin);
     const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(vin);
+
+    const { data: actionsHistory } = useActionsHistory({ skip: 0, take: 1000 })
+    const lastCarVin = Object.keys(actionsHistory || {})?.[0]
+    if (!searchParams.get("vin") && lastCarVin) {
+        router.push(`/?vin=${lastCarVin}`)
+    }
 
     return (
         <section className={styles.searchSection}>
@@ -62,9 +69,9 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
 }
 
 function Tabs({
-                  activeTab,
-                  setActiveTab,
-              }: {
+    activeTab,
+    setActiveTab,
+}: {
     activeTab: "vin" | "plate";
     setActiveTab: (tab: "vin" | "plate") => void;
 }) {

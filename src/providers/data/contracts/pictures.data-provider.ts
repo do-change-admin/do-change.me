@@ -1,7 +1,7 @@
-import { ValueObjects } from "@/value-objects";
+import { VO } from "@/value-objects";
 import z from "zod";
 
-export const itemSchema = ValueObjects.Picture.schema.extend({
+export const itemSchema = VO.Picture.schema.extend({
     id: z.string().nonempty()
 }).omit({
     alt: true

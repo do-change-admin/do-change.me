@@ -23,7 +23,7 @@ export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ activeUser, payload, req }) => {
-        const service = DIContainer().CarSaleUserService(activeUser.id)
+        const service = DIContainer()._CarSaleUserService(activeUser.id)
         const formData = await req.formData()
         let newPhotos = undefined
         if (formData.has('photos')) {
