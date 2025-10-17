@@ -114,23 +114,23 @@ export const AuctionAccess = () => {
                 )}
 
             <div>
-                {(!profileData?.auctionAccessNumber ||
-                    profileData?.auctionAccessQRLink) && (
-                    <Warning
-                        title="Important notice"
-                        message={
-                            <Text size="sm" c="dimmed">
-                                All the information presented here is for
-                                informational purposes only. For accurate and
-                                up-to-date data, please use the{" "}
-                                <Text component="span" fw={600}>
-                                    Auction Access
-                                </Text>{" "}
-                                application.
-                            </Text>
-                        }
-                    />
-                )}
+                {profileData?.auctionAccessNumber &&
+                    profileData?.auctionAccessQRLink && (
+                        <Warning
+                            title="Important notice"
+                            message={
+                                <Text size="sm" c="dimmed">
+                                    All the information presented here is for
+                                    informational purposes only. For accurate
+                                    and up-to-date data, please use the{" "}
+                                    <Text component="span" fw={600}>
+                                        Auction Access
+                                    </Text>{" "}
+                                    application.
+                                </Text>
+                            }
+                        />
+                    )}
             </div>
         </div>
     );
