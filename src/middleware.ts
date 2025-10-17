@@ -13,12 +13,13 @@ export async function middleware(req: NextRequest) {
         "/images",
         "/api/auth",
         "/auth/reset-password",
-        "/auth/login",
-        "/auth/register",
         "/legal",
         "/home",
         "/api/webhooks/stripe",
     ];
+
+    // Пути аутентификации
+    const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
 
     // Разрешаем публичные пути
     if (publicPaths.some((path) => pathname.startsWith(path))) {
@@ -36,8 +37,6 @@ export async function middleware(req: NextRequest) {
         return NextResponse.next();
     }
 
-    const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
-
     // Забираем токен из cookie (NextAuth хранит в `next-auth.session-token`)
     let token = "";
     const authSessionTokens = [
@@ -53,15 +52,15 @@ export async function middleware(req: NextRequest) {
 
     // Если пользователь не авторизован
     if (!user) {
-        // Разрешаем страницу /home и auth пути
-        if (pathname === "/" || !authPaths.includes(pathname)) {
+        // Разрешаем /home и auth страницы
+        if (pathname === "/" || (!authPaths.includes(pathname) && !publicPaths.some((path) => pathname.startsWith(path)))) {
             return NextResponse.redirect(new URL("/home", req.url));
         }
         return NextResponse.next();
     }
 
     // Если пользователь авторизован — не пускать его на /auth/*
-    if (authPaths.includes(pathname)) {
+    if (authPaths.some((path) => pathname.startsWith(path))) {
         return NextResponse.redirect(new URL("/", req.url));
     }
 
