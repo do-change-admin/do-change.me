@@ -66,7 +66,7 @@ export const SearchHistory: FC<SearchHistoryProps> = ({ searches, isLoading }) =
                                                     } else {
                                                         throw new Error("Unexpected response type");
                                                     }
-                                                }}>Carfax</button> : undefined}
+                                                }}>Report</button> : undefined}
                                             </div>
                                             <div>
                                                 {data.autocheck ? <button className={styles.viewBtn} onClick={() => {
@@ -76,7 +76,7 @@ export const SearchHistory: FC<SearchHistoryProps> = ({ searches, isLoading }) =
                                                     } else {
                                                         throw new Error("Unexpected response type");
                                                     }
-                                                }}>Autocheck</button> : undefined}
+                                                }}>Report</button> : undefined}
                                             </div>
                                         </td>
                                     </tr>
