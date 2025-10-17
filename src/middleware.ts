@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
-    const user = await getToken({ req, secret: process.env.AUTH_SECRET })
+    const user = await getToken({ req, secret: process.env.AUTH_SECRET });
 
     // Пути без проверки
     const publicPaths = [
@@ -20,18 +20,20 @@ export async function middleware(req: NextRequest) {
         "/api/webhooks/stripe",
     ];
 
+    // Разрешаем публичные пути
     if (publicPaths.some((path) => pathname.startsWith(path))) {
         return NextResponse.next();
     }
 
-    if (pathname.startsWith('/admin')) {
+    // Доступ к /admin только для авторизованных админов
+    if (pathname.startsWith("/admin")) {
         if (!user) {
             return NextResponse.redirect(new URL("/auth/login", req.url));
         }
-        if (!(process.env.ADMIN_EMAILS?.split(',') ?? []).includes(user.email)) {
+        if (!(process.env.ADMIN_EMAILS?.split(",") ?? []).includes(user.email)) {
             return NextResponse.redirect(new URL("/", req.url));
         }
-        return NextResponse.next()
+        return NextResponse.next();
     }
 
     const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
@@ -49,17 +51,21 @@ export async function middleware(req: NextRequest) {
         }
     }
 
+    // Если пользователь не авторизован
     if (!user) {
-        if (!authPaths.includes(pathname)) {
+        // Разрешаем страницу /home и auth пути
+        if (pathname === "/" || !authPaths.includes(pathname)) {
             return NextResponse.redirect(new URL("/home", req.url));
         }
         return NextResponse.next();
     }
 
+    // Если пользователь авторизован — не пускать его на /auth/*
     if (authPaths.includes(pathname)) {
         return NextResponse.redirect(new URL("/", req.url));
     }
 
+    // Всё остальное — разрешено
     return NextResponse.next();
 
     // try {
@@ -67,8 +73,6 @@ export async function middleware(req: NextRequest) {
     //   await jwtVerify(token, new TextEncoder().encode(process.env.NEXTAUTH_SECRET!));
     //
     //   // Авторизованный не должен попадать на login/register
-
-    //
     //   return NextResponse.next();
     // } catch (e) {
     //   console.error("JWT invalid", e);
@@ -80,5 +84,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/((?!_next|favicon.ico|api/auth).*)", '/'],
+    matcher: ["/((?!_next|favicon.ico|api/auth).*)", "/"],
 };
