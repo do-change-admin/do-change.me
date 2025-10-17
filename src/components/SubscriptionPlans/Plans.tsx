@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, {FC} from 'react';
 import styles from "./SubscriptionPlans.module.css";
 import { motion } from "framer-motion";
 import {
@@ -19,7 +19,10 @@ import { Badge, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { usePlans, useSubscriptionCreation } from "@/hooks";
 
-export const Plans = () => {
+interface IPlanProps {
+    isHome?: boolean;
+}
+export const Plans:FC<IPlanProps> = ({isHome=false}) => {
     const router = useRouter()
     const { data: plans } = usePlans()
     const { mutateAsync: subscribe } = useSubscriptionCreation()
@@ -78,8 +81,7 @@ export const Plans = () => {
                             <div>
                                 <strong>Vehicle History Reports</strong> — <Badge size="lg"
                                     variant="light">Unlimited</Badge>
-                                <p className={styles.featureNote}>The best report options, such as Carfax
-                                    and AutoCheck.</p>
+                                <p className={styles.featureNote}>The best report options.</p>
                                 {/*<p className={styles.featureNote}>Additional reports: $0.95 each</p>*/}
                             </div>
                         </div>
@@ -99,22 +101,23 @@ export const Plans = () => {
                             </div>
                         </div>
                     </div>
-
-                    <button
-                        onClick={async () => {
-                            const { url } = await subscribe({
-                                body: {
-                                    planId: onlyReportsPlan?.prices?.[0]?.planId?.toString() ?? "",
-                                    priceId: onlyReportsPlan?.prices?.[0].stripePriceId ?? ""
+                    {!isHome && (
+                        <button
+                            onClick={async () => {
+                                const { url } = await subscribe({
+                                    body: {
+                                        planId: onlyReportsPlan?.prices?.[0]?.planId?.toString() ?? "",
+                                        priceId: onlyReportsPlan?.prices?.[0].stripePriceId ?? ""
+                                    }
+                                })
+                                if (url) {
+                                    router.push(url)
                                 }
-                            })
-                            if (url) {
-                                router.push(url)
-                            }
-                        }}
-                        className={styles.buttonBlue}>
-                        <FaRocket /> Get Plan
-                    </button>
+                            }}
+                            className={styles.buttonBlue}>
+                            <FaRocket /> Get Plan
+                        </button>
+                    )}
                 </div>
             </motion.div>
 
@@ -171,8 +174,7 @@ export const Plans = () => {
                             <div>
                                 <strong>Vehicle History Reports</strong> — <Badge size="lg"
                                     variant="light">Unlimited</Badge>
-                                <p className={styles.featureNote}>The best report options, such as Carfax
-                                    and AutoCheck.</p>
+                                <p className={styles.featureNote}>The best report options.</p>
                                 {/*<p className={styles.featureNote}>Additional reports: $0.95 each</p>*/}
                             </div>
                         </div>
@@ -189,22 +191,27 @@ export const Plans = () => {
                             Access is approved.
                         </p>
                     </div>
+                    {!isHome && (
+                        <button className={styles.buttonPurple} onClick={() => {
+                            if (isHome) {
+                                router.push("/auth/login");
+                                return
+                            }
+                            router.push('/auctions/dealer')
 
-                    <button className={styles.buttonPurple} onClick={() => {
-                        router.push('/auctions/dealer')
-
-                        // const { url } = await subscribe({
-                        //     body: {
-                        //         planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
-                        //         priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
-                        //     }
-                        // })
-                        // if (url) {
-                        //     router.push(url)
-                        // }
-                    }}>
-                        <FaUnlock /> Get Access
-                    </button>
+                            // const { url } = await subscribe({
+                            //     body: {
+                            //         planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
+                            //         priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
+                            //     }
+                            // })
+                            // if (url) {
+                            //     router.push(url)
+                            // }
+                        }}>
+                            <FaUnlock /> Get Access
+                        </button>
+                    )}
                 </div>
             </motion.div>
         </div>

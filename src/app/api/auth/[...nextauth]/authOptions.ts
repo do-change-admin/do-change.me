@@ -123,6 +123,17 @@ export const authOptions: AuthOptions = {
             session.user.email = token.email;
             return session;
         },
+
+        async redirect({ url, baseUrl }) {
+
+            if (url.startsWith("/auth/login") || url.startsWith("/auth/register")) {
+                return baseUrl;
+            }
+
+            if (url.startsWith("/")) return `${baseUrl}${url}`;
+
+            return baseUrl;
+        },
     },
 
     pages: {

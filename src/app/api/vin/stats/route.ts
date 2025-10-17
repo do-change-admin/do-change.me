@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const url = `${process.env.REPORT_ENDPOINT!}/api/stats`;
+        const url = `${process.env.REPORT_ENDPOINT!}/stats`;
         const key = process.env.REPORT_KEY!;
+
         const response = await fetch(
             url,
             {
@@ -13,7 +14,6 @@ export async function GET() {
                 },
             }
         );
-
         if (!response.ok) {
             return NextResponse.json(
                 { error: `Remote API error: ${response.status}` },

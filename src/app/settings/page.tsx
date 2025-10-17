@@ -76,7 +76,7 @@ export default function SettingsContent() {
                                 </div>
                                 <div className={styles.planMeta}>
                                     <div>
-                                        {profileData?.subscription?.amount}/month
+                                        ${(profileData?.subscription?.amount / 100).toFixed(2)}/month
                                     </div>
                                     <div>
                                         {profileData.subscription.cancelAtPeriodEnd ? 'Subscription ends' : 'Next billing'}:{" "}
@@ -136,7 +136,7 @@ export default function SettingsContent() {
                     color="red"
                     variant="light"
                     radius="lg"
-                    onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                    onClick={() => signOut({ callbackUrl: "/home" })}
                 >
                     Logout
                 </Button>

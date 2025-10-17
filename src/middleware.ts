@@ -10,11 +10,13 @@ export async function middleware(req: NextRequest) {
     const publicPaths = [
         "/_next",
         "/favicon.ico",
+        "/images",
         "/api/auth",
         "/auth/reset-password",
         "/auth/login",
         "/auth/register",
-        "/terms",
+        "/legal",
+        "/home",
         "/api/webhooks/stripe",
     ];
 
@@ -49,7 +51,7 @@ export async function middleware(req: NextRequest) {
 
     if (!user) {
         if (!authPaths.includes(pathname)) {
-            return NextResponse.redirect(new URL("/auth/login", req.url));
+            return NextResponse.redirect(new URL("/home", req.url));
         }
         return NextResponse.next();
     }

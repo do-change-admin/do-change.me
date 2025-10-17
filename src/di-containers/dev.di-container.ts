@@ -18,6 +18,10 @@ const registerDataProviders = () => {
         .to(DataProvidersImplemetations.Mock.VehicleHistoryReports)
 
     container
+        .bind<DataProviders.VehicleHistoryReports.CacheInterface>(DataProviderTokens.vehicleHistoryReportsCache)
+        .to(DataProvidersImplemetations.InMemory.VehicleHistoryReportsCache)
+
+    container
         .bind<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
         .to(DataProvidersImplemetations.API.PicturesInPublicFolder)
 }
