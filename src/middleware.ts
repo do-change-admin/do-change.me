@@ -6,7 +6,6 @@ export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
     const user = await getToken({ req, secret: process.env.AUTH_SECRET });
 
-    // Пути без проверки
     const publicPaths = [
         "/_next",
         "/favicon.ico",
@@ -18,7 +17,6 @@ export async function middleware(req: NextRequest) {
         "/api/webhooks/stripe",
     ];
 
-    // Пути аутентификации
     const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
 
     // Разрешаем публичные пути
@@ -26,7 +24,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.next();
     }
 
-    // Доступ к /admin только для авторизованных админов
+    // Доступ к /admin только для админов
     if (pathname.startsWith("/admin")) {
         if (!user) {
             return NextResponse.redirect(new URL("/auth/login", req.url));
@@ -37,49 +35,31 @@ export async function middleware(req: NextRequest) {
         return NextResponse.next();
     }
 
-    // Забираем токен из cookie (NextAuth хранит в `next-auth.session-token`)
-    let token = "";
-    const authSessionTokens = [
-        "__Secure-next-auth.session-token",
-        "next-auth.session-token",
-    ];
-
-    for (const [key, value] of req.cookies) {
-        if (authSessionTokens.includes(key)) {
-            token = value.value;
-        }
-    }
-
     // Если пользователь не авторизован
     if (!user) {
-        // Разрешаем /home и auth страницы
-        if (pathname === "/" || (!authPaths.includes(pathname) && !publicPaths.some((path) => pathname.startsWith(path)))) {
-            return NextResponse.redirect(new URL("/home", req.url));
+        // Разрешаем /home и auth пути
+        if (
+            pathname.startsWith("/home") ||
+            authPaths.some((path) => pathname.startsWith(path)) ||
+            publicPaths.some((path) => pathname.startsWith(path))
+        ) {
+            return NextResponse.next();
         }
-        return NextResponse.next();
+
+        // Всё остальное ведёт на /home
+        return NextResponse.redirect(new URL("/home", req.url));
     }
 
-    // Если пользователь авторизован — не пускать его на /auth/*
-    if (authPaths.some((path) => pathname.startsWith(path))) {
+    // Если пользователь авторизован — не пускать его на /auth/* и /home
+    if (
+        authPaths.some((path) => pathname.startsWith(path)) ||
+        pathname.startsWith("/home")
+    ) {
         return NextResponse.redirect(new URL("/", req.url));
     }
 
-    // Всё остальное — разрешено
+    // Всё остальное разрешено
     return NextResponse.next();
-
-    // try {
-    //   // Проверяем JWT
-    //   await jwtVerify(token, new TextEncoder().encode(process.env.NEXTAUTH_SECRET!));
-    //
-    //   // Авторизованный не должен попадать на login/register
-    //   return NextResponse.next();
-    // } catch (e) {
-    //   console.error("JWT invalid", e);
-    //   if (!authPaths.includes(pathname)) {
-    //     return NextResponse.redirect(new URL("/auth/login", req.url));
-    //   }
-    //   return NextResponse.next();
-    // }
 }
 
 export const config = {
