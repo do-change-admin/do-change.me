@@ -21,7 +21,7 @@ export default function ReportPage() {
 
     return (
         <div>
-            <Group justify="space-between" p='lg'>
+            <Group justify="space-between" p='1rem 2rem'>
                 <Button leftSection={<FaArrowLeft />} radius={'lg'} variant="light" onClick={() => { router.back() }}>Go back</Button>
                 <PdfDownloader markup={reportHtml!} />
             </Group>

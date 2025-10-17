@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Button } from "@mantine/core";
+import {FaDownload} from "react-icons/fa";
 
 export type Props = {
     markup: string
@@ -41,7 +42,7 @@ export default function PdfDownloader({ markup }: Props) {
 
     return (
         <>
-            <Button radius={'lg'} onClick={handleDownload}>📄 Download PDF</Button>
+            <Button leftSection={<FaDownload/>} radius={'lg'} onClick={handleDownload}> PDF</Button>
             <iframe
                 ref={iframeRef}
                 style={{ display: "none" }}
