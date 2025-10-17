@@ -19,7 +19,9 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const searchParams = useSearchParams();
     const router = useRouter()
     const { data: profileData } = useProfile()
-    const vin = searchParams.get("vin") || '1C6RD6FT1CS310366';
+    const { data: actionsHistory, isFetching } = useActionsHistory({ skip: 0, take: 1000 })
+    const lastCarVin = Object.keys(actionsHistory || {})?.[0]
+    const vin = searchParams.get("vin") || (isFetching ? '' : (lastCarVin || '1C6RD6FT1CS310366'));
     const [activeTab, setActiveTab] = useState<"vin" | "plate">("vin");
 
     const actionsHistoryResponse = useActionsHistory({ skip: 0, take: 10 })
@@ -27,11 +29,9 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(vin);
     const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(vin);
 
-    const { data: actionsHistory } = useActionsHistory({ skip: 0, take: 1000 })
-    const lastCarVin = Object.keys(actionsHistory || {})?.[0]
-    if (!searchParams.get("vin") && lastCarVin) {
-        router.push(`/?vin=${lastCarVin}`)
-    }
+    // if (!searchParams.get("vin") && lastCarVin) {
+    //     router.push(`/?vin=${lastCarVin}`)
+    // }
 
     return (
         <section className={styles.searchSection}>
@@ -44,7 +44,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                         <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
                     </div>
                     <Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />
-                    {(isLoading || salvageIsLoading) && <LoadingMinute label="" />}
+                    {(isLoading || salvageIsLoading || isFetching) && <LoadingMinute label="" />}
                     <div className={styles.searchSectionHeader}>
                         <div className={styles.header}>
                             <div className={styles.headerFlex}>
