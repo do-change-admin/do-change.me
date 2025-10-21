@@ -121,7 +121,6 @@
     padding: 2rem;
     background: var(--text-texas-blue);
     overflow: hidden;
-    box-shadow: var(--shadow);
 }
 
 .bgSalvage {

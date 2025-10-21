@@ -10,6 +10,7 @@ import '@mantine/dates/styles.css';
 import "@mantine/carousel/styles.css";
 import '@mantine/notifications/styles.css';
 
+
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],

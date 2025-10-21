@@ -245,3 +245,24 @@ export const useStats= () => {
         }
     });
 }
+
+
+async function fetchOdometer(vin: string) {
+    const res = await fetch(`/api/odometer?vin=${vin}`)
+    if (!res.ok) throw new Error('Failed to fetch vehicle history')
+    return res.json()
+}
+
+export function useOdometer(vin?: string) {
+    return useQuery({
+        queryKey: ['odometer', vin],
+        queryFn: () => {
+            if (!vin) throw new Error('VIN is required')
+            return fetchOdometer(vin)
+        },
+        enabled: () => {
+            const { success } = VinSchema.safeParse(vin);
+            return success;
+        },
+    })
+}
