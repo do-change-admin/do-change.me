@@ -12,9 +12,9 @@ const mappers = {
     toFindListPayload: (source: FindListPayload): Prisma.SyndicationRequestDraftsWhereInput => {
         return {
             userId: source.userId,
-            make: source.make,
-            model: source.model,
-            vin: source.vin
+            make: source.make ? { contains: source.make, mode: 'insensitive' } : undefined,
+            model: source.model ? { contains: source.model, mode: 'insensitive' } : undefined,
+            vin: source.vin ? { contains: source.vin, mode: 'insensitive' } : undefined
         };
     },
     toListModel: (source: Prisma.SyndicationRequestDraftsGetPayload<{}>): ListModel => {

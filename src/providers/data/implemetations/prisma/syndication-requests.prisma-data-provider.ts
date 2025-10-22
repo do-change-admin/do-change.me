@@ -14,10 +14,9 @@ const mappers = {
         return {
             userId: source.userId,
             status: source.status,
-            make: source.make,
-            model: source.model,
-            vin: source.vin
-
+            make: source.make ? { contains: source.make, mode: 'insensitive' } : undefined,
+            model: source.model ? { contains: source.model, mode: 'insensitive' } : undefined,
+            vin: source.vin ? { contains: source.vin, mode: 'insensitive' } : undefined
         };
     },
     toListModel: (source: Prisma.SyndicationRequestsGetPayload<{ include: { user: true } }>): ListModel => {
