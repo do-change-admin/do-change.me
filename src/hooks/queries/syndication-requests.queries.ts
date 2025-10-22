@@ -8,7 +8,7 @@ type API = SyndicationRequestsAPI;
 const apiURL = '/api/syndication-requests';
 
 
-export const useList = ( // previously useCarsForSaleUserList
+export const useList = (
     query: Omit<API["GET"]["payload"]["query"], 'status'> & { status: SyndicationRequestStatusNames }
 ) => {
     return useQuery<API["GET"]["response"], API["GET"]["error"]>({
@@ -49,7 +49,7 @@ export const useList = ( // previously useCarsForSaleUserList
     });
 };
 
-export const useManualPosting = () => { // previously useCarForSaleUserPosting
+export const useManualPosting = () => {
     const queryClient = useQueryClient()
     return useMutation<void, API['POST']['error'], API['POST']['payload']['query'] & { photos: File[] }>({
         mutationFn: async (payload) => {
@@ -76,7 +76,7 @@ export const useManualPosting = () => { // previously useCarForSaleUserPosting
     })
 }
 
-export const usePostingFromDraft = () => { // <- new
+export const usePostingFromDraft = () => {
     const queryClient = useQueryClient()
 
     return useMutation<API['FromDraft_POST']['response'], API['FromDraft_POST']['error'], API['FromDraft_POST']['payload']>({

@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 type API = SyndicationRequestDraftsAPI
 const apiURL = '/api/syndication-requests/drafts'
 
-export const useCreation = () => { // <- useCarForSaleDraftCreation
+export const useCreation = () => {
     return useMutation<void, API['POST']['error'], API['POST']['payload']['query'] & { photos?: File[] }>({
         mutationFn: async (payload) => {
             const formData = new FormData();
@@ -28,7 +28,7 @@ export const useCreation = () => { // <- useCarForSaleDraftCreation
     })
 }
 
-export const useUpdate = () => { // <- useCarForSaleDraftUpdate
+export const useUpdate = () => {
     return useMutation<void, API['PATCH']['error'], API['PATCH']['payload']['query'] & { photos?: File[] }>({
         mutationFn: async (payload) => {
             const formData = new FormData();
@@ -51,7 +51,7 @@ export const useUpdate = () => { // <- useCarForSaleDraftUpdate
     })
 }
 
-export const useDetails = (draftId: string | null) => { // <- useCarForSaleDraftDetail
+export const useDetails = (draftId: string | null) => {
     return useQuery<API['Details_GET']['response'], API['Details_GET']['error']>({
         queryKey: ['syndication-requests', 'drafts', 'details', draftId],
         queryFn: () => {
