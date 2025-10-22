@@ -7,16 +7,13 @@ import { registerControllers } from './register-controllers'
 const container = new Container()
 
 const registerDataProviders = () => {
-    const syndicationRequests = new DataProvidersImplemetations.InMemory.SyndicationRequests()
-    const syndicationRequestDrafts = new DataProvidersImplemetations.InMemory.SyndicationRequestDrafts()
-
     container
         .bind<DataProviders.SyndicationRequests.Interface>(DataProviderTokens.syndicationRequests)
-        .toConstantValue(syndicationRequests)
+        .to(DataProvidersImplemetations.Prisma.SyndicationRequests)
 
     container
         .bind<DataProviders.SyndicationRequestDrafts.Interface>(DataProviderTokens.syndicationRequestDrafts)
-        .toConstantValue(syndicationRequestDrafts)
+        .to(DataProvidersImplemetations.Prisma.SyndicationRequestDrafts)
 
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DataProviderTokens.vehicleHistoryReports)
