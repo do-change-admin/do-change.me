@@ -144,7 +144,7 @@ export const generateInMemoryCRUDProvider = <DataProvider>(options?: {
 
             this.data = this.data.filter((x, i) => i !== index)
 
-            return { wasFoundBeforeDeletion: index > -1 }
+            return { success: index > -1 }
         }
     }
     return InMemoryCRUDProvider

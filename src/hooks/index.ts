@@ -7,5 +7,5 @@ export * from './_auctions.hooks'
 export * from './_utils.hooks'
 export * from './_plans.hooks'
 export * from './_subscriptions'
-export * from './_car-sale.admin.hooks'
-export * from './_car-sale.user.hooks'
+
+export * as Queries from './queries'

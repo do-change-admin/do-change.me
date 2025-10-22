@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CarFormAdder, CarInfo, CarPhoto } from "./CarFormAdder";
-import {
-    useCarForSaleDraftDetail,
-    useCarForSaleDraftUpdate,
-    useCarForSaleUserPosting,
-} from "@/hooks";
+import { Queries } from "@/hooks";
 
 export interface CarDraftAdderProps {
     opened: boolean;
@@ -19,11 +15,9 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
 }) => {
     const [vin, setVin] = useState("");
 
-    const { data: draft, isLoading } = useCarForSaleDraftDetail({
-        id: draftId,
-    });
-    const { mutateAsync: updateDraft } = useCarForSaleDraftUpdate();
-    const { mutateAsync: postNewCar } = useCarForSaleUserPosting();
+    const { data: draft, isLoading } = Queries.SyndicationRequestDrafts.useDetails(draftId);
+    const { mutateAsync: updateDraft } = Queries.SyndicationRequestDrafts.useUpdate();
+    const { mutateAsync: postNewCar } = Queries.SyndicationRequests.usePostingFromDraft();
 
     useEffect(() => {
         if (draft) {
@@ -36,7 +30,7 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
 
         const currentIds = photos
             .filter((p) => p.type === "remote")
-            .map((p) => p.id);
+            .map((p) => p.url);
 
         return draft.currentPhotos
             .filter((p) => !currentIds.includes(p.id))
@@ -52,27 +46,17 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
             mileage: values.mileage,
             price: values.price,
             id: draftId,
-            newPhotos: values.photos
+            photos: values.photos
                 .filter((p) => p.type === "local")
                 .map((p) => p.file),
-            removedPhotoIds: getRemovedPhotos(values.photos),
+            photoIdsToBeRemoved: getRemovedPhotos(values.photos),
         });
         onClose();
     };
 
     const handleSubmitForSyndication = async (values: Required<CarInfo>) => {
-        await postNewCar({
-            make: values.make,
-            mileage: values.mileage,
-            model: values.model,
-            photos: values.photos
-                .filter((photo) => photo.type === "local")
-                .map((photo) => photo.file),
-            price: values.price,
-            vin: vin,
-            year: values.year,
-            draftId: draftId,
-        });
+        await handleUpdateDraft(values)
+        await postNewCar({ query: { draftId } })
 
         onClose();
     };
@@ -81,10 +65,10 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
 
     const remotePhotos: CarPhoto[] = draft.currentPhotos
         ? draft.currentPhotos.map((photo) => ({
-              type: "remote",
-              url: photo.url,
-              id: photo.id,
-          }))
+            type: "remote",
+            url: photo.url,
+            id: photo.id,
+        }))
         : [];
 
     return (

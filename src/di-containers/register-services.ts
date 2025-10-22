@@ -2,26 +2,52 @@ import { Container } from "inversify"
 import { DataProviderTokens, ServiceTokens } from "./tokens.di-container"
 import { DataProviders } from "@/providers"
 import { Services } from "@/services"
+import { SyndicationRequestsService } from "@/services/syndication-requests.service"
+import { SyndicationRequestDraftsService } from "@/services/syndication-request-drafts.service"
+import { SyndicationRequestManagementService } from "@/services/syndication-request-management.service"
 
-export type CarSaleUserServiceFactory = (userId: string) => Services.CarSaleUser.Instance
+export type SyndicationRequestsServiceFactory = (userId: string) => SyndicationRequestsService
+export type SyndicationRequestDraftsServiceFactory = (userId: string) => SyndicationRequestDraftsService
 
 export const registerServices = (container: Container) => {
     container.
-        bind<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)
+        bind<SyndicationRequestsServiceFactory>(ServiceTokens.syndicationRequestsFactory)
         .toFactory(ctx => {
             return (userId) => {
-                const dataProvider = ctx.get<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
+                const dataProvider = ctx.get<DataProviders.SyndicationRequests.Interface>(DataProviderTokens.syndicationRequests)
+                const draftsDataProvider = ctx.get<DataProviders.SyndicationRequestDrafts.Interface>(DataProviderTokens.syndicationRequestDrafts)
+
                 const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
-                return new Services.CarSaleUser.Instance(
+                return new SyndicationRequestsService(
                     dataProvider,
+                    draftsDataProvider,
                     picturesDataProvider,
                     userId
                 )
             }
         })
+
+    container.
+        bind<SyndicationRequestDraftsServiceFactory>(ServiceTokens.syndicationRequestDraftsFactory)
+        .toFactory(ctx => {
+            return (userId) => {
+                const dataProvider = ctx.get<DataProviders.SyndicationRequestDrafts.Interface>(DataProviderTokens.syndicationRequestDrafts)
+                const requestsDataProvider = ctx.get<DataProviders.SyndicationRequests.Interface>(DataProviderTokens.syndicationRequests)
+
+                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
+                return new SyndicationRequestDraftsService(
+                    dataProvider,
+                    requestsDataProvider,
+                    picturesDataProvider,
+                    userId
+                )
+            }
+        })
+
     container
-        .bind<Services.CarSaleAdmin.Instance>(ServiceTokens.carSaleAdmin)
-        .to(Services.CarSaleAdmin.Instance)
+        .bind<SyndicationRequestManagementService>(ServiceTokens.syndicationRequestManagement)
+        .to(SyndicationRequestManagementService)
+
     container
         .bind<Services.Email.Instance>(ServiceTokens.email)
         .to(Services.Email.Instance)

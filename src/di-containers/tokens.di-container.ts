@@ -1,8 +1,9 @@
 export const DataProviderTokens = {
-    carsForSale: Symbol.for("CARS-FOR-SALE-DATA-PROVIDER"),
     vehicleHistoryReports: Symbol.for("VEHICLE-HISTORY-REPORTS-DATA-PROVIDER"),
     vehicleHistoryReportsCache: Symbol.for("VEHICLE-HISTORY-REPORTS-CACHE-DATA-PROVIDER"),
-    pictures: Symbol.for("PICTURES-DATA-PROVIDER")
+    pictures: Symbol.for("PICTURES-DATA-PROVIDER"),
+    syndicationRequests: Symbol.for("SYNDICATION-REQUESTS-DATA-PROVIDER"),
+    syndicationRequestDrafts: Symbol.for("SYNDICATION-REQUEST-DRAFTS")
 }
 
 export const FunctionProviderTokens = {
@@ -10,11 +11,14 @@ export const FunctionProviderTokens = {
 }
 
 export const ServiceTokens = {
-    carSaleUserFactory: Symbol.for('CAR-SALE-USER-SERVICE-FACTORY'),
-    carSaleAdmin: Symbol.for('CAR-SALE-ADMIN-SERVICE'),
-    email: Symbol.for('EMAIL-SERVICE')
+    email: Symbol.for('EMAIL-SERVICE'),
+    syndicationRequestsFactory: Symbol.for("SYNDICATION-REQUESTS-SERVICE-FACTORY"),
+    syndicationRequestDraftsFactory: Symbol.for("SYNDICATION-REQUEST-DRAFTS-SERVICE-FACTORY"),
+    syndicationRequestManagement: Symbol.for("SYNDICATION-REQUEST-MANAGEMENT-SERVICE")
 }
 
 export const ControllerTokens = {
-    carSaleUser: Symbol.for("CAR-SALE-USER-CONTROLLER")
+    syndicationRequests: Symbol.for("SYNDICATION-REQUESTS-CONTROLLER"),
+    syndicationRequestDrafts: Symbol.for("SYNDICATION-REQUEST-DRAFTS-CONTROLLER"),
+    syndicationRequestManagement: Symbol.for("SYNDICATION-REQUEST-MANAGEMENT-CONTROLLER")
 }

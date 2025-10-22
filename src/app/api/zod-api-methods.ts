@@ -402,3 +402,9 @@ export const zodApiMethod_DEPRECATED = <
         }
     };
 };
+
+export type ZodControllerSchemas = Record<string, ZodAPISchemas>
+
+export type ZodAPIController<Schemas extends Record<string, { body: unknown, query: unknown, response: unknown }>> = {
+    [k in keyof Schemas]: ZodAPIMethod<Schemas[k]>
+}

@@ -7,11 +7,16 @@ import { registerControllers } from './register-controllers'
 const container = new Container()
 
 const registerDataProviders = () => {
-    const carsForSaleInMemoryDataProvider = new DataProvidersImplemetations.InMemory.CarsForSale()
+    const syndicationRequests = new DataProvidersImplemetations.InMemory.SyndicationRequests()
+    const syndicationRequestDrafts = new DataProvidersImplemetations.InMemory.SyndicationRequestDrafts()
 
     container
-        .bind<DataProviders.CarsForSale.Interface>(DataProviderTokens.carsForSale)
-        .toConstantValue(carsForSaleInMemoryDataProvider)
+        .bind<DataProviders.SyndicationRequests.Interface>(DataProviderTokens.syndicationRequests)
+        .toConstantValue(syndicationRequests)
+
+    container
+        .bind<DataProviders.SyndicationRequestDrafts.Interface>(DataProviderTokens.syndicationRequestDrafts)
+        .toConstantValue(syndicationRequestDrafts)
 
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DataProviderTokens.vehicleHistoryReports)

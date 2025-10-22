@@ -1,5 +1,4 @@
 export * as ActionsHistoryService from './actions-history'
 export * from './auction-access-requests'
 export * from './profile'
-export * from './car-sale'
 export * from './email'

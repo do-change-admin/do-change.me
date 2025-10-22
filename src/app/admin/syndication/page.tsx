@@ -16,30 +16,28 @@ import {
     TextInput,
 } from "@mantine/core";
 import { FaChevronDown, FaLink, FaPlus } from "react-icons/fa6";
-import { CarSaleStatus } from "@/entities";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { useCarsForSaleAdminFilters, useCarsForSaleAdminList } from "@/hooks";
 import {
     getColorByCarSaleStatus,
     getVisualDataByCarSaleMarketplaceLink,
 } from "@/app/sdk/sdk.utils";
+import type { SyndicationRequestActiveStatusNames, SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
+import { Queries } from "@/hooks";
 
 export default function VehiclesPage() {
     const [vin, setVin] = useState("");
     const [make, setMake] = useState("");
     const [model, setModel] = useState("");
-    const [activeTab, setActiveTab] = useState<CarSaleStatus>("active");
+    const [activeTab, setActiveTab] = useState<SyndicationRequestActiveStatusNames>("active");
 
-    const { data } = useCarsForSaleAdminList({
-        pageSize: 10,
-        zeroBasedIndex: 0,
+    const { data } = Queries.SyndicationRequestManagement.useList({
         make,
         model,
         status: activeTab,
         vin,
     });
 
-    const { data: filters } = useCarsForSaleAdminFilters();
+    const { data: filters } = Queries.SyndicationRequestManagement.useFilters();
 
     const vehicles = data?.items ?? [];
 

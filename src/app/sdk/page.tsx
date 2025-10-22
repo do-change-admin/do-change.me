@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { type CarSaleStatus } from "@/entities";
 import {
     Button,
     Tabs,
@@ -26,10 +25,11 @@ import {
     getColorByCarSaleStatus,
     getVisualDataByCarSaleMarketplaceLink,
 } from "./sdk.utils";
-import { useCarsForSaleUserFilters, useCarsForSaleUserList } from "@/hooks";
 import { CarAdder } from "@/components/CarAdder/CarAdder";
 import { useDisclosure } from "@mantine/hooks";
 import Sell from "@/app/sdk/plug";
+import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
+import { Queries } from "@/hooks";
 
 const isDEV = process.env.NODE_ENV === "development";
 
@@ -39,18 +39,15 @@ export default function VehiclesPage() {
     const [make, setMake] = useState("");
     const [model, setModel] = useState("");
     const [editingId, setEditingId] = useState<string | undefined>();
-    const [activeTab, setActiveTab] = useState<CarSaleStatus>("active");
+    const [activeTab, setActiveTab] = useState<SyndicationRequestStatusNames>("active");
 
-    const { data } = useCarsForSaleUserList({
-        pageSize: 10,
-        zeroBasedIndex: 0,
+    const { data } = Queries.SyndicationRequests.useList({
         make,
         model,
         status: activeTab,
         vin,
-    });
-
-    const { data: filters } = useCarsForSaleUserFilters();
+    })
+    const { data: filters } = Queries.SyndicationRequests.useFilters();
 
     const vehicles = data?.items ?? [];
 
@@ -67,7 +64,7 @@ export default function VehiclesPage() {
     if (!isDEV) {
         return (
             <div className={styles.container}>
-                <Sell/>
+                <Sell />
             </div>
         )
     }

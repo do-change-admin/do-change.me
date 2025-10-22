@@ -5,8 +5,9 @@ import { devContainer } from './dev.di-container'
 import { stageContainer } from './stage.di-container'
 import { ControllerTokens, ServiceTokens } from './tokens.di-container'
 import { Services } from '@/services'
-import { CarSaleUserServiceFactory } from './register-services'
-import { Controllers } from '@/controllers'
+import type { SyndicationRequestsController } from '@/controllers/syndication-requests.controller'
+import type { SyndicationRequestDraftsController } from '@/controllers/syndication-request-drafts.controller'
+import type { SyndicationRequestManagementController } from '@/controllers/syndication-request-management.controller'
 
 const getDIContainer = () => {
     if (process.env['IN_TEST']) {
@@ -37,23 +38,18 @@ export const DIContainer = () => {
         /**
          * Использовать только для временных решений
          */
-        _CarSaleUserService: (userId: string) => {
-            return container.get<CarSaleUserServiceFactory>(ServiceTokens.carSaleUserFactory)(userId)
-        },
-        /**
-        * Использовать только для временных решений
-        */
-        _CarSaleAdminService: () => {
-            return container.get<Services.CarSaleAdmin.Instance>(ServiceTokens.carSaleAdmin)
-        },
-        /**
-         * Использовать только для временных решений
-         */
         _EmailService: () => {
             return container.get<Services.Email.Instance>(ServiceTokens.email)
         },
-        CarSaleUserController: () => {
-            return container.get<Controllers.CarSale.User.Instance>(ControllerTokens.carSaleUser)
+
+        SyndicationRequestsController: () => {
+            return container.get<SyndicationRequestsController>(ControllerTokens.syndicationRequests)
+        },
+        SyndicationRequestDraftsController: () => {
+            return container.get<SyndicationRequestDraftsController>(ControllerTokens.syndicationRequestDrafts)
+        },
+        SyndicationRequestManagementController: () => {
+            return container.get<SyndicationRequestManagementController>(ControllerTokens.syndicationRequestManagement)
         }
     }
 }

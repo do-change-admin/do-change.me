@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { CarFormAdder, CarInfo } from "./CarFormAdder";
 import {
+    Queries,
     useBaseInfoByVIN,
-    useCarForSaleDraftCreation,
-    useCarForSaleUserPosting,
 } from "@/hooks";
 
 export interface CarNewAdderProps {
@@ -18,8 +17,8 @@ export const CarNewAdder: React.FC<CarNewAdderProps> = ({
     const [vin, setVin] = useState("");
 
     const { data: baseInfo } = useBaseInfoByVIN(vin);
-    const { mutateAsync: createDraft } = useCarForSaleDraftCreation();
-    const { mutateAsync: postNewCar } = useCarForSaleUserPosting();
+    const { mutateAsync: createDraft } = Queries.SyndicationRequestDrafts.useCreation();
+    const { mutateAsync: postNewCar } = Queries.SyndicationRequests.useManualPosting();
 
     const handleCreateDraft = async (values: CarInfo) => {
         await createDraft({
