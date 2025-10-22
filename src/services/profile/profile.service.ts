@@ -11,7 +11,7 @@ export class ProfileService {
     constructor(
         private readonly email: EmailAddress,
         private readonly fileProvider: ProvidesFileUploading & ProvidesFileLink
-    ) { }
+    ) {}
 
     profileData = async (): Promise<ProfileData> => {
         const rawEmail = this.email.address();
@@ -29,7 +29,7 @@ export class ProfileService {
         });
 
         if (!profile) {
-            throw businessError('profile was not found', undefined, 404)
+            throw businessError("profile was not found", undefined, 404);
         }
 
         const activePlan = profile.userPlan.at(0);
@@ -51,6 +51,7 @@ export class ProfileService {
         const service = new RequestsMeteringService(profile.id);
         const usedReports = await service.getUsage(FeatureKey.Report);
         return {
+            id: profile.id,
             bio: profile.bio ?? "",
             email: profile.email,
             firstName: profile.firstName ?? "",
@@ -64,17 +65,17 @@ export class ProfileService {
 
             subscription: activePlan
                 ? {
-                    planName: activePlan.plan.name,
-                    planSlug: activePlan.plan.slug,
-                    priceSlug: activePlan.price.slug,
-                    status: activePlan.status,
-                    cancelAtPeriodEnd: activePlan.cancelAtPeriodEnd,
-                    canceledAt: activePlan.canceledAt,
-                    currentPeriodEnd: activePlan.currentPeriodEnd,
-                    amount: activePlan.price.amount,
-                    currency: activePlan.price.currency,
-                    id: activePlan.id,
-                }
+                      planName: activePlan.plan.name,
+                      planSlug: activePlan.plan.slug,
+                      priceSlug: activePlan.price.slug,
+                      status: activePlan.status,
+                      cancelAtPeriodEnd: activePlan.cancelAtPeriodEnd,
+                      canceledAt: activePlan.canceledAt,
+                      currentPeriodEnd: activePlan.currentPeriodEnd,
+                      amount: activePlan.price.amount,
+                      currency: activePlan.price.currency,
+                      id: activePlan.id,
+                  }
                 : null,
             photoLink,
             birthDate: profile.birthDate,

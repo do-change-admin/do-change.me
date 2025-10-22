@@ -15,9 +15,12 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
 }) => {
     const [vin, setVin] = useState("");
 
-    const { data: draft, isLoading } = Queries.SyndicationRequestDrafts.useDetails(draftId);
-    const { mutateAsync: updateDraft } = Queries.SyndicationRequestDrafts.useUpdate();
-    const { mutateAsync: postNewCar } = Queries.SyndicationRequests.usePostingFromDraft();
+    const { data: draft, isLoading } =
+        Queries.SyndicationRequestDrafts.useDetails(draftId);
+    const { mutateAsync: updateDraft } =
+        Queries.SyndicationRequestDrafts.useUpdate();
+    const { mutateAsync: postNewCar } =
+        Queries.SyndicationRequests.usePostingFromDraft();
 
     useEffect(() => {
         if (draft) {
@@ -30,7 +33,7 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
 
         const currentIds = photos
             .filter((p) => p.type === "remote")
-            .map((p) => p.url);
+            .map((p) => p.id);
 
         return draft.currentPhotos
             .filter((p) => !currentIds.includes(p.id))
@@ -55,8 +58,8 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
     };
 
     const handleSubmitForSyndication = async (values: Required<CarInfo>) => {
-        await handleUpdateDraft(values)
-        await postNewCar({ query: { draftId } })
+        await handleUpdateDraft(values);
+        await postNewCar({ query: { draftId } });
 
         onClose();
     };
@@ -65,10 +68,10 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
 
     const remotePhotos: CarPhoto[] = draft.currentPhotos
         ? draft.currentPhotos.map((photo) => ({
-            type: "remote",
-            url: photo.url,
-            id: photo.id,
-        }))
+              type: "remote",
+              url: photo.url,
+              id: photo.id,
+          }))
         : [];
 
     return (

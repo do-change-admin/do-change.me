@@ -101,6 +101,9 @@ export const usePostingFromDraft = () => {
                     { status: "pending publisher" },
                 ],
             });
+            queryClient.invalidateQueries({
+                queryKey: ["syndication-requests", "user", { status: "draft" }],
+            });
         },
     });
 };

@@ -21,11 +21,17 @@ import {
     getColorByCarSaleStatus,
     getVisualDataByCarSaleMarketplaceLink,
 } from "@/app/sdk/sdk.utils";
-import { useDebouncedValue } from "@mantine/hooks";
+import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestActiveStatusNames } from "@/entities/sindycation-request-status.entity";
 import { CardSlider } from "@/components";
+import { CarEditor } from "@/components/_admin/CarEditor/CarEditor";
 
 export default function VehiclesPage() {
+    const [opened, { open, close }] = useDisclosure(false);
+    const [editingCarId, setEditingCarId] = useState<string | undefined>();
+    const [editingUserCarId, setEditingUserCarId] = useState<
+        string | undefined
+    >();
     const [vin, setVin] = useState("");
     const [debouncedVin] = useDebouncedValue(vin, 500);
     const [make, setMake] = useState<null | string>(null);
@@ -46,6 +52,17 @@ export default function VehiclesPage() {
         setVin("");
         setMake(null);
         setModel(null);
+    };
+
+    const handleClose = () => {
+        setEditingCarId(undefined);
+        close();
+    };
+
+    const handleEdit = (id: string, userId: string) => {
+        setEditingCarId(id);
+        setEditingUserCarId(userId);
+        open();
     };
 
     const vehicles = data?.items ?? [];
@@ -130,13 +147,14 @@ export default function VehiclesPage() {
                 </Stack>
             </Card>
 
-            {(vehicles ?? []).map((v) => (
-                <div className={styles.vehicleGrid}>
+            <div className={styles.vehicleGrid}>
+                {vehicles.map((v) => (
                     <Card
                         shadow="sm"
                         radius="md"
                         withBorder
                         className={styles.vehicleCard}
+                        onClick={() => handleEdit(v.id, v.userId)}
                     >
                         <Card.Section style={{ position: "relative" }}>
                             {v.photoLinks.length > 0 ? (
@@ -188,8 +206,16 @@ export default function VehiclesPage() {
                             </Stack>
                         </Stack>
                     </Card>
-                </div>
-            ))}
+                ))}
+            </div>
+            {opened && editingCarId && editingUserCarId && (
+                <CarEditor
+                    carId={editingCarId}
+                    opened={opened}
+                    onClose={handleClose}
+                    userId={editingUserCarId}
+                />
+            )}
         </div>
     );
 }

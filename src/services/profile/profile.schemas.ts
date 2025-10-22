@@ -14,6 +14,7 @@ export const subscriptionSchema = z.object({
 });
 
 export const profileSchema = z.object({
+    id: z.string(),
     firstName: z.string(),
     lastName: z.string(),
     phone: z.string(),
