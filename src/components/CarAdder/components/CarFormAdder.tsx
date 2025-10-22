@@ -92,6 +92,20 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
         setPrice(val);
     };
 
+    const handleMakeChange = (val: string) => {
+        setMake(val);
+    };
+
+    const handleModelChange = (val: string) => {
+        setModel(val);
+    };
+
+    const handleYearChange = (val: string) => {
+        if (val) {
+            setYear(Number(val));
+        }
+    };
+
     const handleAddPhotos = (files: File[]) => {
         if (!files.length) return;
         setPhotos((prev) => {
@@ -189,18 +203,20 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                             <TextInput
                                 label="Make"
                                 placeholder="Auto-filled from VIN"
-                                readOnly
-                                classNames={{ input: styles.readonlyInput }}
                                 value={make}
+                                onChange={(e) =>
+                                    handleMakeChange(e.currentTarget.value)
+                                }
                             />
                         </Grid.Col>
                         <Grid.Col span={{ base: 12, sm: 6 }}>
                             <TextInput
                                 label="Model"
                                 placeholder="Auto-filled from VIN"
-                                readOnly
-                                classNames={{ input: styles.readonlyInput }}
                                 value={model}
+                                onChange={(e) =>
+                                    handleModelChange(e.currentTarget.value)
+                                }
                             />
                         </Grid.Col>
 
@@ -208,9 +224,12 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                             <TextInput
                                 label="Year"
                                 placeholder="Auto-filled from VIN"
-                                readOnly
-                                classNames={{ input: styles.readonlyInput }}
                                 value={year}
+                                type="number"
+                                min={1}
+                                onChange={(e) =>
+                                    handleYearChange(e.currentTarget.value)
+                                }
                             />
                         </Grid.Col>
                         <Grid.Col span={{ base: 12, sm: 6 }}>

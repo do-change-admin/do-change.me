@@ -1,65 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { useDebouncedValue } from "@mantine/hooks";
-import {
-    Button,
-    Tabs,
-    TextInput,
-    Select,
-    Card,
-    Badge,
-    Group,
-    Text,
-    Stack,
-} from "@mantine/core";
-import {
-    FaPlus,
-    FaSearch,
-    FaLink,
-    FaTimes,
-    FaChevronDown,
-} from "react-icons/fa";
+
 import styles from "./page.module.css";
+import {
+    Badge,
+    Button,
+    Card,
+    Group,
+    Select,
+    Stack,
+    Tabs,
+    Text,
+    TextInput,
+} from "@mantine/core";
+import { FaChevronDown, FaLink } from "react-icons/fa6";
+import { FaSearch, FaTimes } from "react-icons/fa";
+import { Queries } from "@/hooks";
 import {
     getColorByCarSaleStatus,
     getVisualDataByCarSaleMarketplaceLink,
-} from "./sdk.utils";
-import { CarAdder } from "@/components/CarAdder/CarAdder";
-import { useDisclosure } from "@mantine/hooks";
-import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
-import { Queries } from "@/hooks";
+} from "@/app/sdk/sdk.utils";
+import { useDebouncedValue } from "@mantine/hooks";
+import { SyndicationRequestActiveStatusNames } from "@/entities/sindycation-request-status.entity";
 import { CardSlider } from "@/components";
 
 export default function VehiclesPage() {
-    const [opened, { open, close }] = useDisclosure(false);
     const [vin, setVin] = useState("");
     const [debouncedVin] = useDebouncedValue(vin, 500);
     const [make, setMake] = useState<null | string>(null);
     const [model, setModel] = useState<null | string>(null);
-    const [editingId, setEditingId] = useState<string | undefined>();
     const [activeTab, setActiveTab] =
-        useState<SyndicationRequestStatusNames>("active");
+        useState<SyndicationRequestActiveStatusNames>("active");
 
-    const { data } = Queries.SyndicationRequests.useList({
+    const { data } = Queries.SyndicationRequestManagement.useList({
         make: make ?? "",
         model: model ?? "",
         status: activeTab,
         vin: debouncedVin,
     });
-    const { data: filters } = Queries.SyndicationRequests.useFilters();
 
-    const vehicles = data?.items ?? [];
-
-    const handleEdit = (id: string) => {
-        setEditingId(id);
-        open();
-    };
-
-    const handleClose = () => {
-        setEditingId(undefined);
-        close();
-    };
+    const { data: filters } = Queries.SyndicationRequestManagement.useFilters();
 
     const handleClearFilters = () => {
         setVin("");
@@ -67,49 +48,43 @@ export default function VehiclesPage() {
         setModel(null);
     };
 
+    const vehicles = data?.items ?? [];
+
     return (
         <div className={styles.container}>
-            {/* Add Vehicle Button */}
-            <Group mb="lg">
-                <Button
-                    leftSection={<FaPlus />}
-                    color="blue"
-                    radius="md"
-                    className={styles.addButton}
-                    onClick={open}
-                >
-                    Add Vehicle
-                </Button>
-            </Group>
-
-            {/* Tabs */}
             <Tabs
                 value={activeTab}
                 onChange={(value) => setActiveTab(value as any)}
                 mb="lg"
             >
                 <Tabs.List>
-                    <Tabs.Tab value="draft">
-                        Draft <Badge color="blue" variant="light" ml={5} />
-                    </Tabs.Tab>
                     <Tabs.Tab value="pending publisher">
-                        Pending Publisher{" "}
-                        <Badge color="orange" variant="light" ml={5} />
+                        Pending Review{" "}
+                        <Badge color="orange" variant="light" ml={5}>
+                            {/*vehicles.filter(v => v.status === 'Pending').length*/}
+                        </Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="active">
-                        Active <Badge color="green" variant="light" ml={5} />
+                        Active{" "}
+                        <Badge color="green" variant="light" ml={5}>
+                            {/*vehicles.filter(v => v.status === 'Sold').length*/}
+                        </Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="pending sales">
                         Pending Sales{" "}
-                        <Badge color="gray" variant="light" ml={5} />
+                        <Badge color="gray" variant="light" ml={5}>
+                            {/*vehicles.filter(v => v.status === 'Draft').length*/}
+                        </Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="sold">
-                        Sold <Badge color="gray" variant="light" ml={5} />
+                        Sold{" "}
+                        <Badge color="gray" variant="light" ml={5}>
+                            {/*vehicles.filter(v => v.status === 'Draft').length*/}
+                        </Badge>
                     </Tabs.Tab>
                 </Tabs.List>
             </Tabs>
 
-            {/* Filters */}
             <Card
                 shadow="sm"
                 radius="md"
@@ -155,9 +130,8 @@ export default function VehiclesPage() {
                 </Stack>
             </Card>
 
-            {/* Vehicles Grid */}
-            <div className={styles.vehicleGrid}>
-                {(vehicles ?? []).map((v) => (
+            {(vehicles ?? []).map((v) => (
+                <div className={styles.vehicleGrid}>
                     <Card
                         shadow="sm"
                         radius="md"
@@ -168,7 +142,6 @@ export default function VehiclesPage() {
                             {v.photoLinks.length > 0 ? (
                                 <CardSlider images={v.photoLinks} />
                             ) : null}
-
                             <Badge
                                 color={getColorByCarSaleStatus(v.status)}
                                 className={styles.statusBadge}
@@ -213,25 +186,10 @@ export default function VehiclesPage() {
                                     );
                                 })}
                             </Stack>
-                            <Stack>
-                                {v.status === "draft" && (
-                                    <Button onClick={() => handleEdit(v.id)}>
-                                        Edit
-                                    </Button>
-                                )}
-                            </Stack>
                         </Stack>
                     </Card>
-                ))}
-            </div>
-
-            {opened && (
-                <CarAdder
-                    draftId={editingId}
-                    opened={opened}
-                    onClose={handleClose}
-                />
-            )}
+                </div>
+            ))}
         </div>
     );
 }

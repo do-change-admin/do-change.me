@@ -1,12 +1,18 @@
-import type { SyndicationRequestDraftsAPI } from "@/controllers/syndication-request-drafts.controller"
-import { apiRequest, buildQueryString } from "@/lib/apiFetch"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import type { SyndicationRequestDraftsAPI } from "@/controllers/syndication-request-drafts.controller";
+import { apiRequest, buildQueryString } from "@/lib/apiFetch";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-type API = SyndicationRequestDraftsAPI
-const apiURL = '/api/syndication-requests/drafts'
+type API = SyndicationRequestDraftsAPI;
+const apiURL = "/api/syndication-requests/drafts";
 
 export const useCreation = () => {
-    return useMutation<void, API['POST']['error'], API['POST']['payload']['query'] & { photos?: File[] }>({
+    const queryClient = useQueryClient();
+
+    return useMutation<
+        void,
+        API["POST"]["error"],
+        API["POST"]["payload"]["query"] & { photos?: File[] }
+    >({
         mutationFn: async (payload) => {
             const formData = new FormData();
 
@@ -14,22 +20,29 @@ export const useCreation = () => {
                 formData.append("photos", photo);
             }
 
-            const { photos, ...queryData } = payload
+            const { photos, ...queryData } = payload;
 
-            await fetch(
-                `${apiURL}${buildQueryString(queryData)}`,
-                {
-                    body: formData,
-                    method: "POST",
-                }
-            );
-
-        }
-    })
-}
+            await fetch(`${apiURL}${buildQueryString(queryData)}`, {
+                body: formData,
+                method: "POST",
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["syndication-requests", "user", { status: "draft" }],
+            });
+        },
+    });
+};
 
 export const useUpdate = () => {
-    return useMutation<void, API['PATCH']['error'], API['PATCH']['payload']['query'] & { photos?: File[] }>({
+    const queryClient = useQueryClient();
+
+    return useMutation<
+        void,
+        API["PATCH"]["error"],
+        API["PATCH"]["payload"]["query"] & { photos?: File[] }
+    >({
         mutationFn: async (payload) => {
             const formData = new FormData();
 
@@ -37,30 +50,45 @@ export const useUpdate = () => {
                 formData.append("photos", photo);
             }
 
-            const { photos, ...queryData } = payload
+            const { photos, ...queryData } = payload;
 
-            await fetch(
-                `${apiURL}${buildQueryString(queryData)}`,
-                {
-                    body: formData,
-                    method: "PATCH",
-                }
-            );
-
-        }
-    })
-}
+            await fetch(`${apiURL}${buildQueryString(queryData)}`, {
+                body: formData,
+                method: "PATCH",
+            });
+        },
+        onSuccess: (_, payload) => {
+            queryClient.invalidateQueries({
+                queryKey: ["syndication-requests", "user", { status: "draft" }],
+            });
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "syndication-requests",
+                    "drafts",
+                    "details",
+                    payload.id,
+                ],
+            });
+        },
+    });
+};
 
 export const useDetails = (draftId: string | null) => {
-    return useQuery<API['Details_GET']['response'], API['Details_GET']['error']>({
-        queryKey: ['syndication-requests', 'drafts', 'details', draftId],
+    return useQuery<
+        API["Details_GET"]["response"],
+        API["Details_GET"]["error"]
+    >({
+        queryKey: ["syndication-requests", "drafts", "details", draftId],
         queryFn: () => {
-            return apiRequest(apiURL + '/details', 'GET')({
+            return apiRequest(
+                apiURL + "/details",
+                "GET"
+            )({
                 query: {
-                    id: draftId!
-                }
-            } satisfies API['Details_GET']['payload'])
+                    id: draftId!,
+                },
+            } satisfies API["Details_GET"]["payload"]);
         },
-        enabled: !!draftId
-    })
-}   
+        enabled: !!draftId,
+    });
+};

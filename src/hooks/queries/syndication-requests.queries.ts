@@ -5,25 +5,27 @@ import { apiRequest, buildQueryString } from "@/lib/apiFetch";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type API = SyndicationRequestsAPI;
-const apiURL = '/api/syndication-requests';
-
+const apiURL = "/api/syndication-requests";
 
 export const useList = (
-    query: Omit<API["GET"]["payload"]["query"], 'status'> & { status: SyndicationRequestStatusNames }
+    query: Omit<API["GET"]["payload"]["query"], "status"> & {
+        status: SyndicationRequestStatusNames;
+    }
 ) => {
     return useQuery<API["GET"]["response"], API["GET"]["error"]>({
-        queryKey: [
-            "syndication-requests",
-            "user",
-            query
-        ],
+        queryKey: ["syndication-requests", "user", query],
         queryFn: async () => {
-            if (query.status === 'draft') {
+            if (query.status === "draft") {
                 type DraftsAPI = SyndicationRequestDraftsAPI;
-                const draftsApiURL = '/api/syndication-requests/drafts'
+                const draftsApiURL = "/api/syndication-requests/drafts";
 
-                const data: DraftsAPI['GET']['response'] = await apiRequest(draftsApiURL, 'GET')({ query })
-                const mapper = (data: DraftsAPI['GET']['response']): API['GET']['response'] => {
+                const data: DraftsAPI["GET"]["response"] = await apiRequest(
+                    draftsApiURL,
+                    "GET"
+                )({ query });
+                const mapper = (
+                    data: DraftsAPI["GET"]["response"]
+                ): API["GET"]["response"] => {
                     return {
                         items: data.items.map((x) => {
                             return {
@@ -32,16 +34,17 @@ export const useList = (
                                 marketplaceLinks: [],
                                 mileage: x.mileage || 0,
                                 model: x.model || "",
-                                photoLinks: x.currentPhotos?.map(x => x.id) ?? [],
+                                photoLinks:
+                                    x.currentPhotos?.map((x) => x.url) ?? [],
                                 price: x.price || 0,
-                                vin: x.vin || '',
+                                vin: x.vin || "",
                                 year: x.year || 0,
-                                status: 'draft'
-                            }
-                        })
-                    }
-                }
-                return mapper(data)
+                                status: "draft",
+                            };
+                        }),
+                    };
+                };
+                return mapper(data);
             }
 
             return apiRequest(apiURL, "GET")({ query });
@@ -50,8 +53,12 @@ export const useList = (
 };
 
 export const useManualPosting = () => {
-    const queryClient = useQueryClient()
-    return useMutation<void, API['POST']['error'], API['POST']['payload']['query'] & { photos: File[] }>({
+    const queryClient = useQueryClient();
+    return useMutation<
+        void,
+        API["POST"]["error"],
+        API["POST"]["payload"]["query"] & { photos: File[] }
+    >({
         mutationFn: async (payload) => {
             const formData = new FormData();
 
@@ -60,40 +67,52 @@ export const useManualPosting = () => {
             }
 
             const { photos, ...queryData } = payload;
-            await fetch(
-                `${apiURL}${buildQueryString(queryData)}`,
-                {
-                    body: formData,
-                    method: "POST",
-                }
-            );
+            await fetch(`${apiURL}${buildQueryString(queryData)}`, {
+                body: formData,
+                method: "POST",
+            });
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['syndication-requests'],
-            })
-        }
-    })
-}
+                queryKey: [
+                    "syndication-requests",
+                    "user",
+                    { status: "pending publisher" },
+                ],
+            });
+        },
+    });
+};
 
 export const usePostingFromDraft = () => {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
-    return useMutation<API['FromDraft_POST']['response'], API['FromDraft_POST']['error'], API['FromDraft_POST']['payload']>({
-        mutationFn: apiRequest(apiURL + '/from-draft', 'POST'),
+    return useMutation<
+        API["FromDraft_POST"]["response"],
+        API["FromDraft_POST"]["error"],
+        API["FromDraft_POST"]["payload"]
+    >({
+        mutationFn: apiRequest(apiURL + "/from-draft", "POST"),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['syndication-requests']
-            })
-        }
-    })
-}
+                queryKey: [
+                    "syndication-requests",
+                    "user",
+                    { status: "pending publisher" },
+                ],
+            });
+        },
+    });
+};
 
 export const useFilters = () => {
-    return useQuery<API['Filters_GET']['response'], API['Filters_GET']['error']>({
-        queryKey: ['syndication-requests', 'filters'],
+    return useQuery<
+        API["Filters_GET"]["response"],
+        API["Filters_GET"]["error"]
+    >({
+        queryKey: ["syndication-requests", "filters"],
         queryFn: () => {
-            return apiRequest(apiURL + '/filters', 'GET')({})
-        }
-    })
-}
+            return apiRequest(apiURL + "/filters", "GET")({});
+        },
+    });
+};
