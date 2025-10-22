@@ -9,7 +9,6 @@ import {allMessages} from "../../../locale";
 import {NextIntlClientProvider} from "next-intl";
 import {ActionIcon, Image} from "@mantine/core";
 import {useSlideMenu} from "@/contexts";
-import {useProfile} from "@/hooks";
 
 export function Layout({children}: { children: React.ReactNode }) {
     const pathname = usePathname();

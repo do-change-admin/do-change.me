@@ -41,7 +41,7 @@ export const SampleResults: FC<ISampleResults> = ({vin, baseInfo}) => {
                 <div className={styles.grid}>
                     <div className={styles.valuationInfo}>
                         <div className={styles.infoCard}>
-                            <h3>Market Valuation</h3>
+                            {/*<h3>Market Valuation</h3>*/}
                             {isLoading ? <Skeleton mb="md" h={50} w="100%" radius="lg"/> : (
                                 <Paper p="xs" radius="lg" mb="md">
                                     <Group mb="xs">
@@ -51,7 +51,7 @@ export const SampleResults: FC<ISampleResults> = ({vin, baseInfo}) => {
                                         {miles === lastMileageRecord && (
                                             <>
                                                 <Badge variant="light" size="xs" c="gray">
-                                                    Latest Odometer Record
+                                                    Latest Record
                                                 </Badge>
                                                 <Badge variant="light" size="xs" c="gray">
                                                     {formatDate(odometerData[0].last_seen_at_date)}
