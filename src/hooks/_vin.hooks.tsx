@@ -71,31 +71,6 @@ export const useMileagePriceQuery = (
     });
 };
 
-export function useCheckRecords(vin: string) {
-    const router = useRouter();
-
-    return useMutation({
-        mutationFn: async (service: string) => {
-            const res = await fetch(
-                `/api/checkrecords?vin=${vin}&service=${service}`
-            );
-            const data = await res.json();
-
-            if (data.error) {
-                throw new Error(data.message || "Unknown error");
-            }
-
-            if (data.type === "html") {
-                sessionStorage.setItem("report", data.data);
-                router.push("/report");
-            } else {
-                throw new Error("Unexpected response type");
-            }
-
-            return data;
-        },
-    });
-}
 
 export const useActionsHistory = (pagination: PaginationSchemaType) => {
     return useQuery<ActionsHistoryService.VinAnalysisResult>({
@@ -233,7 +208,7 @@ export interface StatsResponse {
 }
 
 
-export const useStats= () => {
+export const useStats = () => {
     return useQuery<StatsResponse, Error>({
         queryKey: ["stats"],
         queryFn: async () => {
