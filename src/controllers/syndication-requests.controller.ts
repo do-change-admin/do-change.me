@@ -1,8 +1,10 @@
 import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "@/app/api/zod-api-methods";
 import { type SyndicationRequestDraftsServiceFactory, type SyndicationRequestsServiceFactory } from "@/di-containers/register-services";
-import { ServiceTokens } from "@/di-containers/tokens.di-container";
+import { FunctionProviderTokens, ServiceTokens } from "@/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
+import { FunctionProviders } from "@/providers";
 import { SyndicationRequestsService } from "@/services/syndication-requests.service";
+import { ErrorFactory } from "@/value-objects/errors.value-object";
 import { VIN } from "@/value-objects/vin.value-object";
 import { inject, injectable } from "inversify";
 import z from "zod";
@@ -56,18 +58,29 @@ const schemas = {
     }
 } satisfies ZodControllerSchemas
 
+const errorFactory = ErrorFactory.forController('Syndication requests')
+
 @injectable()
 export class SyndicationRequestsController {
     public constructor(
         @inject(ServiceTokens.syndicationRequestsFactory) private readonly serviceFactory: SyndicationRequestsServiceFactory,
-        @inject(ServiceTokens.syndicationRequestDraftsFactory) private readonly draftsServiceFactory: SyndicationRequestDraftsServiceFactory
+        @inject(ServiceTokens.syndicationRequestDraftsFactory) private readonly draftsServiceFactory: SyndicationRequestDraftsServiceFactory,
+        @inject(FunctionProviderTokens.logger) private readonly logger: FunctionProviders.Logger.Interface
     ) { }
 
     GET = zodApiMethod(schemas.GET, {
         handler: async ({ activeUser, payload }) => {
-            const service = this.serviceFactory(activeUser.id)
-            const items = await service.list(payload)
-            return { items }
+            const { newError } = errorFactory.inMethod('GET')
+            try {
+                const service = this.serviceFactory(activeUser.id)
+                const items = await service.list(payload)
+                return { items }
+            } catch (e) {
+                this.logger.error(
+                    newError({ error: 'Could not obtain items' }, e)
+                )
+                return { items: [] }
+            }
         }
     })
 

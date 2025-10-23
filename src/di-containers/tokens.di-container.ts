@@ -7,7 +7,8 @@ export const DataProviderTokens = {
 }
 
 export const FunctionProviderTokens = {
-    email: Symbol.for("EMAIL-FUNCTIONAL-PROVIDER")
+    email: Symbol.for("EMAIL-FUNCTIONAL-PROVIDER"),
+    logger: Symbol.for("LOGGER-FUNCTIONAL-PROVIDER")
 }
 
 export const ServiceTokens = {

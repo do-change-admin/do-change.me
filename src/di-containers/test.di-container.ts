@@ -34,6 +34,11 @@ const registerFunctionProviders = () => {
     container
         .bind<FunctionProviders.Email.Interface>(FunctionProviderTokens.email)
         .to(FunctionProvidersImplementations.Mock.Email)
+
+    container
+        .bind<FunctionProviders.Logger.Interface>(FunctionProviderTokens.logger)
+        .to(FunctionProvidersImplementations.Mock.Logger)
+
 }
 
 registerDataProviders()

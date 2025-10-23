@@ -1,7 +1,5 @@
-import { VO } from "@/value-objects"
-
-type Errors = VO.Errors.ControllerModel | VO.Errors.ProviderModel | VO.Errors.ServiceModel
+import { ControllerErrorModel, ErrorBaseModel, ProviderErrorModel, ServiceErrorModel } from "@/value-objects/errors.value-object"
 
 export type Interface = {
-    error: (errorToBeLogged: Errors) => Promise<void>
+    error: (errorToBeLogged: ErrorBaseModel | ProviderErrorModel | ServiceErrorModel | ControllerErrorModel) => Promise<void>
 }
