@@ -1,10 +1,9 @@
-import { PaginationSchemaType } from "@/schemas";
 import { AdminUpdateAuctionAccessRequest, AuctionAccessRequestCountByStages, AuctionAccessRequestFullItem, AuctionAccessRequestListItem, AuctionAccessRequestStatus } from './types'
 import { prismaClient } from "@/infrastructure";
 import { businessError } from "@/lib/errors";
 import { ProvidesFileLink } from "@/providers/contracts";
 
-type FindListQueryData = PaginationSchemaType & { status: AuctionAccessRequestStatus }
+type FindListQueryData = { status: AuctionAccessRequestStatus }
 
 export class AuctionAccessRequestsAdminService {
     public constructor(private readonly fileLinksProvider: ProvidesFileLink) {
@@ -119,8 +118,8 @@ export class AuctionAccessRequestsAdminService {
 
     findRequests = async (query: FindListQueryData): Promise<AuctionAccessRequestListItem[]> => {
         const result = await prismaClient.auctionAccessRequest.findMany({
-            skip: query.skip,
-            take: query.take,
+            skip: 0,
+            take: 1000,
             where: {
                 status: query.status
             }

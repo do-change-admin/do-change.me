@@ -2,17 +2,17 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
 import { ActionsHistoryService } from "@/services";
-import { PaginationSchemaType, VinSchema } from "@/schemas";
 import { CachedData_GET_Response } from "@/app/api/vin/cached-data/models";
 import { MarketValueAPI } from "@/app/api/vin/market-value/route";
 import { apiRequest } from "@/lib/apiFetch";
 import { ReportsAPI } from "@/app/api/vin/report/route";
 import { SalvageAPI } from "@/app/api/vin/salvage/route";
+import { VIN } from "@/value-objects/vin.value-object";
 
 const VIN_LENGTH = 17;
 
 export const useBaseInfoByVIN = (vin: string | null) => {
-    const isEnabled = VinSchema.safeParse(vin).success;
+    const isEnabled = VIN.schema.safeParse(vin).success;
 
     return useQuery<VehicleBaseInfoDTO>({
         queryKey: ["vinCheck", vin],
@@ -58,7 +58,7 @@ export const useMileagePriceQuery = (
                 return false;
             }
 
-            const { success } = VinSchema.safeParse(vin);
+            const { success } = VIN.schema.safeParse(vin);
             if (!success) {
                 return false;
             }
@@ -72,12 +72,12 @@ export const useMileagePriceQuery = (
 };
 
 
-export const useActionsHistory = (pagination: PaginationSchemaType) => {
+export const useActionsHistory = () => {
     return useQuery<ActionsHistoryService.VinAnalysisResult>({
-        queryKey: ["actions-history", pagination.skip, pagination.take],
+        queryKey: ["actions-history", 0, 1000],
         queryFn: async () => {
             const response = await fetch(
-                `/api/actions-history?skip=${pagination.skip}&take=${pagination.take}`
+                `/api/actions-history`
             );
             const json = await response.json();
             return json.data as ActionsHistoryService.VinAnalysisResult;
@@ -97,7 +97,7 @@ export function usePhotoHook(vin: string) {
             return res.json();
         },
         enabled: () => {
-            const { success } = VinSchema.safeParse(vin);
+            const { success } = VIN.schema.safeParse(vin);
             return success;
         },
     });
@@ -113,7 +113,7 @@ export const useSalvageCheck = (vin: string | null) => {
             )({ query: { vin } } as SalvageAPI["GET"]["payload"]);
         },
         enabled: () => {
-            const { success } = VinSchema.safeParse(vin);
+            const { success } = VIN.schema.safeParse(vin);
             return success;
         },
     });
@@ -134,7 +134,7 @@ export const useCachedInfo = (vin: string | null) => {
         refetchOnReconnect: false,
         staleTime: 5 * 60 * 1000,
         enabled: () => {
-            const { success } = VinSchema.safeParse(vin);
+            const { success } = VIN.schema.safeParse(vin);
             return success;
         },
     });
@@ -236,7 +236,7 @@ export function useOdometer(vin?: string) {
             return fetchOdometer(vin)
         },
         enabled: () => {
-            const { success } = VinSchema.safeParse(vin);
+            const { success } = VIN.schema.safeParse(vin);
             return success;
         },
     })

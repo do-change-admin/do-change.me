@@ -1,6 +1,5 @@
 import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
 import { PricesResultDTO } from "@/app/api/vin/market-value/models";
-import { PaginationSchemaType } from "@/schemas";
 import { getServerSession } from "next-auth";
 import { prismaClient } from "@/infrastructure/prisma/client";
 
@@ -73,9 +72,7 @@ export const Register = async (item: Omit<Item, "registeredAt">) => {
 /**
  * Must be used with try/catch.
  */
-export const ShowCurrentHistory = async (
-    pagination: PaginationSchemaType
-): Promise<VinAnalysisResult> => {
+export const ShowCurrentHistory = async (): Promise<VinAnalysisResult> => {
     const userMail = await getCurrentUserMail();
     const data = await prismaClient.action.findMany({
         where: { userMail },

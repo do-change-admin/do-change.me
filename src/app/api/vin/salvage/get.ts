@@ -1,4 +1,3 @@
-import { VinSchema } from "@/schemas"
 import z from "zod"
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods"
 import { prismaClient } from "@/infrastructure"
@@ -6,11 +5,12 @@ import { ActionsHistoryService } from "@/services"
 import { noSubscriptionsGuard } from "@/api-guards"
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers"
 import { businessError } from "@/lib/errors"
+import { VIN } from "@/value-objects/vin.value-object"
 
 const schemas = {
     body: undefined,
     query: z.object({
-        vin: VinSchema
+        vin: VIN.schema
     }),
     response: z.object({
         salvageWasFound: z.boolean()
