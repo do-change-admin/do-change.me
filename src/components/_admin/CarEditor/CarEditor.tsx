@@ -25,9 +25,9 @@ import {
     FaXmark,
 } from "react-icons/fa6";
 import {
-    useDetails,
-    useUpdate,
-} from "@/hooks/queries/syndication-request-management.queries";
+    useAdminSyndicationRequestDetails,
+    useAdminSyndicationRequestUpdate,
+} from "@/client/queries/syndication-request-management.queries";
 import { FaSave } from "react-icons/fa";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
@@ -53,8 +53,8 @@ export const CarEditor: React.FC<CarEditorProps> = ({
     const [newLinkError, setNewLinkError] = useState<string | null>(null);
     const [newLinkValue, setNewLinkValue] = useState("");
 
-    const { data: car } = useDetails({ id: carId, userId });
-    const { mutateAsync: updateCar } = useUpdate();
+    const { data: car } = useAdminSyndicationRequestDetails({ id: carId, userId });
+    const { mutateAsync: updateCar } = useAdminSyndicationRequestUpdate();
 
     useEffect(() => {
         if (car) {

@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export const useAdminAuctionAccessRequests = (query: AuctionAccessRequestsAdminAPI['GET']['payload']['query']) => {
     return useQuery<AuctionAccessRequestsAdminAPI['GET']['response'], AuctionAccessRequestsAdminAPI['GET']['error']>({
-        queryKey: ['auction-access-requests', query.status, query.skip, query.take],
+        queryKey: ['auction-access-requests', query.status, 0, 1000],
         queryFn: () => {
             return apiRequest('/api/admin/auction-access-requests', 'GET')({ query })
         }

@@ -1,17 +1,17 @@
 import z from "zod";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { VinSchema } from "@/schemas";
 import { baseVehicleInfoSchema } from "./schemas";
 import { prismaClient } from "@/infrastructure";
 import { businessError } from "@/lib/errors";
 import { noSubscriptionsGuard } from "@/api-guards";
 import { ActionsHistoryService } from "@/services";
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers";
+import { VIN } from "@/value-objects/vin.value-object";
 
 const schemas = {
     body: undefined,
     query: z.object({
-        vin: VinSchema
+        vin: VIN.schema
     }),
     response: baseVehicleInfoSchema,
 } satisfies ZodAPISchemas

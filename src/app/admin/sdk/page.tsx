@@ -16,7 +16,6 @@ import {
 } from "@mantine/core";
 import { FaChevronDown, FaLink } from "react-icons/fa6";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { Queries } from "@/hooks";
 import {
     getColorByCarSaleStatus,
     getVisualDataByCarSaleMarketplaceLink,
@@ -25,6 +24,7 @@ import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestActiveStatusNames } from "@/entities/sindycation-request-status.entity";
 import { CardSlider } from "@/components";
 import { CarEditor } from "@/components/_admin/CarEditor/CarEditor";
+import { useAdminSyndicationRequestFilters, useAdminSyndicationRequests } from "@/client/queries/syndication-request-management.queries";
 
 export default function VehiclesPage() {
     const [opened, { open, close }] = useDisclosure(false);
@@ -39,14 +39,14 @@ export default function VehiclesPage() {
     const [activeTab, setActiveTab] =
         useState<SyndicationRequestActiveStatusNames>("active");
 
-    const { data } = Queries.SyndicationRequestManagement.useList({
+    const { data } = useAdminSyndicationRequests({
         make: make ?? "",
         model: model ?? "",
         status: activeTab,
         vin: debouncedVin,
     });
 
-    const { data: filters } = Queries.SyndicationRequestManagement.useFilters();
+    const { data: filters } = useAdminSyndicationRequestFilters();
 
     const handleClearFilters = () => {
         setVin("");

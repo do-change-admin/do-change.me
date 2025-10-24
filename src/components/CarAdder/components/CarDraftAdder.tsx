@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CarFormAdder, CarInfo, CarPhoto } from "./CarFormAdder";
-import { Queries } from "@/hooks";
+import { useSyndicationRequestDraftDetails, useSyndicationRequestDraftUpdate } from "@/client/queries/syndication-request-drafts.queries";
+import { useSyndicationRequestPostingFromDraft } from "@/client/queries/syndication-requests.queries";
 
 export interface CarDraftAdderProps {
     opened: boolean;
@@ -15,12 +16,9 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
 }) => {
     const [vin, setVin] = useState("");
 
-    const { data: draft, isLoading } =
-        Queries.SyndicationRequestDrafts.useDetails(draftId);
-    const { mutateAsync: updateDraft } =
-        Queries.SyndicationRequestDrafts.useUpdate();
-    const { mutateAsync: postNewCar } =
-        Queries.SyndicationRequests.usePostingFromDraft();
+    const { data: draft, isLoading } = useSyndicationRequestDraftDetails(draftId);
+    const { mutateAsync: updateDraft } = useSyndicationRequestDraftUpdate();
+    const { mutateAsync: postNewCar } = useSyndicationRequestPostingFromDraft();
 
     useEffect(() => {
         if (draft) {
@@ -68,10 +66,10 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
 
     const remotePhotos: CarPhoto[] = draft.currentPhotos
         ? draft.currentPhotos.map((photo) => ({
-              type: "remote",
-              url: photo.url,
-              id: photo.id,
-          }))
+            type: "remote",
+            url: photo.url,
+            id: photo.id,
+        }))
         : [];
 
     return (

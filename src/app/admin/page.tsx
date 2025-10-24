@@ -76,7 +76,7 @@ export default function AuctionAccessPage() {
     }, [activeStatus])
 
 
-    const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({ skip: 0, take: 100, status })
+    const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({ status })
 
 
     return (

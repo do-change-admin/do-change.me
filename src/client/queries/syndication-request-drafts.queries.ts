@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 type API = SyndicationRequestDraftsAPI;
 const apiURL = "/api/syndication-requests/drafts";
 
-export const useCreation = () => {
+export const useSyndicationRequestDraftCreation = () => {
     const queryClient = useQueryClient();
 
     return useMutation<
@@ -35,7 +35,7 @@ export const useCreation = () => {
     });
 };
 
-export const useUpdate = () => {
+export const useSyndicationRequestDraftUpdate = () => {
     const queryClient = useQueryClient();
 
     return useMutation<
@@ -73,7 +73,7 @@ export const useUpdate = () => {
     });
 };
 
-export const useDetails = (draftId: string | null) => {
+export const useSyndicationRequestDraftDetails = (draftId: string | null) => {
     return useQuery<
         API["Details_GET"]["response"],
         API["Details_GET"]["error"]

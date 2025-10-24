@@ -47,8 +47,4 @@ export const registerServices = (container: Container) => {
     container
         .bind<SyndicationRequestManagementService>(ServiceTokens.syndicationRequestManagement)
         .to(SyndicationRequestManagementService)
-
-    container
-        .bind<Services.Email.Instance>(ServiceTokens.email)
-        .to(Services.Email.Instance)
 }

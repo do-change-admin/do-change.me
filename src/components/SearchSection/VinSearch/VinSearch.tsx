@@ -1,17 +1,18 @@
 import React, { FC, useState } from 'react';
 import styles from "./VinSearch.module.css";
 import { motion } from "framer-motion";
-import {FaCamera, FaQrcode, FaSearch} from "react-icons/fa";
+import { FaCamera, FaQrcode, FaSearch } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from '@/components/_ui';
-import {BiBarcode} from "react-icons/bi";
-import {useScanner} from "@/contexts";
+import { BiBarcode } from "react-icons/bi";
+import { useScanner } from "@/contexts";
 import Image from "next/image";
-import {useProfile} from "@/hooks";
+import { useProfile } from "@/hooks";
+import { useLocaleStore } from '@/client/stores/locale.client-store';
 
-export const VinSearch = ({openSubscription}:{openSubscription?: () => void}) => {
+export const VinSearch = ({ openSubscription }: { openSubscription?: () => void }) => {
     const router = useRouter();
-    const {data} = useProfile();
+    const { data } = useProfile();
     const searchParams = useSearchParams();
     const initVin = searchParams.get("vin");
     const [vin, setVin] = useState(initVin);
@@ -57,7 +58,7 @@ export const VinSearch = ({openSubscription}:{openSubscription?: () => void}) =>
                             onClick={handleStartScanner}
                         >
                             <div className={styles.qrBox}>
-                                <Image className={styles.qrIcon} src="/scanIcon.png" alt='' width={25} height={25}/>
+                                <Image className={styles.qrIcon} src="/scanIcon.png" alt='' width={25} height={25} />
                             </div>
                         </motion.div>
                     </>}

@@ -1,11 +1,11 @@
 'use client'
 
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
 import ReactCountryFlag from 'react-country-flag';
 import styles from './LanguageSelector.module.css';
-import {useLocale} from "@/contexts/_locale.context";
+import { useLocaleStore } from '@/client/stores/locale.client-store';
 
 type LangOption = {
     code: string;
@@ -23,7 +23,7 @@ const LANGUAGES: LangOption[] = [
 export const LanguageSelector = () => {
     const [open, setOpen] = useState(false);
     const [current, setCurrent] = useState<LangOption>(LANGUAGES[0]);
-    const { locale, setLocale } = useLocale();
+    const { locale, setLocale } = useLocaleStore();
 
     useEffect(() => {
         const saved = locale;
@@ -78,4 +78,5 @@ export const LanguageSelector = () => {
                 </AnimatePresence>
             </div>
         </div>
-    )}
+    )
+}

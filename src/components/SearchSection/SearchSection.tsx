@@ -17,21 +17,13 @@ interface SearchSectionProps {
 
 export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const searchParams = useSearchParams();
-    const router = useRouter()
     const { data: profileData } = useProfile()
-    const { data: actionsHistory, isFetching } = useActionsHistory({ skip: 0, take: 1000 })
+    const { data: actionsHistory, isFetching } = useActionsHistory()
     const lastCarVin = Object.keys(actionsHistory || {})?.[0]
     const vin = searchParams.get("vin") || (isFetching ? '' : (lastCarVin || '1C6RD6FT1CS310366'));
     const [activeTab, setActiveTab] = useState<"vin" | "plate">("vin");
-
-    const actionsHistoryResponse = useActionsHistory({ skip: 0, take: 10 })
-
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(vin);
     const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(vin);
-
-    // if (!searchParams.get("vin") && lastCarVin) {
-    //     router.push(`/?vin=${lastCarVin}`)
-    // }
 
     return (
         <section className={styles.searchSection}>
@@ -62,7 +54,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                     <VinSearch openSubscription={openSubscription} />
                 </div>
                 <SampleResults baseInfo={baseInfo} reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0} vin={vin} />
-                <SearchHistory searches={actionsHistoryResponse.data} isLoading={actionsHistoryResponse.isFetching || actionsHistoryResponse.isLoading} />
+                <SearchHistory searches={actionsHistory} isLoading={isFetching} />
             </div>
         </section>
     );

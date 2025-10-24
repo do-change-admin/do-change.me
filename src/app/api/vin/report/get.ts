@@ -1,6 +1,5 @@
 import z from "zod";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { VinSchema } from "@/schemas";
 import { RequestsMeteringService } from "@/services/requests-metering/requests-metering.service";
 import { FeatureKey } from "@/value-objects/feature-key.vo";
 import { DIContainer } from "@/di-containers";
@@ -8,13 +7,14 @@ import { DataProviders } from "@/providers";
 import { DataProviderTokens } from "@/di-containers/tokens.di-container";
 import { noSubscriptionsGuard } from "@/api-guards";
 import { ActionsHistoryService } from "@/services";
+import { VIN } from "@/value-objects/vin.value-object";
 
 const FROM_CACHE_FLAG = 'FROM_CACHE'
 
 const schemas = {
     body: undefined,
     query: z.object({
-        vin: VinSchema,
+        vin: VIN.schema,
     }),
     response: z.object({
         htmlMarkup: z.string().nonempty(),

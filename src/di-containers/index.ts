@@ -3,8 +3,7 @@ import 'reflect-metadata'
 import { testContainer } from './test.di-container'
 import { devContainer } from './dev.di-container'
 import { stageContainer } from './stage.di-container'
-import { ControllerTokens, ServiceTokens } from './tokens.di-container'
-import { Services } from '@/services'
+import { ControllerTokens } from './tokens.di-container'
 import type { SyndicationRequestsController } from '@/controllers/syndication-requests.controller'
 import type { SyndicationRequestDraftsController } from '@/controllers/syndication-request-drafts.controller'
 import type { SyndicationRequestManagementController } from '@/controllers/syndication-request-management.controller'
@@ -35,12 +34,6 @@ export const DIContainer = () => {
          * Использовать только для временных решений
          */
         _context: container,
-        /**
-         * Использовать только для временных решений
-         */
-        _EmailService: () => {
-            return container.get<Services.Email.Instance>(ServiceTokens.email)
-        },
 
         SyndicationRequestsController: () => {
             return container.get<SyndicationRequestsController>(ControllerTokens.syndicationRequests)

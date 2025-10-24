@@ -56,11 +56,11 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        after(() => {
-            const emailService = DIContainer()._EmailService();
-            const email = verificationEmail(user, token.raw);
-            emailService.sendEmail(email);
-        });
+        // after(() => {
+        //     const emailService = DIContainer()._EmailService();
+        //     const email = verificationEmail(user, token.raw);
+        //     emailService.sendEmail(email);
+        // });
 
         return NextResponse.json({ message: "User created" }, { status: 201 });
     } catch (err) {
