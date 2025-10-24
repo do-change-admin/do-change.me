@@ -40,7 +40,7 @@ export const SearchHistory: FC<SearchHistoryProps> = ({ searches, isLoading }) =
                                 <th>Vehicle</th>
                                 <th>VIN/Plate</th>
                                 <th>Value</th>
-                                <th>Status</th>
+                                {/*<th>Status</th>*/}
                                 <th>Reports</th>
                             </tr>
                         </thead>
@@ -59,9 +59,9 @@ export const SearchHistory: FC<SearchHistoryProps> = ({ searches, isLoading }) =
                                             </Link>
                                         </td>
                                         <td className={styles.valueGreen}>{data.marketValue?.market_prices.average ? "$" + `${data.marketValue?.market_prices.average}` : 'Market value was not requested'}</td>
-                                        <td>
-                                            <span className={data.salvage ? styles.withSalvage : styles.noSalvage}>{data.salvage ? 'Total Loss' : 'Clean VIN'}</span>
-                                        </td>
+                                        {/*<td>*/}
+                                        {/*    <span className={data.salvage ? styles.withSalvage : styles.noSalvage}>{data.salvage ? 'Total Loss' : 'Clean VIN'}</span>*/}
+                                        {/*</td>*/}
                                         <td>
                                             <div>
                                                 {data.carfax ? <button className={styles.viewBtn} onClick={() => {
