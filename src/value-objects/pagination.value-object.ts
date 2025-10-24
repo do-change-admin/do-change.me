@@ -1,6 +1,5 @@
 import z from "zod";
 
-
 export class Pagination {
     static rawSchema = z.object({
         zeroBasedIndex: z.union([z.string(), z.number()]),
@@ -28,6 +27,13 @@ export class Pagination {
             pageSize: this.pageSize,
             zeroBasedIndex: this.zeroBasedIndex
         }
+    }
+
+    nextPage = () => {
+        return Pagination.create({
+            pageSize: this.pageSize,
+            zeroBasedIndex: this.zeroBasedIndex + 1
+        })
     }
 }
 
