@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { CarFormAdder, CarInfo } from "./CarFormAdder";
 import {
-    Queries,
     useBaseInfoByVIN,
 } from "@/hooks";
+import { useSyndicationRequestDraftCreation } from "@/client/queries/syndication-request-drafts.queries";
+import { useSyndicationRequestManualPosting } from "@/client/queries/syndication-requests.queries";
 
 export interface CarNewAdderProps {
     opened: boolean;
@@ -17,8 +18,8 @@ export const CarNewAdder: React.FC<CarNewAdderProps> = ({
     const [vin, setVin] = useState("");
 
     const { data: baseInfo } = useBaseInfoByVIN(vin);
-    const { mutateAsync: createDraft } = Queries.SyndicationRequestDrafts.useCreation();
-    const { mutateAsync: postNewCar } = Queries.SyndicationRequests.useManualPosting();
+    const { mutateAsync: createDraft } = useSyndicationRequestDraftCreation();
+    const { mutateAsync: postNewCar } = useSyndicationRequestManualPosting();
 
     const handleCreateDraft = async (values: CarInfo) => {
         await createDraft({

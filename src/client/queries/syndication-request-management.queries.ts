@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 type API = SyndicationRequestManagementAPI;
 const apiURL = "/api/syndication-requests/management";
 
-export const useList = (query: API["GET"]["payload"]["query"]) => {
+export const useAdminSyndicationRequests = (query: API["GET"]["payload"]["query"]) => {
     return useQuery<API["GET"]["response"], API["GET"]["error"]>({
         queryKey: ["syndication-requests", "management", query],
         queryFn: () => {
@@ -14,7 +14,7 @@ export const useList = (query: API["GET"]["payload"]["query"]) => {
     });
 };
 
-export const useDetails = (query: API["Details_GET"]["payload"]["query"]) => {
+export const useAdminSyndicationRequestDetails = (query: API["Details_GET"]["payload"]["query"]) => {
     return useQuery<
         API["Details_GET"]["response"],
         API["Details_GET"]["error"]
@@ -27,7 +27,7 @@ export const useDetails = (query: API["Details_GET"]["payload"]["query"]) => {
     });
 };
 
-export const useUpdate = () => {
+export const useAdminSyndicationRequestUpdate = () => {
     const queryClient = useQueryClient();
     return useMutation<
         API["PATCH"]["response"],
@@ -43,7 +43,7 @@ export const useUpdate = () => {
     });
 };
 
-export const useFilters = () => {
+export const useAdminSyndicationRequestFilters = () => {
     return useQuery<
         API["Filters_GET"]["response"],
         API["Filters_GET"]["error"]

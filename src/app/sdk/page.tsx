@@ -28,8 +28,8 @@ import {
 import { CarAdder } from "@/components/CarAdder/CarAdder";
 import { useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
-import { Queries } from "@/hooks";
 import { CardSlider } from "@/components";
+import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
 
 export default function VehiclesPage() {
     const [opened, { open, close }] = useDisclosure(false);
@@ -41,13 +41,13 @@ export default function VehiclesPage() {
     const [activeTab, setActiveTab] =
         useState<SyndicationRequestStatusNames>("active");
 
-    const { data } = Queries.SyndicationRequests.useList({
+    const { data } = useSyndicationRequests({
         make: make ?? "",
         model: model ?? "",
         status: activeTab,
         vin: debouncedVin,
     });
-    const { data: filters } = Queries.SyndicationRequests.useFilters();
+    const { data: filters } = useSyndicationRequestFilters();
 
     const vehicles = data?.items ?? [];
 
