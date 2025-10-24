@@ -9,6 +9,11 @@
     border: 1px solid #e5e7eb;
 }
 
+.vinLink {
+    text-decoration: var(--text-texas-blue);
+    color: var(--text-texas-blue);
+}
+
 .header {
     padding: 1.5rem 1.5rem;
 }

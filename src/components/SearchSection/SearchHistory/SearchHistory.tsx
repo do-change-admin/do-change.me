@@ -4,6 +4,7 @@ import { ActionsHistoryService } from "@/services";
 import styles from "./SearchHistory.module.css";
 import { FC } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export type SearchHistoryProps = {
     searches: ActionsHistoryService.VinAnalysisResult | undefined;
@@ -52,10 +53,14 @@ export const SearchHistory: FC<SearchHistoryProps> = ({ searches, isLoading }) =
                                             <div className={styles.vehicleName}>{data.baseInfo?.ModelYear} {data.baseInfo?.Make} {data.baseInfo?.Model}</div>
                                             <div className={styles.vehicleTrim}>{data.baseInfo?.Trim}</div>
                                         </td>
-                                        <td className={styles.vin}>{vin}</td>
+                                        <td>
+                                            <Link href={`/?vin=${vin}`} passHref className={styles.vinLink}>
+                                                {vin}
+                                            </Link>
+                                        </td>
                                         <td className={styles.valueGreen}>{data.marketValue?.market_prices.average ? "$" + `${data.marketValue?.market_prices.average}` : 'Market value was not requested'}</td>
                                         <td>
-                                            <span className={data.salvage ? styles.withSalvage : styles.noSalvage}>{data.salvage ? 'Salvage was found' : 'No salvage'}</span>
+                                            <span className={data.salvage ? styles.withSalvage : styles.noSalvage}>{data.salvage ? 'Total Loss' : 'Clean VIN'}</span>
                                         </td>
                                         <td>
                                             <div>
