@@ -165,7 +165,7 @@ export const useCachedInfo = (vin: string | null) => {
     });
 };
 
-export const useReport = () => {
+export const useReport = (vin?: string) => {
     const router = useRouter();
 
     return useMutation<
@@ -176,7 +176,7 @@ export const useReport = () => {
         mutationFn: apiRequest("/api/vin/report", "GET"),
         onSuccess: ({ htmlMarkup }) => {
             sessionStorage.setItem("report", htmlMarkup);
-            router.push("/report");
+            router.push(`/report/${vin}`);
         },
     });
 };

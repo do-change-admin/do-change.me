@@ -16,7 +16,7 @@ export interface IReportsProviderProp {
 }
 
 export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
-    const { mutate: getReport, isPending } = useReport();
+    const { mutate: getReport, isPending } = useReport(vin);
     const handleGetReport = () => {
         getReport(
             { query: { vin } },
@@ -25,7 +25,7 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
                     const message =
                         error?.response?.data?.message ||
                         error?.error.message ||
-                        "An error occurred while fetching the report";
+                       `An error occurred while fetching the ${vin}`;
 
                     notifications.show({
                         title: "Error",

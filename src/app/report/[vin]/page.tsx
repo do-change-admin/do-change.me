@@ -23,7 +23,7 @@ export default function ReportPage() {
         <div>
             <Group justify="space-between" p='1rem 2rem'>
                 <Button leftSection={<FaArrowLeft />} radius={'lg'} variant="light" onClick={() => { router.back() }}>Go back</Button>
-                {/* <PdfDownloader markup={reportHtml!} /> */}
+                <PdfDownloader markup={reportHtml!} />
             </Group>
 
             <div className={styles.container} dangerouslySetInnerHTML={{ __html: reportHtml! }} />
