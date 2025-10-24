@@ -18,20 +18,20 @@ export class Notification {
         )
     }
 
-    model = (): NotificationModel => {
+    get model() {
         return this.modelData
     }
 
-    critical = () => {
+    get critical() {
         return !this.modelData.seen && this.modelData.level === 'error'
     }
 
-    new = () => {
+    get new() {
         return !this.modelData.seen
     }
 
     read = () => {
-        const model = this.model()
+        const model = this.model
         model.seen = true
         return Notification.create(model)
     }

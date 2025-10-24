@@ -22,14 +22,14 @@ export class Pagination {
             && pagination.zeroBasedIndex === this.zeroBasedIndex
     }
 
-    model = (): PaginationModel => {
+    get model(): PaginationModel {
         return {
             pageSize: this.pageSize,
             zeroBasedIndex: this.zeroBasedIndex
         }
     }
 
-    nextPage = () => {
+    get nextPage() {
         return Pagination.create({
             pageSize: this.pageSize,
             zeroBasedIndex: this.zeroBasedIndex + 1
