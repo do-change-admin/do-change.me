@@ -6,7 +6,7 @@ export type Details = NotificationModel
 export type ListModel = NotificationModel
 
 // SEARCH CONTRACTS
-export type FindOnePayload = { userId: string, id: string }
+export type FindOnePayload = { id: string }
 export type FindListPayload = { userId: string }
 
 // ACTION CONTRACTS
