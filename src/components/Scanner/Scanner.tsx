@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { useScanner } from "@/contexts";
 import { useRecognize } from "./query";
+import { useShallow } from 'zustand/react/shallow'
 import styles from "./Scanner.module.css";
 import { IoClose } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import { useScannerStore } from "@/client/stores/scanner.client-store";
 
 export const Scanner = () => {
-    const { open, stop, setResult } = useScanner();
+    const { open, stop, setResult } = useScannerStore(
+        useShallow(({ open, stop, setResult }) => ({ open, stop, setResult }))
+    );
     const router = useRouter();
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);

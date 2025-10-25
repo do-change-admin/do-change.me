@@ -140,7 +140,7 @@ export const useCachedInfo = (vin: string | null) => {
     });
 };
 
-export const useReport = (vin?: string) => {
+export const useReport = () => {
     const router = useRouter();
 
     return useMutation<
@@ -149,9 +149,9 @@ export const useReport = (vin?: string) => {
         ReportsAPI["GET"]["payload"]
     >({
         mutationFn: apiRequest("/api/vin/report", "GET"),
-        onSuccess: ({ htmlMarkup }) => {
+        onSuccess: ({ htmlMarkup }, { query }) => {
             sessionStorage.setItem("report", htmlMarkup);
-            router.push(`/report/${vin}`);
+            router.push(`/report/${query.vin}`);
         },
     });
 };
@@ -228,12 +228,11 @@ async function fetchOdometer(vin: string) {
     return res.json()
 }
 
-export function useOdometer(vin?: string) {
+export function useOdometer(vin: string | null) {
     return useQuery({
         queryKey: ['odometer', vin],
         queryFn: () => {
-            if (!vin) throw new Error('VIN is required')
-            return fetchOdometer(vin)
+            return fetchOdometer(vin!)
         },
         enabled: () => {
             const { success } = VIN.schema.safeParse(vin);

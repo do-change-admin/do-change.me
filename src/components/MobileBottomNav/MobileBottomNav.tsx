@@ -2,14 +2,15 @@
 
 import React, { FC } from 'react';
 import styles from './MobileBottomNav.module.css';
-import { useScanner, useSlideMenu } from '@/contexts';
+import { useSlideMenu } from '@/contexts';
 import { AuctionsServicesCards, Chat, SubscriptionPlans } from '@/components';
 import { useNavMenu, useProfile } from '@/hooks';
 import { FaQrcode } from 'react-icons/fa';
 import { useDisclosure } from '@mantine/hooks';
+import { useScannerStore } from '@/client/stores/scanner.client-store';
 
 export const MobileBottomNav = () => {
-    const { start } = useScanner();
+    const start = useScannerStore(x => x.start);
     const { data } = useProfile()
     const { openMenu } = useSlideMenu();
 

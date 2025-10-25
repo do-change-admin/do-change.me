@@ -35,6 +35,17 @@ export class Pagination {
             zeroBasedIndex: this.zeroBasedIndex + 1
         })
     }
+
+    get previousPage() {
+        if (this.zeroBasedIndex === 0) {
+            return Pagination.create(this.model);
+        }
+
+        return Pagination.create({
+            pageSize: this.pageSize,
+            zeroBasedIndex: this.zeroBasedIndex - 1
+        })
+    }
 }
 
 export type PaginationModel = {

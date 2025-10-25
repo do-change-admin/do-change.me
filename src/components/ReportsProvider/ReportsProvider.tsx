@@ -7,17 +7,22 @@ import Image from "next/image";
 import React, { FC } from "react";
 import { useReport } from "@/hooks";
 import { FiRefreshCw } from "react-icons/fi";
-import { LoadingOverlay } from "@mantine/core";
-import {notifications} from "@mantine/notifications";
-import {LoadingMinute} from "@/components";
+import { notifications } from "@mantine/notifications";
+import { LoadingMinute } from "@/components";
+import { useVINAnalysisStore } from "@/client/stores/vin-analysis.client-store";
 
-export interface IReportsProviderProp {
-    vin: string;
-}
-
-export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
-    const { mutate: getReport, isPending } = useReport(vin);
+export const ReportsProvider: FC = () => {
+    const vin = useVINAnalysisStore(x => x.vin)
+    const { mutate: getReport, isPending } = useReport();
     const handleGetReport = () => {
+        if (!vin) {
+            notifications.show({
+                message: 'No VIN was selected',
+                title: "Error",
+                color: "red",
+            })
+            return
+        }
         getReport(
             { query: { vin } },
             {
@@ -25,7 +30,7 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
                     const message =
                         error?.response?.data?.message ||
                         error?.error.message ||
-                       `An error occurred while fetching the ${vin}`;
+                        `An error occurred while fetching the ${vin}`;
 
                     notifications.show({
                         title: "Error",
@@ -45,7 +50,7 @@ export const ReportsProvider: FC<IReportsProviderProp> = ({ vin }) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
         >
-            {isPending &&  <LoadingMinute label="We’re compiling the Vehicle History Report" />}
+            {isPending && <LoadingMinute label="We’re compiling the Vehicle History Report" />}
             <div className={styles.content}>
                 <div className={styles.intro}>
                     <div className={styles.reportsAvailable}>

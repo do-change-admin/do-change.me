@@ -1,15 +1,16 @@
 'use client'
 
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./SearchSection.module.css";
 import { SearchHistory } from "./SearchHistory/SearchHistory";
 import { SampleResults } from "./SampleResults/SampleResults";
 import { LoadingMinute, Salvage } from "@/components";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useProfile } from "@/hooks";
 import { VinSearch } from "./VinSearch/VinSearch";
 import cn from "classnames";
-import { FaCar, FaHashtag } from "react-icons/fa";
+import { FaHashtag } from "react-icons/fa";
+import { useVINAnalysisStore } from "@/client/stores/vin-analysis.client-store";
 
 interface SearchSectionProps {
     openSubscription?: () => void
@@ -20,7 +21,17 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const { data: profileData } = useProfile()
     const { data: actionsHistory, isFetching } = useActionsHistory()
     const lastCarVin = Object.keys(actionsHistory || {})?.[0]
-    const vin = searchParams.get("vin") || (isFetching ? '' : (lastCarVin || '1C6RD6FT1CS310366'));
+    const initialVIN = searchParams.get("vin") || (isFetching ? null : (lastCarVin || '1C6RD6FT1CS310366'));
+
+    const { vin, setVIN } = useVINAnalysisStore()
+
+    useEffect(() => {
+        if (initialVIN) {
+            setVIN(initialVIN)
+        }
+    }, [initialVIN])
+
+
     const [activeTab, setActiveTab] = useState<"vin" | "plate">("vin");
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(vin);
     const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(vin);
@@ -53,7 +64,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                     </div>
                     <VinSearch openSubscription={openSubscription} />
                 </div>
-                <SampleResults baseInfo={baseInfo} reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0} vin={vin} />
+                <SampleResults baseInfo={baseInfo} reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0} />
                 <SearchHistory searches={actionsHistory} isLoading={isFetching} />
             </div>
         </section>

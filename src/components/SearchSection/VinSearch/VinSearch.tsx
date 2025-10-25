@@ -1,22 +1,23 @@
-import React, { FC, useState } from 'react';
+import React from 'react';
 import styles from "./VinSearch.module.css";
 import { motion } from "framer-motion";
-import { FaCamera, FaQrcode, FaSearch } from "react-icons/fa";
-import { useRouter, useSearchParams } from "next/navigation";
+import { FaSearch } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 import { Input } from '@/components/_ui';
-import { BiBarcode } from "react-icons/bi";
-import { useScanner } from "@/contexts";
 import Image from "next/image";
 import { useProfile } from "@/hooks";
-import { useLocaleStore } from '@/client/stores/locale.client-store';
+import { useScannerStore } from '@/client/stores/scanner.client-store';
+import { useVINAnalysisStore } from '@/client/stores/vin-analysis.client-store';
+import { useShallow } from 'zustand/react/shallow'
 
 export const VinSearch = ({ openSubscription }: { openSubscription?: () => void }) => {
     const router = useRouter();
     const { data } = useProfile();
-    const searchParams = useSearchParams();
-    const initVin = searchParams.get("vin");
-    const [vin, setVin] = useState(initVin);
-    const { start } = useScanner();
+
+    const { setVIN, vin } = useVINAnalysisStore(
+        useShallow(({ setVIN, vin }) => ({ vin, setVIN }))
+    )
+    const start = useScannerStore(x => x.start);
 
     const handleSearch = () => {
         if (openSubscription && !data?.subscription) {
@@ -39,9 +40,9 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
         <div className={styles.searchPanel}>
             <div className={styles.grid}>
                 <Input
-                    onChange={(e) => setVin(e.target.value)}
+                    onChange={(e) => setVIN(e.target.value)}
                     type="text"
-                    placeholder={initVin || 'Enter VIN (e.g. 1C6RD6FT1CS310366)'}
+                    placeholder={vin || 'Enter VIN (e.g. 1C6RD6FT1CS310366)'}
                     maxLength={17}
                     value={vin || ""}
                     icon={<>
