@@ -36,6 +36,9 @@ export class Pagination {
         })
     }
 
+    /**
+     * safe implementation
+     */
     get previousPage() {
         if (this.zeroBasedIndex === 0) {
             return Pagination.create(this.model);
