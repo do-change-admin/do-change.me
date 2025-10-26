@@ -8,7 +8,7 @@ import { allMessages } from "../../../../locale";
 import { NextIntlClientProvider } from "next-intl";
 import { ActionIcon, Image } from "@mantine/core";
 import { useSlideMenu } from "@/client/contexts";
-import { useLocalesStore } from "@/client/stores/locales.store";
+import { useLocalesState } from "@/client/states/locales.state";
 
 export function Layout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -20,7 +20,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     const isLegal = pathname.includes("/legal");
     const { openMenu, isOpen, closeMenu } = useSlideMenu();
 
-    const locale = useLocalesStore(x => x.locale);
+    const locale = useLocalesState(x => x.locale);
     const messages = allMessages[locale] || allMessages["en"];
 
     if (isAuthPage || isTermsPage || isAdminPage || isHome || isLegal) {

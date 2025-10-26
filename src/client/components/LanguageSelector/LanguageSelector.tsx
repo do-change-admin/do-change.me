@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
 import ReactCountryFlag from 'react-country-flag';
 import styles from './LanguageSelector.module.css';
-import { useLocalesStore } from '@/client/stores/locales.store';
+import { useLocalesState } from '@/client/states/locales.state';
 
 type LangOption = {
     code: string;
@@ -23,7 +23,7 @@ const LANGUAGES: LangOption[] = [
 export const LanguageSelector = () => {
     const [open, setOpen] = useState(false);
     const [current, setCurrent] = useState<LangOption>(LANGUAGES[0]);
-    const { locale, setLocale } = useLocalesStore();
+    const { locale, setLocale } = useLocalesState();
 
     useEffect(() => {
         const saved = locale;

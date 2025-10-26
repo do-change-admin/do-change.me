@@ -10,7 +10,7 @@ import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
 import { formatDate, Odometer } from "@/client/components/SearchSection/Odometer/Odometer";
 import { Badge, Group, Paper, Skeleton, Slider, Text, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { useVINAnalysisStore } from "@/client/stores/vin-analysis.store";
+import { useVINAnalysisState } from "@/client/states/vin-analysis.state";
 
 export interface ISampleResults {
     reportsLeft: number,
@@ -23,7 +23,7 @@ const formatNumber = (num: number) => {
 }
 
 export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
-    const vin = useVINAnalysisStore(x => x.vin)
+    const vin = useVINAnalysisState(x => x.vin)
 
     const { data: odometerData, isLoading } = useOdometer(vin);
     const lastMileageRecord = odometerData?.at()?.miles;

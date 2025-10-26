@@ -6,18 +6,18 @@ import { useRouter } from "next/navigation";
 import { Input } from '@/client/components/_ui';
 import Image from "next/image";
 import { useProfile } from "@/client/hooks";
-import { useScannerStore } from '@/client/stores/scanner.store';
-import { useVINAnalysisStore } from '@/client/stores/vin-analysis.store';
+import { useScannerState } from '@/client/states/scanner.state';
+import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import { useShallow } from 'zustand/react/shallow'
 
 export const VinSearch = ({ openSubscription }: { openSubscription?: () => void }) => {
     const router = useRouter();
     const { data } = useProfile();
 
-    const { setVIN, vin } = useVINAnalysisStore(
+    const { setVIN, vin } = useVINAnalysisState(
         useShallow(({ setVIN, vin }) => ({ vin, setVIN }))
     )
-    const start = useScannerStore(x => x.start);
+    const start = useScannerState(x => x.start);
 
     const handleSearch = () => {
         if (openSubscription && !data?.subscription) {

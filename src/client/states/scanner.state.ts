@@ -8,7 +8,7 @@ type ScannerStore = {
     setResult: (result: string | null) => void;
 }
 
-export const useScannerStore = create<ScannerStore>((set) => {
+export const useScannerState = create<ScannerStore>((set) => {
     return {
         open: false,
         result: null,

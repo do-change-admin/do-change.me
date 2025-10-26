@@ -1,11 +1,11 @@
 import { create } from 'zustand'
 
-type LocalesStore = {
+type LocalesState = {
     locale: string;
     setLocale: (newLocale: string) => void;
 }
 
-export const useLocalesStore = create<LocalesStore>((set) => {
+export const useLocalesState = create<LocalesState>((set) => {
     return {
         locale: 'en',
         setLocale: (locale) => {

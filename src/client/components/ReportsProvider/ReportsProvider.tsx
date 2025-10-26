@@ -9,10 +9,10 @@ import { useReport } from "@/client/hooks";
 import { FiRefreshCw } from "react-icons/fi";
 import { notifications } from "@mantine/notifications";
 import { LoadingMinute } from "@/client/components";
-import { useVINAnalysisStore } from "@/client/stores/vin-analysis.store";
+import { useVINAnalysisState } from "@/client/states/vin-analysis.state";
 
 export const ReportsProvider: FC = () => {
-    const vin = useVINAnalysisStore(x => x.vin)
+    const vin = useVINAnalysisState(x => x.vin)
     const { mutate: getReport, isPending } = useReport();
     const handleGetReport = () => {
         if (!vin) {

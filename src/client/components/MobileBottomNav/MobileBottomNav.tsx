@@ -7,10 +7,10 @@ import { AuctionsServicesCards, Chat, SubscriptionPlans } from '@/client/compone
 import { useNavMenu, useProfile } from '@/client/hooks';
 import { FaQrcode } from 'react-icons/fa';
 import { useDisclosure } from '@mantine/hooks';
-import { useScannerStore } from '@/client/stores/scanner.store';
+import { useScannerState } from '@/client/states/scanner.state';
 
 export const MobileBottomNav = () => {
-    const start = useScannerStore(x => x.start);
+    const start = useScannerState(x => x.start);
     const { data } = useProfile()
     const { openMenu } = useSlideMenu();
 

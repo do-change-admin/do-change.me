@@ -10,7 +10,7 @@ import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useProfile } from
 import { VinSearch } from "./VinSearch/VinSearch";
 import cn from "classnames";
 import { FaHashtag } from "react-icons/fa";
-import { useVINAnalysisStore } from "@/client/stores/vin-analysis.store";
+import { useVINAnalysisState } from "@/client/states/vin-analysis.state";
 
 interface SearchSectionProps {
     openSubscription?: () => void
@@ -23,7 +23,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const lastCarVin = Object.keys(actionsHistory || {})?.[0]
     const initialVIN = searchParams.get("vin") || (isFetching ? null : (lastCarVin || '1C6RD6FT1CS310366'));
 
-    const { vin, setVIN } = useVINAnalysisStore()
+    const { vin, setVIN } = useVINAnalysisState()
 
     useEffect(() => {
         if (initialVIN) {

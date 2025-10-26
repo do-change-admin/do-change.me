@@ -5,7 +5,7 @@ type VINAnalysisStore = {
     setVIN: (value: string) => void;
 }
 
-export const useVINAnalysisStore = create<VINAnalysisStore>((set) => {
+export const useVINAnalysisState = create<VINAnalysisStore>((set) => {
     return {
         vin: null,
         setVIN: (vin) => {

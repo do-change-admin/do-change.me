@@ -6,10 +6,10 @@ import { useShallow } from 'zustand/react/shallow'
 import styles from "./Scanner.module.css";
 import { IoClose } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import { useScannerStore } from "@/client/stores/scanner.store";
+import { useScannerState } from "@/client/states/scanner.state";
 
 export const Scanner = () => {
-    const { open, stop, setResult } = useScannerStore(
+    const { open, stop, setResult } = useScannerState(
         useShallow(({ open, stop, setResult }) => ({ open, stop, setResult }))
     );
     const router = useRouter();
