@@ -4,6 +4,7 @@ import { SyndicationRequestsController } from "@/backend/controllers/syndication
 import { SyndicationRequestDraftsController } from "@/backend/controllers/syndication-request-drafts.controller";
 import { SyndicationRequestManagementController } from "@/backend/controllers/syndication-request-management.controller";
 import { UserNotificationsController } from "../controllers/user-notifications.controller";
+import { UserNotificationsManagementController } from "../controllers/user-notifications-management.controller";
 
 export const registerControllers = (container: Container) => {
     container.bind<SyndicationRequestsController>(ControllerTokens.syndicationRequests)
@@ -14,4 +15,6 @@ export const registerControllers = (container: Container) => {
         .to(SyndicationRequestManagementController)
     container.bind<UserNotificationsController>(ControllerTokens.userNotifications)
         .to(UserNotificationsController)
+    container.bind<UserNotificationsManagementController>(ControllerTokens.userNotificationsManagement)
+        .to(UserNotificationsManagementController)
 }

@@ -25,5 +25,6 @@ export const ControllerTokens = {
     syndicationRequests: Symbol.for("SYNDICATION-REQUESTS-CONTROLLER"),
     syndicationRequestDrafts: Symbol.for("SYNDICATION-REQUEST-DRAFTS-CONTROLLER"),
     syndicationRequestManagement: Symbol.for("SYNDICATION-REQUEST-MANAGEMENT-CONTROLLER"),
-    userNotifications: Symbol.for("USER-NOTIFICATIONS-CONTROLLER")
+    userNotifications: Symbol.for("USER-NOTIFICATIONS-CONTROLLER"),
+    userNotificationsManagement: Symbol.for("USER-NOTIFICATIONS-MANAGEMENT-CONTROLLER")
 }
