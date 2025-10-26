@@ -1,40 +1,41 @@
 import { DataProviders, DataProvidersImplemetations, FunctionProviders, FunctionProvidersImplementations } from '@/backend/providers'
 import { Container } from 'inversify'
-import { DataProviderTokens, FunctionProviderTokens } from './tokens.di-container'
+import { StoreTokens, ProviderTokens } from './tokens.di-container'
 import { registerServices } from './register-services'
 import { registerControllers } from './register-controllers'
+import { NotificationStore } from '../stores/interfaces/notification.store'
+import { NotificationInMemoryStore } from '../stores/implementations/in-memory/notification.in-memory-store'
 
 const container = new Container()
 
 const registerDataProviders = () => {
     container
-        .bind<DataProviders.SyndicationRequests.Interface>(DataProviderTokens.syndicationRequests)
+        .bind<DataProviders.SyndicationRequests.Interface>(StoreTokens.syndicationRequests)
         .to(DataProvidersImplemetations.Prisma.SyndicationRequests)
-
     container
-        .bind<DataProviders.SyndicationRequestDrafts.Interface>(DataProviderTokens.syndicationRequestDrafts)
+        .bind<DataProviders.SyndicationRequestDrafts.Interface>(StoreTokens.syndicationRequestDrafts)
         .to(DataProvidersImplemetations.Prisma.SyndicationRequestDrafts)
-
     container
-        .bind<DataProviders.VehicleHistoryReports.Interface>(DataProviderTokens.vehicleHistoryReports)
+        .bind<DataProviders.VehicleHistoryReports.Interface>(StoreTokens.vehicleHistoryReports)
         .to(DataProvidersImplemetations.API.VehicleHistoryReports)
-
     container
-        .bind<DataProviders.VehicleHistoryReports.CacheInterface>(DataProviderTokens.vehicleHistoryReportsCache)
+        .bind<DataProviders.VehicleHistoryReports.CacheInterface>(StoreTokens.vehicleHistoryReportsCache)
         .to(DataProvidersImplemetations.Prisma.VehicleHistoryReportsCache)
-
     container
-        .bind<DataProviders.Pictures.Interface>(DataProviderTokens.pictures)
+        .bind<DataProviders.Pictures.Interface>(StoreTokens.pictures)
         .to(DataProvidersImplemetations.API.PicturesInVercelBlob)
+    container
+        .bind<NotificationStore>(StoreTokens.notifications)
+        .to(NotificationInMemoryStore).inSingletonScope()
 }
 
 const registerFunctionProviders = () => {
     container
-        .bind<FunctionProviders.Email.Interface>(FunctionProviderTokens.email)
+        .bind<FunctionProviders.Email.Interface>(ProviderTokens.email)
         .to(FunctionProvidersImplementations.Mock.Email)
 
     container
-        .bind<FunctionProviders.Logger.Interface>(FunctionProviderTokens.logger)
+        .bind<FunctionProviders.Logger.Interface>(ProviderTokens.logger)
         .to(FunctionProvidersImplementations.Mock.Logger)
 
 }

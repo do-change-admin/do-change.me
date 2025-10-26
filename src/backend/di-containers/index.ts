@@ -7,6 +7,7 @@ import { ControllerTokens } from './tokens.di-container'
 import type { SyndicationRequestsController } from '@/backend/controllers/syndication-requests.controller'
 import type { SyndicationRequestDraftsController } from '@/backend/controllers/syndication-request-drafts.controller'
 import type { SyndicationRequestManagementController } from '@/backend/controllers/syndication-request-management.controller'
+import type { UserNotificationsController } from '../controllers/user-notifications.controller'
 
 const getDIContainer = () => {
     if (process.env['IN_TEST']) {
@@ -43,6 +44,9 @@ export const DIContainer = () => {
         },
         SyndicationRequestManagementController: () => {
             return container.get<SyndicationRequestManagementController>(ControllerTokens.syndicationRequestManagement)
+        },
+        UserNotificationsController: () => {
+            return container.get<UserNotificationsController>(ControllerTokens.userNotifications)
         }
     }
 }

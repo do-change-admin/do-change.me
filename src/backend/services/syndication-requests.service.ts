@@ -1,4 +1,4 @@
-import { DataProviderTokens } from "@/backend/di-containers/tokens.di-container";
+import { StoreTokens } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
 import { SyndicationRequest } from "@/entities/syndication-request.entity";
 import { DataProviders } from "@/backend/providers";
@@ -19,9 +19,9 @@ export class SyndicationRequestsService {
     })
 
     public constructor(
-        @inject(DataProviderTokens.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
-        @inject(DataProviderTokens.syndicationRequestDrafts) private readonly drafts: DataProviders.SyndicationRequestDrafts.Interface,
-        @inject(DataProviderTokens.pictures) private readonly pictures: DataProviders.Pictures.Interface,
+        @inject(StoreTokens.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
+        @inject(StoreTokens.syndicationRequestDrafts) private readonly drafts: DataProviders.SyndicationRequestDrafts.Interface,
+        @inject(StoreTokens.pictures) private readonly pictures: DataProviders.Pictures.Interface,
         private readonly userId: string
     ) { }
 

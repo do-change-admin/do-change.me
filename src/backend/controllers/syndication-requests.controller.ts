@@ -1,6 +1,6 @@
 import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
 import { type SyndicationRequestDraftsServiceFactory, type SyndicationRequestsServiceFactory } from "@/backend/di-containers/register-services";
-import { FunctionProviderTokens, ServiceTokens } from "@/backend/di-containers/tokens.di-container";
+import { ProviderTokens, ServiceTokens } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
 import { FunctionProviders } from "@/backend/providers";
 import { SyndicationRequestsService } from "@/backend/services/syndication-requests.service";
@@ -65,7 +65,7 @@ export class SyndicationRequestsController {
     public constructor(
         @inject(ServiceTokens.syndicationRequestsFactory) private readonly serviceFactory: SyndicationRequestsServiceFactory,
         @inject(ServiceTokens.syndicationRequestDraftsFactory) private readonly draftsServiceFactory: SyndicationRequestDraftsServiceFactory,
-        @inject(FunctionProviderTokens.logger) private readonly logger: FunctionProviders.Logger.Interface
+        @inject(ProviderTokens.logger) private readonly logger: FunctionProviders.Logger.Interface
     ) { }
 
     GET = zodApiMethod(schemas.GET, {

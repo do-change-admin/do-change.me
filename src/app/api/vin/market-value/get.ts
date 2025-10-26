@@ -3,7 +3,7 @@ import { ZodAPIMethod, zodApiMethod, ZodAPISchemas } from "../../../../backend/u
 import { businessError } from "@/lib-deprecated/errors";
 import { prismaClient } from "@/backend/infrastructure";
 import { ActionsHistoryService } from "@/backend/services";
-import { noSubscriptionGuard } from "@/backend/api-guards/no-subscription.api-guard";
+import { noSubscriptionGuard } from "@/backend/controllers/api-guards/no-subscription.api-guard";
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers";
 import { VIN } from "@/value-objects/vin.value-object";
 

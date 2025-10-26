@@ -4,8 +4,8 @@ import { RequestsMeteringService } from "@/backend/services/requests-metering/re
 import { FeatureKey } from "@/value-objects/feature-key.vo";
 import { DIContainer } from "@/backend/di-containers";
 import { DataProviders } from "@/backend/providers";
-import { DataProviderTokens } from "@/backend/di-containers/tokens.di-container";
-import { noSubscriptionGuard } from "@/backend/api-guards/no-subscription.api-guard";
+import { StoreTokens } from "@/backend/di-containers/tokens.di-container";
+import { noSubscriptionGuard } from "@/backend/controllers/api-guards/no-subscription.api-guard";
 import { ActionsHistoryService } from "@/backend/services";
 import { VIN } from "@/value-objects/vin.value-object";
 
@@ -27,10 +27,10 @@ export const method = zodApiMethod(schemas, {
     handler: async ({ payload: { vin }, flags }) => {
         // TODO - вынести в сервис
         const reportsDataProvider = DIContainer()._context.get<DataProviders.VehicleHistoryReports.Interface>(
-            DataProviderTokens.vehicleHistoryReports
+            StoreTokens.vehicleHistoryReports
         )
         const reportsCache = DIContainer()._context.get<DataProviders.VehicleHistoryReports.CacheInterface>(
-            DataProviderTokens.vehicleHistoryReportsCache
+            StoreTokens.vehicleHistoryReportsCache
         )
         const reportFromCache = await reportsCache.find(vin)
         if (reportFromCache) {
