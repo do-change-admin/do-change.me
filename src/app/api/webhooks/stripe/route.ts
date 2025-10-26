@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { prismaClient } from "@/infrastructure/prisma/client";
-import { businessError, serverError } from "@/lib/errors";
+import { prismaClient } from "@/backend/infrastructure/prisma/client";
+import { businessError, serverError } from "@/lib-deprecated/errors";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-08-27.basil",

@@ -1,5 +1,5 @@
 import z from "zod";
-import { prismaClient } from "@/infrastructure";
+import { prismaClient } from "@/backend/infrastructure";
 import Stripe from "stripe";
 import {
     zodApiMethod_DEPRECATED,

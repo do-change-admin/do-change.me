@@ -1,4 +1,4 @@
-import { ActionsHistoryService } from "@/services"
+import { ActionsHistoryService } from "@/backend/services"
 import { NextRequest, NextResponse } from "next/server"
 
 export const GET = async (req: NextRequest) => {

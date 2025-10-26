@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { Tabs, Button, Group, Badge } from "@mantine/core";
 import styles from "./layout.module.css";
-import { UserTable } from "@/components";
+import { UserTable } from "@/client/components";
 import {
     useAdminAuctionAccessCount,
     useAdminAuctionAccessRequests,
-} from "@/hooks";
-import type { AuctionAccessRequestStatus } from "@/services/auction-access-requests";
+} from "@/client/hooks";
+import type { AuctionAccessRequestStatus } from "@/backend/services/auction-access-requests";
 
 type Tab = {
     label: string;

@@ -6,8 +6,8 @@ import { ProfileForm } from "./(ProfileForm)/ProfileForm";
 import { Button, Group, Modal, Text } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import { useDisclosure } from "@mantine/hooks";
-import { useProfile, useSubscriptionDeletion } from "@/hooks";
-import { Plans } from "@/components/SubscriptionPlans/Plans";
+import { useProfile, useSubscriptionDeletion } from "@/client/hooks";
+import { Plans } from "@/client/components/SubscriptionPlans/Plans";
 
 export default function SettingsContent() {
     const [opened, { open, close }] = useDisclosure(false);

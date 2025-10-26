@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ResetPassword } from "./models";
 import z from "zod";
-import { generatePasswordHash } from "@/lib/password";
-import { businessError, serverError, validationError } from "@/lib/errors";
-import { prismaClient } from "@/infrastructure/prisma/client";
+import { generatePasswordHash } from "@/lib-deprecated/password";
+import { businessError, serverError, validationError } from "@/lib-deprecated/errors";
+import { prismaClient } from "@/backend/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
 import { VO } from "@/value-objects";
 

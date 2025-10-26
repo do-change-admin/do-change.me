@@ -1,6 +1,6 @@
 import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "@/app/api/zod-api-methods";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
-import { auctionAccessRequestFullSchema, AuctionAccessRequestsAdminService } from "@/services";
+import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
+import { auctionAccessRequestFullSchema, AuctionAccessRequestsAdminService } from "@/backend/services";
 import z from "zod";
 
 const queryParamsSchema = z.object({

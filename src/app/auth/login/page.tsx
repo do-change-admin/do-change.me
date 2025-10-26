@@ -1,10 +1,10 @@
 import React from 'react';
-import {CookieBanner, Login} from "@/components";
+import { CookieBanner, Login } from "@/client/components";
 
 const Page = () => {
     return (
         <div>
-            <Login/>
+            <Login />
             <CookieBanner />
         </div>
     );

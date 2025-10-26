@@ -1,0 +1,12 @@
+import { AdminUsersAPI } from "@/app/api/admin/users/route"
+import { apiRequest } from "@/client/utils/apiFetch"
+import { useQuery } from "@tanstack/react-query"
+
+export const useAdminUsersInfo = () => {
+    return useQuery<AdminUsersAPI['GET']['response'], AdminUsersAPI['GET']['error']>({
+        queryKey: ['admin-dashboard-info'],
+        queryFn: () => {
+            return apiRequest('/api/admin/users', 'GET')({})
+        }
+    })
+}

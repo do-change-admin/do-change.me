@@ -1,7 +1,7 @@
 import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../zod-api-methods";
-import { businessError } from "@/lib/errors";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
-import { AuctionAccessRequestsUserService } from "@/services";
+import { businessError } from "@/lib-deprecated/errors";
+import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
+import { AuctionAccessRequestsUserService } from "@/backend/services";
 
 export type Method = ZodAPIMethod_DEPRECATED<undefined, undefined, undefined>
 

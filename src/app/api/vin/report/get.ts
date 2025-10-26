@@ -1,12 +1,12 @@
 import z from "zod";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { RequestsMeteringService } from "@/services/requests-metering/requests-metering.service";
+import { RequestsMeteringService } from "@/backend/services/requests-metering/requests-metering.service";
 import { FeatureKey } from "@/value-objects/feature-key.vo";
-import { DIContainer } from "@/di-containers";
-import { DataProviders } from "@/providers";
-import { DataProviderTokens } from "@/di-containers/tokens.di-container";
-import { noSubscriptionsGuard } from "@/api-guards";
-import { ActionsHistoryService } from "@/services";
+import { DIContainer } from "@/backend/di-containers";
+import { DataProviders } from "@/backend/providers";
+import { DataProviderTokens } from "@/backend/di-containers/tokens.di-container";
+import { noSubscriptionGuard } from "@/backend/api-guards/no-subscription.api-guard";
+import { ActionsHistoryService } from "@/backend/services";
 import { VIN } from "@/value-objects/vin.value-object";
 
 const FROM_CACHE_FLAG = 'FROM_CACHE'
@@ -63,5 +63,5 @@ export const method = zodApiMethod(schemas, {
             }
         })
     },
-    beforehandler: noSubscriptionsGuard
+    beforehandler: noSubscriptionGuard
 })

@@ -1,7 +1,22 @@
-import { isApplicationError } from "@/lib/errors";
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import { isApplicationError } from "@/lib-deprecated/errors";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import z, { ZodObject } from "zod";
+import { authOptions } from "./auth/[...nextauth]/authOptions";
+
+async function getCurrentUser() {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user) {
+        return null;
+    }
+
+    return {
+        id: session.user.id,
+        email: session.user.email,
+    };
+}
+
 
 export type ZodObjectData = Readonly<{
     [k: string]: z.core.$ZodType<

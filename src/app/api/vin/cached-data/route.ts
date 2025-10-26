@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { prismaClient } from '@/infrastructure'
+import { prismaClient } from '@/backend/infrastructure'
 import { CachedData_GET_Response, mapReportFromPrismaToReportData } from "./models"
 import { VIN } from "@/value-objects/vin.value-object"
 

@@ -14,14 +14,14 @@ import {
 } from "react-icons/fa";
 import styles from "./ApplicationForm.module.css";
 import { ApplicationSuccesses } from "./ApplicationSuccesses";
-import { useAuctionAccessRequestCreation, useProfile, useProfileModifying } from "@/hooks";
-import type { ProfileData, UpdateProfilePayload } from "@/services";
+import { useAuctionAccessRequestCreation, useProfile, useProfileModifying } from "@/client/hooks";
+import type { ProfileData, UpdateProfilePayload } from "@/backend/services";
 import { FaCalendar } from "react-icons/fa6";
 import { DateInput } from "@mantine/dates";
 import { useQueryClient } from "@tanstack/react-query";
-import {Avatar, Button, Group, Text} from "@mantine/core";
-import {ProfileForm} from "@/app/settings/(ProfileForm)/ProfileForm";
-import {FiAlertCircle, FiCheckCircle} from "react-icons/fi";
+import { Avatar, Button, Group, Text } from "@mantine/core";
+import { ProfileForm } from "@/app/settings/(ProfileForm)/ProfileForm";
+import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 
 export const ApplicationForm = () => {
 
@@ -36,7 +36,7 @@ export const ApplicationForm = () => {
                             Complete your application to get exclusive access to premium car auctions
                         </p>
                     </div>
-                    <ProfileForm isApplicationForm/>
+                    <ProfileForm isApplicationForm />
                 </div>
             </div>
 

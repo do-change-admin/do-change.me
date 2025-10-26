@@ -1,6 +1,6 @@
-import { adminUpdateAuctionAccessRequestSchema, AuctionAccessRequestsAdminService } from "@/services";
+import { adminUpdateAuctionAccessRequestSchema, AuctionAccessRequestsAdminService } from "@/backend/services";
 import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../zod-api-methods";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
+import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
 
 export type Method = ZodAPIMethod_DEPRECATED<undefined, typeof adminUpdateAuctionAccessRequestSchema, undefined>
 

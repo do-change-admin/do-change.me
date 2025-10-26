@@ -3,7 +3,7 @@ import {
     zodApiMethod_DEPRECATED,
     ZodAPIMethod_DEPRECATED,
 } from "../zod-api-methods";
-import { prismaClient } from "@/infrastructure";
+import { prismaClient } from "@/backend/infrastructure";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {

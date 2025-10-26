@@ -22,8 +22,8 @@ import {
 } from "@/app/sdk/sdk.utils";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestActiveStatusNames } from "@/entities/sindycation-request-status.entity";
-import { CardSlider } from "@/components";
-import { CarEditor } from "@/components/_admin/CarEditor/CarEditor";
+import { CardSlider } from "@/client/components";
+import { CarEditor } from "@/client/components/_admin/CarEditor/CarEditor";
 import { useAdminSyndicationRequestFilters, useAdminSyndicationRequests } from "@/client/queries/syndication-request-management.queries";
 
 export default function VehiclesPage() {

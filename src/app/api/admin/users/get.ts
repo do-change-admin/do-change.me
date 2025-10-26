@@ -1,6 +1,6 @@
 import z from "zod";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { prismaClient } from "@/infrastructure";
+import { prismaClient } from "@/backend/infrastructure";
 import { FeatureKey } from "@/value-objects/feature-key.vo";
 
 const schemas = {

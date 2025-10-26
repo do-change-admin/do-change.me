@@ -1,10 +1,10 @@
 import z from "zod";
 import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods";
 import { baseVehicleInfoSchema } from "./schemas";
-import { prismaClient } from "@/infrastructure";
-import { businessError } from "@/lib/errors";
-import { noSubscriptionsGuard } from "@/api-guards";
-import { ActionsHistoryService } from "@/services";
+import { prismaClient } from "@/backend/infrastructure";
+import { businessError } from "@/lib-deprecated/errors";
+import { noSubscriptionGuard } from "@/backend/api-guards/no-subscription.api-guard";
+import { ActionsHistoryService } from "@/backend/services";
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers";
 import { VIN } from "@/value-objects/vin.value-object";
 
@@ -52,6 +52,6 @@ export const method = zodApiMethod(schemas, {
         }
     },
 
-    beforehandler: noSubscriptionsGuard,
+    beforehandler: noSubscriptionGuard,
     ignoreBeforeHandler: isDemoVin
 })

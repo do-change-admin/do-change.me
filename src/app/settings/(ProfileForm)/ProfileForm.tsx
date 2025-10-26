@@ -16,13 +16,13 @@ import {
     useProfile,
     useProfileModifying,
     useUploadPhoto,
-} from "@/hooks";
+} from "@/client/hooks";
 import { notifications } from "@mantine/notifications";
 import { ProfileFormSkeleton } from "@/app/settings/(ProfileForm)/ProfileFormSkeleton";
 import { DateInput } from "@mantine/dates";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import cn from "classnames";
-import { ProfileData } from "@/services";
+import { ProfileData } from "@/backend/services";
 
 export const STATES = [
     { value: "AL", label: "Alabama (AL)" },

@@ -1,6 +1,6 @@
-import { AuctionAccessRequestStatus, UserAuctionAccessSchema, userAuctionAccessSchema } from "@/services";
+import { AuctionAccessRequestStatus, UserAuctionAccessSchema, userAuctionAccessSchema } from "@/backend/services";
 import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../zod-api-methods";
-import { prismaClient } from "@/infrastructure";
+import { prismaClient } from "@/backend/infrastructure";
 
 const responseSchema = userAuctionAccessSchema
 

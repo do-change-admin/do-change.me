@@ -25,10 +25,10 @@ import {
     getColorByCarSaleStatus,
     getVisualDataByCarSaleMarketplaceLink,
 } from "./sdk.utils";
-import { CarAdder } from "@/components/CarAdder/CarAdder";
+import { CarAdder } from "@/client/components/CarAdder/CarAdder";
 import { useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
-import { CardSlider } from "@/components";
+import { CardSlider } from "@/client/components";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
 
 export default function VehiclesPage() {

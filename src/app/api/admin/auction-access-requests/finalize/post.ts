@@ -1,7 +1,7 @@
 import { zodApiMethod, ZodAPISchemas } from "@/app/api/zod-api-methods";
-import { prismaClient } from "@/infrastructure";
-import { businessError } from "@/lib/errors";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
+import { prismaClient } from "@/backend/infrastructure";
+import { businessError } from "@/lib-deprecated/errors";
+import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
 import { v4 } from "uuid";
 import z from "zod";
 

@@ -1,7 +1,7 @@
-import type { SyndicationRequestDraftsAPI } from "@/controllers/syndication-request-drafts.controller";
-import type { SyndicationRequestsAPI } from "@/controllers/syndication-requests.controller";
+import type { SyndicationRequestDraftsAPI } from "@/backend/controllers/syndication-request-drafts.controller";
+import type { SyndicationRequestsAPI } from "@/backend/controllers/syndication-requests.controller";
 import type { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
-import { apiRequest, buildQueryString } from "@/lib/apiFetch";
+import { apiRequest, buildQueryString } from "@/client/utils/apiFetch";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type API = SyndicationRequestsAPI;
