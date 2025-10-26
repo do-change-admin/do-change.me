@@ -1,4 +1,4 @@
-import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "@/app/api/zod-api-methods";
+import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
 import { type SyndicationRequestDraftsServiceFactory } from "@/backend/di-containers/register-services";
 import { ServiceTokens } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestDraftsService } from "@/backend/services/syndication-request-drafts.service";

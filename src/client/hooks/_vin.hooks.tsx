@@ -4,7 +4,7 @@ import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
 import { ActionsHistoryService } from "@/backend/services";
 import { CachedData_GET_Response } from "@/app/api/vin/cached-data/models";
 import { MarketValueAPI } from "@/app/api/vin/market-value/route";
-import { apiRequest } from "@/client/utils/apiFetch";
+import { apiRequest } from "@/client/utils/api-request.utils";
 import { ReportsAPI } from "@/app/api/vin/report/route";
 import { SalvageAPI } from "@/app/api/vin/salvage/route";
 import { VIN } from "@/value-objects/vin.value-object";

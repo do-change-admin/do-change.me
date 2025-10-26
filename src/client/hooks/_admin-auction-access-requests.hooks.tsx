@@ -2,7 +2,7 @@ import { AuctionAccessRequestAdminCountAPI } from "@/app/api/admin/auction-acces
 import { AuctionAccessRequestsDetailsAdminAPI } from "@/app/api/admin/auction-access-requests/details/route"
 import { AuctionAccessRequestsAdminAPI } from "@/app/api/admin/auction-access-requests/route"
 import { AuctionAccessRequestsSetStatusAdminAPI } from "@/app/api/admin/auction-access-requests/set-status/route"
-import { apiRequest } from "@/client/utils/apiFetch"
+import { apiRequest } from "@/client/utils/api-request.utils"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export const useAdminAuctionAccessRequests = (query: AuctionAccessRequestsAdminAPI['GET']['payload']['query']) => {

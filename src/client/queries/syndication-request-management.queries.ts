@@ -1,5 +1,5 @@
 import type { SyndicationRequestManagementAPI } from "@/backend/controllers/syndication-request-management.controller";
-import { apiRequest } from "@/client/utils/apiFetch";
+import { apiRequest } from "@/client/utils/api-request.utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type API = SyndicationRequestManagementAPI;

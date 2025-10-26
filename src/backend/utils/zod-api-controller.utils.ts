@@ -2,7 +2,7 @@ import { isApplicationError } from "@/lib-deprecated/errors";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import z, { ZodObject } from "zod";
-import { authOptions } from "./auth/[...nextauth]/authOptions";
+import { authOptions } from "../../app/api/auth/[...nextauth]/authOptions";
 
 async function getCurrentUser() {
     const session = await getServerSession(authOptions);

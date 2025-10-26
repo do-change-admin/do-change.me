@@ -1,4 +1,4 @@
-import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "@/app/api/zod-api-methods";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "@/backend/utils/zod-api-controller.utils";
 import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
 import { auctionAccessRequestFullSchema, AuctionAccessRequestsAdminService } from "@/backend/services";
 import z from "zod";

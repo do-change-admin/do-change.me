@@ -1,5 +1,5 @@
 import { AuctionAccessRequestsAPI } from "@/app/api/auction-access-requests/route"
-import { apiRequest } from "@/client/utils/apiFetch"
+import { apiRequest } from "@/client/utils/api-request.utils"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react";
 

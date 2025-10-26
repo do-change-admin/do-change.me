@@ -1,4 +1,4 @@
-import { zodApiMethod, ZodAPISchemas } from "@/app/api/zod-api-methods";
+import { zodApiMethod, ZodAPISchemas } from "@/backend/utils/zod-api-controller.utils";
 import { prismaClient } from "@/backend/infrastructure";
 import { businessError } from "@/lib-deprecated/errors";
 import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";

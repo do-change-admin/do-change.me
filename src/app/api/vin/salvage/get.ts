@@ -1,5 +1,5 @@
 import z from "zod"
-import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods"
+import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller.utils"
 import { prismaClient } from "@/backend/infrastructure"
 import { ActionsHistoryService } from "@/backend/services"
 import { noSubscriptionGuard } from "@/backend/api-guards/no-subscription.api-guard"

@@ -1,5 +1,5 @@
 import { PlansAPI } from "@/app/api/plans/route";
-import { apiRequest } from "@/client/utils/apiFetch";
+import { apiRequest } from "@/client/utils/api-request.utils";
 import { useQuery } from "@tanstack/react-query";
 
 type API = PlansAPI

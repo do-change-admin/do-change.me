@@ -1,5 +1,5 @@
 import { SubscriptionsAPI } from "@/app/api/subscriptions/route";
-import { apiRequest } from "@/client/utils/apiFetch";
+import { apiRequest } from "@/client/utils/api-request.utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type API = SubscriptionsAPI

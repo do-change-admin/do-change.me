@@ -1,5 +1,5 @@
 import z from "zod";
-import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../zod-api-methods";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../../backend/utils/zod-api-controller.utils";
 import { AuctionAccessRequestsUserService } from "@/backend/services";
 import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
 
