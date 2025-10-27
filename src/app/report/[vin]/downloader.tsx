@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useRef } from "react";
 import { Button } from "@mantine/core";
@@ -20,13 +20,33 @@ export default function PdfDownloader({ markup }: Props) {
         const doc = iframe.contentDocument || iframe.contentWindow?.document;
         if (!doc) return;
 
-        // Безопасно вставляем HTML в iframe
+        // Принудительно задаем десктопный viewport
         doc.open();
-        doc.write('<!DOCTYPE html><html><head><style>body{margin:0;padding:0;}</style></head><body></body></html>');
+        doc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=1280, initial-scale=1.0">
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              width: 1280px; /* фиксируем ширину под десктоп */
+              overflow-x: hidden;
+            }
+          </style>
+        </head>
+        <body></body>
+      </html>
+    `);
         doc.close();
         doc.body.innerHTML = markup;
 
-        // Ждем, пока браузер отрисует контент
+        // Задаем также ширину самого iframe
+        iframe.width = "1280";
+        iframe.height = "1800";
+
+        // Ждём отрисовку
         setTimeout(async () => {
             const body = iframe.contentDocument?.body;
             if (!body) return;
@@ -38,12 +58,15 @@ export default function PdfDownloader({ markup }: Props) {
                     margin: 0,
                     filename: String(vin),
                     image: { type: "jpeg", quality: 0.98 },
-                    html2canvas: { scale: 2 },
+                    html2canvas: {
+                        scale: 2,
+                        windowWidth: 1280, // десктопное окно
+                    },
                     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
                 })
                 .from(body)
                 .save();
-        }, 200);
+        }, 300);
     };
 
     return (
@@ -51,11 +74,7 @@ export default function PdfDownloader({ markup }: Props) {
             <Button leftSection={<FaDownload />} radius="lg" onClick={handleDownload}>
                 PDF
             </Button>
-            <iframe
-                ref={iframeRef}
-                style={{ display: "none" }}
-                title="pdf-generator"
-            />
+            <iframe ref={iframeRef} style={{ display: "none" }} title="pdf-generator" />
         </>
     );
 }
