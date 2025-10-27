@@ -1,4 +1,4 @@
-import { MIN_PASSWORD_LENGTH } from "@/lib/password";
+import { MIN_PASSWORD_LENGTH } from "@/lib-deprecated/password";
 import z from "zod";
 
 export const RegistreUser = z.object({

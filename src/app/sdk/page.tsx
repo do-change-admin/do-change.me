@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { type CarSaleStatus } from "@/entities";
+import { useDebouncedValue } from "@mantine/hooks";
 import {
     Button,
     Tabs,
@@ -12,7 +12,6 @@ import {
     Group,
     Text,
     Stack,
-    Image,
 } from "@mantine/core";
 import {
     FaPlus,
@@ -21,36 +20,39 @@ import {
     FaTimes,
     FaChevronDown,
 } from "react-icons/fa";
+
+import Sell from "@/app/sdk/plug";
+
 import styles from "./page.module.css";
 import {
     getColorByCarSaleStatus,
     getVisualDataByCarSaleMarketplaceLink,
 } from "./sdk.utils";
-import { useCarsForSaleUserFilters, useCarsForSaleUserList } from "@/hooks";
-import { CarAdder } from "@/components/CarAdder/CarAdder";
+import { CarAdder } from "@/client/components/CarAdder/CarAdder";
 import { useDisclosure } from "@mantine/hooks";
-import Sell from "@/app/sdk/plug";
+import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
+import { CardSlider } from "@/client/components";
+import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
 
 const isDEV = process.env.NODE_ENV === "development";
 
 export default function VehiclesPage() {
     const [opened, { open, close }] = useDisclosure(false);
     const [vin, setVin] = useState("");
-    const [make, setMake] = useState("");
-    const [model, setModel] = useState("");
+    const [debouncedVin] = useDebouncedValue(vin, 500);
+    const [make, setMake] = useState<null | string>(null);
+    const [model, setModel] = useState<null | string>(null);
     const [editingId, setEditingId] = useState<string | undefined>();
-    const [activeTab, setActiveTab] = useState<CarSaleStatus>("active");
+    const [activeTab, setActiveTab] =
+        useState<SyndicationRequestStatusNames>("active");
 
-    const { data } = useCarsForSaleUserList({
-        pageSize: 10,
-        zeroBasedIndex: 0,
-        make,
-        model,
+    const { data } = useSyndicationRequests({
+        make: make ?? "",
+        model: model ?? "",
         status: activeTab,
-        vin,
+        vin: debouncedVin,
     });
-
-    const { data: filters } = useCarsForSaleUserFilters();
+    const { data: filters } = useSyndicationRequestFilters();
 
     const vehicles = data?.items ?? [];
 
@@ -64,14 +66,17 @@ export default function VehiclesPage() {
         close();
     };
 
+    const handleClearFilters = () => {
+        setVin("");
+        setMake(null);
+        setModel(null);
+    };
+
     if (!isDEV) {
         return (
-            <div className={styles.container}>
-                <Sell/>
-            </div>
+            <Sell />
         )
     }
-
     return (
         <div className={styles.container}>
             {/* Add Vehicle Button */}
@@ -95,34 +100,21 @@ export default function VehiclesPage() {
             >
                 <Tabs.List>
                     <Tabs.Tab value="draft">
-                        Draft{" "}
-                        <Badge color="blue" variant="light" ml={5}>
-                            {/*vehicles.filter(v => v.status === 'Active').length*/}
-                        </Badge>
+                        Draft <Badge color="blue" variant="light" ml={5} />
                     </Tabs.Tab>
                     <Tabs.Tab value="pending publisher">
                         Pending Publisher{" "}
-                        <Badge color="orange" variant="light" ml={5}>
-                            {/*vehicles.filter(v => v.status === 'Pending').length*/}
-                        </Badge>
+                        <Badge color="orange" variant="light" ml={5} />
                     </Tabs.Tab>
                     <Tabs.Tab value="active">
-                        Active{" "}
-                        <Badge color="green" variant="light" ml={5}>
-                            {/*vehicles.filter(v => v.status === 'Sold').length*/}
-                        </Badge>
+                        Active <Badge color="green" variant="light" ml={5} />
                     </Tabs.Tab>
                     <Tabs.Tab value="pending sales">
                         Pending Sales{" "}
-                        <Badge color="gray" variant="light" ml={5}>
-                            {/*vehicles.filter(v => v.status === 'Draft').length*/}
-                        </Badge>
+                        <Badge color="gray" variant="light" ml={5} />
                     </Tabs.Tab>
                     <Tabs.Tab value="sold">
-                        Sold{" "}
-                        <Badge color="gray" variant="light" ml={5}>
-                            {/*vehicles.filter(v => v.status === 'Draft').length*/}
-                        </Badge>
+                        Sold <Badge color="gray" variant="light" ml={5} />
                     </Tabs.Tab>
                 </Tabs.List>
             </Tabs>
@@ -147,7 +139,6 @@ export default function VehiclesPage() {
                             label="Makes"
                             placeholder="All Makes"
                             value={make}
-                            // @ts-ignore
                             onChange={setMake}
                             data={filters?.makes}
                             rightSection={<FaChevronDown />}
@@ -156,7 +147,6 @@ export default function VehiclesPage() {
                             label="Models"
                             placeholder="All Models"
                             value={model}
-                            // @ts-ignore
                             onChange={setModel}
                             data={filters?.models}
                             rightSection={<FaChevronDown />}
@@ -167,11 +157,7 @@ export default function VehiclesPage() {
                             variant="outline"
                             color="gray"
                             leftSection={<FaTimes />}
-                            onClick={() => {
-                                setVin("");
-                                setMake("");
-                                setModel("");
-                            }}
+                            onClick={handleClearFilters}
                         >
                             Clear Filters
                         </Button>
@@ -189,16 +175,10 @@ export default function VehiclesPage() {
                         className={styles.vehicleCard}
                     >
                         <Card.Section style={{ position: "relative" }}>
-                            {[v?.photoLinks].map((src) => {
-                                return (
-                                    <Image
-                                        key={`car-photo-${src}`}
-                                        src={src}
-                                        alt={"Car photo"}
-                                        className={styles.vehicleImg}
-                                    />
-                                );
-                            })}
+                            {v.photoLinks.length > 0 ? (
+                                <CardSlider images={v.photoLinks} />
+                            ) : null}
+
                             <Badge
                                 color={getColorByCarSaleStatus(v.status)}
                                 className={styles.statusBadge}

@@ -2,7 +2,7 @@
 
 import { AppShell } from "@mantine/core";
 import styles from "./layout.module.css";
-import {AdminSideBar} from "@/components";
+import { AdminSideBar } from "@/client/components";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (

@@ -1,6 +1,6 @@
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
-import { zodApiMethod, ZodAPIMethod, zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED, ZodAPISchemas } from "../zod-api-methods";
-import { profileSchema, ProfileService } from "@/services";
+import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
+import { zodApiMethod, ZodAPIMethod, zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED, ZodAPISchemas } from "../../../backend/utils/zod-api-controller.utils";
+import { profileSchema, ProfileService } from "@/backend/services";
 import { EmailAddress } from "@/value-objects/email-address.vo";
 
 const schemas = {

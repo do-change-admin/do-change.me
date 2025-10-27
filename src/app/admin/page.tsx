@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { Tabs, Button, Group, Badge } from "@mantine/core";
 import styles from "./layout.module.css";
-import { UserTable } from "@/components";
+import { UserTable } from "@/client/components";
 import {
     useAdminAuctionAccessCount,
     useAdminAuctionAccessRequests,
-} from "@/hooks";
-import type { AuctionAccessRequestStatus } from "@/services/auction-access-requests";
+} from "@/client/hooks";
+import type { AuctionAccessRequestStatus } from "@/backend/services/auction-access-requests";
 
 type Tab = {
     label: string;
@@ -81,14 +81,12 @@ export default function AuctionAccessPage() {
     }, [activeOnboardingTab]);
 
     useEffect(() => {
-        setStatus(activeStatus);
-    }, [activeStatus]);
+        setStatus(activeStatus)
+    }, [activeStatus])
 
-    const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({
-        skip: 0,
-        take: 100,
-        status,
-    });
+
+    const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({ status })
+
 
     return (
         <div className={styles.container}>

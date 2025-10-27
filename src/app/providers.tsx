@@ -6,10 +6,7 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
 import { MantineProvider } from "@mantine/core";
-import { AppContextProvider } from "@/contexts";
-import { NextIntlClientProvider } from "next-intl";
-import { allMessages } from "../../locale";
-import { useLocale } from "@/contexts/_locale.context";
+import { AppContextProvider } from "@/client/contexts";
 
 export function Providers({
     children,

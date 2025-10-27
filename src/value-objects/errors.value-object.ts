@@ -1,144 +1,174 @@
-import z from "zod";
-
-const codesSchema = z.enum([
-    'validation',
-    'third party service error',
-])
-
-const sidesSchema = z.enum([
-    'client',
-    'module'
-])
-
-const baseSchema = z.object({
-    timestamp: z.number(),
-    message: z.string().nonempty(),
-    stack: z.string().nullable(),
-    name: z.string().nonempty(),
-    code: codesSchema,
-    side: sidesSchema
-})
-
-export const providerSchema = baseSchema.extend({
-    type: z.enum(['backend data provider', 'backend functionality provider']),
-    provider: z.string().nonempty(),
-    method: z.string().nonempty()
-})
-
-export const serviceSchema = baseSchema.extend({
-    type: z.literal('backend service'),
-    service: z.string().nonempty(),
-    method: z.string().nonempty(),
-    cause: providerSchema.nullable(),
-})
-
-export const controllerSchema = baseSchema.extend({
-    statusCode: z.number().min(100).max(599),
-    type: z.literal('backend controller'),
-    controller: z.string().nonempty(),
-    method: z.string().nonempty(),
-    cause: serviceSchema.nullable(),
-    userId: z.string().nullable(),
-})
-
-
-type BaseModel = z.infer<typeof baseSchema>
-export type ProviderModel = z.infer<typeof providerSchema>
-export type ServiceModel = z.infer<typeof serviceSchema>
-export type ControllerModel = z.infer<typeof controllerSchema>
-export type CodeModel = z.infer<typeof codesSchema>
-export type SideModel = z.infer<typeof sidesSchema>
-
-export type ErrorCreatingPayload = {
+type ErrorBaseCreatingPayload = {
     error: unknown,
-    code: CodeModel,
-    side?: SideModel
-    name?: string,
+    code?: string,
+    details?: Record<string, string>
 }
 
-export type ServiceErrorCreatingPayload = ErrorCreatingPayload & {
-    providerError?: ProviderModel
+export type ErrorBaseModel = {
+    name: string;
+    message: string;
+    code: string;
+    stack: string | null;
+    timestamp: number;
+    details: Record<string, string> | null;
 }
 
-export type ControllerErrorCreatingPayload = ErrorCreatingPayload & {
-    userId: string | null,
-    statusCode: number,
-    type: ControllerModel['type'],
-    serviceError?: ServiceModel
+export type ProviderErrorModel = ErrorBaseModel & {
+    module: string;
+    method: string;
+    source: "provider";
+    cause: ErrorBaseModel | null
 }
 
-const Base = ({ error, code, name, side }: ErrorCreatingPayload): BaseModel => {
-    let err: Error = error instanceof Error ? error : new Error('unknown error');
-
-    if (typeof error === 'string' || typeof error === 'number') {
-        err = new Error(error?.toString())
-    }
-
-    if (typeof error === 'object' && error !== null) {
-        const jsonRepresentation = JSON.stringify(error)
-        err = new Error(jsonRepresentation)
-    }
-
-    return {
-        message: err.message,
-        name: name || err.name,
-        stack: err.stack || null,
-        timestamp: Date.now(),
-        code: code || null,
-        side: side || 'module'
-    }
+export type ServiceErrorModel = ErrorBaseModel & {
+    module: string;
+    method: string;
+    source: "service";
+    cause: ProviderErrorModel | ErrorBaseModel | null
 }
 
-export const InProvider = (provider: string, type: ProviderModel['type']) =>
-    (method: string) => (payload: ErrorCreatingPayload): ProviderModel => {
-        const baseError = Base(payload)
+export type ControllerErrorModel = ErrorBaseModel & {
+    module: string;
+    method: string;
+    source: "controller";
+    cause: ServiceErrorModel | ProviderErrorModel | ErrorBaseModel | null
+}
+
+
+export class ErrorFactory {
+    private static base = ({ error, code, details }: ErrorBaseCreatingPayload): ErrorBaseModel => {
+        let err: Error = error instanceof Error ? error : new Error('unknown error');
+
+        if (typeof error === 'string' || typeof error === 'number') {
+            err = new Error(error?.toString())
+        }
+
+        if (typeof error === 'object' && error !== null) {
+            const jsonRepresentation = JSON.stringify(error)
+            err = new Error(jsonRepresentation)
+        }
+
         return {
-            code: baseError.code,
-            message: baseError.message,
-            method,
-            name: baseError.name,
-            provider,
-            stack: baseError.stack,
-            timestamp: baseError.timestamp,
-            type: type,
-            side: baseError.side
+            message: err.message,
+            name: err.name,
+            stack: err.stack || null,
+            timestamp: Date.now(),
+            code: code || err.name,
+            details: details || null
         }
     }
 
-export const InService = (service: string) =>
-    (method: string) =>
-        (payload: ServiceErrorCreatingPayload): ServiceModel => {
-            const baseError = Base(payload)
-            return {
-                cause: payload.providerError || null,
-                code: baseError.code,
-                message: baseError.message,
-                method,
-                service,
-                name: baseError.name,
-                stack: baseError.stack,
-                timestamp: baseError.timestamp,
-                type: 'backend service',
-                side: baseError.side
+    static forProvider = (providerName: string) => {
+        return {
+            inMethod: (methodName: string) => {
+                return {
+                    newError: (payload: ErrorBaseCreatingPayload, cause?: unknown): ProviderErrorModel => {
+                        const errorBase = ErrorFactory.base(payload)
+                        return {
+                            ...errorBase,
+                            module: providerName,
+                            method: methodName,
+                            source: 'provider',
+                            cause: cause ? ErrorFactory.fromUnknownError(cause) : null
+                        }
+                    }
+                }
+            },
+        }
+    }
+
+    static forService = (serviceName: string) => {
+        return {
+            inMethod: (methodName: string) => {
+                return {
+                    newError: (payload: ErrorBaseCreatingPayload, cause?: unknown): ServiceErrorModel => {
+                        const errorBase = ErrorFactory.base(payload)
+                        return {
+                            ...errorBase,
+                            cause: cause ? ErrorFactory.fromUnknownError(cause) : null,
+                            module: serviceName,
+                            method: methodName,
+                            source: 'service'
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    static forController = (controllerName: string) => {
+        return {
+            inMethod: (methodName: string) => {
+                return {
+                    newError: (payload: ErrorBaseCreatingPayload, cause?: unknown): ControllerErrorModel => {
+                        const errorBase = ErrorFactory.base(payload)
+                        return {
+                            ...errorBase,
+                            cause: cause ? ErrorFactory.fromUnknownError(cause) : null,
+                            module: controllerName,
+                            method: methodName,
+                            source: 'controller'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static fromUnknownError = (error: unknown): ErrorBaseModel | ProviderErrorModel | ServiceErrorModel => {
+        const isErrorBase = (arg: any): arg is ErrorBaseModel => {
+            if (typeof arg !== 'object' || !arg) {
+                return false
+            }
+            const argKeys = Object.keys(arg)
+            const requiredKeys = ['name', 'message', 'code', 'timestamp']
+            return requiredKeys.every(x => argKeys.includes(x))
         }
 
-export const InController = (controller: string) =>
-    (method: string) =>
-        (payload: ControllerErrorCreatingPayload): ControllerModel => {
-            const baseError = Base(payload)
-            return {
-                cause: payload.serviceError || null,
-                code: baseError.code,
-                controller,
-                message: baseError.message,
-                method,
-                name: baseError.name,
-                stack: baseError.stack,
-                statusCode: payload.statusCode,
-                timestamp: baseError.timestamp,
-                type: payload.type,
-                userId: payload.userId,
-                side: baseError.side
+        const isProviderError = (arg: any): arg is ProviderErrorModel => {
+            if (typeof arg !== 'object' || !arg) {
+                return false
             }
+            const argKeys = Object.keys(arg)
+            const requiredKeys = ['name', 'message', 'code', 'module', 'method', 'source', 'timestamp']
+            if (!requiredKeys.every(x => argKeys.includes(x))) {
+                return false
+            }
+
+            // @ts-ignore
+            const source = arg['source'];
+            return source === 'provider'
         }
+
+        const isServiceError = (arg: any): arg is ServiceErrorModel => {
+            if (typeof arg !== 'object' || !arg) {
+                return false
+            }
+            const argKeys = Object.keys(arg)
+            const requiredKeys = ['name', 'message', 'code', 'module', 'method', 'source', 'timestamp']
+            if (!requiredKeys.every(x => argKeys.includes(x))) {
+                return false
+            }
+
+            // @ts-ignore
+            const source = arg['source'];
+            return source === 'service'
+        }
+
+        if (isErrorBase(error)) {
+            return error as ErrorBaseModel
+        }
+
+        if (isProviderError(error)) {
+            return error as ProviderErrorModel
+        }
+
+        if (isServiceError(error)) {
+            return error as ServiceErrorModel
+        }
+
+
+        return ErrorFactory.base({ error })
+    }
+}
+

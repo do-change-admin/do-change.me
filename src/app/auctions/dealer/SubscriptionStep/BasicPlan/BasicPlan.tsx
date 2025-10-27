@@ -3,7 +3,7 @@
 import React from 'react';
 import styles from "./BasicPlan.module.css";
 import { FaCheck, FaRocket } from "react-icons/fa";
-import { usePlans, useSubscriptionCreation } from '@/hooks';
+import { usePlans, useSubscriptionCreation } from '@/client/hooks';
 import { useRouter } from 'next/navigation';
 
 export const BasicPlan = () => {

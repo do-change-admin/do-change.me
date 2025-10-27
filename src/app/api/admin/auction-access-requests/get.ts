@@ -1,14 +1,11 @@
-import { withPaginationSchema } from "@/schemas";
-import { auctionAccessRequestListSchema, auctionAccessRequestStatusSchema, AuctionAccessRequestsAdminService } from "@/services";
+import { auctionAccessRequestListSchema, auctionAccessRequestStatusSchema, AuctionAccessRequestsAdminService } from "@/backend/services";
 import z from "zod";
-import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../zod-api-methods";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../../../backend/utils/zod-api-controller.utils";
+import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
 
-const queryParamsSchema = z.object(
-    withPaginationSchema({
-        status: auctionAccessRequestStatusSchema
-    })
-)
+const queryParamsSchema = z.object({
+    status: auctionAccessRequestStatusSchema
+})
 
 const responseSchema = z.object({
     items: z.array(
@@ -22,10 +19,10 @@ export const handler = zodApiMethod_DEPRECATED(
     queryParamsSchema,
     undefined,
     responseSchema,
-    async ({ skip, status, take }) => {
+    async ({ status }) => {
         const fileSystemProvider = new VercelBlobFileSystemProvider()
         const service = new AuctionAccessRequestsAdminService(fileSystemProvider)
-        const items = await service.findRequests({ skip, status, take })
+        const items = await service.findRequests({ status })
         return { items }
     }
 )

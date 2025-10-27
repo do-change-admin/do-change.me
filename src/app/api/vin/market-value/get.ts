@@ -1,11 +1,11 @@
 import z from "zod";
-import { ZodAPIMethod, zodApiMethod, ZodAPISchemas } from "../../zod-api-methods";
-import { VinSchema } from "@/schemas";
-import { businessError } from "@/lib/errors";
-import { prismaClient } from "@/infrastructure";
-import { ActionsHistoryService } from "@/services";
-import { noSubscriptionsGuard } from "@/api-guards";
+import { ZodAPIMethod, zodApiMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller.utils";
+import { businessError } from "@/lib-deprecated/errors";
+import { prismaClient } from "@/backend/infrastructure";
+import { ActionsHistoryService } from "@/backend/services";
+import { noSubscriptionGuard } from "@/backend/controllers/api-guards/no-subscription.api-guard";
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers";
+import { VIN } from "@/value-objects/vin.value-object";
 
 export const marketPricesSchema = z.object({
     market_prices: z.object({
@@ -27,7 +27,7 @@ export const marketPricesSchema = z.object({
 const schemas = {
     body: undefined,
     query: z.object({
-        vin: VinSchema,
+        vin: VIN.schema,
         mileage: z.coerce.number(),
     }),
     response: marketPricesSchema
@@ -92,6 +92,6 @@ export const method = zodApiMethod(schemas, {
             })
         }
     },
-    beforehandler: noSubscriptionsGuard,
+    beforehandler: noSubscriptionGuard,
     ignoreBeforeHandler: isDemoVin
 })

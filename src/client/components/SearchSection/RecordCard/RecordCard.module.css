@@ -1,0 +1,127 @@
+.card {
+    width: 100%;
+    border-radius: 2rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardContent {
+    padding: 0.75rem;
+    /* внутренние отступы */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.iconWrapper {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(to right, #3b82f6, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.icon {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    background: linear-gradient(to right, #10b981, #14b8a6);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+}
+
+.badgeIcon {
+    font-size: 0.65rem;
+}
+
+.seller {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1f2937;
+}
+
+.priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1f2937;
+}
+
+.miles {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #2563eb;
+}
+
+.location,
+.infoRow {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: #4b5563;
+}
+
+.iconSmall {
+    color: #9ca3af;
+    flex-shrink: 0;
+}
+
+.dates {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 0.4rem;
+    font-size: 0.7rem;
+    color: #6b7280;
+    gap: 0.4rem;
+}
+
+.dateLabel {
+    color: #9ca3af;
+}
+
+.dateValue {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.right {
+    text-align: right;
+}
+
+/* Обеспечиваем, что карточка не ломает слайд
+:global(.mantine-Carousel-slide) {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+}
+
+:global(.mantine-Carousel-slide > *) {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+} */

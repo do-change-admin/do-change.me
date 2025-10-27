@@ -1,12 +1,59 @@
 import z from "zod";
 
-export const schema = z.object({
-    zeroBasedIndex: z.coerce.number().nonnegative(),
-    pageSize: z.coerce.number().positive()
-})
+export class Pagination {
+    static rawSchema = z.object({
+        zeroBasedIndex: z.union([z.string(), z.number()]),
+        pageSize: z.union([z.string(), z.number()])
+    })
 
-export type Model = z.infer<typeof schema>
+    private constructor(
+        private readonly zeroBasedIndex: number,
+        private readonly pageSize: number
+    ) { }
 
-export const areSame = (a: Model, b: Model) => {
-    return a.pageSize === b.pageSize && a.zeroBasedIndex === b.zeroBasedIndex
+    static create = (rawModel: PaginationRawModel) => {
+        const zeroBasedIndex = z.coerce.number().int().nonnegative().parse(rawModel.zeroBasedIndex)
+        const pageSize = z.coerce.number().positive().parse(rawModel.pageSize)
+        return new Pagination(zeroBasedIndex, pageSize)
+    }
+
+    same = (pagination: Pagination) => {
+        return pagination.pageSize === this.pageSize
+            && pagination.zeroBasedIndex === this.zeroBasedIndex
+    }
+
+    get model(): PaginationModel {
+        return {
+            pageSize: this.pageSize,
+            zeroBasedIndex: this.zeroBasedIndex
+        }
+    }
+
+    get nextPage() {
+        return Pagination.create({
+            pageSize: this.pageSize,
+            zeroBasedIndex: this.zeroBasedIndex + 1
+        })
+    }
+
+    /**
+     * safe implementation
+     */
+    get previousPage() {
+        if (this.zeroBasedIndex === 0) {
+            return Pagination.create(this.model);
+        }
+
+        return Pagination.create({
+            pageSize: this.pageSize,
+            zeroBasedIndex: this.zeroBasedIndex - 1
+        })
+    }
 }
+
+export type PaginationModel = {
+    zeroBasedIndex: number;
+    pageSize: number;
+}
+
+export type PaginationRawModel = z.infer<typeof Pagination.rawSchema>

@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
-import { prismaClient } from '@/infrastructure'
-import { VinSchema } from "@/schemas"
-import { PricesResultDTO } from "../market-value/models"
+import { prismaClient } from '@/backend/infrastructure'
 import { CachedData_GET_Response, mapReportFromPrismaToReportData } from "./models"
+import { VIN } from "@/value-objects/vin.value-object"
 
 export const GET = async (req: NextRequest) => {
     const searchParams = req.nextUrl.searchParams
     const vinFromRequest = searchParams.get('vin')
-    const { success, data: vin, error } = VinSchema.safeParse(vinFromRequest)
+    const { success, data: vin, error } = VIN.schema.safeParse(vinFromRequest)
     if (!success) {
         return NextResponse.json(error, { status: 400 })
     }

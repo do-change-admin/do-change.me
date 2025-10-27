@@ -1,6 +1,6 @@
 "use client";
 
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 import {
     FaCalendarAlt,
     FaPaperPlane,
@@ -18,15 +18,15 @@ import {
 } from "react-icons/fa";
 
 import styles from "./UserCard.module.css";
-import React, {FC, useEffect, useState} from "react";
-import {Schedule, SchedulePicker} from "@/components/_admin/SchedulePicker/SchedulePicker";
+import React, { FC, useEffect, useState } from "react";
+import { Schedule, SchedulePicker } from "@/client/components/_admin/SchedulePicker/SchedulePicker";
 import {
     useAdminAuctionAccessFinalizing,
     useAdminAuctionAccessRequest,
     useAdminAuctionAccessRequestUpdate, useAdminAuctionAccessStatusSetting,
     useDatesMapping
-} from "@/hooks";
-import {useRouter} from "next/navigation";
+} from "@/client/hooks";
+import { useRouter } from "next/navigation";
 import {
     Avatar,
     LoadingOverlay,
@@ -40,15 +40,15 @@ import {
     TextInput,
     FileInput, Select
 } from "@mantine/core";
-import {AiOutlineArrowLeft} from "react-icons/ai";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 
-export type  NewStatusType = "review" | "approved" | "rejected" | "awaiting user confirmation" | "call scheduling" | "call completed" | "awaiting documents upload" | "documents under review" | "corrections required" | "ready for auction access" | "subscription ended";
+export type NewStatusType = "review" | "approved" | "rejected" | "awaiting user confirmation" | "call scheduling" | "call completed" | "awaiting documents upload" | "documents under review" | "corrections required" | "ready for auction access" | "subscription ended";
 export interface UserCardProps {
     applicationId: string;
 }
 
-export const UserCard: FC<UserCardProps> = ({applicationId}) => {
+export const UserCard: FC<UserCardProps> = ({ applicationId }) => {
     const [schedule, setSchedule] = useState<Schedule>({})
     const [formData, setFormData] = useState<{
         number: string;
@@ -57,11 +57,11 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
         number: "",
         qrFile: null,
     });
-    const {datesFromSchedule, scheduleFromDates} = useDatesMapping()
-    const {data: requestInfo} = useAdminAuctionAccessRequest({id: applicationId})
-    const {mutate: update, isPending: isUpdating} = useAdminAuctionAccessRequestUpdate()
-    const {mutate: updateStatus, isPending: isUpdatingStatus} = useAdminAuctionAccessStatusSetting()
-    const {mutate: addAuctionAccess, data: auctionAccess} = useAdminAuctionAccessFinalizing()
+    const { datesFromSchedule, scheduleFromDates } = useDatesMapping()
+    const { data: requestInfo } = useAdminAuctionAccessRequest({ id: applicationId })
+    const { mutate: update, isPending: isUpdating } = useAdminAuctionAccessRequestUpdate()
+    const { mutate: updateStatus, isPending: isUpdatingStatus } = useAdminAuctionAccessStatusSetting()
+    const { mutate: addAuctionAccess, data: auctionAccess } = useAdminAuctionAccessFinalizing()
     const router = useRouter();
     const [applicationStatus, setApplicationStatus] = useState<NewStatusType | null>(requestInfo?.status || null);
 
@@ -76,11 +76,11 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
     }, [requestInfo?.timeSlots])
 
     if (!requestInfo) {
-        return <Loader/>
+        return <Loader />
     }
 
     const handleReject = () => {
-        update({body: {id: applicationId, progress: 'reject'}})
+        update({ body: { id: applicationId, progress: 'reject' } })
     }
     const handleContinue = () => {
         const dates = requestInfo.timeSlots?.length ? [] : datesFromSchedule(schedule)
@@ -88,7 +88,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
             body: {
                 id: applicationId,
                 progress: 'next approve step',
-                availableTimeSlots: dates.length ? dates.map(x => ({date: x})) : undefined
+                availableTimeSlots: dates.length ? dates.map(x => ({ date: x })) : undefined
             }
         })
         setApplicationStatus(null)
@@ -98,7 +98,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
         updateStatus({
             query: { id: applicationId },
             body: {
-              newStatus: applicationStatus || 'approved',
+                newStatus: applicationStatus || 'approved',
             }
         })
         setApplicationStatus(null)
@@ -106,30 +106,30 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
 
     const handleSubmit = (isShow: boolean = false) => {
         if (isShow) {
-            addAuctionAccess({id: applicationId, qr: formData.qrFile, auctionAccessNumber: formData.number})
+            addAuctionAccess({ id: applicationId, qr: formData.qrFile, auctionAccessNumber: formData.number })
             return
         }
 
-        addAuctionAccess({id: applicationId, qr: formData.qrFile, auctionAccessNumber: ''})
+        addAuctionAccess({ id: applicationId, qr: formData.qrFile, auctionAccessNumber: '' })
     };
 
     return (
         <div className={styles.container}>
             <motion.div
                 className={styles.card}
-                initial={{opacity: 0, y: 20}}
-                animate={{opacity: 1, y: 0}}
-                transition={{duration: 0.5}}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
             >
                 {/* HeaderWeb */}
                 <div className={styles.header}>
-                    <LoadingOverlay visible={isUpdatingStatus || isUpdating}/>
+                    <LoadingOverlay visible={isUpdatingStatus || isUpdating} />
                     <Group justify="space-between">
                         <Button
                             variant="light"
                             color="white"
                             mb={16}
-                            leftSection={<AiOutlineArrowLeft size={18}/>}
+                            leftSection={<AiOutlineArrowLeft size={18} />}
                             onClick={() => router.push("/admin")}
                         >
                             Back
@@ -137,10 +137,10 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                         {/* Buttons */}
                         <section className={styles.buttons}>
                             <button className={styles.rejectBtn} onClick={handleReject}>
-                                <FaTimes/> Reject
+                                <FaTimes /> Reject
                             </button>
                             <button className={styles.continueBtn} onClick={handleContinue}>
-                                <FaArrowRight/> Continue
+                                <FaArrowRight /> Continue
                             </button>
                         </section>
                     </Group>
@@ -156,16 +156,16 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                             <h1 className={styles.userName}>{requestInfo.firstName} {requestInfo.lastName}</h1>
                             <div className={styles.dates}>
                                 <div className={styles.dateItem}>
-                                    <FaCalendarAlt/>
+                                    <FaCalendarAlt />
                                     <span>Born: {new Date(requestInfo.birthDate).toDateString()}</span>
                                 </div>
                                 <div className={styles.dateItem}>
-                                    <FaPaperPlane/>
+                                    <FaPaperPlane />
                                     <span>Applied: {new Date(requestInfo.applicationDate).toDateString()}</span>
                                 </div>
                             </div>
                             <div className={styles.email}>
-                                <FaEnvelope/>
+                                <FaEnvelope />
                                 <span>{requestInfo.email}</span>
                             </div>
                         </div>
@@ -174,7 +174,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                     {/* Status */}
                     <section className={styles.section}>
                         <div className={styles.sectionHeader}>
-                            <FaClock className={styles.sectionIconOrange}/>
+                            <FaClock className={styles.sectionIconOrange} />
                             <h2>Application Status</h2>
                         </div>
                         <div className={styles.statusBox}>
@@ -213,7 +213,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                     {/* About */}
                     <section className={styles.section}>
                         <div className={styles.sectionHeader}>
-                            <FaUserCircle className={styles.sectionIcon}/>
+                            <FaUserCircle className={styles.sectionIcon} />
                             <h2>About</h2>
                         </div>
                         <p className={styles.text}>
@@ -225,10 +225,10 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                         {/* Calendar */}
                         <section className={styles.section}>
                             <div className={styles.sectionHeader}>
-                                <FaCalendarAlt className={styles.sectionIconBlue}/>
+                                <FaCalendarAlt className={styles.sectionIconBlue} />
                                 <h2>Available Slots</h2>
                             </div>
-                            <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                 {requestInfo.timeSlots?.length ? (
                                     <Card shadow="sm" padding="lg" radius="md" withBorder>
                                         <Text fw={600} size="lg" mb="sm">
@@ -238,9 +238,9 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                             {requestInfo.timeSlots.map((slot, index) => {
                                                 const parsedDate = new Date(slot.date);
 
-                                                const day = parsedDate.toLocaleDateString("en-US", {day: "2-digit"});
-                                                const month = parsedDate.toLocaleDateString("en-US", {month: "short"});
-                                                const weekday = parsedDate.toLocaleDateString("en-US", {weekday: "short"});
+                                                const day = parsedDate.toLocaleDateString("en-US", { day: "2-digit" });
+                                                const month = parsedDate.toLocaleDateString("en-US", { month: "short" });
+                                                const weekday = parsedDate.toLocaleDateString("en-US", { weekday: "short" });
                                                 const hr = parsedDate.toLocaleTimeString("en-US", {
                                                     hour: "2-digit",
                                                     minute: "2-digit",
@@ -251,11 +251,11 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                                         key={String(slot.date)}
                                                         className={styles.dateButton}
                                                     >
-                                                        <FaCalendarAlt className={styles.dateButtonIcon}/>
+                                                        <FaCalendarAlt className={styles.dateButtonIcon} />
                                                         <div className={styles.dateButtonText}>
-                                                    <span className={styles.dateButtonDay}>
-                                                      {day} {month} {weekday}
-                                                    </span>
+                                                            <span className={styles.dateButtonDay}>
+                                                                {day} {month} {weekday}
+                                                            </span>
                                                             <span className={styles.dateButtonWeekday}>{hr}</span>
                                                         </div>
                                                     </div>
@@ -264,7 +264,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                         </Group>
                                     </Card>
                                 ) : (
-                                    <SchedulePicker scheduleState={[schedule, setSchedule]}/>
+                                    <SchedulePicker scheduleState={[schedule, setSchedule]} />
                                 )}
 
                                 <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -273,19 +273,19 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                     </Text>
                                     {requestInfo.activeTimeSlot ? (
                                         <div className={styles.dateButton}>
-                                            <FaCalendarAlt className={styles.dateButtonIcon} color="green"/>
+                                            <FaCalendarAlt className={styles.dateButtonIcon} color="green" />
                                             <div className={styles.dateButtonText}>
-                                                 <span className={styles.dateButtonDay}>
-                                                        {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", {day: "2-digit"})}
+                                                <span className={styles.dateButtonDay}>
+                                                    {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", { day: "2-digit" })}
 
-                                                     {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", {month: "short"})}
-                                                 </span>
+                                                    {new Date(requestInfo.activeTimeSlot.date).toLocaleDateString("en-US", { month: "short" })}
+                                                </span>
                                                 <span
                                                     className={styles.dateButtonWeekday}>{new Date(requestInfo.activeTimeSlot.date).toLocaleTimeString("en-US", {
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                    hour12: true,
-                                                })}</span>
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                        hour12: true,
+                                                    })}</span>
                                             </div>
                                         </div>
                                     ) : (
@@ -299,7 +299,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                         {requestInfo.links.agreement && requestInfo.links.driverLicence && (
                             <section className={styles.section}>
                                 <div className={styles.sectionHeader}>
-                                    <FaFileUpload className={styles.sectionIconBlue}/>
+                                    <FaFileUpload className={styles.sectionIconBlue} />
                                     <h2>Uploaded Documents</h2>
                                 </div>
 
@@ -307,7 +307,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                 <div className={styles.docCard}>
                                     <div className={styles.docInfo}>
                                         <div className={styles.docIcon}>
-                                            <FaIdCard/>
+                                            <FaIdCard />
                                         </div>
                                         <div>
                                             <h3>Driver License</h3>
@@ -317,10 +317,10 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                     </div>
                                     <div className={styles.docActions}>
                                         <button>
-                                            <FaEye/>
+                                            <FaEye />
                                         </button>
                                         <a download href={requestInfo.links.agreement} target="_blank">
-                                            <FaDownload/>
+                                            <FaDownload />
                                         </a>
                                     </div>
                                 </div>
@@ -328,7 +328,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                 <div className={styles.docCard}>
                                     <div className={styles.docInfo}>
                                         <div className={styles.docIconGreen}>
-                                            <FaFileContract/>
+                                            <FaFileContract />
                                         </div>
                                         <div>
                                             <h3>Agreement Contract</h3>
@@ -338,21 +338,21 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                     </div>
                                     <div className={styles.docActions}>
                                         <button>
-                                            <FaEye/>
+                                            <FaEye />
                                         </button>
                                         <a download href={requestInfo.links.driverLicence} target="_blank">
-                                            <FaDownload/>
+                                            <FaDownload />
                                         </a>
                                     </div>
                                 </div>
                                 {requestInfo.auctionAccessNumber && (
-                                    <Group flex="column" gap="sm" style={{marginTop: 20}}>
+                                    <Group flex="column" gap="sm" style={{ marginTop: 20 }}>
                                         <Text size="lg" fw={600}>
                                             Auction Access Number
                                         </Text>
 
                                         <CopyButton value={requestInfo.auctionAccessNumber} timeout={2000}>
-                                            {({copied, copy}) => (
+                                            {({ copied, copy }) => (
                                                 <Group gap="sm">
 
                                                     <Tooltip label={copied ? 'Copied!' : 'Copy to clipboard'} withArrow>
@@ -360,8 +360,8 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                                             size="md"
                                                             variant="transparent"
                                                             onClick={copy}
-                                                            rightSection={copied ? <FaCheck size={18}/> :
-                                                                <FaCopy size={18}/>}
+                                                            rightSection={copied ? <FaCheck size={18} /> :
+                                                                <FaCopy size={18} />}
                                                         >
                                                             {requestInfo.auctionAccessNumber}
                                                         </Button>
@@ -381,7 +381,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                                     placeholder="Enter your number"
                                                     value={formData?.number}
                                                     onChange={(e) =>
-                                                        setFormData((prev) => ({...prev, number: e?.currentTarget?.value}))
+                                                        setFormData((prev) => ({ ...prev, number: e?.currentTarget?.value }))
                                                     }
                                                     mb="md"
                                                 />
@@ -392,7 +392,7 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
                                                     accept="image/*"
                                                     value={formData?.qrFile}
                                                     onChange={(file) =>
-                                                        setFormData((prev) => ({...prev, qrFile: file}))
+                                                        setFormData((prev) => ({ ...prev, qrFile: file }))
                                                     }
                                                     mb="md"
                                                 />

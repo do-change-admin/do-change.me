@@ -12,7 +12,7 @@ import {
     FaCalendarCheck, FaCalendarAlt,
 } from "react-icons/fa";
 import styles from "./CallSchedule.module.css"
-import { useAuctionAccessRequest, useAuctionAccessRequestUpdate, useDatesMapping } from "@/hooks";
+import { useAuctionAccessRequest, useAuctionAccessRequestUpdate, useDatesMapping } from "@/client/hooks";
 import dayjs from "dayjs";
 import cn from "classnames";
 
@@ -77,7 +77,7 @@ export const CallSchedule = () => {
                                                 <FaCalendarAlt className={styles.dateButtonIcon} />
                                                 <div className={styles.dateButtonText}>
                                                     <span className={styles.dateButtonDay}>
-                                                      {day} {month} {weekday}
+                                                        {day} {month} {weekday}
                                                     </span>
                                                     <span className={styles.dateButtonWeekday}>{hr}</span>
                                                 </div>

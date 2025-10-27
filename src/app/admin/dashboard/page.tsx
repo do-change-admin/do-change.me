@@ -11,8 +11,8 @@ import {
     Text,
     Title,
 } from "@mantine/core";
-import { useAdminUsersInfo } from "@/hooks/_admin-users.hooks";
-import { useStats } from "@/hooks";
+import { useAdminUsersInfo } from "@/client/hooks/_admin-users.hooks";
+import { useStats } from "@/client/hooks";
 
 const MAX_REPORTS = 100;
 
@@ -87,67 +87,67 @@ export default function UsersTable() {
                 <div className={styles.tableContent}>
                     <table className={styles.table}>
                         <thead>
-                        <tr>
-                            <th>
-                                <div className={styles.flexRow}>
-                                    <FaIdCard color="#4f46e5" />
-                                    <span>User ID</span>
-                                </div>
-                            </th>
-                            <th>
-                                <div className={styles.flexRow}>
-                                    <FaEnvelope color="#a855f7" />
-                                    <span>User Email</span>
-                                </div>
-                            </th>
-                            <th>
-                                <div className={styles.flexRow}>
-                                    <FaDownload color="#06b6d4" />
-                                    <span>Reports Downloaded</span>
-                                </div>
-                            </th>
-                        </tr>
+                            <tr>
+                                <th>
+                                    <div className={styles.flexRow}>
+                                        <FaIdCard color="#4f46e5" />
+                                        <span>User ID</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div className={styles.flexRow}>
+                                        <FaEnvelope color="#a855f7" />
+                                        <span>User Email</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div className={styles.flexRow}>
+                                        <FaDownload color="#06b6d4" />
+                                        <span>Reports Downloaded</span>
+                                    </div>
+                                </th>
+                            </tr>
                         </thead>
 
                         <tbody>
-                        {data.users
-                            .sort((a, b) => b.downloadedReports - a.downloadedReports)
-                            .map((user) => {
-                                const isHigh = user.downloadedReports > MAX_REPORTS;
-                                return (
-                                    <tr key={user.id}>
-                                        <td className={styles.bodyTd}>
-                                            <div className={styles.flexRow}>
-                                                <span>{user.id}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={styles.flexRow}>
-                                                <span>{user.email}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={styles.flexRow}>
-                                                <Badge
-                                                    color={isHigh ? "red" : "green"}
-                                                    variant="filled"
-                                                    className={styles.badge}
-                                                >
-                                                    {user.downloadedReports}
-                                                </Badge>
-                                                <Progress
-                                                    value={Math.min(
-                                                        (user.downloadedReports / MAX_REPORTS) * 100,
-                                                        100
-                                                    )}
-                                                    color={isHigh ? "red" : "green"}
-                                                    style={{ flex: 1 }}
-                                                />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {data.users
+                                .sort((a, b) => b.downloadedReports - a.downloadedReports)
+                                .map((user) => {
+                                    const isHigh = user.downloadedReports > MAX_REPORTS;
+                                    return (
+                                        <tr key={user.id}>
+                                            <td className={styles.bodyTd}>
+                                                <div className={styles.flexRow}>
+                                                    <span>{user.id}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className={styles.flexRow}>
+                                                    <span>{user.email}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className={styles.flexRow}>
+                                                    <Badge
+                                                        color={isHigh ? "red" : "green"}
+                                                        variant="filled"
+                                                        className={styles.badge}
+                                                    >
+                                                        {user.downloadedReports}
+                                                    </Badge>
+                                                    <Progress
+                                                        value={Math.min(
+                                                            (user.downloadedReports / MAX_REPORTS) * 100,
+                                                            100
+                                                        )}
+                                                        color={isHigh ? "red" : "green"}
+                                                        style={{ flex: 1 }}
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                         </tbody>
                     </table>
                 </div>

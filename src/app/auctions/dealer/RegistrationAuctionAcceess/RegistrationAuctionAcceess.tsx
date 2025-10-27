@@ -10,7 +10,7 @@ import {
 import styles from './RegistrationAuctionAcceess.module.css';
 import { Button, Image } from "@mantine/core";
 import { ChangeEvent } from "react";
-import { useAuctionAccessDock } from "@/hooks";
+import { useAuctionAccessDock } from "@/client/hooks";
 import { notifications } from "@mantine/notifications";
 
 const handleFileChange = (
