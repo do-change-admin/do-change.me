@@ -21,7 +21,7 @@ import {
     FaChevronDown,
 } from "react-icons/fa";
 
-// import Sell from "@/app/sdk/plug";
+import Sell from "@/app/sdk/plug";
 
 import styles from "./page.module.css";
 import {
@@ -74,9 +74,7 @@ export default function VehiclesPage() {
 
     if (!isDEV) {
         return (
-            <div className={styles.container}>
-                <></>
-            </div>
+            <Sell />
         )
     }
     return (
