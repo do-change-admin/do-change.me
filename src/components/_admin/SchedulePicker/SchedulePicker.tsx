@@ -3,7 +3,11 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { DatePicker } from "@mantine/dates";
 import { Button, Card, Text, Badge } from "@mantine/core";
-import { AiOutlineCalendar, AiOutlineClockCircle, AiOutlineClose } from "react-icons/ai";
+import {
+    AiOutlineCalendar,
+    AiOutlineClockCircle,
+    AiOutlineClose,
+} from "react-icons/ai";
 import styles from "./SchedulePicker.module.css";
 
 const timeSlots = [
@@ -19,25 +23,24 @@ const timeSlots = [
     "6:00 PM",
 ];
 
-
 export type Schedule = {
     [date: string]: string[];
 };
 
-export const SchedulePicker: FC<{ scheduleState: [Schedule, Dispatch<SetStateAction<Schedule>>] }> = ({
-    scheduleState
-}) => {
+export const SchedulePicker: FC<{
+    scheduleState: [Schedule, Dispatch<SetStateAction<Schedule>>];
+}> = ({ scheduleState }) => {
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [schedule, setSchedule] = scheduleState;
     const [currentDate, setCurrentDate] = useState<string | null>(null);
 
     useEffect(() => {
         const dates = Object.keys(schedule);
-        const notSelected = dates.filter(x => !selectedDates.includes(x))
+        const notSelected = dates.filter((x) => !selectedDates.includes(x));
         if (notSelected.length) {
-            setSelectedDates(x => x.concat(notSelected))
+            setSelectedDates((x) => x.concat(notSelected));
         }
-    }, [schedule])
+    }, [schedule]);
 
     const handleTimeClick = (slot: string) => {
         if (!currentDate) return;
@@ -66,9 +69,7 @@ export const SchedulePicker: FC<{ scheduleState: [Schedule, Dispatch<SetStateAct
         }
     };
 
-    const handleConfirm = () => {
-        console.log(schedule);
-    };
+    const handleConfirm = () => {};
 
     return (
         <Card className={styles.wrapper} shadow="lg" radius="xl" withBorder>
@@ -115,20 +116,27 @@ export const SchedulePicker: FC<{ scheduleState: [Schedule, Dispatch<SetStateAct
                         <AiOutlineClockCircle /> Available Times
                     </Text>
                     <Text className={styles.subTitle}>
-                        {currentDate ? currentDate.toString() : "Please select a date"}
+                        {currentDate
+                            ? currentDate.toString()
+                            : "Please select a date"}
                     </Text>
 
                     <div className={styles.timeGrid}>
                         {timeSlots.map((slot) => {
                             const isSelected =
                                 currentDate &&
-                                schedule[currentDate.toString()]?.includes(slot);
+                                schedule[currentDate.toString()]?.includes(
+                                    slot
+                                );
                             return (
                                 <button
                                     key={slot}
                                     onClick={() => handleTimeClick(slot)}
-                                    className={`${styles.timeSlot} ${isSelected ? styles.timeSlotSelected : ""
-                                        }`}
+                                    className={`${styles.timeSlot} ${
+                                        isSelected
+                                            ? styles.timeSlotSelected
+                                            : ""
+                                    }`}
                                 >
                                     {slot}
                                 </button>

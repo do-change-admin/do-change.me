@@ -65,7 +65,6 @@ export const UserCard: FC<UserCardProps> = ({applicationId}) => {
     const router = useRouter();
     const [applicationStatus, setApplicationStatus] = useState<NewStatusType | null>(requestInfo?.status || null);
 
-    console.log('auctionAccess', auctionAccess)
     useEffect(() => {
         const slots = requestInfo?.timeSlots
         if (!slots) {
