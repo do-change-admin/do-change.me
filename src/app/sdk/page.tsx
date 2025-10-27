@@ -20,6 +20,9 @@ import {
     FaTimes,
     FaChevronDown,
 } from "react-icons/fa";
+
+// import Sell from "@/app/sdk/plug";
+
 import styles from "./page.module.css";
 import {
     getColorByCarSaleStatus,
@@ -30,6 +33,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
 import { CardSlider } from "@/client/components";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
+
+const isDEV = process.env.NODE_ENV === "development";
 
 export default function VehiclesPage() {
     const [opened, { open, close }] = useDisclosure(false);
@@ -67,6 +72,13 @@ export default function VehiclesPage() {
         setModel(null);
     };
 
+    if (!isDEV) {
+        return (
+            <div className={styles.container}>
+                <></>
+            </div>
+        )
+    }
     return (
         <div className={styles.container}>
             {/* Add Vehicle Button */}
