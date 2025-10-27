@@ -3,8 +3,8 @@ import { Container } from 'inversify'
 import { StoreTokens, ProviderTokens } from './tokens.di-container'
 import { registerServices } from './register-services'
 import { registerControllers } from './register-controllers'
-import { NotificationStore } from '../stores/interfaces/notification.store'
-import { NotificationInMemoryStore } from '../stores/implementations/in-memory/notification.in-memory-store'
+import { Notifications } from '../stores/interfaces/notification.store.interface'
+import { NotificationsFromRAM } from '../stores/implementations/ram/notification.store.ram'
 
 const container = new Container()
 
@@ -25,8 +25,8 @@ const registerDataProviders = () => {
         .bind<DataProviders.Pictures.Interface>(StoreTokens.pictures)
         .to(DataProvidersImplemetations.API.PicturesInPublicFolder)
     container
-        .bind<NotificationStore>(StoreTokens.notifications)
-        .to(NotificationInMemoryStore).inSingletonScope()
+        .bind<Notifications>(StoreTokens.notifications)
+        .to(NotificationsFromRAM).inSingletonScope()
 }
 
 const registerFunctionProviders = () => {

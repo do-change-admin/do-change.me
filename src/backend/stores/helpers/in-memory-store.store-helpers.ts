@@ -1,6 +1,7 @@
 import { injectable } from "inversify";
 import { v4 } from "uuid";
 import { CRUDStore } from "./abstract-models.store-helpers";
+import { Notifications } from "../interfaces/notification.store.interface";
 
 type ExtractCRUDParams<T> =
     T extends {
@@ -17,7 +18,7 @@ type ExtractCRUDParams<T> =
     }
     : never;
 
-export const newInMemoryStore = <Store>(options?: {
+export const newStoreInRAM = <Store>(options?: {
     searchLogic?: {
         list?: (entity: ExtractCRUDParams<Store>['Models']['detail'], pattern: ExtractCRUDParams<Store>['SearchPayload']['list']) => boolean,
         specific?: (entity: ExtractCRUDParams<Store>['Models']['detail'], pattern: ExtractCRUDParams<Store>['SearchPayload']['specific']) => boolean,
@@ -30,7 +31,7 @@ export const newInMemoryStore = <Store>(options?: {
     initialData?: Array<ExtractCRUDParams<Store>['Models']['detail']>
 }) => {
     @injectable()
-    class InMemoryCRUDProvider implements CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']> {
+    class StoreInRAM implements CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']> {
         protected data = [] as Array<ExtractCRUDParams<Store>['Models']['detail']>
 
         protected listSearchLogic = (entity: ExtractCRUDParams<Store>['Models']['detail'], pattern: ExtractCRUDParams<Store>['SearchPayload']['list']) => {
@@ -147,5 +148,5 @@ export const newInMemoryStore = <Store>(options?: {
             return { success: index > -1 }
         }
     }
-    return InMemoryCRUDProvider
+    return StoreInRAM
 }

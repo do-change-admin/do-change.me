@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { StoreTokens } from "../di-containers/tokens.di-container";
-import type { NotificationStore } from "../stores/interfaces/notification.store";
+import type { Notifications } from "../stores/interfaces/notification.store.interface";
 import z from "zod";
 
 type UserNotificationPayload = z.infer<typeof UserNotificationsManagementService.notificationPayloadSchema>
@@ -13,7 +13,7 @@ export class UserNotificationsManagementService {
     })
 
     public constructor(
-        @inject(StoreTokens.notifications) private readonly notifications: NotificationStore,
+        @inject(StoreTokens.notifications) private readonly notifications: Notifications,
         private readonly userId: string,
     ) { }
 

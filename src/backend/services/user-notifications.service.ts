@@ -3,7 +3,7 @@ import { StoreTokens } from "../di-containers/tokens.di-container";
 import { Notification } from "@/value-objects/notification.value-object";
 import z from "zod";
 import { ErrorFactory } from "@/value-objects/errors.value-object";
-import type { NotificationStore } from "../stores/interfaces/notification.store";
+import type { Notifications } from "../stores/interfaces/notification.store.interface";
 
 export type NotificationDTO = z.infer<typeof UserNotificationsService.notificationDTO>
 
@@ -16,7 +16,7 @@ export class UserNotificationsService {
     })
 
     public constructor(
-        @inject(StoreTokens.notifications) private readonly notifications: NotificationStore,
+        @inject(StoreTokens.notifications) private readonly notifications: Notifications,
         private readonly userId: string
     ) { }
 

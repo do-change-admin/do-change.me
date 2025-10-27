@@ -1,6 +1,6 @@
 import { beforeEach, expect, test } from 'vitest'
 import { ActionsPayload, CRUDStore, Models, SearchPayload } from './abstract-models.store-helpers'
-import { newInMemoryStore } from './in-memory-store.store-helpers'
+import { newStoreInRAM } from './in-memory-store.store-helpers'
 import { v4 } from 'uuid'
 
 type Detail = { id: string, name: string, extraField: string }
@@ -12,7 +12,7 @@ type InMemoryDataProvider = CRUDStore<
     ActionsPayload<{ name: string, extraField: string }, { extraField: string }>
 >
 
-const inMemoryProvider = newInMemoryStore<InMemoryDataProvider>()
+const inMemoryProvider = newStoreInRAM<InMemoryDataProvider>()
 
 let provider: InMemoryDataProvider
 
@@ -57,7 +57,7 @@ test('pagination', async () => {
 })
 
 test('with initial data', async () => {
-    const inMemoryProviderWithData = newInMemoryStore<InMemoryDataProvider>({
+    const inMemoryProviderWithData = newStoreInRAM<InMemoryDataProvider>({
         initialData: [{ extraField: '', id: '', name: 'asfsaf' }]
     })
 

@@ -5,7 +5,7 @@ import { SyndicationRequestsService } from "@/backend/services/syndication-reque
 import { SyndicationRequestDraftsService } from "@/backend/services/syndication-request-drafts.service"
 import { SyndicationRequestManagementService } from "@/backend/services/syndication-request-management.service"
 import { UserNotificationsService } from "../services/user-notifications.service"
-import type { NotificationStore } from "../stores/interfaces/notification.store"
+import type { Notifications } from "../stores/interfaces/notification.store.interface"
 import { UserNotificationsManagementService } from "../services/user-notifications-management.service"
 
 export type SyndicationRequestsServiceFactory = (userId: string) => SyndicationRequestsService
@@ -56,7 +56,7 @@ export const registerServices = (container: Container) => {
         .bind<UserNotificationsServiceFactory>(ServiceTokens.userNotificationsFactory)
         .toFactory((ctx) => {
             return (userId) => {
-                const notifications = ctx.get<NotificationStore>(StoreTokens.notifications)
+                const notifications = ctx.get<Notifications>(StoreTokens.notifications)
                 return new UserNotificationsService(notifications, userId)
             }
         })
@@ -65,7 +65,7 @@ export const registerServices = (container: Container) => {
         .bind<UserNotificationsManagementServiceFactory>(ServiceTokens.userNotificationsManagementFactory)
         .toFactory((ctx) => {
             return (userId) => {
-                const notifications = ctx.get<NotificationStore>(StoreTokens.notifications)
+                const notifications = ctx.get<Notifications>(StoreTokens.notifications)
                 return new UserNotificationsManagementService(notifications, userId)
             }
         })

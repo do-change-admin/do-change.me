@@ -4,6 +4,7 @@ import { SyndicationRequest } from "@/entities/syndication-request.entity";
 import { DataProviders } from "@/backend/providers";
 import { inject, injectable } from "inversify";
 import z from "zod";
+import type { Pictures } from "../stores/interfaces/picture.store.interface";
 
 type DataListModel = DataProviders.SyndicationRequests.ListModel;
 type CreateDataPayload = DataProviders.SyndicationRequests.CreatePayload;
@@ -21,7 +22,7 @@ export class SyndicationRequestsService {
     public constructor(
         @inject(StoreTokens.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
         @inject(StoreTokens.syndicationRequestDrafts) private readonly drafts: DataProviders.SyndicationRequestDrafts.Interface,
-        @inject(StoreTokens.pictures) private readonly pictures: DataProviders.Pictures.Interface,
+        @inject(StoreTokens.pictures) private readonly pictures: Pictures,
         private readonly userId: string
     ) { }
 
