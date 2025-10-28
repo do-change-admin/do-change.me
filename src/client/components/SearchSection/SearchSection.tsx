@@ -23,18 +23,19 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const lastCarVin = Object.keys(actionsHistory || {})?.[0]
     const initialVIN = searchParams.get("vin") || (isFetching ? null : (lastCarVin || '1C6RD6FT1CS310366'));
 
-    const { vin, setVIN } = useVINAnalysisState()
+    const setRequestVIN = useVINAnalysisState(x => x.setRequestVIN)
+    const requestVIN = useVINAnalysisState(x => x.requestVIN)
 
     useEffect(() => {
         if (initialVIN) {
-            setVIN(initialVIN)
+            setRequestVIN(initialVIN)
         }
     }, [initialVIN])
 
 
     const [activeTab, setActiveTab] = useState<"vin" | "plate">("vin");
-    const { data: baseInfo, isLoading } = useBaseInfoByVIN(vin);
-    const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(vin);
+    const { data: baseInfo, isLoading } = useBaseInfoByVIN(requestVIN);
+    const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(requestVIN);
 
     return (
         <section className={styles.searchSection}>

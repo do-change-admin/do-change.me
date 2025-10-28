@@ -9,6 +9,7 @@ import { useProfile } from "@/client/hooks";
 import { useScannerState } from '@/client/states/scanner.state';
 import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import { useShallow } from 'zustand/react/shallow'
+import { VIN } from '@/value-objects/vin.value-object';
 
 export const VinSearch = ({ openSubscription }: { openSubscription?: () => void }) => {
     const router = useRouter();
@@ -24,8 +25,10 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
             openSubscription()
             return;
         }
-        if (!vin && vin?.length !== 17) return;
-        router.push(`/?vin=${encodeURIComponent(vin)}`);
+        if (!VIN.schema.safeParse(vin).success) {
+            return;
+        }
+        router.push(`/?vin=${encodeURIComponent(vin!)}`);
     };
 
     const handleStartScanner = () => {
