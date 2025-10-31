@@ -54,6 +54,9 @@ export const useMileagePriceQuery = (
                 "GET"
             )({ query: { vin, mileage } }),
         enabled: () => {
+            if (!mileage) {
+                return false
+            }
             const { success } = VIN.schema.safeParse(vin);
             if (!success) {
                 return false;
