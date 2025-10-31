@@ -25,17 +25,22 @@ const formatNumber = (num: number) => {
 export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
     const requestVIN = useVINAnalysisState(x => x.requestVIN)
 
-    const { data: odometerData, isLoading } = useOdometer(requestVIN);
+    const { data: odometerData, isLoading, isFetched } = useOdometer(requestVIN);
     const lastMileageRecord = odometerData?.at()?.miles;
     const [miles, setMiles] = useState<number>(0)
-    const [debouncedMiles] = useDebouncedValue(miles, 500)
+    const [debouncedMiles] = useDebouncedValue(miles, 1500)
     const { data: mileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(requestVIN, debouncedMiles);
 
     useEffect(() => {
-        if (!!lastMileageRecord) {
+        if (!!lastMileageRecord && !isLoadingMileage && !miles) {
             setMiles(lastMileageRecord);
+            return
         }
-    }, [lastMileageRecord])
+
+        if (isFetched && !miles && !lastMileageRecord) {
+            setMiles(1)
+        }
+    }, [lastMileageRecord, isLoadingMileage, isFetched])
 
     return (
         <section className={styles.sampleResults}>
