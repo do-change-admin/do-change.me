@@ -1,6 +1,6 @@
 import {
     Button,
-    Divider,
+    Divider, Drawer,
     FileButton,
     Grid,
     Group,
@@ -147,29 +147,17 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
     const isFormValidForDraft = vin?.length === 17;
 
     return (
-        <Modal
+        <Drawer
             opened={opened}
             onClose={onClose}
-            size="70%"
-            radius="lg"
-            centered
-            classNames={{
-                content: styles.modalContent,
-                body: styles.modalBody,
-                header: styles.modalHeader,
-            }}
-            title={
-                <div>
-                    <Title order={2}>Add Your Car</Title>
-                    <Text size="sm" c="dimmed">
-                        Fill in the details to list your car for sale
-                    </Text>
-                </div>
-            }
-            closeButtonProps={{ icon: <FaXmark /> }}
-            overlayProps={{ backgroundOpacity: 0.55, blur: 2 }}
+            position="bottom"
+            padding="xl"
+            overlayProps={{ blur: 2, opacity: 0.55 }}
+            size="100%"
+            radius="xl"
+            zIndex={999999999}
+            className={styles.drawerWrapper}
         >
-            <Stack gap="lg">
                 <div>
                     <Group gap="xs">
                         <FaIdCard className={styles.iconBlue} />
@@ -179,6 +167,8 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     <Grid>
                         <Grid.Col span={12}>
                             <TextInput
+                                radius="lg"
+                                pt="lg"
                                 label="VIN Number *"
                                 placeholder="Enter 17-character VIN"
                                 maxLength={17}
@@ -201,6 +191,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
 
                         <Grid.Col span={{ base: 12, sm: 6 }}>
                             <TextInput
+                                radius="lg"
                                 label="Make"
                                 placeholder="Auto-filled from VIN"
                                 value={make}
@@ -211,6 +202,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                         </Grid.Col>
                         <Grid.Col span={{ base: 12, sm: 6 }}>
                             <TextInput
+                                radius="lg"
                                 label="Model"
                                 placeholder="Auto-filled from VIN"
                                 value={model}
@@ -222,6 +214,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
 
                         <Grid.Col span={{ base: 12, sm: 6 }}>
                             <TextInput
+                                radius="lg"
                                 label="Year"
                                 placeholder="Auto-filled from VIN"
                                 value={year}
@@ -234,6 +227,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                         </Grid.Col>
                         <Grid.Col span={{ base: 12, sm: 6 }}>
                             <NumberInput
+                                radius="lg"
                                 label="Mileage *"
                                 placeholder="0"
                                 min={0}
@@ -244,10 +238,8 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     </Grid>
                 </div>
 
-                <Divider />
-
                 <div>
-                    <Group gap="xs">
+                    <Group gap="xs" mt="lg">
                         <FaDollarSign className={styles.iconGreen} />
                         <Title order={4}>Pricing</Title>
                     </Group>
@@ -255,6 +247,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     <Grid mt="md">
                         <Grid.Col span={{ lg: 6, base: 12 }}>
                             <NumberInput
+                                radius="lg"
                                 label="Listing Price *"
                                 placeholder="0.00"
                                 min={0}
@@ -265,10 +258,8 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     </Grid>
                 </div>
 
-                <Divider />
-
                 <div>
-                    <Group>
+                    <Group mt="lg">
                         <Group gap="xs">
                             <FaCamera className={styles.iconPurple} />
                             <Title order={4}>Photos *</Title>
@@ -357,19 +348,13 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                         </Grid>
                     )}
                 </div>
-            </Stack>
 
             <Divider mt="lg" />
 
             <Group mt="lg">
-                <Text size="sm" c="dimmed">
-                    <Text component="span" c="red">
-                        *
-                    </Text>{" "}
-                    Required fields
-                </Text>
                 <Group>
                     <Button
+                        radius="lg"
                         variant="outline"
                         leftSection={<FaSave />}
                         disabled={!isFormValidForDraft}
@@ -378,6 +363,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                         Save as Draft
                     </Button>
                     <Button
+                        radius="lg"
                         color="blue"
                         leftSection={<FaPaperPlane />}
                         disabled={!isFormValidForSyndication}
@@ -387,6 +373,6 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     </Button>
                 </Group>
             </Group>
-        </Modal>
+        </Drawer>
     );
 };

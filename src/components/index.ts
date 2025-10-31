@@ -19,3 +19,5 @@ export * from './SubscriptionPlans/Plans';
 export * from './CookieBanner/CookieBanner';
 export * from './AuctionAccess/AuctionAccess';
 export * from './Chat/Chat';
+export * from './PlaceholderSDK/PlaceholderSDK';
+
