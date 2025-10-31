@@ -4,15 +4,15 @@ import {FC, useState} from 'react';
 import { motion } from 'framer-motion';
 import {
     FaCar, FaChartLine, FaPlus, FaChevronDown, FaSyncAlt, FaDownload, FaFilter,
-    FaTimes, FaEdit, FaClock, FaCheckCircle, FaHandshake, FaTrophy, FaEye, FaSearch
+    FaTimes, FaEdit, FaClock, FaCheckCircle, FaHandshake, FaTrophy, FaEye, FaSearch, FaLink
 } from 'react-icons/fa';
 import styles from './page.module.css';
-import {ActionIcon, Badge, Button, Input, Select, TextInput} from "@mantine/core";
+import {ActionIcon, Badge, Button, Input, Select, Stack, TextInput} from "@mantine/core";
 import {useDebouncedValue, useDisclosure} from "@mantine/hooks";
 import {SyndicationRequestStatusNames} from "@/entities/sindycation-request-status.entity";
 import {useSyndicationRequestFilters, useSyndicationRequests} from "@/client/queries/syndication-requests.queries";
 import {CarAdder} from "@/components/CarAdder/CarAdder";
-import {getColorByCarSaleStatus} from "@/app/sdk/sdk.utils";
+import {getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink} from "@/app/sdk/sdk.utils";
 import {PlaceholderSDK} from "@/components";
 
 const cars = [
@@ -194,11 +194,36 @@ const CarSyndicationSection: FC = () => {
                                     </Badge>
                                     <span className={styles.vin}>VIN: {car.vin}</span>
                                 </div>
-                                <h3>{car.model} ({car.year})</h3>
+                                <h3> {car.make} {car.model} ({car.year})</h3>
                                 <div className={styles.vehicleBottom}>
-                                    <span className={styles.price}>{car.price}</span>
+                                    <span className={styles.price}>${(car?.price / 100).toFixed(2)}</span>
                                 </div>
                             </div>
+                            <Stack gap="xs" p="lg">
+                                {car.marketplaceLinks.map((link) => {
+                                    const { color, label } =
+                                        getVisualDataByCarSaleMarketplaceLink(
+                                            link
+                                        );
+                                    return (
+                                        <Button
+                                            key={link}
+                                            variant="light"
+                                            color={color}
+                                            fullWidth
+                                            rightSection={<FaLink />}
+                                            styles={{
+                                                root: {
+                                                    justifyContent:
+                                                        "space-between",
+                                                },
+                                            }}
+                                        >
+                                            {label}
+                                        </Button>
+                                    );
+                                })}
+                            </Stack>
                         </motion.div>
                     ))}
                 </div>
