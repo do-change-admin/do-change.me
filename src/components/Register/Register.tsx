@@ -65,7 +65,7 @@ export const Register = () => {
             });
 
             if (result?.ok) {
-                router.push("/");
+                window.location.reload();
                 return;
             }
 

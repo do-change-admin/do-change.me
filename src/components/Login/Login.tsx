@@ -13,11 +13,14 @@ import Alert from "@/components/Alert/Alert";
 // import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 import { AppError, isBusinessError } from "@/lib/errors";
 import { handleApiError } from "@/lib/handleApiError";
+import {window} from "effect/Array";
+import {LoadingOverlay} from "@mantine/core";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -66,6 +69,7 @@ export const Login = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setLoading(true);
     const result = await signIn("credentials", {
       email,
       password,
@@ -73,11 +77,13 @@ export const Login = () => {
     });
 
     if (result?.ok) {
-      router.push("/");
+      setLoading(false);
+      router.refresh();
       return;
     }
 
     if (result?.error) {
+      setLoading(false);
       try {
         const parsedError: AppError = JSON.parse(result.error);
 
@@ -103,10 +109,9 @@ export const Login = () => {
     }
   };
 
-  const handleClickLogo = () => router.push("/");
-
   return (
     <div className={styles.wrapper}>
+      <LoadingOverlay visible={loading} />
       {alertVisible && alertMessage && (
         <Alert
           message={alertMessage}

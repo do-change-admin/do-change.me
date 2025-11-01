@@ -4,8 +4,18 @@
     background: #fff;
     display: flex;
     flex-direction: column;
+    overflow: visible;
 }
 
+.current {
+    border: 2px solid  #10b981;
+}
+
+.badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
 .cardContent {
     padding: 0.75rem;
     /* внутренние отступы */
