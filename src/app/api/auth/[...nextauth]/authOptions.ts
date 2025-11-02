@@ -2,8 +2,8 @@ import { compare } from "bcryptjs";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { businessError } from "@/lib/errors";
-import { prismaClient } from "@/infrastructure/prisma/client";
+import { businessError } from "@/lib-deprecated/errors";
+import { prismaClient } from "@/backend/infrastructure/prisma/client";
 
 export const authOptions: AuthOptions = {
     providers: [

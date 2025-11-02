@@ -1,11 +1,11 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import { RequestPassword } from "./models";
 import z from "zod";
-import { serverError, validationError } from "@/lib/errors";
-import { passwordReset } from "@/infrastructure/email/templates/password-reset";
-import { prismaClient } from "@/infrastructure/prisma/client";
+import { serverError, validationError } from "@/lib-deprecated/errors";
+import { passwordReset } from "@/backend/infrastructure/email/templates/password-reset";
+import { prismaClient } from "@/backend/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
-import { DIContainer } from "@/di-containers";
+import { DIContainer } from "@/backend/di-containers";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();

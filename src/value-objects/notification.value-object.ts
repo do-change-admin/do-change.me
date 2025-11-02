@@ -30,7 +30,7 @@ export class Notification {
         return !this.modelData.seen
     }
 
-    read = () => {
+    get read() {
         const model = this.model
         model.seen = true
         return Notification.create(model)

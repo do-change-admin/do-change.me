@@ -1,9 +1,9 @@
-import React, {Suspense} from 'react';
-import {Layout} from "@/components/Layout/Layout";
-import {Providers} from "./providers";
-import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
-import {Inter} from "next/font/google";
+import React, { Suspense } from 'react';
+import { Layout } from "@/client/components/Layout/Layout";
+import { Providers } from "./providers";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
@@ -34,19 +34,19 @@ export const metadata: Metadata = {
 };
 
 
-export default async function  SpaceLayout({children,  params: { locale } }: { children: React.ReactNode, params: { locale: string } }) {
+export default async function SpaceLayout({ children, params: { locale } }: { children: React.ReactNode, params: { locale: string } }) {
 
     return (
         <html>
-        <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
-        <Suspense>
-            <Providers>
-                <Layout>
-                    {children}
-                </Layout>
-            </Providers>
-        </Suspense>
-        </body>
+            <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
+                <Suspense>
+                    <Providers>
+                        <Layout>
+                            {children}
+                        </Layout>
+                    </Providers>
+                </Suspense>
+            </body>
         </html>
     );
 }

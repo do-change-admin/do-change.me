@@ -24,7 +24,7 @@ export class SyndicationRequestDraft {
         return new SyndicationRequestDraft(payload)
     }
 
-    model = (): SyndicationRequestDraftModel => {
+    get model(): SyndicationRequestDraftModel {
         return this.data
     }
 }

@@ -2,12 +2,12 @@ import { redirect } from "next/navigation";
 import { after, NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { VerifyEmail } from "./models";
-import { serverError, validationError } from "@/lib/errors";
-import { verificationEmail } from "@/infrastructure/email/templates/verification-email";
-import { prismaClient } from "@/infrastructure/prisma/client";
+import { serverError, validationError } from "@/lib-deprecated/errors";
+import { verificationEmail } from "@/backend/infrastructure/email/templates/verification-email";
+import { prismaClient } from "@/backend/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
 import { VO } from "@/value-objects";
-import { DIContainer } from "@/di-containers";
+import { DIContainer } from "@/backend/di-containers";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();

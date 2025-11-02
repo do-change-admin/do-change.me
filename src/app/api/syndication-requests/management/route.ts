@@ -1,4 +1,4 @@
-import { DIContainer } from "@/di-containers";
+import { DIContainer } from "@/backend/di-containers";
 
 const controller = DIContainer().SyndicationRequestManagementController()
 

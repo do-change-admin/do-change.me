@@ -1,6 +1,6 @@
-import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "@/app/api/zod-api-methods";
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
-import { auctionAccessRequestCountByStagesSchema, AuctionAccessRequestsAdminService } from "@/services";
+import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "@/backend/utils/zod-api-controller.utils";
+import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
+import { auctionAccessRequestCountByStagesSchema, AuctionAccessRequestsAdminService } from "@/backend/services";
 
 const schemas = {
     body: undefined,

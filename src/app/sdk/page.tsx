@@ -1,29 +1,42 @@
 'use client';
 
-import React, {FC, useState} from 'react';
+import React, { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-    FaPlus, FaChevronDown,
-    FaTimes, FaSearch, FaLink
-} from 'react-icons/fa';
-import styles from './page.module.css';
-import {Badge, Button, LoadingOverlay, Select, Stack, TextInput} from "@mantine/core";
-import {useDebouncedValue, useDisclosure} from "@mantine/hooks";
-import {SyndicationRequestStatusNames} from "@/entities/sindycation-request-status.entity";
-import {useSyndicationRequestFilters, useSyndicationRequests} from "@/client/queries/syndication-requests.queries";
-import {CarAdder} from "@/components/CarAdder/CarAdder";
-import {getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink} from "@/app/sdk/sdk.utils";
-import {PlaceholderSDK} from "@/components";
+    Button,
+    Tabs,
+    TextInput,
+    Select,
+    Card,
+    Badge,
+    Group,
+    Text,
+    Stack,
+} from "@mantine/core";
+import {
+    FaPlus,
+    FaSearch,
+    FaLink,
+    FaTimes,
+    FaChevronDown,
+} from "react-icons/fa";
 
-const STATUS_OPTIONS = [
-    'draft',
-    'pending publisher',
-    'active',
-    'pending sales',
-    'sold',
-];
+import Sell from "@/app/sdk/plug";
 
-const CarSyndicationSection: FC = () => {
+import styles from "./page.module.css";
+import {
+    getColorByCarSaleStatus,
+    getVisualDataByCarSaleMarketplaceLink,
+} from "./sdk.utils";
+import { CarAdder } from "@/client/components/CarAdder/CarAdder";
+import { useDisclosure } from "@mantine/hooks";
+import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
+import { CardSlider } from "@/client/components";
+import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
+
+const isDEV = process.env.NODE_ENV === "development";
+
+export default function VehiclesPage() {
     const [opened, { open, close }] = useDisclosure(false);
     const [vin, setVin] = useState("");
     const [debouncedVin] = useDebouncedValue(vin, 500);
@@ -59,6 +72,11 @@ const CarSyndicationSection: FC = () => {
         setModel(null);
     };
 
+    if (!isDEV) {
+        return (
+            <Sell />
+        )
+    }
     return (
         <div className={styles.dashboard}>
             <div className={styles.container}>
@@ -75,9 +93,9 @@ const CarSyndicationSection: FC = () => {
                 {/* Filters Section */}
                 <div className={styles.actionLeft}>
                     <Button className={styles.addButton}
-                            radius="lg"
-                            leftSection={<FaPlus /> }
-                            onClick={open}
+                        radius="lg"
+                        leftSection={<FaPlus />}
+                        onClick={open}
                     >
                         Add Car
                     </Button>
@@ -134,9 +152,9 @@ const CarSyndicationSection: FC = () => {
 
                         <div className={styles.filterItem}>
                             <Button leftSection={<FaTimes />}
-                                    onClick={handleClearFilters}
-                                    radius="lg"
-                                    variant="outline"
+                                onClick={handleClearFilters}
+                                radius="lg"
+                                variant="outline"
                             >
                                 Clean
                             </Button>
@@ -146,7 +164,7 @@ const CarSyndicationSection: FC = () => {
                 {/* Vehicle Cards Grid */}
                 {!vehicles.length && <PlaceholderSDK />}
                 <div className={styles.vehicleGrid}>
-                    <LoadingOverlay visible={isLoading}/>
+                    <LoadingOverlay visible={isLoading} />
                     {(vehicles ?? []).map((car, i) => (
                         <motion.div key={i} whileHover={{ scale: 1.03 }} className={styles.vehicleCard}>
                             <div className={styles.vehicleImageWrapper}>

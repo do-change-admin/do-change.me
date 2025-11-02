@@ -1,7 +1,7 @@
 import { EmailAddress } from "@/value-objects/email-address.vo";
-import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../zod-api-methods";
-import { updateProfileSchema, ProfileService } from '@/services'
-import { VercelBlobFileSystemProvider } from "@/providers/implementations";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../../backend/utils/zod-api-controller.utils";
+import { updateProfileSchema, ProfileService } from '@/backend/services'
+import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
 
 const bodySchema = updateProfileSchema
 

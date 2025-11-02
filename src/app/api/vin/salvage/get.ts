@@ -1,10 +1,10 @@
 import z from "zod"
-import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../zod-api-methods"
-import { prismaClient } from "@/infrastructure"
-import { ActionsHistoryService } from "@/services"
-import { noSubscriptionsGuard } from "@/api-guards"
+import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller.utils"
+import { prismaClient } from "@/backend/infrastructure"
+import { ActionsHistoryService } from "@/backend/services"
+import { noSubscriptionGuard } from "@/backend/controllers/api-guards/no-subscription.api-guard"
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers"
-import { businessError } from "@/lib/errors"
+import { businessError } from "@/lib-deprecated/errors"
 import { VIN } from "@/value-objects/vin.value-object"
 
 const schemas = {
@@ -71,7 +71,7 @@ export const method = zodApiMethod(schemas, {
             await ActionsHistoryService.Register({ target: "salvage", payload: { vin: requestPayload.vin, result: result.salvageWasFound } })
         }
     },
-    beforehandler: noSubscriptionsGuard,
+    beforehandler: noSubscriptionGuard,
     ignoreBeforeHandler: isDemoVin
 })
 

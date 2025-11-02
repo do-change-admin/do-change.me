@@ -30,7 +30,7 @@ export class SyndicationRequest {
         )
     }
 
-    model = (): SyndicationRequestModel => {
+    get model(): SyndicationRequestModel {
         return this.data
     }
 }

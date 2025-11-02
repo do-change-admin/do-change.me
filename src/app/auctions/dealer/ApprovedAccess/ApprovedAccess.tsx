@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 import { FaCheckCircle, FaGavel, FaShieldAlt, FaClock } from "react-icons/fa";
 import styles from "./ApprovedAccess.module.css";
-import {useProfile} from "@/hooks";
-import {Avatar} from "@mantine/core";
+import { useProfile } from "@/client/hooks";
+import { Avatar } from "@mantine/core";
 
 export const ApprovedAccess = () => {
-    const {data: profileData} = useProfile()
+    const { data: profileData } = useProfile()
     return (
         <div id="auction-access-main" className={styles.main}>
             <div id="access-card" className={styles.card}>
@@ -23,7 +23,7 @@ export const ApprovedAccess = () => {
                     {/* QR */}
                     <div id="qr-section" className={styles.qrSection}>
                         <div className={styles.qrBox}>
-                            <Avatar src={profileData?.auctionAccessQRLink} className={styles.qrPlaceholder}/>
+                            <Avatar src={profileData?.auctionAccessQRLink} className={styles.qrPlaceholder} />
                         </div>
                         <h3 className={styles.qrTitle}>Scan QR Code</h3>
                     </div>

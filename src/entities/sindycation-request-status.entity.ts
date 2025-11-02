@@ -21,7 +21,7 @@ export class SyndicationRequestStatus {
         )
     }
 
-    model = (): SyndicationRequestStatusModel => {
+    get model(): SyndicationRequestStatusModel {
         return {
             status: this.status,
             isPublished: SyndicationRequestStatus.activeStatusesNameSchema.safeParse(this.status).success,
