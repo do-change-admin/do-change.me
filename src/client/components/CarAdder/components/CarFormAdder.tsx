@@ -253,6 +253,9 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                                 min={0}
                                 onChange={handlePriceChange}
                                 value={price}
+                                decimalScale={2}
+                                fixedDecimalScale
+                                thousandSeparator=","
                             />
                         </Grid.Col>
                     </Grid>

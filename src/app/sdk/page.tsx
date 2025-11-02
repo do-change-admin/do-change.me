@@ -14,41 +14,7 @@ import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/q
 import { CarAdder } from "@/client/components/CarAdder/CarAdder";
 import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from "@/app/sdk/sdk.utils";
 import { PlaceholderSDK } from "@/client/components";
-
-const cars = [
-    {
-        status: 'Active',
-        vin: '1HGBH41JXMN109186',
-        name: '2023 Honda Accord',
-        price: '$28,500',
-        views: 234,
-        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/d1dfebe3ad-f49c7d201569260847c1.png',
-        icon: <FaEye />,
-        color: 'green'
-    },
-    {
-        status: 'Pending Publisher',
-        vin: '5NPE34AF4GH012345',
-        name: '2024 BMW X5',
-        price: '$65,900',
-        views: null,
-        processing: true,
-        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/c8b1449594-d1f9f4473d74c96137ad.png',
-        icon: <FaClock />,
-        color: 'orange'
-    },
-    {
-        status: 'Draft',
-        vin: '1FTFW1ET5DFC12345',
-        name: '2023 Ford F-150',
-        price: '$42,750',
-        views: null,
-        editing: true,
-        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/8682136f25-6f16f60c695c8551fc00.png',
-        icon: <FaEdit />,
-        color: 'yellow'
-    }
-];
+import Sell from "@/app/sdk/plug";
 
 const STATUS_OPTIONS = [
     'draft',
@@ -57,6 +23,8 @@ const STATUS_OPTIONS = [
     'pending sales',
     'sold',
 ];
+
+const isDEV = process.env.NODE_ENV === "development";
 
 const CarSyndicationSection: FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -93,6 +61,14 @@ const CarSyndicationSection: FC = () => {
         setMake(null);
         setModel(null);
     };
+
+    if (!isDEV) {
+        return (
+            <div className={styles.container}>
+                <Sell />
+            </div>
+        )
+    }
 
     return (
         <div className={styles.dashboard}>
@@ -195,7 +171,7 @@ const CarSyndicationSection: FC = () => {
                                 </div>
                                 <h3> {car.make} {car.model} ({car.year})</h3>
                                 <div className={styles.vehicleBottom}>
-                                    <span className={styles.price}>${(car?.price / 100).toFixed(2)}</span>
+                                    <span className={styles.price}>${(car?.price/1000).toFixed(3)}</span>
                                 </div>
                             </div>
                             <Stack gap="xs" p="lg">
@@ -222,6 +198,13 @@ const CarSyndicationSection: FC = () => {
                                         </Button>
                                     );
                                 })}
+                            </Stack>
+                            <Stack>
+                                {car.status === "draft" && (
+                                    <Button onClick={() => handleEdit(car.id)}>
+                                        Edit
+                                    </Button>
+                                )}
                             </Stack>
                         </motion.div>
                     ))}
