@@ -5,6 +5,7 @@ import { Card, Text, Group, Badge } from '@mantine/core'
 import { FaCar, FaStar, FaMapMarkerAlt, FaStore } from 'react-icons/fa'
 import styles from './RecordCard.module.css'
 import { formatDate } from "@/client/components/SearchSection/Odometer/Odometer";
+import cn from "classnames";
 
 interface RecordCardProps {
     record: {
@@ -22,23 +23,26 @@ interface RecordCardProps {
 
 export const RecordCard = ({ record, isLatest }: RecordCardProps) => {
     return (
-        <Card radius="xl" p="lg" className={styles.card}>
+        <Card shadow="lg" radius="xl" p="lg" className={cn(styles.card, {
+            [styles.current]: isLatest
+        })}>
+            {isLatest && (
+                <Badge
+                    variant="gradient"
+                    gradient={{ from: 'green', to: 'teal' }}
+                    leftSection={<FaStar size={10} style={{ marginRight: 4 }} />}
+                    radius="sm"
+                    className={styles.badge}
+                >
+                    Current
+                </Badge>
+            )}
             <Group justify="space-between" mb="md">
                 <Group gap="sm">
                     <div>
                         <Text fw={700} fz="lg" c="gray.9">
                             {record.seller_name}
                         </Text>
-                        {isLatest && (
-                            <Badge
-                                variant="gradient"
-                                gradient={{ from: 'green', to: 'teal' }}
-                                leftSection={<FaStar size={10} style={{ marginRight: 4 }} />}
-                                radius="sm"
-                            >
-                                Latest
-                            </Badge>
-                        )}
                     </div>
                 </Group>
             </Group>

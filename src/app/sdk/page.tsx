@@ -1,42 +1,65 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-    Button,
-    Tabs,
-    TextInput,
-    Select,
-    Card,
-    Badge,
-    Group,
-    Text,
-    Stack,
-} from "@mantine/core";
-import {
-    FaPlus,
-    FaSearch,
-    FaLink,
-    FaTimes,
-    FaChevronDown,
-} from "react-icons/fa";
-
-import Sell from "@/app/sdk/plug";
-
-import styles from "./page.module.css";
-import {
-    getColorByCarSaleStatus,
-    getVisualDataByCarSaleMarketplaceLink,
-} from "./sdk.utils";
-import { CarAdder } from "@/client/components/CarAdder/CarAdder";
-import { useDisclosure } from "@mantine/hooks";
+    FaCar, FaChartLine, FaPlus, FaChevronDown, FaSyncAlt, FaDownload, FaFilter,
+    FaTimes, FaEdit, FaClock, FaCheckCircle, FaHandshake, FaTrophy, FaEye, FaSearch, FaLink
+} from 'react-icons/fa';
+import styles from './page.module.css';
+import { ActionIcon, Badge, Button, Input, Select, Stack, TextInput } from "@mantine/core";
+import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
-import { CardSlider } from "@/client/components";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
+import { CarAdder } from "@/client/components/CarAdder/CarAdder";
+import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from "@/app/sdk/sdk.utils";
+import { PlaceholderSDK } from "@/client/components";
 
-const isDEV = process.env.NODE_ENV === "development";
+const cars = [
+    {
+        status: 'Active',
+        vin: '1HGBH41JXMN109186',
+        name: '2023 Honda Accord',
+        price: '$28,500',
+        views: 234,
+        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/d1dfebe3ad-f49c7d201569260847c1.png',
+        icon: <FaEye />,
+        color: 'green'
+    },
+    {
+        status: 'Pending Publisher',
+        vin: '5NPE34AF4GH012345',
+        name: '2024 BMW X5',
+        price: '$65,900',
+        views: null,
+        processing: true,
+        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/c8b1449594-d1f9f4473d74c96137ad.png',
+        icon: <FaClock />,
+        color: 'orange'
+    },
+    {
+        status: 'Draft',
+        vin: '1FTFW1ET5DFC12345',
+        name: '2023 Ford F-150',
+        price: '$42,750',
+        views: null,
+        editing: true,
+        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/8682136f25-6f16f60c695c8551fc00.png',
+        icon: <FaEdit />,
+        color: 'yellow'
+    }
+];
 
-export default function VehiclesPage() {
+const STATUS_OPTIONS = [
+    'All Status',
+    'Draft',
+    'Pending Publisher',
+    'Active',
+    'Pending Sales',
+    'Sold',
+];
+
+const CarSyndicationSection: FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
     const [vin, setVin] = useState("");
     const [debouncedVin] = useDebouncedValue(vin, 500);
@@ -44,9 +67,9 @@ export default function VehiclesPage() {
     const [model, setModel] = useState<null | string>(null);
     const [editingId, setEditingId] = useState<string | undefined>();
     const [activeTab, setActiveTab] =
-        useState<SyndicationRequestStatusNames>("pending publisher");
+        useState<SyndicationRequestStatusNames>("active");
 
-    const { data, isLoading } = useSyndicationRequests({
+    const { data } = useSyndicationRequests({
         make: make ?? "",
         model: model ?? "",
         status: activeTab,
@@ -72,11 +95,6 @@ export default function VehiclesPage() {
         setModel(null);
     };
 
-    if (!isDEV) {
-        return (
-            <Sell />
-        )
-    }
     return (
         <div className={styles.dashboard}>
             <div className={styles.container}>
@@ -105,12 +123,8 @@ export default function VehiclesPage() {
                             placeholder="Select Status"
                             data={STATUS_OPTIONS}
                             value={activeTab}
-                            onChange={(value) => {
-                                if (!value || value.toLowerCase() === activeTab) return;
-                                setActiveTab(value.toLowerCase() as any);
-                            }}
+                            onChange={(value) => setActiveTab(value as any)}
                         />
-
                     </div>
                 </div>
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className={styles.filtersSection}>
@@ -164,7 +178,7 @@ export default function VehiclesPage() {
                 {/* Vehicle Cards Grid */}
                 {!vehicles.length && <PlaceholderSDK />}
                 <div className={styles.vehicleGrid}>
-                    <LoadingOverlay visible={isLoading} />
+
                     {(vehicles ?? []).map((car, i) => (
                         <motion.div key={i} whileHover={{ scale: 1.03 }} className={styles.vehicleCard}>
                             <div className={styles.vehicleImageWrapper}>
