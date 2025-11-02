@@ -64,7 +64,7 @@ export const Odometer = ({ records }: OdometerProps) => {
                         <h2 className={styles.chartTitle}>Odometer Records</h2>
                         <p className={styles.chartDescription}>Vehicle mileage tracking from first to last seen date</p>
                     </div>
-                    <div style={{ width: '100%', height: 300 }}>
+                    <div style={{ width: '100%', height: 200 }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -89,7 +89,7 @@ export const Odometer = ({ records }: OdometerProps) => {
                         <h2 className={styles.chartTitle}>Price History</h2>
                         <p className={styles.chartDescription}>Vehicle price changes from first to last seen date</p>
                     </div>
-                    <div style={{ width: '100%', height: 300 }}>
+                    <div style={{ width: '100%', height: 200 }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -118,7 +118,7 @@ export const Odometer = ({ records }: OdometerProps) => {
                 {records
                     .filter(record => record.seller_name && record.city && record.state)
                     .map((record, index) => (
-                        <Carousel.Slide key={record.id}>
+                        <Carousel.Slide key={record.id} h={270}>
                             <RecordCard record={record} isLatest={index === 0} />
                         </Carousel.Slide>
                     ))}

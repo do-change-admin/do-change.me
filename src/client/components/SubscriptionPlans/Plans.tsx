@@ -15,8 +15,9 @@ import {
     FaShieldAlt,
     FaStar, FaUnlock
 } from "react-icons/fa";
-import { Badge, Text } from "@mantine/core";
+import { Alert, Anchor, Badge, Group, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import { usePlans, useSubscriptionCreation } from "@/client/hooks";
 
 interface IPlanProps {
@@ -29,6 +30,7 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
 
     const onlyReportsPlan = plans?.basic
     const auctionAccessPlan = plans?.auctionAccess
+
     return (
         <div className={styles.grid}>
             {/* Basic Plan */}
@@ -192,25 +194,48 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
                         </p>
                     </div>
                     {!isHome && (
-                        <button className={styles.buttonPurple} onClick={() => {
-                            if (isHome) {
-                                router.push("/auth/login");
-                                return
-                            }
-                            router.push('/auctions/dealer')
-
-                            // const { url } = await subscribe({
-                            //     body: {
-                            //         planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
-                            //         priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
-                            //     }
-                            // })
-                            // if (url) {
-                            //     router.push(url)
-                            // }
-                        }}>
-                            <FaUnlock /> Get Access
-                        </button>
+                        <>
+                            <button className={styles.buttonPurple} onClick={() => {
+                                if (isHome) {
+                                    router.push("/auth/login");
+                                    return
+                                }
+                                router.push('/auctions/dealer')
+                            }}>
+                                <FaUnlock /> Get Access
+                            </button>
+                            <Alert
+                                icon={<AiOutlineInfoCircle size={18} />}
+                                color="blue"
+                                radius="lg"
+                                variant="light"
+                                mt="lg"
+                            >
+                                <Group gap="xs">
+                                    <Text size="sm">
+                                        If you already have <b>Auction Access</b>, you can get or subscribe to this plan
+                                    </Text>
+                                    <Anchor
+                                        size="sm"
+                                        fw={500}
+                                        underline="always"
+                                        onClick={async () => {
+                                            const { url } = await subscribe({
+                                                body: {
+                                                    planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? "",
+                                                    priceId: auctionAccessPlan?.prices?.[0].stripePriceId ?? ""
+                                                }
+                                            })
+                                            if (url) {
+                                                router.push(url)
+                                            }
+                                        }}
+                                    >
+                                        here.
+                                    </Anchor>
+                                </Group>
+                            </Alert>
+                        </>
                     )}
                 </div>
             </motion.div>

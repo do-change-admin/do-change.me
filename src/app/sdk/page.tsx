@@ -1,42 +1,65 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useDebouncedValue } from "@mantine/hooks";
+import { FC, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
-    Button,
-    Tabs,
-    TextInput,
-    Select,
-    Card,
-    Badge,
-    Group,
-    Text,
-    Stack,
-} from "@mantine/core";
-import {
-    FaPlus,
-    FaSearch,
-    FaLink,
-    FaTimes,
-    FaChevronDown,
-} from "react-icons/fa";
-
-import Sell from "@/app/sdk/plug";
-
-import styles from "./page.module.css";
-import {
-    getColorByCarSaleStatus,
-    getVisualDataByCarSaleMarketplaceLink,
-} from "./sdk.utils";
-import { CarAdder } from "@/client/components/CarAdder/CarAdder";
-import { useDisclosure } from "@mantine/hooks";
+    FaCar, FaChartLine, FaPlus, FaChevronDown, FaSyncAlt, FaDownload, FaFilter,
+    FaTimes, FaEdit, FaClock, FaCheckCircle, FaHandshake, FaTrophy, FaEye, FaSearch, FaLink
+} from 'react-icons/fa';
+import styles from './page.module.css';
+import { ActionIcon, Badge, Button, Input, Select, Stack, TextInput } from "@mantine/core";
+import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
-import { CardSlider } from "@/client/components";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
+import { CarAdder } from "@/client/components/CarAdder/CarAdder";
+import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from "@/app/sdk/sdk.utils";
+import { PlaceholderSDK } from "@/client/components";
 
-const isDEV = process.env.NODE_ENV === "development";
+const cars = [
+    {
+        status: 'Active',
+        vin: '1HGBH41JXMN109186',
+        name: '2023 Honda Accord',
+        price: '$28,500',
+        views: 234,
+        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/d1dfebe3ad-f49c7d201569260847c1.png',
+        icon: <FaEye />,
+        color: 'green'
+    },
+    {
+        status: 'Pending Publisher',
+        vin: '5NPE34AF4GH012345',
+        name: '2024 BMW X5',
+        price: '$65,900',
+        views: null,
+        processing: true,
+        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/c8b1449594-d1f9f4473d74c96137ad.png',
+        icon: <FaClock />,
+        color: 'orange'
+    },
+    {
+        status: 'Draft',
+        vin: '1FTFW1ET5DFC12345',
+        name: '2023 Ford F-150',
+        price: '$42,750',
+        views: null,
+        editing: true,
+        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/8682136f25-6f16f60c695c8551fc00.png',
+        icon: <FaEdit />,
+        color: 'yellow'
+    }
+];
 
-export default function VehiclesPage() {
+const STATUS_OPTIONS = [
+    'All Status',
+    'Draft',
+    'Pending Publisher',
+    'Active',
+    'Pending Sales',
+    'Sold',
+];
+
+const CarSyndicationSection: FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
     const [vin, setVin] = useState("");
     const [debouncedVin] = useDebouncedValue(vin, 500);
@@ -72,134 +95,112 @@ export default function VehiclesPage() {
         setModel(null);
     };
 
-    if (!isDEV) {
-        return (
-            <Sell />
-        )
-    }
     return (
-        <div className={styles.container}>
-            {/* Add Vehicle Button */}
-            <Group mb="lg">
-                <Button
-                    leftSection={<FaPlus />}
-                    color="blue"
-                    radius="md"
-                    className={styles.addButton}
-                    onClick={open}
-                >
-                    Add Vehicle
-                </Button>
-            </Group>
+        <div className={styles.dashboard}>
+            <div className={styles.container}>
 
-            {/* Tabs */}
-            <Tabs
-                value={activeTab}
-                onChange={(value) => setActiveTab(value as any)}
-                mb="lg"
-            >
-                <Tabs.List>
-                    <Tabs.Tab value="draft">
-                        Draft <Badge color="blue" variant="light" ml={5} />
-                    </Tabs.Tab>
-                    <Tabs.Tab value="pending publisher">
-                        Pending Publisher{" "}
-                        <Badge color="orange" variant="light" ml={5} />
-                    </Tabs.Tab>
-                    <Tabs.Tab value="active">
-                        Active <Badge color="green" variant="light" ml={5} />
-                    </Tabs.Tab>
-                    <Tabs.Tab value="pending sales">
-                        Pending Sales{" "}
-                        <Badge color="gray" variant="light" ml={5} />
-                    </Tabs.Tab>
-                    <Tabs.Tab value="sold">
-                        Sold <Badge color="gray" variant="light" ml={5} />
-                    </Tabs.Tab>
-                </Tabs.List>
-            </Tabs>
-
-            {/* Filters */}
-            <Card
-                shadow="sm"
-                radius="md"
-                withBorder
-                className={styles.filtersCard}
-            >
-                <Stack>
-                    <TextInput
-                        placeholder="Enter VIN number..."
-                        label="Search by VIN Number"
-                        value={vin}
-                        onChange={(e) => setVin(e.currentTarget.value)}
-                        leftSection={<FaSearch />}
-                    />
-                    <Group>
-                        <Select
-                            label="Makes"
-                            placeholder="All Makes"
-                            value={make}
-                            onChange={setMake}
-                            data={filters?.makes}
-                            rightSection={<FaChevronDown />}
-                        />
-                        <Select
-                            label="Models"
-                            placeholder="All Models"
-                            value={model}
-                            onChange={setModel}
-                            data={filters?.models}
-                            rightSection={<FaChevronDown />}
-                        />
-                    </Group>
-                    <Group align="right">
-                        <Button
-                            variant="outline"
-                            color="gray"
-                            leftSection={<FaTimes />}
-                            onClick={handleClearFilters}
-                        >
-                            Clear Filters
-                        </Button>
-                    </Group>
-                </Stack>
-            </Card>
-
-            {/* Vehicles Grid */}
-            <div className={styles.vehicleGrid}>
-                {(vehicles ?? []).map((v) => (
-                    <Card
-                        shadow="sm"
-                        radius="md"
-                        withBorder
-                        className={styles.vehicleCard}
+                {/* Header */}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className={styles.header}>
+                    <div className={styles.headerLeft}>
+                        <div>
+                            <h1 className={styles.title}>Vehicle Syndication</h1>
+                            <p className={styles.subtitle}>Manage and publish your inventory across multiple platforms</p>
+                        </div>
+                    </div>
+                </motion.div>
+                {/* Filters Section */}
+                <div className={styles.actionLeft}>
+                    <Button className={styles.addButton}
+                        radius="lg"
+                        leftSection={<FaPlus />}
+                        onClick={open}
                     >
-                        <Card.Section style={{ position: "relative" }}>
-                            {v.photoLinks.length > 0 ? (
-                                <CardSlider images={v.photoLinks} />
-                            ) : null}
+                        Add Car
+                    </Button>
+                    <div className={styles.selectWrapper}>
+                        <Select
+                            radius="lg"
+                            placeholder="Select Status"
+                            data={STATUS_OPTIONS}
+                            value={activeTab}
+                            onChange={(value) => setActiveTab(value as any)}
+                        />
+                    </div>
+                </div>
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className={styles.filtersSection}>
+                    <div className={styles.filtersGrid}>
+                        <div className={styles.filterItem}>
+                            <TextInput
+                                placeholder="Enter VIN number..."
+                                label="Search by VIN Number"
+                                radius="lg"
+                                value={vin}
+                                onChange={(e) => setVin(e.currentTarget.value)}
+                                leftSection={<FaSearch />}
+                            />
+                        </div>
 
-                            <Badge
-                                color={getColorByCarSaleStatus(v.status)}
-                                className={styles.statusBadge}
+                        <div className={styles.filterItem}>
+                            <Select
+                                radius="lg"
+                                label="Makes"
+                                placeholder="All Makes"
+                                value={make}
+                                onChange={setMake}
+                                data={filters?.makes}
+                                rightSection={<FaChevronDown />}
+                            />
+                        </div>
+
+                        <div className={styles.filterItem}>
+                            <Select
+                                radius="lg"
+                                label="Model"
+                                placeholder="All Makes"
+                                value={model}
+                                onChange={setModel}
+                                data={filters?.models}
+                                rightSection={<FaChevronDown />}
+                            />
+                        </div>
+
+                        <div className={styles.filterItem}>
+                            <Button leftSection={<FaTimes />}
+                                onClick={handleClearFilters}
+                                radius="lg"
+                                variant="outline"
                             >
-                                {v.status}
-                            </Badge>
-                        </Card.Section>
-                        <Stack mt="sm">
-                            <Text fw={600}>{v.make}</Text>
-                            <Text size="sm" c="dimmed">
-                                {v.model} ({v.year})
-                            </Text>
-                            <Text
-                                size="xs"
-                                c="dimmed"
-                                style={{ fontFamily: "monospace" }}
-                            >
-                                VIN: {v.vin}
-                            </Text>
-                            <Stack gap="xs" mt="xs">
-                                {v.marketplaceLinks.map((link) => {
+                                Clean
+                            </Button>
+                        </div>
+                    </div>
+                </motion.div>
+                {/* Vehicle Cards Grid */}
+                {!vehicles.length && <PlaceholderSDK />}
+                <div className={styles.vehicleGrid}>
+
+                    {(vehicles ?? []).map((car, i) => (
+                        <motion.div key={i} whileHover={{ scale: 1.03 }} className={styles.vehicleCard}>
+                            <div className={styles.vehicleImageWrapper}>
+                                <img src={car.photoLinks[0]} alt="" />
+                            </div>
+                            <div className={styles.vehicleContent}>
+                                <div className={styles.vehicleTop}>
+                                    <Badge
+                                        color={getColorByCarSaleStatus(car.status)}
+                                        className={styles.statusBadge}
+                                    >
+                                        {car.status}
+                                    </Badge>
+                                    <span className={styles.vin}>VIN: {car.vin}</span>
+                                </div>
+                                <h3> {car.make} {car.model} ({car.year})</h3>
+                                <div className={styles.vehicleBottom}>
+                                    <span className={styles.price}>${(car?.price / 100).toFixed(2)}</span>
+                                </div>
+                            </div>
+                            <Stack gap="xs" p="lg">
+                                {car.marketplaceLinks.map((link) => {
                                     const { color, label } =
                                         getVisualDataByCarSaleMarketplaceLink(
                                             link
@@ -223,25 +224,19 @@ export default function VehiclesPage() {
                                     );
                                 })}
                             </Stack>
-                            <Stack>
-                                {v.status === "draft" && (
-                                    <Button onClick={() => handleEdit(v.id)}>
-                                        Edit
-                                    </Button>
-                                )}
-                            </Stack>
-                        </Stack>
-                    </Card>
-                ))}
+                        </motion.div>
+                    ))}
+                </div>
+                {opened && (
+                    <CarAdder
+                        draftId={editingId}
+                        opened={opened}
+                        onClose={handleClose}
+                    />
+                )}
             </div>
-
-            {opened && (
-                <CarAdder
-                    draftId={editingId}
-                    opened={opened}
-                    onClose={handleClose}
-                />
-            )}
         </div>
     );
-}
+};
+
+export default CarSyndicationSection;

@@ -1,18 +1,3 @@
-.modalContent {
-  border-radius: 1rem;
-}
-
-.modalHeader {
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.modalBody {
-  padding: 1rem;
-}
-
-.input {
-  border-radius: 0.5rem;
-}
 
 .readonlyInput {
   background: #f9fafb;
@@ -38,6 +23,20 @@
     border-color: #3b82f6;
     background: #eff6ff;
   }
+}
+
+.drawerWrapper {
+  margin: 1rem; /* отступы сверху/снизу/сбоку */
+  height: calc(100% - 2rem); /* почти весь экран */
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.drawerContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem; /* внутренние отступы */
 }
 
 .uploadContent {
