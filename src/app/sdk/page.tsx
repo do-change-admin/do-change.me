@@ -51,12 +51,11 @@ const cars = [
 ];
 
 const STATUS_OPTIONS = [
-    'All Status',
-    'Draft',
-    'Pending Publisher',
-    'Active',
-    'Pending Sales',
-    'Sold',
+    'draft',
+    'pending publisher',
+    'active',
+    'pending sales',
+    'sold',
 ];
 
 const CarSyndicationSection: FC = () => {
@@ -67,7 +66,7 @@ const CarSyndicationSection: FC = () => {
     const [model, setModel] = useState<null | string>(null);
     const [editingId, setEditingId] = useState<string | undefined>();
     const [activeTab, setActiveTab] =
-        useState<SyndicationRequestStatusNames>("active");
+        useState<SyndicationRequestStatusNames>("pending publisher");
 
     const { data } = useSyndicationRequests({
         make: make ?? "",
