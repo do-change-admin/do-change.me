@@ -43,14 +43,6 @@ export class UserNotificationsController {
         }
     })
 
-    Unseen_GET = zodApiMethod(schemas.Unseen_GET, {
-        handler: async ({ activeUser }) => {
-            const service = this.serviceFactory(activeUser.id)
-            const items = await service.allUnseen()
-            return { items }
-        }
-    })
-
     PATCH = zodApiMethod(schemas.PATCH, {
         handler: async ({ activeUser, payload }) => {
             const service = this.serviceFactory(activeUser.id)
