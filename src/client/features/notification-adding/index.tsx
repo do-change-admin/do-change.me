@@ -9,7 +9,7 @@ export const NotificationAddingFeature = injectViews(NotificationAddingFeatureCo
     AddNotificationButton: ({ add, disabled }) => {
         return <Button disabled={disabled} onClick={async () => {
             try {
-                add()
+                await add()
                 alert("Notification was succesfully added")
             } catch (e) {
                 console.log(e)
