@@ -1,11 +1,9 @@
-'use client'
-
-import { injectViews } from "@/client/utils/views.utils";
-import { NotificationAddingFeatureContainer } from "./notification-adding.feature.container";
+import { FeatureViews } from "@/client/utils/views.utils";
+import type { NotificationAddingFeatureContainer } from "./notification-adding.feature.container";
 import { Button, Input, Select } from "@mantine/core";
 import { NotificationLevel } from "@/value-objects/notification.value-object";
 
-export const NotificationAddingFeature = injectViews(NotificationAddingFeatureContainer, {
+export const notificationAddingFeatureViews: FeatureViews<typeof NotificationAddingFeatureContainer> = {
     AddNotificationButton: ({ add, disabled }) => {
         return <Button disabled={disabled} onClick={async () => {
             try {
@@ -36,22 +34,30 @@ export const NotificationAddingFeature = injectViews(NotificationAddingFeatureCo
     Loader: () => <div>Loading...</div>,
 
     LevelSelector: ({ levelState }) => {
-        return <Select value={levelState[0]} data={['error', 'info', 'warning'] as NotificationLevel[]} onChange={(x) => {
+        const [level, setLevel] = levelState
+
+        return <Select value={level} data={['error', 'info', 'warning'] as NotificationLevel[]} onChange={(x) => {
             if (!!x) {
-                levelState[1](x as NotificationLevel)
+                setLevel(x as NotificationLevel)
             }
         }} />
     },
 
     MessageSelector: ({ messageState }) => {
-        return <Input value={messageState[0]} onChange={(x) => { messageState[1](x.target.value) }} />
+        const [message, setMessage] = messageState;
+
+        return <Input value={message} onChange={(x) => { setMessage(x.target.value) }} />
     },
 
     TitleSelector: ({ titleState }) => {
-        return <Input value={titleState[0]} onChange={(x) => { titleState[1](x.target.value) }} />
+        const [title, setTitle] = titleState
+
+        return <Input value={title} onChange={(x) => { setTitle(x.target.value) }} />
     },
 
     UserSelector: ({ userIdState }) => {
-        return <Input value={userIdState[0]} onChange={(x) => { userIdState[1](x.target.value) }} />
+        const [userId, setUserId] = userIdState
+
+        return <Input value={userId} onChange={(x) => { setUserId(x.target.value) }} />
     },
-})
+}

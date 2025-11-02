@@ -1,9 +1,7 @@
-'use client'
-
-import { injectViews } from "@/client/utils/views.utils";
+import { FeatureViews } from "@/client/utils/views.utils";
 import { NotificationsListFeatureContainer } from "./notifications-list.feature.container";
 
-export const NotificationsListFeature = injectViews(NotificationsListFeatureContainer, {
+export const notificationListFeatureViews: FeatureViews<typeof NotificationsListFeatureContainer> = {
     Container: ({ children }) => <>{children}</>,
 
     Loader: () => <div>loading...</div>,
@@ -25,4 +23,4 @@ export const NotificationsListFeature = injectViews(NotificationsListFeatureCont
         </div>
         <button onClick={() => { read() }}>Read</button>
     </div>
-})
+}

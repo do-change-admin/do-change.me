@@ -32,6 +32,7 @@ export const NotificationAddingFeatureContainer: FC<NotificationAddingFeatureCon
     const titleState = useState('')
     const messageState = useState('')
     const levelState = useState<NotificationLevel>('info')
+    const { mutateAsync: addNotification, isPending } = useNotificationAdding()
 
     const messageControl = <MessageControl messageState={messageState} />
     const levelSelector = <LevelSelector levelState={levelState} />
@@ -51,8 +52,6 @@ export const NotificationAddingFeatureContainer: FC<NotificationAddingFeatureCon
         disabled={!messageState[0] || !titleState[0] || !userIdState[0]}
     />
 
-
-    const { mutateAsync: addNotification, isPending } = useNotificationAdding()
 
     if (isPending) {
         return <Container>
