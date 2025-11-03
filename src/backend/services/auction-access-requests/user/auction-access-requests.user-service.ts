@@ -1,15 +1,18 @@
 import { UpdateAuctionAccessRequest } from "./types";
 import { prismaClient } from "@/backend/infrastructure";
 import { ProfileService } from "../../profile";
-import { EmailAddress } from "@/value-objects/email-address.vo";
+import { EmailAddress } from "@/value-objects/email-address.value-object";
 import { businessError } from "@/lib-deprecated/errors";
-import { ProvidesFileUploading, ProvidesFileLink } from "@/backend/providers/contracts";
+import {
+    ProvidesFileUploading,
+    ProvidesFileLink,
+} from "@/backend/providers/contracts";
 import { v4 } from "uuid";
 
 export class AuctionAccessRequestsUserService {
     public constructor(
         private readonly fileUploader: ProvidesFileUploading & ProvidesFileLink
-    ) { }
+    ) {}
 
     create = async (rawEmail: string) => {
         const email = EmailAddress.create(rawEmail);
@@ -19,7 +22,7 @@ export class AuctionAccessRequestsUserService {
         await prismaClient.auctionAccessRequest.create({
             data: {
                 applicationDate: new Date(),
-                email: email.address(),
+                email: email.adress,
                 firstName: profileData.firstName,
                 birthDate: profileData.birthDate!,
                 lastName: profileData.lastName,
