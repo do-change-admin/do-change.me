@@ -8,6 +8,7 @@ import { prismaClient } from "@/backend/infrastructure/prisma/client";
 import { Token } from "@/value-objects/token.vo";
 import { VO } from "@/value-objects";
 import { DIContainer } from "@/backend/di-containers";
+import { EmailMessage } from "@/value-objects/email-message.value-object";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -45,11 +46,13 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        // after(() => {
-        //     const emailService = DIContainer()._EmailService();
-        //     const email = verificationEmail(user, token.raw);
-        //     emailService.sendEmail(email);
-        // });
+        after(() => {
+            const emailService = DIContainer().MailerService();
+            const emailMessage = EmailMessage.create(
+                verificationEmail(user, token.raw)
+            );
+            emailService.send(emailMessage);
+        });
 
         return NextResponse.json({ message: "Verification email sent" });
     } catch (err) {

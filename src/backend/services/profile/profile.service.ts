@@ -1,7 +1,10 @@
 import { prismaClient } from "@/backend/infrastructure";
-import { EmailAddress } from "@/value-objects/email-address.vo";
+import { EmailAddress } from "@/value-objects/email-address.value-object";
 import { ProfileData, UpdateProfilePayload } from "./profile.types";
-import { ProvidesFileLink, ProvidesFileUploading } from "@/backend/providers/contracts";
+import {
+    ProvidesFileLink,
+    ProvidesFileUploading,
+} from "@/backend/providers/contracts";
 import { v4 } from "uuid";
 import { RequestsMeteringService } from "../requests-metering/requests-metering.service";
 import { FeatureKey } from "@/value-objects/feature-key.vo";
@@ -11,10 +14,10 @@ export class ProfileService {
     constructor(
         private readonly email: EmailAddress,
         private readonly fileProvider: ProvidesFileUploading & ProvidesFileLink
-    ) { }
+    ) {}
 
     profileData = async (): Promise<ProfileData> => {
-        const rawEmail = this.email.address();
+        const rawEmail = this.email.adress;
         const profile = await prismaClient.user.findUnique({
             where: { email: rawEmail },
             include: {
@@ -69,17 +72,17 @@ export class ProfileService {
 
             subscription: activePlan
                 ? {
-                    planName: activePlan.plan.name,
-                    planSlug: activePlan.plan.slug,
-                    priceSlug: activePlan.price.slug,
-                    status: activePlan.status,
-                    cancelAtPeriodEnd: activePlan.cancelAtPeriodEnd,
-                    canceledAt: activePlan.canceledAt,
-                    currentPeriodEnd: activePlan.currentPeriodEnd,
-                    amount: activePlan.price.amount,
-                    currency: activePlan.price.currency,
-                    id: activePlan.id,
-                }
+                      planName: activePlan.plan.name,
+                      planSlug: activePlan.plan.slug,
+                      priceSlug: activePlan.price.slug,
+                      status: activePlan.status,
+                      cancelAtPeriodEnd: activePlan.cancelAtPeriodEnd,
+                      canceledAt: activePlan.canceledAt,
+                      currentPeriodEnd: activePlan.currentPeriodEnd,
+                      amount: activePlan.price.amount,
+                      currency: activePlan.price.currency,
+                      id: activePlan.id,
+                  }
                 : null,
             photoLink,
             birthDate: profile.birthDate,
@@ -90,7 +93,7 @@ export class ProfileService {
     };
 
     update = async (payload: UpdateProfilePayload) => {
-        const rawEmail = this.email.address();
+        const rawEmail = this.email.adress;
         const {
             bio,
             firstName,
@@ -121,7 +124,7 @@ export class ProfileService {
         await this.fileProvider.upload(file, id, file.name);
         await prismaClient.user.update({
             data: { photoFileId: id },
-            where: { email: this.email.address() },
+            where: { email: this.email.adress },
         });
     };
 }
