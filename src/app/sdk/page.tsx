@@ -14,7 +14,8 @@ import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/q
 import { CarAdder } from "@/client/components/CarAdder/CarAdder";
 import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from "@/app/sdk/sdk.utils";
 import { PlaceholderSDK } from "@/client/components";
-import Sell from "@/app/sdk/plug";
+import NoAccessPage from "@/app/sdk/no-access-page";
+import { useProfile } from '@/client/hooks';
 
 const STATUS_OPTIONS = [
     'draft',
@@ -23,8 +24,6 @@ const STATUS_OPTIONS = [
     'pending sales',
     'sold',
 ];
-
-const isDEV = process.env.NODE_ENV === "development";
 
 const CarSyndicationSection: FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -35,6 +34,8 @@ const CarSyndicationSection: FC = () => {
     const [editingId, setEditingId] = useState<string | undefined>();
     const [activeTab, setActiveTab] =
         useState<SyndicationRequestStatusNames>("pending publisher");
+
+    const { data: profileData } = useProfile()
 
     const { data } = useSyndicationRequests({
         make: make ?? "",
@@ -62,10 +63,11 @@ const CarSyndicationSection: FC = () => {
         setModel(null);
     };
 
-    if (!isDEV) {
+
+    if (profileData?.subscription?.planSlug !== "auction access") {
         return (
             <div className={styles.container}>
-                <Sell />
+                <NoAccessPage />
             </div>
         )
     }
@@ -171,7 +173,7 @@ const CarSyndicationSection: FC = () => {
                                 </div>
                                 <h3> {car.make} {car.model} ({car.year})</h3>
                                 <div className={styles.vehicleBottom}>
-                                    <span className={styles.price}>${(car?.price/1000).toFixed(3)}</span>
+                                    <span className={styles.price}>${(car?.price / 1000).toFixed(3)}</span>
                                 </div>
                             </div>
                             <Stack gap="xs" p="lg">
