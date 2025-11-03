@@ -5,11 +5,7 @@ import {
     FunctionProvidersImplementations,
 } from "@/backend/providers";
 import { Container } from "inversify";
-import {
-    StoreTokens,
-    ProviderTokens,
-    ServiceTokens,
-} from "./tokens.di-container";
+import { StoreTokens, ProviderTokens } from "./tokens.di-container";
 import { registerServices } from "./register-services";
 import { registerControllers } from "./register-controllers";
 import { NotificationStore } from "../stores/interfaces/notification.store";
