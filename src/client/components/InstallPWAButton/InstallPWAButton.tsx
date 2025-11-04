@@ -19,7 +19,6 @@ export const InstallPWAButton: React.FC = () => {
 
     const isAdmin = process.env.ADMIN_EMAILS?.split(',')?.includes(profileData?.email ?? "") ?? false
 
-
     useEffect(() => {
         if (typeof window === 'undefined') return; // SSR check
 
