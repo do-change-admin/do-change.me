@@ -9,6 +9,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import "@mantine/carousel/styles.css";
 import '@mantine/notifications/styles.css';
+import {InstallPWAButton} from "@/client/components";
 
 
 const geistSans = Geist({
@@ -42,6 +43,7 @@ export default async function SpaceLayout({ children, params: { locale } }: { ch
             <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
                 <Suspense>
                     <Providers>
+                        <InstallPWAButton />
                         <Layout>
                             {children}
                         </Layout>
