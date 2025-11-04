@@ -15,7 +15,8 @@ export async function middleware(req: NextRequest) {
         "/legal",
         "/home",
         "/api/webhooks/stripe",
-        '/manifest.json'
+        '/manifest.json',
+        '/logo'
     ];
 
     const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
