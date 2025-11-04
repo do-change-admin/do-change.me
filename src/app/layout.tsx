@@ -9,7 +9,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import "@mantine/carousel/styles.css";
 import '@mantine/notifications/styles.css';
-import InstallPWAButton from '@/client/components/InstallPWAButton/InstallPWAButton';
+import {InstallPWAButton} from "@/client/components";
 
 
 const geistSans = Geist({
