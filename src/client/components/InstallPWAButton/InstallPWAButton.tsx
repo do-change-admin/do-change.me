@@ -2,8 +2,9 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { Button, Group, Modal, Stack, Text } from "@mantine/core";
-import { FaDownload, FaHome, FaShareAlt } from "react-icons/fa";
-import { useProfile } from '@/client/hooks';
+import { FaDownload } from "react-icons/fa";
+import { CiSquarePlus } from "react-icons/ci";
+import { IoShareOutline } from "react-icons/io5";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt(): Promise<void>;
@@ -107,13 +108,13 @@ export const InstallPWAButton: React.FC = () => {
                         To install this app on your iPhone or iPad:
                     </Text>
                     <Group gap="sm" align="center">
-                        <FaShareAlt size={24} color="#6366f1" />
+                        <IoShareOutline size={24} color="#6366f1" />
                         <Text size="sm" fw={500}>
                             Tap the <strong>“Share”</strong> button in Safari
                         </Text>
                     </Group>
                     <Group gap="sm" align="center">
-                        <FaHome size={24} color="#3b82f6" />
+                        <CiSquarePlus size={24} color="#3b82f6" />
                         <Text size="sm" fw={500}>
                             Select <strong>“Add to Home Screen”</strong>
                         </Text>
