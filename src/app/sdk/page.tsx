@@ -3,11 +3,11 @@
 import { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-    FaCar, FaChartLine, FaPlus, FaChevronDown, FaSyncAlt, FaDownload, FaFilter,
-    FaTimes, FaEdit, FaClock, FaCheckCircle, FaHandshake, FaTrophy, FaEye, FaSearch, FaLink
+   FaPlus, FaChevronDown,
+    FaTimes, FaSearch, FaLink
 } from 'react-icons/fa';
 import styles from './page.module.css';
-import { ActionIcon, Badge, Button, Input, Select, Stack, TextInput } from "@mantine/core";
+import {ActionIcon, Badge, Button, Input, Loader, Select, Stack, TextInput} from "@mantine/core";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
@@ -35,15 +35,15 @@ const CarSyndicationSection: FC = () => {
     const [activeTab, setActiveTab] =
         useState<SyndicationRequestStatusNames>("pending publisher");
 
-    const { data: profileData } = useProfile()
+    const { data: profileData, isLoading: isLoadingProfile } = useProfile()
 
-    const { data } = useSyndicationRequests({
+    const { data, isLoading, isPending } = useSyndicationRequests({
         make: make ?? "",
         model: model ?? "",
         status: activeTab,
         vin: debouncedVin,
     });
-    const { data: filters } = useSyndicationRequestFilters();
+    const { data: filters, isLoading: isLoadingFilters } = useSyndicationRequestFilters();
 
     const vehicles = data?.items ?? [];
 
@@ -64,10 +64,19 @@ const CarSyndicationSection: FC = () => {
     };
 
 
+    if (isLoading || isLoadingFilters || isLoadingProfile) {
+        return (
+            <div className={styles.loader}>
+                <Loader/>
+            </div>
+        )
+    }
+
+
     if (profileData?.subscription?.planSlug !== "auction access") {
         return (
             <div className={styles.container}>
-                <NoAccessPage />
+                <NoAccessPage/>
             </div>
         )
     }
