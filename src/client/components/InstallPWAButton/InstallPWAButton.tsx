@@ -1,8 +1,9 @@
 'use client'
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import {Button} from "@mantine/core";
-import {FaDownload} from "react-icons/fa";
+import { Button } from "@mantine/core";
+import { FaDownload } from "react-icons/fa";
+import { useProfile } from '@/client/hooks';
 
 // Объявляем тип для события beforeinstallprompt, чтобы TS не ругался
 interface BeforeInstallPromptEvent extends Event {
@@ -13,6 +14,10 @@ interface BeforeInstallPromptEvent extends Event {
 const InstallPWAButton: React.FC = () => {
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isIOS, setIsIOS] = useState(false);
+    const { data: profileData } = useProfile();
+
+    const isAdmin = process.env.ADMIN_EMAILS?.split(',')?.includes(profileData?.email ?? "") ?? false
+
 
     useEffect(() => {
         // Определяем iOS
@@ -54,6 +59,10 @@ const InstallPWAButton: React.FC = () => {
 
         setDeferredPrompt(null);
     };
+
+    if (!isAdmin) {
+        return <></>
+    }
 
 
     return (
