@@ -31,6 +31,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: "do-change",
     description: "",
+    manifest: '/manifest.json'
 };
 
 

@@ -1,4 +1,6 @@
 import type { NextConfig } from "next";
+import withPWA from 'next-pwa';
+
 
 const nextConfig: NextConfig = {
     webpack: (config) => {
@@ -26,4 +28,11 @@ const nextConfig: NextConfig = {
     },
 };
 
-export default nextConfig;
+export default withPWA({
+    dest: 'public',
+    disable: false,
+    register: true,
+    skipWaiting: true,
+    sw: 'worker.js'
+    // @ts-ignore
+})(nextConfig);
