@@ -1,8 +1,8 @@
 'use client'
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import {Button, Group, Modal, Stack, Text} from "@mantine/core";
-import {FaDownload, FaHome, FaShareAlt} from "react-icons/fa";
+import { Button, Group, Modal, Stack, Text } from "@mantine/core";
+import { FaDownload, FaHome, FaShareAlt } from "react-icons/fa";
 import { useProfile } from '@/client/hooks';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -15,9 +15,6 @@ export const InstallPWAButton: React.FC = () => {
     const [isIOS, setIsIOS] = useState(false);
     const [showButton, setShowButton] = useState(false);
     const [iosModalOpened, setIosModalOpened] = useState(false);
-    const { data: profileData } = useProfile();
-
-    const isAdmin = process.env.ADMIN_EMAILS?.split(',')?.includes(profileData?.email ?? "") ?? false
 
     useEffect(() => {
         if (typeof window === 'undefined') return; // SSR check
@@ -71,7 +68,7 @@ export const InstallPWAButton: React.FC = () => {
         setDeferredPrompt(null);
     };
 
-    if (!isAdmin || !showButton) {
+    if (!showButton) {
         return <></>
     }
 
