@@ -52,8 +52,6 @@ const InstallPWAButton: React.FC = () => {
         setDeferredPrompt(null);
     };
 
-    // Показываем кнопку только на iOS или когда есть deferredPrompt (Android/Chrome)
-    if (!isIOS && !deferredPrompt) return null;
 
     return (
         <button onClick={handleInstallClick}>
