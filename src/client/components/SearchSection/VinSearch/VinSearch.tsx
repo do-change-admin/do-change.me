@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from "./VinSearch.module.css";
 import { motion } from "framer-motion";
-import { FaSearch } from "react-icons/fa";
+import {FaSearch, FaTimes} from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { Input } from '@/client/components/_ui';
 import Image from "next/image";
@@ -10,6 +10,7 @@ import { useScannerState } from '@/client/states/scanner.state';
 import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import { useShallow } from 'zustand/react/shallow'
 import { VIN } from '@/value-objects/vin.value-object';
+import {ActionIcon} from "@mantine/core";
 
 export const VinSearch = ({ openSubscription }: { openSubscription?: () => void }) => {
     const router = useRouter();
@@ -49,6 +50,14 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
                     maxLength={17}
                     value={vin || ""}
                     icon={<>
+                        {vin && (
+                            <ActionIcon
+                                variant="outline"
+                                onClick={() => setVIN('')}
+                            >
+                                <FaTimes className={styles.icon} />
+                            </ActionIcon>
+                        )}
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             className={styles.analyzeBtn}
