@@ -1,5 +1,8 @@
 'use client'
+import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
+import {Button} from "@mantine/core";
+import {FaDownload} from "react-icons/fa";
 
 // Объявляем тип для события beforeinstallprompt, чтобы TS не ругался
 interface BeforeInstallPromptEvent extends Event {
@@ -54,9 +57,23 @@ const InstallPWAButton: React.FC = () => {
 
 
     return (
-        <button onClick={handleInstallClick}>
-            Установить приложение
-        </button>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+            <Button
+                fullWidth
+                onClick={handleInstallClick}
+                leftSection={<FaDownload size={18} />}
+                size="md"
+                style={{
+                    background: 'linear-gradient(90deg, #6366f1, #3b82f6)',
+                    color: 'white',
+                    fontWeight: 600,
+                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.4)',
+                    transition: 'all 0.3s ease',
+                }}
+            >
+                Install App
+            </Button>
+        </motion.div>
     );
 };
 

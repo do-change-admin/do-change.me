@@ -43,8 +43,8 @@ export default async function SpaceLayout({ children, params: { locale } }: { ch
             <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}>
                 <Suspense>
                     <Providers>
+                        <InstallPWAButton />
                         <Layout>
-                            <InstallPWAButton />
                             {children}
                         </Layout>
                     </Providers>
