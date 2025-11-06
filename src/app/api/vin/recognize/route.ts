@@ -1,4 +1,8 @@
+import { DIContainer } from "@/backend/di-containers";
+import { ErrorFactory } from "@/value-objects/errors.value-object";
 import { NextResponse } from "next/server";
+
+const errorFactory = ErrorFactory.forController("vin / recognize");
 
 export async function POST(req: Request) {
     try {
@@ -17,14 +21,25 @@ export async function POST(req: Request) {
             method: "POST",
             headers: {
                 "x-rapidapi-key": process.env.RAPID_API_KEY!,
-                "x-rapidapi-host": process.env.VIN_SCANNER_HOST!
+                "x-rapidapi-host": process.env.VIN_SCANNER_HOST!,
             },
-            body: payload
+            body: payload,
         });
 
         const data = await response.json();
         return NextResponse.json(data, { status: response.status });
     } catch (error: any) {
+        const loggerService = DIContainer().LoggerService();
+
+        const newError = errorFactory.inMethod("POST").newError(
+            {
+                error: "Could not recognize",
+            },
+            error
+        );
+
+        loggerService.error(newError);
+
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

@@ -12,6 +12,8 @@ import { NotificationStore } from "../stores/interfaces/notification.store";
 import { NotificationInMemoryStore } from "../stores/implementations/in-memory/notification.in-memory-store";
 import { IMailerProvider } from "../providers/mailer/mailer.provider";
 import { ConsoleMailerProvider } from "../providers/mailer/console-mailer/console-mailer.provider";
+import { ILogger } from "../services/logger/logger.service";
+import { ConsoleLogger } from "../services/logger/console-logger/console-logger.service";
 
 const container = new Container();
 
@@ -53,9 +55,7 @@ const registerFunctionProviders = () => {
         .bind<IMailerProvider>(ProviderTokens.mailer)
         .to(ConsoleMailerProvider);
 
-    container
-        .bind<FunctionProviders.Logger.Interface>(ProviderTokens.logger)
-        .to(FunctionProvidersImplementations.Mock.Logger);
+    container.bind<ILogger>(ProviderTokens.logger).to(ConsoleLogger);
 };
 
 registerDataProviders();
