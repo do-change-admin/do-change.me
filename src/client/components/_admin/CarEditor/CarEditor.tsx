@@ -279,13 +279,13 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                         </Group>
 
                         <Group justify="space-between" mt="md" mb="sm">
-                            <Text fw={600}>Фотографии автомобиля</Text>
+                            <Text fw={600}>Photos</Text>
                             <Button
                                 variant="light"
                                 color="blue"
                                 onClick={() => downloadAllImages(car?.photoLinks || [])}
                             >
-                                Скачать все (.zip)
+                                Car Photos (.zip)
                             </Button>
                         </Group>
 
