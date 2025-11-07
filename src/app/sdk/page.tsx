@@ -7,7 +7,7 @@ import {
     FaTimes, FaSearch, FaLink
 } from 'react-icons/fa';
 import styles from './page.module.css';
-import {ActionIcon, Badge, Button, Input, Loader, Select, Stack, TextInput} from "@mantine/core";
+import { Badge, Button, Loader, Select, Stack, TextInput} from "@mantine/core";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";

@@ -109,7 +109,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
     const handleAddPhotos = (files: File[]) => {
         if (!files.length) return;
         setPhotos((prev) => {
-            const free = Math.max(0, 10 - prev.length);
+            const free = Math.max(0, 30 - prev.length);
             return [
                 ...prev,
                 ...files
@@ -147,10 +147,10 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
     const isFormValidForDraft = vin?.length === 17;
 
     return (
-        <Drawer
+        <Modal
             opened={opened}
             onClose={onClose}
-            position="bottom"
+            fullScreen
             padding="xl"
             overlayProps={{ blur: 2, opacity: 0.55 }}
             size="100%"
@@ -267,11 +267,11 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                             <FaCamera className={styles.iconPurple} />
                             <Title order={4}>Photos *</Title>
                             <Text size="sm" c="dimmed">
-                                (1–10 photos)
+                                (1–30 photos)
                             </Text>
                         </Group>
                         <Text size="sm" c="dimmed">
-                            {photos.length}/10
+                            {photos.length}/30
                         </Text>
                     </Group>
 
@@ -285,7 +285,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                             multiple
                             onChange={handleAddPhotos}
                             accept="image/*"
-                            disabled={photos.length >= 10}
+                            disabled={photos.length >= 30}
                         >
                             {(props) => (
                                 <div
@@ -376,6 +376,6 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     </Button>
                 </Group>
             </Group>
-        </Drawer>
+        </Modal>
     );
 };
