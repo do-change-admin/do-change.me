@@ -31,6 +31,7 @@ import {
 import { FaSave } from "react-icons/fa";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
+import {downloadAllImages} from "@/client/components/_admin/CarEditor/utils";
 
 export interface CarEditorProps {
     opened: boolean;
@@ -223,11 +224,11 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                                 <FaCamera className={styles.iconPurple} />
                                 <Title order={4}>Photos *</Title>
                                 <Text size="sm" c="dimmed">
-                                    (1–10 photos)
+                                    (1–30 photos)
                                 </Text>
                             </Group>
                             <Text size="sm" c="dimmed">
-                                {car?.photoLinks.length}/10
+                                {car?.photoLinks.length}/30
                             </Text>
                         </Group>
 
@@ -275,6 +276,17 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                     <div>
                         <Group gap="xs">
                             <Title order={5}>Admin actions</Title>
+                        </Group>
+
+                        <Group justify="space-between" mt="md" mb="sm">
+                            <Text fw={600}>Фотографии автомобиля</Text>
+                            <Button
+                                variant="light"
+                                color="blue"
+                                onClick={() => downloadAllImages(car?.photoLinks || [])}
+                            >
+                                Скачать все (.zip)
+                            </Button>
                         </Group>
 
                         <Grid mt="md">

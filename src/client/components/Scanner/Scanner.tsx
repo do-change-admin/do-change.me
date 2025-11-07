@@ -37,7 +37,7 @@ export const Scanner = () => {
     // авто-сканирование
     useEffect(() => {
         if (!scanning || !open) return;
-        const interval = setInterval(() => captureAndSend(), 3000);
+        const interval = setInterval(() => captureAndSend(), 2000);
         return () => clearInterval(interval);
     }, [scanning, open]);
 
@@ -80,6 +80,9 @@ export const Scanner = () => {
     return (
         <div className={styles.wrapper}>
             <video ref={videoRef} autoPlay playsInline className={styles.webcam} />
+            <div className={styles.vinFrame}>
+                <span className={styles.vinLabel}>Align VIN here</span>
+            </div>
             <canvas ref={canvasRef} className={styles.canvas} />
             <button
                 className={styles.closeButton}
