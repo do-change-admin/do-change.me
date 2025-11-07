@@ -24,14 +24,6 @@
     background: #eff6ff;
   }
 }
-
-.drawerWrapper {
-  margin: 1rem; /* отступы сверху/снизу/сбоку */
-  height: calc(100% - 2rem); /* почти весь экран */
-  border-radius: 1rem;
-  overflow: hidden;
-}
-
 .drawerContent {
   height: 100%;
   display: flex;

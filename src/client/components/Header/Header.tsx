@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "./Header.module.css";
+import {Text, Box, Group, Image} from "@mantine/core";
 import { LanguageSelector } from "@/client/components";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -10,7 +11,13 @@ export const Header = () => {
 
     return (
         <header className={styles.header}>
-            <h1 className={styles.name}>do-change</h1>
+            <Image
+                src="/logo/logo.png"
+                alt="DoChange logo"
+                w="auto"
+                h={40}
+            />
+            {/*<h1 className={styles.name}>do-change</h1>*/}
             <div className={styles.right}>
                 {/*<Tooltip label="Notifications" position="bottom" transitionProps={{ duration: 150 }}>*/}
                 {/*    <ActionIcon*/}
