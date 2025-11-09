@@ -31,15 +31,19 @@ export const NotificationAdminListContainer: FC<NotificationAdminListContainerPr
     const { data, isFetching } = useNotificationsAdminList()
 
     if (isFetching) {
-        return <div className={containerClass}>
-            <Loader />
-        </div>
+        return (
+            <div className={containerClass}>
+                <Loader />
+            </div>
+        )
     }
 
     if (!data?.items.length) {
-        return <div className={containerClass}>
-            <Warning message='No notifications was found' />
-        </div>
+        return (
+            <div className={containerClass}>
+                <Warning message='No notifications was found' />
+            </div>
+        )
     }
 
     return <div className={containerClass}>
