@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import { StoreTokens } from "../di-containers/tokens.di-container";
 import type { NotificationStore } from "../stores/interfaces/notification.store";
 import z from "zod";
+import { X } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
 type UserNotificationPayload = z.infer<typeof UserNotificationsManagementService.notificationPayloadSchema>
 
@@ -16,6 +17,12 @@ export class UserNotificationsManagementService {
         @inject(StoreTokens.notifications) private readonly notifications: NotificationStore,
         private readonly userId: string,
     ) { }
+
+    all = async () => {
+        const data = await this.notifications.list({}, { pageSize: 1000, zeroBasedIndex: 0 })
+
+        return data
+    }
 
     notify = async ({ message, title }: UserNotificationPayload) => {
         return await this.notifications.create({

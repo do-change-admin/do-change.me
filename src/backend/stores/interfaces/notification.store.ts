@@ -3,12 +3,12 @@ import { ActionsPayload, Models, CRUDStore, SearchPayload } from '../helpers/abs
 import { Id, UserId } from '@/backend/utils/shared-models.utils'
 
 // ITEM CONTRACTS
-export type NotificationList = NotificationModel & Id
-export type NotificationDetails = NotificationList & UserId
+export type NotificationList = NotificationModel & Id & UserId
+export type NotificationDetails = NotificationList
 
 // SEARCH CONTRACTS
 export type FindNotificationPayload = Id
-export type FindNotificationsPayload = UserId & { seen?: boolean }
+export type FindNotificationsPayload = Partial<UserId & { seen: boolean }>
 
 // ACTION CONTRACTS
 export type CreateNotificationPayload = Omit<NotificationDetails, 'id' | 'seen'>

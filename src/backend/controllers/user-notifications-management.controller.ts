@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { ServiceTokens } from "../di-containers/tokens.di-container";
 import { type UserNotificationsManagementServiceFactory } from "../di-containers/register-services";
-import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
+import { zodApiMethod, ZodController, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
 import { UserNotificationsManagementService } from "../services/user-notifications-management.service";
 import z from "zod";
 import { Notification } from "@/value-objects/notification.value-object";
@@ -17,6 +17,12 @@ const schemas = {
             userId: z.string().nonempty(),
             level: Notification.levelSchema
         })
+    },
+
+    GET: {
+        query: undefined,
+        response: z.object({ items: z.array(Notification.modelSchema.extend({ userId: z.string().nonempty() })) }),
+        body: undefined,
     }
 } satisfies ZodControllerSchemas
 
@@ -43,6 +49,17 @@ export class UserNotificationsManagementController {
             }
         }
     })
+
+    GET = zodApiMethod(schemas.GET, {
+        handler: async ({ payload }) => {
+            const service = this.serviceFactory(' ')
+            const items = await service.all()
+
+            return { items }
+        }
+    })
 }
 
-export type UserNotificationsManagementAPI = ZodAPIController<typeof schemas>
+export type UserNotificationsManagementAPI = ZodController<typeof schemas, {
+    Notification: z.infer<typeof schemas.GET['response']>['items'][number]
+}>

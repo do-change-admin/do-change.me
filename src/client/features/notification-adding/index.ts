@@ -1,7 +1,7 @@
 'use client'
 
 import { injectViews } from "@/client/utils/views.utils";
-import { NotificationAddingFeatureContainer } from "./notification-adding.feature.container";
-import { notificationAddingFeatureViews } from "./notification-adding.feature.views";
+import { NotificationAddingContainer } from "./notification-adding.feature.container";
+import { FormLayout } from "./views";
 
-export const NotificationAddingFeature = injectViews(NotificationAddingFeatureContainer, notificationAddingFeatureViews)
+export const NotificationAdding = injectViews(NotificationAddingContainer, { FormLayout })

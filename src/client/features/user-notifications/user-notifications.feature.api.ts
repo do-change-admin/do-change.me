@@ -2,8 +2,8 @@ import type { UserNotificationsAPI } from "@/backend/controllers/user-notificati
 import { apiRequest } from "@/client/utils/api-request.utils"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
-export type GET = UserNotificationsAPI['GET']
-export type PATCH = UserNotificationsAPI['PATCH']
+export type GET = UserNotificationsAPI['endpoints']['GET']
+export type PATCH = UserNotificationsAPI['endpoints']['PATCH']
 
 const endpoint = '/api/user-notifications'
 
@@ -26,3 +26,5 @@ export const userUserNotificationReading = () => {
         }
     })
 }
+
+export type UserNotificationDTO = UserNotificationsAPI['DTOs']['Notification']
