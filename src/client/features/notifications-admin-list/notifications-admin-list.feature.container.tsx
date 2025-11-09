@@ -43,7 +43,7 @@ export const NotificationAdminListContainer: FC<NotificationAdminListContainerPr
     }
 
     return <div className={containerClass}>
-        <List notificationsMarkup={(data?.items ?? []).map(x => {
+        <List notificationsMarkup={data?.items?.map(x => {
             return <Item data={x} key={x.userId + x.title + x.level} />
         })} />
     </div>
