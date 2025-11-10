@@ -1,7 +1,7 @@
-import { NotificationsListFeature } from "@/client/features/notifications-list";
+import { UserNotifications } from "@/client/features/user-notifications";
 
 export default function () {
     return <>
-        <NotificationsListFeature />
+        <UserNotifications />
     </>
 }

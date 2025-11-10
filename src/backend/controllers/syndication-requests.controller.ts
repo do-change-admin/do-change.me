@@ -1,4 +1,4 @@
-import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
+import { ZodAPIController_DEPRECATED, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
 import { type SyndicationRequestDraftsServiceFactory, type SyndicationRequestsServiceFactory } from "@/backend/di-containers/register-services";
 import { ProviderTokens, ServiceTokens } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
@@ -117,5 +117,5 @@ export class SyndicationRequestsController {
  * FormData с ключом photos, в котором находятся фотографии,
  * которые должны быть ассоциированы с создаваемой заявкой.
  */
-export type SyndicationRequestsAPI = ZodAPIController<typeof schemas>
+export type SyndicationRequestsAPI = ZodAPIController_DEPRECATED<typeof schemas>
 

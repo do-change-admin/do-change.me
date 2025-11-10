@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
+import { ZodAPIController_DEPRECATED, zodApiMethod, ZodController, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
 import z from "zod";
 import { UserNotificationsService } from "../services/user-notifications.service";
 import { ServiceTokens } from "../di-containers/tokens.di-container";
@@ -54,4 +54,6 @@ export class UserNotificationsController {
 /**
  * PATCH - mark as read
  */
-export type UserNotificationsAPI = ZodAPIController<typeof schemas>
+export type UserNotificationsAPI = ZodController<typeof schemas, {
+    Notification: z.infer<typeof schemas.GET.response>['items'][number]
+}>

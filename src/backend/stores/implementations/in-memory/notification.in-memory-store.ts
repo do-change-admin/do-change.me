@@ -11,7 +11,7 @@ const NotificationInMemoryStore = newInMemoryStore<NotificationStore>({
                 message: payload.message,
                 seen: false,
                 title: payload.title,
-                userId: payload.userId
+                userId: payload.userId,
             }
         }
     }

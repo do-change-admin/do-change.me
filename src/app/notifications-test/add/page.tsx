@@ -1,7 +1,12 @@
-import { NotificationAddingFeature } from "@/client/features/notification-adding";
+'use client'
+
+
+import { NotificationAdding } from "@/client/features/notification-adding";
+import { NotificationsAdminList } from "@/client/features/notifications-admin-list";
 
 export default function () {
     return <>
-        <NotificationAddingFeature />
+        <NotificationsAdminList />
+        <NotificationAdding />
     </>
 }

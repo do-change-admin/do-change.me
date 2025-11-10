@@ -420,6 +420,15 @@ export const zodApiMethod_DEPRECATED = <
 
 export type ZodControllerSchemas = Record<string, ZodAPISchemas>
 
-export type ZodAPIController<Schemas extends Record<string, { body: unknown, query: unknown, response: unknown }>> = {
+export type ZodAPIController_DEPRECATED<Schemas extends Record<string, { body: unknown, query: unknown, response: unknown }>> = {
     [k in keyof Schemas]: ZodAPIMethod<Schemas[k]>
+}
+
+
+export type ZodController<
+    Schemas extends Record<string, { body: unknown, query: unknown, response: unknown }>,
+    DTOs extends Record<string, unknown> | undefined = undefined
+> = {
+    endpoints: { [k in keyof Schemas]: ZodAPIMethod<Schemas[k]> },
+    DTOs: DTOs extends undefined ? {} : DTOs
 }

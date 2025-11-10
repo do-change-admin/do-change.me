@@ -9,6 +9,7 @@ import { NotificationInMemoryStore } from '../stores/implementations/in-memory/n
 const container = new Container()
 
 const registerDataProviders = () => {
+    const d = new NotificationInMemoryStore()
     container
         .bind<DataProviders.SyndicationRequests.Interface>(StoreTokens.syndicationRequests)
         .to(DataProvidersImplemetations.Prisma.SyndicationRequests)
@@ -26,7 +27,7 @@ const registerDataProviders = () => {
         .to(DataProvidersImplemetations.API.PicturesInPublicFolder)
     container
         .bind<NotificationStore>(StoreTokens.notifications)
-        .to(NotificationInMemoryStore).inSingletonScope()
+        .toConstantValue(d)
 }
 
 const registerFunctionProviders = () => {

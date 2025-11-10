@@ -102,6 +102,7 @@ export const newInMemoryStore = <Store>(options?: {
         }
 
         list: CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']>['list'] = async (searchPayload, pagination) => {
+            console.log(this.data)
             const afterFiltration = this.data.filter((x) => this.listSearchLogic(x, searchPayload))
             const afterPagination = afterFiltration.filter((_, i) => {
                 return i >= pagination.pageSize * pagination.zeroBasedIndex && i < (pagination.zeroBasedIndex + 1) * pagination.pageSize

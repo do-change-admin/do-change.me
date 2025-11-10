@@ -1,69 +1,74 @@
-import { SeparateView, View, WrapperView } from "@/client/utils/views.utils"
 import { FC, ReactNode, useState } from "react"
-import { useNotificationAdding } from "./notification-adding.feature.queries"
-import { ReactState } from "@/client/utils/shared-types.utils"
+import { useNotificationAdding } from "./notification-adding.feature.api"
 import type { NotificationLevel } from "@/value-objects/notification.value-object"
+import { WithViews } from "@/client/utils/views.utils"
+import { Select, Input, Button, Loader } from "@/client/components/_ui"
 
-export type NotificationAddingFeatureContainerProps = {
-    views: {
-        Container: WrapperView,
-        UserSelector: View<{ userIdState: ReactState<string> }>,
-        LevelSelector: View<{ levelState: ReactState<NotificationLevel> }>,
-        TitleSelector: View<{ titleState: ReactState<string> }>,
-        MessageSelector: View<{ messageState: ReactState<string> }>,
-        AddNotificationButton: View<{ add: () => Promise<void>, disabled: boolean }>,
-        Loader: SeparateView,
-        FormLayout: View<{
-            userSelector: ReactNode,
-            titleControl: ReactNode,
-            messageControl: ReactNode,
-            levelSelector: ReactNode,
-            addNotificationButton: ReactNode,
-        }>
-    },
+export type NotificationAddingViews = {
+    FormLayout: FC<{
+        userIdInput: ReactNode,
+        titleInput: ReactNode,
+        messageInput: ReactNode,
+        levelSelect: ReactNode,
+        addNotificationButton: ReactNode,
+    }>
 }
 
-export const NotificationAddingFeatureContainer: FC<NotificationAddingFeatureContainerProps> = ({
-    views
-}) => {
-    const { Container, FormLayout, MessageSelector: MessageControl, TitleSelector: TitleControl, UserSelector, LevelSelector, Loader, AddNotificationButton } = views
+export type NotificationAddingContainerProps = WithViews<NotificationAddingViews>
 
-    const userIdState = useState('')
-    const titleState = useState('')
-    const messageState = useState('')
-    const levelState = useState<NotificationLevel>('info')
+export const NotificationAddingContainer: FC<NotificationAddingContainerProps> = ({
+    views,
+    containerClass
+}) => {
+    const { FormLayout } = views
+
+    const [userId, setUserId] = useState('')
+    const [title, setTitle] = useState('')
+    const [message, setMessage] = useState('')
+    const [level, setLevel] = useState<NotificationLevel>('info')
     const { mutateAsync: addNotification, isPending } = useNotificationAdding()
 
-    const messageControl = <MessageControl messageState={messageState} />
-    const levelSelector = <LevelSelector levelState={levelState} />
-    const titleControl = <TitleControl titleState={titleState} />
-    const userSelector = <UserSelector userIdState={userIdState} />
-    const addNotificationButton = <AddNotificationButton
-        add={async () => {
-            await addNotification({
-                body: {
-                    level: levelState[0],
-                    message: messageState[0],
-                    title: titleState[0],
-                    userId: userIdState[0]
-                }
-            })
+    const messageInput = <Input value={message} onChange={(x) => { setMessage(x.target.value) }} />
+    const titleInput = <Input value={title} onChange={(x) => { setTitle(x.target.value) }} />
+    const userIdInput = <Input value={userId} onChange={(x) => { setUserId(x.target.value) }} />
+
+    const levelSelect = <Select
+        value={level}
+        data={['error', 'info', 'warning'] as NotificationLevel[]}
+        onChange={(x) => {
+            if (!!x) {
+                setLevel(x as NotificationLevel)
+            }
         }}
-        disabled={!messageState[0] || !titleState[0] || !userIdState[0]}
     />
+
+    const addNotificationButton = <Button
+        disabled={!message || !title || !userId}
+        onClick={async () => {
+            try {
+                await addNotification({
+                    body: { level, message, title, userId }
+                })
+                alert("Notification was succesfully added")
+            } catch (e) {
+                console.log(e)
+            }
+        }}>Add notification</Button>
 
 
     if (isPending) {
-        return <Container>
+        return <div className={containerClass}>
             <Loader />
-        </Container>
+        </div>
     }
 
-    return <FormLayout
-        messageControl={messageControl}
-        titleControl={titleControl}
-        userSelector={userSelector}
-        levelSelector={levelSelector}
-        addNotificationButton={addNotificationButton}
-    />
+    return <div className={containerClass}>
+        <FormLayout
+            levelSelect={levelSelect}
+            messageInput={messageInput}
+            titleInput={titleInput}
+            userIdInput={userIdInput}
+            addNotificationButton={addNotificationButton}
+        />
+    </div>
 }

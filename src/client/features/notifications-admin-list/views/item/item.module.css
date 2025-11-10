@@ -1,0 +1,15 @@
+.container {
+    padding: 10px;
+}
+
+.warning {
+    background-color: red;
+}
+
+.error {
+    background-color: orange;
+}
+
+.info {
+    background-color: white;
+}
