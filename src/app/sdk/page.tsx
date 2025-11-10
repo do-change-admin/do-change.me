@@ -3,60 +3,26 @@
 import { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-    FaCar, FaChartLine, FaPlus, FaChevronDown, FaSyncAlt, FaDownload, FaFilter,
-    FaTimes, FaEdit, FaClock, FaCheckCircle, FaHandshake, FaTrophy, FaEye, FaSearch, FaLink
+   FaPlus, FaChevronDown,
+    FaTimes, FaSearch, FaLink
 } from 'react-icons/fa';
 import styles from './page.module.css';
-import { ActionIcon, Badge, Button, Input, Select, Stack, TextInput } from "@mantine/core";
+import { Badge, Button, Loader, Select, Stack, TextInput} from "@mantine/core";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
 import { CarAdder } from "@/client/components/CarAdder/CarAdder";
 import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from "@/app/sdk/sdk.utils";
 import { PlaceholderSDK } from "@/client/components";
-
-const cars = [
-    {
-        status: 'Active',
-        vin: '1HGBH41JXMN109186',
-        name: '2023 Honda Accord',
-        price: '$28,500',
-        views: 234,
-        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/d1dfebe3ad-f49c7d201569260847c1.png',
-        icon: <FaEye />,
-        color: 'green'
-    },
-    {
-        status: 'Pending Publisher',
-        vin: '5NPE34AF4GH012345',
-        name: '2024 BMW X5',
-        price: '$65,900',
-        views: null,
-        processing: true,
-        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/c8b1449594-d1f9f4473d74c96137ad.png',
-        icon: <FaClock />,
-        color: 'orange'
-    },
-    {
-        status: 'Draft',
-        vin: '1FTFW1ET5DFC12345',
-        name: '2023 Ford F-150',
-        price: '$42,750',
-        views: null,
-        editing: true,
-        img: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/8682136f25-6f16f60c695c8551fc00.png',
-        icon: <FaEdit />,
-        color: 'yellow'
-    }
-];
+import NoAccessPage from "@/app/sdk/no-access-page";
+import { useProfile } from '@/client/hooks';
 
 const STATUS_OPTIONS = [
-    'All Status',
-    'Draft',
-    'Pending Publisher',
-    'Active',
-    'Pending Sales',
-    'Sold',
+    'draft',
+    'pending publisher',
+    'active',
+    'pending sales',
+    'sold',
 ];
 
 const CarSyndicationSection: FC = () => {
@@ -67,15 +33,17 @@ const CarSyndicationSection: FC = () => {
     const [model, setModel] = useState<null | string>(null);
     const [editingId, setEditingId] = useState<string | undefined>();
     const [activeTab, setActiveTab] =
-        useState<SyndicationRequestStatusNames>("active");
+        useState<SyndicationRequestStatusNames>("pending publisher");
 
-    const { data } = useSyndicationRequests({
+    const { data: profileData, isLoading: isLoadingProfile } = useProfile()
+
+    const { data, isLoading, isPending } = useSyndicationRequests({
         make: make ?? "",
         model: model ?? "",
         status: activeTab,
         vin: debouncedVin,
     });
-    const { data: filters } = useSyndicationRequestFilters();
+    const { data: filters, isLoading: isLoadingFilters } = useSyndicationRequestFilters();
 
     const vehicles = data?.items ?? [];
 
@@ -94,6 +62,24 @@ const CarSyndicationSection: FC = () => {
         setMake(null);
         setModel(null);
     };
+
+
+    if (isLoading || isLoadingFilters || isLoadingProfile) {
+        return (
+            <div className={styles.loader}>
+                <Loader/>
+            </div>
+        )
+    }
+
+
+    if (profileData?.subscription?.planSlug !== "auction access") {
+        return (
+            <div className={styles.container}>
+                <NoAccessPage/>
+            </div>
+        )
+    }
 
     return (
         <div className={styles.dashboard}>
@@ -196,7 +182,7 @@ const CarSyndicationSection: FC = () => {
                                 </div>
                                 <h3> {car.make} {car.model} ({car.year})</h3>
                                 <div className={styles.vehicleBottom}>
-                                    <span className={styles.price}>${(car?.price / 100).toFixed(2)}</span>
+                                    <span className={styles.price}>${(car?.price / 1000).toFixed(3)}</span>
                                 </div>
                             </div>
                             <Stack gap="xs" p="lg">
@@ -223,6 +209,13 @@ const CarSyndicationSection: FC = () => {
                                         </Button>
                                     );
                                 })}
+                            </Stack>
+                            <Stack>
+                                {car.status === "draft" && (
+                                    <Button onClick={() => handleEdit(car.id)}>
+                                        Edit
+                                    </Button>
+                                )}
                             </Stack>
                         </motion.div>
                     ))}

@@ -222,8 +222,8 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
                                         onClick={async () => {
                                             const { url } = await subscribe({
                                                 body: {
-                                                    planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? '',
-                                                    priceId: auctionAccessPlan?.prices?.[0]?.stripePriceId ?? ''
+                                                    planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? "",
+                                                    priceId: auctionAccessPlan?.prices?.[0].stripePriceId ?? ""
                                                 }
                                             })
                                             if (url) {

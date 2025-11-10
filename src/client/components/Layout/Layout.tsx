@@ -46,16 +46,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <div className={styles.chat}>
                         <Chat />
                     </div>
-                    <ActionIcon
-                        className={styles.auctionButton}
-                        pos="fixed"
-                        onClick={handleOpenAuctionAccess}
-                        p="xl"
-                        radius="lg"
-                        bg="white"
-                    >
-                        <Image src="/auctionAccessIcon.png" w={50} h={50} />
-                    </ActionIcon>
+                    {/*<ActionIcon*/}
+                    {/*    className={styles.auctionButton}*/}
+                    {/*    pos="fixed"*/}
+                    {/*    onClick={handleOpenAuctionAccess}*/}
+                    {/*    p="xl"*/}
+                    {/*    radius="lg"*/}
+                    {/*    bg="white"*/}
+                    {/*>*/}
+                    {/*    <Image src="/auctionAccessIcon.png" w={50} h={50} />*/}
+                    {/*</ActionIcon>*/}
                     {!isReportPage && (
                         <header className={styles.header}>
                             <Header />

@@ -4,6 +4,7 @@ import styles from "./HeaderWeb.module.css";
 import {FaArrowLeft, FaArrowRight, FaPowerOff} from "react-icons/fa";
 import {useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
+import {Image} from "@mantine/core";
 
 export const HeaderWeb = () => {
     const router = useRouter();
@@ -28,7 +29,14 @@ export const HeaderWeb = () => {
             <div className={styles.container}>
                 <div className={styles.wrapper}>
                     <nav className={styles.nav}>
-                        <Link href="/home" className={`${styles.name} ${scrolled ? styles.scrolled : ""} ${isOpen ? styles.open : ""}`}>do-change</Link>
+                        <Link href="/home" className={`${styles.name} ${scrolled ? styles.scrolled : ""} ${isOpen ? styles.open : ""}`}>
+                            <Image
+                                src="/logo/logo.png"
+                                alt="DoChange logo"
+                                w="auto"
+                                h={40}
+                            />
+                        </Link>
                         <Link href="#how-it-works" className={`${styles.link} ${scrolled ? styles.scrolled : ""} ${isOpen ? styles.open : ""}`}>
                             How It Works
                         </Link>

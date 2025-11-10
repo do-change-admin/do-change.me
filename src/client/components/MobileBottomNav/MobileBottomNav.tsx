@@ -5,9 +5,10 @@ import styles from './MobileBottomNav.module.css';
 import { useSlideMenu } from '@/client/contexts';
 import { AuctionsServicesCards, Chat, SubscriptionPlans } from '@/client/components';
 import { useNavMenu, useProfile } from '@/client/hooks';
-import { FaQrcode } from 'react-icons/fa';
+import {FaBarcode, FaQrcode } from 'react-icons/fa';
 import { useDisclosure } from '@mantine/hooks';
 import { useScannerState } from '@/client/states/scanner.state';
+import { MdScanner } from 'react-icons/md';
 
 export const MobileBottomNav = () => {
     const start = useScannerState(x => x.start);
@@ -49,7 +50,7 @@ export const MobileBottomNav = () => {
 
                     {/* Scanner Button (Center) */}
                     <button className={styles.scannerButton} onClick={scannerOnClick}>
-                        <FaQrcode className={styles.scannerIcon} />
+                        <FaBarcode   className={styles.scannerIcon} />
                     </button>
 
                     {secondHalf.map((nav) => (
