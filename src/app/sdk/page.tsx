@@ -3,11 +3,11 @@
 import { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-   FaPlus, FaChevronDown,
+    FaPlus, FaChevronDown,
     FaTimes, FaSearch, FaLink
 } from 'react-icons/fa';
 import styles from './page.module.css';
-import { Badge, Button, Loader, Select, Stack, TextInput} from "@mantine/core";
+import { Badge, Button, Loader, Select, Stack, TextInput } from "@mantine/core";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
@@ -15,7 +15,7 @@ import { CarAdder } from "@/client/components/CarAdder/CarAdder";
 import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from "@/app/sdk/sdk.utils";
 import { PlaceholderSDK } from "@/client/components";
 import NoAccessPage from "@/app/sdk/no-access-page";
-import { useProfile } from '@/client/hooks';
+import { useCurrentSubscriptionInfo } from '@/client/queries/subscription.queries';
 
 const STATUS_OPTIONS = [
     'draft',
@@ -35,7 +35,7 @@ const CarSyndicationSection: FC = () => {
     const [activeTab, setActiveTab] =
         useState<SyndicationRequestStatusNames>("pending publisher");
 
-    const { data: profileData, isLoading: isLoadingProfile } = useProfile()
+    const { data: subscriptionInfo, isFetching: subscriptionLevelIsFetching } = useCurrentSubscriptionInfo()
 
     const { data, isLoading, isPending } = useSyndicationRequests({
         make: make ?? "",
@@ -64,19 +64,20 @@ const CarSyndicationSection: FC = () => {
     };
 
 
-    if (isLoading || isLoadingFilters || isLoadingProfile) {
+    if (isLoading || isLoadingFilters || subscriptionLevelIsFetching) {
         return (
             <div className={styles.loader}>
-                <Loader/>
+                <Loader />
             </div>
         )
     }
 
+    const subscriptionLevel = subscriptionInfo?.level ?? 'no subscription'
 
-    if (profileData?.subscription?.planSlug !== "auction access") {
+    if (subscriptionLevel !== "premium plan") {
         return (
             <div className={styles.container}>
-                <NoAccessPage/>
+                <NoAccessPage />
             </div>
         )
     }

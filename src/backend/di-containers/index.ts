@@ -9,6 +9,7 @@ import type { SyndicationRequestDraftsController } from '@/backend/controllers/s
 import type { SyndicationRequestManagementController } from '@/backend/controllers/syndication-request-management.controller'
 import type { UserNotificationsController } from '../controllers/user-notifications.controller'
 import type { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller'
+import type { SubscriptionsController } from '../controllers/subscriptions.controller'
 
 const getDIContainer = () => {
     if (process.env['IN_TEST']) {
@@ -51,6 +52,9 @@ export const DIContainer = () => {
         },
         UserNotificationsManagementController: () => {
             return container.get<UserNotificationsManagementController>(ControllerTokens.userNotificationsManagement)
+        },
+        SubscriptionsController: () => {
+            return container.get<SubscriptionsController>(ControllerTokens.subscriptions)
         }
     }
 }
