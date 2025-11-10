@@ -10,7 +10,7 @@ export async function GET(req: Request) {
 
     try {
         const params = new URLSearchParams({
-            api_key: process.env.ODOMETER_API_KEY_02 || '',
+            api_key: process.env.ODOMETER_API_KEY_03 || '',
             fields: 'id,price,miles,seller_name,city,state,last_seen_at_date,first_seen_at_date',
         })
 
