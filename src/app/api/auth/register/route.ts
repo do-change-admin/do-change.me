@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
         const emailMessage = EmailMessage.create(
             verificationEmail(user, token.raw)
         );
-        emailService.send(emailMessage);
+        await emailService.send(emailMessage);
 
         return NextResponse.json({ message: "User created" }, { status: 201 });
     } catch (err) {
