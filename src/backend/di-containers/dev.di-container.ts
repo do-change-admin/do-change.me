@@ -55,7 +55,7 @@ const registerFunctionProviders = () => {
         .bind<FunctionProviders.Logger.Interface>(ProviderTokens.logger)
         .to(FunctionProvidersImplementations.Mock.Logger);
 
-    container.bind<IMailerService>(ServiceTokens.email).to(ResendMailerService);
+    container.bind<IMailerService>(ServiceTokens.email).to(MockMailerService);
 };
 
 registerDataProviders();
