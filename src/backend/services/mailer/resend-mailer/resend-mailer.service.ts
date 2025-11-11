@@ -8,6 +8,7 @@ export class ResendMailerService implements IMailerService {
     private sender!: ResendSender;
 
     constructor() {
+        console.log("RESEND_API_KEY exists:", !!process.env.RESEND_API_KEY);
         this.sender = new ResendSender(process.env.RESEND_API_KEY!);
     }
 
