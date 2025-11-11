@@ -15,7 +15,6 @@ import { registerControllers } from "./register-controllers";
 import { NotificationStore } from "../stores/interfaces/notification.store";
 import { NotificationInMemoryStore } from "../stores/implementations/in-memory/notification.in-memory-store";
 import { IMailerService } from "../services/mailer/mailer.service";
-import { MockMailerService } from "../services/mailer/mock-mailer/mock-mailer.service";
 import { ResendMailerService } from "../services/mailer/resend-mailer/resend-mailer.service";
 
 const container = new Container();
@@ -55,7 +54,7 @@ const registerFunctionProviders = () => {
         .bind<FunctionProviders.Logger.Interface>(ProviderTokens.logger)
         .to(FunctionProvidersImplementations.Mock.Logger);
 
-    container.bind<IMailerService>(ServiceTokens.email).to(MockMailerService);
+    container.bind<IMailerService>(ServiceTokens.email).to(ResendMailerService);
 };
 
 registerDataProviders();
