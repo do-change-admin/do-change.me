@@ -61,13 +61,19 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        after(() => {
-            const emailService = DIContainer().MailerService();
-            const emailMessage = EmailMessage.create(
-                verificationEmail(user, token.raw)
-            );
-            emailService.send(emailMessage);
-        });
+        // after(() => {
+        //     const emailService = DIContainer().MailerService();
+        //     const emailMessage = EmailMessage.create(
+        //         verificationEmail(user, token.raw)
+        //     );
+        //     emailService.send(emailMessage);
+        // });
+
+        const emailService = DIContainer().MailerService();
+        const emailMessage = EmailMessage.create(
+            verificationEmail(user, token.raw)
+        );
+        emailService.send(emailMessage);
 
         return NextResponse.json({ message: "User created" }, { status: 201 });
     } catch (err) {
