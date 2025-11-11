@@ -22,6 +22,7 @@ export class ResendMailerService implements IMailerService {
         });
 
         if (error) {
+            console.log("ERRORORORORORO", error);
             throw error;
         }
     }
