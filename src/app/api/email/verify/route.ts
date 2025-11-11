@@ -46,13 +46,11 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        after(() => {
-            const emailService = DIContainer().MailerService();
-            const emailMessage = EmailMessage.create(
-                verificationEmail(user, token.raw)
-            );
-            emailService.send(emailMessage);
-        });
+        const emailService = DIContainer().MailerService();
+        const emailMessage = EmailMessage.create(
+            verificationEmail(user, token.raw)
+        );
+        await emailService.send(emailMessage);
 
         return NextResponse.json({ message: "Verification email sent" });
     } catch (err) {
