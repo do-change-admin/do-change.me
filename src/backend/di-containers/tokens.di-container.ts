@@ -11,10 +11,10 @@ export const StoreTokens = {
 
 export const ProviderTokens = {
     logger: Symbol.for("LOGGER-FUNCTIONAL-PROVIDER"),
+    mailer: Symbol.for("MAILER-PROVIDER"),
 };
 
 export const ServiceTokens = {
-    email: Symbol.for("EMAIL-SERVICE"),
     syndicationRequestsFactory: Symbol.for(
         "SYNDICATION-REQUESTS-SERVICE-FACTORY"
     ),
