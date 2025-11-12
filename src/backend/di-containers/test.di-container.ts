@@ -1,8 +1,6 @@
 import {
     DataProviders,
     DataProvidersImplemetations,
-    FunctionProviders,
-    FunctionProvidersImplementations,
 } from "@/backend/providers";
 import { Container } from "inversify";
 import { StoreTokens, ProviderTokens } from "./tokens.di-container";
