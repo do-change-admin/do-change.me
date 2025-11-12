@@ -11,7 +11,7 @@ export type AnyErrorModel =
     | ServiceErrorModel
     | ControllerErrorModel;
 
-export interface ILogger {
+export interface ILoggerProvider {
     info(message: string, context?: Record<string, unknown>): Promise<void>;
     warn(message: string, context?: Record<string, unknown>): Promise<void>;
     error(error: AnyErrorModel): Promise<void>;

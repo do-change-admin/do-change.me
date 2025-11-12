@@ -25,7 +25,7 @@ export async function GET() {
         const data = await response.json();
         return NextResponse.json(data);
     } catch (err: any) {
-        const loggerService = DIContainer().LoggerService();
+        const loggerProvider = DIContainer().LoggerProvider();
 
         const newError = errorFactory.inMethod("GET").newError(
             {
@@ -34,7 +34,7 @@ export async function GET() {
             err
         );
 
-        loggerService.error(newError);
+        loggerProvider.error(newError);
 
         return NextResponse.json(
             { error: err.message || "Internal Server Error" },

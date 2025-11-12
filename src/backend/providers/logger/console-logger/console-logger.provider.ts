@@ -1,8 +1,8 @@
 import { injectable } from "inversify";
-import { AnyErrorModel, ILogger } from "../logger.service";
+import { AnyErrorModel, ILoggerProvider } from "../logger.provider";
 
 @injectable()
-export class ConsoleLogger implements ILogger {
+export class ConsoleLoggerProvider implements ILoggerProvider {
     async info(message: string, context?: Record<string, unknown>) {
         console.log(`[INFO] ${message}`, context || "");
     }

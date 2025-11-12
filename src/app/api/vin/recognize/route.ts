@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         const data = await response.json();
         return NextResponse.json(data, { status: response.status });
     } catch (error: any) {
-        const loggerService = DIContainer().LoggerService();
+        const loggerProvider = DIContainer().LoggerProvider();
 
         const newError = errorFactory.inMethod("POST").newError(
             {
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
             error
         );
 
-        loggerService.error(newError);
+        loggerProvider.error(newError);
 
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

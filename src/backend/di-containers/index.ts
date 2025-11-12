@@ -15,7 +15,7 @@ import type { UserNotificationsController } from "../controllers/user-notificati
 import type { UserNotificationsManagementController } from "../controllers/user-notifications-management.controller";
 import type { SubscriptionsController } from "../controllers/subscriptions.controller";
 import { IMailerProvider } from "../providers/mailer/mailer.provider";
-import { ILogger } from "../services/logger/logger.service";
+import { ILoggerProvider } from "../providers/logger/logger.provider";
 
 const getDIContainer = () => {
     if (process.env["IN_TEST"]) {
@@ -78,8 +78,8 @@ export const DIContainer = () => {
             return container.get<IMailerProvider>(ProviderTokens.mailer);
         },
 
-        LoggerService: () => {
-            return container.get<ILogger>(ServiceTokens.logger);
+        LoggerProvider: () => {
+            return container.get<ILoggerProvider>(ProviderTokens.logger);
         },
     };
 };

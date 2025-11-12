@@ -73,7 +73,7 @@ export const method = zodApiMethod(schemas, {
         });
     },
     onError: async (error, ctx) => {
-        const loggerService = DIContainer().LoggerService();
+        const loggerProvider = DIContainer().LoggerProvider();
 
         const newError = errorFactory
             .inMethod("GET")
@@ -82,7 +82,7 @@ export const method = zodApiMethod(schemas, {
                 error
             );
 
-        loggerService.error(newError);
+        loggerProvider.error(newError);
     },
     beforehandler: noSubscriptionGuard,
 });

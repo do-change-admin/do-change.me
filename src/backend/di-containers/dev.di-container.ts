@@ -13,12 +13,12 @@ import { NotificationInMemoryStore } from "../stores/implementations/in-memory/n
 import { IMailerProvider } from "../providers/mailer/mailer.provider";
 import { ResendMailerProvider } from "../providers/mailer/resend-mailer/resend-mailer.provider";
 
-import { ILogger } from "../services/logger/logger.service";
-import { ConsoleLogger } from "../services/logger/console-logger/console-logger.service";
+import { ILoggerProvider } from "../providers/logger/logger.provider";
+import { ConsoleLoggerProvider } from "../providers/logger/console-logger/console-logger.provider";
 
 const container = new Container();
 
-const registerDataProviders = () => {
+const registerStores = () => {
     container
         .bind<DataProviders.SyndicationRequests.Interface>(
             StoreTokens.syndicationRequests
@@ -48,16 +48,18 @@ const registerDataProviders = () => {
         .inSingletonScope();
 };
 
-const registerFunctionProviders = () => {
-    container.bind<ILogger>(ProviderTokens.logger).to(ConsoleLogger);
+const registerProviders = () => {
+    container
+        .bind<ILoggerProvider>(ProviderTokens.logger)
+        .to(ConsoleLoggerProvider);
 
     container
         .bind<IMailerProvider>(ProviderTokens.mailer)
         .to(ResendMailerProvider);
 };
 
-registerDataProviders();
-registerFunctionProviders();
+registerStores();
+registerProviders();
 registerServices(container);
 registerControllers(container);
 

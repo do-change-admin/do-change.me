@@ -11,7 +11,7 @@ import { ErrorFactory } from "@/value-objects/errors.value-object";
 const errorFactory = ErrorFactory.forController("vin / cached-data");
 
 export const GET = async (req: NextRequest) => {
-    const loggerService = DIContainer().LoggerService();
+    const loggerProvider = DIContainer().LoggerProvider();
 
     const searchParams = req.nextUrl.searchParams;
     const vinFromRequest = searchParams.get("vin");
@@ -22,7 +22,7 @@ export const GET = async (req: NextRequest) => {
             details: { payload: vinFromRequest },
         });
 
-        loggerService.error(newError);
+        loggerProvider.error(newError);
 
         return NextResponse.json(error, { status: 400 });
     }
@@ -79,6 +79,6 @@ export const GET = async (req: NextRequest) => {
             e
         );
 
-        loggerService.error(newError);
+        loggerProvider.error(newError);
     }
 };
