@@ -2,6 +2,7 @@ import { FC, ReactNode } from "react";
 import { AdminNotificationDTO, useNotificationsAdminList } from "./notifications-admin-list.feature.api";
 import { WithViews } from "@/client/utils/views.utils";
 import { Warning, Loader } from "@/client/components/_ui";
+import {Alert} from "@mantine/core";
 
 export type NotificationAdminListViews = {
     /**
@@ -41,7 +42,7 @@ export const NotificationAdminListContainer: FC<NotificationAdminListContainerPr
     if (!data?.items.length) {
         return (
             <div className={containerClass}>
-                <Warning message='No notifications was found' />
+                <Alert title='No notifications was found' />
             </div>
         )
     }

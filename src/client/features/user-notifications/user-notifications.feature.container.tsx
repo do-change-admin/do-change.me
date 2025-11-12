@@ -1,7 +1,9 @@
-import { FC, ReactNode } from "react";
+import {FC, PropsWithChildren, ReactNode, useState} from "react";
 import { UserNotificationDTO, userUserNotificationReading, useUserNotifications } from "./user-notifications.feature.api";
 import { WithViews } from "@/client/utils/views.utils";
-import { Loader, Warning } from "@/client/components/_ui";
+import { Loader, Warning } from "@/client/components";
+import {Alert, Modal} from "@mantine/core";
+import {useDisclosure} from "@mantine/hooks";
 
 export type UserNotificationsViews = {
     /**
@@ -13,27 +15,18 @@ export type UserNotificationsViews = {
          */
         data: Omit<UserNotificationDTO, 'seen' | 'id'> & {
             /**
-             * Статус уведомления. Если оно уже прочитано - в этом объекте поле с флагом { seen: true }. 
+             * Статус уведомления. Если оно уже прочитано - в этом объекте поле с флагом { seen: true }.
              * В противном случае в этом объекте ещё есть функция для чтения уведомления и флаг, показывающий
              * идёт ли запрос на чтение после вызова этой функции.
              */
-            status: { seen: false, read: Function, isPendingReadRequest: boolean } | { seen: true }
+            status: { seen: boolean, open: Function }
         }
     }>,
 
     /**
      * Layout списка уведомлений.
      */
-    List: FC<{
-        /**
-         * Готовая вёрстка всех непрочитанных уведомлений.
-         */
-        unseenNotifications: ReactNode,
-        /**
-         * Готовая вёрстка всех прочитанных уведомлений.
-         */
-        seenNotifications: ReactNode
-    }>
+    List: FC<PropsWithChildren>
 }
 
 export type UserNotificationsContainerProps = WithViews<UserNotificationsViews>
@@ -42,7 +35,9 @@ export const UserNotificationsContainer: FC<UserNotificationsContainerProps> = (
     const { Item, List } = views
 
     const { data, isFetching } = useUserNotifications()
-    const { mutate: readNotification, isPending } = userUserNotificationReading()
+    const {mutateAsync: readNotification, isPending } = userUserNotificationReading()
+    const [opened, { open, close }] = useDisclosure(false);
+    const [currentNotification,  setCurrentNotification] = useState<UserNotificationDTO>();
 
     if (isFetching) {
         return <div className={containerClass}>
@@ -52,40 +47,35 @@ export const UserNotificationsContainer: FC<UserNotificationsContainerProps> = (
 
     if (!data?.items.length) {
         return <div className={containerClass}>
-            <Warning message="You don't have any notifications for now" />
+            <Alert radius="lg" c="gray" title="You don't have any notifications for now" />
         </div>
     }
 
-    const unseenNotificationItems = data?.items.filter(x => !x.seen) ?? []
-    const seenNotificationItems = data?.items.filter(x => x.seen) ?? []
-
     return <div className={containerClass}>
-        <List
-            seenNotifications={seenNotificationItems.map((seenNotification) => {
-                return <Item key={seenNotification.id} data={{
-                    level: seenNotification.level,
-                    message: seenNotification.message,
-                    status: { seen: true },
-                    title: seenNotification.title
+        <List>
+            <Modal zIndex={9999999999999999} opened={opened && Boolean(currentNotification)} onClose={ async () => {
+                if (!currentNotification?.seen) {
+                    await readNotification({body: {id: currentNotification?.id || ''}})
+                }
+                setCurrentNotification(undefined)
+                close()
+            }}>
+                {currentNotification?.message}
+            </Modal>
+            {data.items.map(item => {
+                return <Item key={item.id} data={{
+                    level: item.level,
+                    message: item.message,
+                    status: {
+                        open: () => {
+                            setCurrentNotification(item)
+                            open()
+                        },
+                        seen: item.seen
+                    },
+                    title: item.title
                 }} />
             })}
-
-            unseenNotifications={unseenNotificationItems.map((unseenNotification) => {
-                return <Item
-                    key={unseenNotification.id}
-                    data={{
-                        level: unseenNotification.level,
-                        message: unseenNotification.message,
-                        status: {
-                            seen: false,
-                            isPendingReadRequest: isPending,
-                            read: () => {
-                                readNotification({ body: { id: unseenNotification.id } })
-                            }
-                        },
-                        title: unseenNotification.title
-                    }} />
-            })}
-        />
+        </List>
     </div>
 }
