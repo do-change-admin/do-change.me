@@ -88,6 +88,7 @@ export const CarDraftAdder: React.FC<CarDraftAdderProps> = ({
                 price: draft.price,
                 year: draft.year,
             }}
+            isPending={false}
             {...rest}
         />
     );
