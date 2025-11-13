@@ -4,6 +4,7 @@ import {
     FileButton,
     Grid,
     Group,
+    LoadingOverlay,
     Modal,
     NumberInput,
     Paper,
@@ -49,6 +50,7 @@ export interface CarFormAdderProps {
     onDraft: (values: CarInfo) => void;
     onSubmitForSyndication: (values: Required<CarInfo>) => void;
     setVin: (vin: string) => void;
+    isPending: boolean;
 }
 
 export const CarFormAdder: React.FC<CarFormAdderProps> = ({
@@ -60,6 +62,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
     onSubmitForSyndication,
     onClose,
     setVin,
+    isPending
 }) => {
     const [mileage, setMileage] = useState<number | undefined>(
         initialCarInfo?.mileage
@@ -156,8 +159,10 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
             size="100%"
             radius="xl"
             zIndex={999999999}
+            pos={'relative'}
             className={styles.drawerWrapper}
         >
+            <LoadingOverlay visible={isPending} />
             <div>
                 <Group gap="xs">
                     <FaIdCard className={styles.iconBlue} />
@@ -174,8 +179,8 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                             maxLength={17}
                             classNames={{
                                 input: `${styles.input} ${mode === "draft"
-                                        ? styles.readonlyInput
-                                        : ""
+                                    ? styles.readonlyInput
+                                    : ""
                                     }`,
                             }}
                             value={vin}
@@ -303,7 +308,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     </FileButton>
                 </Paper>
 
-                {photos.length > 0 && (
+                {photos.length > 0 && !isPending && (
                     <Grid mt="md">
                         {photos.map((photo, idx) => (
                             <Grid.Col

@@ -29,7 +29,7 @@ export const MobileBottomNav = () => {
         start()
     }
 
-    const { navLinks, handleClick } = useNavMenu(handleOpenMenu);
+    const { navLinks, currentLink,  handleClick } = useNavMenu(handleOpenMenu);
 
 
     const firstHalf = navLinks.slice(0, 2);
@@ -42,7 +42,11 @@ export const MobileBottomNav = () => {
             <div className={styles.container}>
                 <div className={styles.buttonsWrapper}>
                     {firstHalf.map((nav) => (
-                        <button key={nav.href} className={styles.button} onClick={() => handleClick(nav)}>
+                        <button
+                            key={nav.href}
+                            className={`${styles.button} ${currentLink === nav.href ? styles.active : ""}`}
+                            onClick={() => handleClick(nav)}
+                        >
                             {nav.icon}
                             <span className={styles.label}>{nav.label}</span>
                         </button>
@@ -54,7 +58,11 @@ export const MobileBottomNav = () => {
                     </button>
 
                     {secondHalf.map((nav) => (
-                        <button key={nav.href} className={styles.button} onClick={() => handleClick(nav)}>
+                        <button
+                            key={nav.href}
+                            className={`${styles.button} ${currentLink === nav.href ? styles.active : ""}`}
+                            onClick={() => handleClick(nav)}
+                        >
                             {nav.icon}
                             <span className={styles.label}>{nav.label}</span>
                         </button>
