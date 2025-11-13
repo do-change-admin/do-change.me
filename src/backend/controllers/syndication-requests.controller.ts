@@ -3,11 +3,12 @@ import { type SyndicationRequestDraftsServiceFactory, type SyndicationRequestsSe
 import { ProviderTokens, ServiceTokens } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
 import { FunctionProviders } from "@/backend/providers";
-import { SyndicationRequestsService } from "@/backend/services/syndication-requests.service";
+import { SyndicationRequestsService, syndicationRequestsServiceSchemas } from "@/backend/services/syndication-requests.service";
 import { ErrorFactory } from "@/value-objects/errors.value-object";
 import { VIN } from "@/value-objects/vin.value-object";
 import { inject, injectable } from "inversify";
 import z from "zod";
+import { ZodController } from "../utils/zod-controller.utils";
 
 const schemas = {
     GET: {
@@ -55,36 +56,33 @@ const schemas = {
             models: z.array(z.string()),
             makes: z.array(z.string())
         })
+    },
+
+    PATCH: {
+        body: undefined,
+        query: syndicationRequestsServiceSchemas.addPhotos.payload.pick({ id: true }),
+        response: undefined
     }
 } satisfies ZodControllerSchemas
 
-const errorFactory = ErrorFactory.forController('Syndication requests')
-
 @injectable()
-export class SyndicationRequestsController {
+export class SyndicationRequestsController extends ZodController('Syndication requests', schemas) {
     public constructor(
         @inject(ServiceTokens.syndicationRequestsFactory) private readonly serviceFactory: SyndicationRequestsServiceFactory,
         @inject(ServiceTokens.syndicationRequestDraftsFactory) private readonly draftsServiceFactory: SyndicationRequestDraftsServiceFactory,
-        @inject(ProviderTokens.logger) private readonly logger: FunctionProviders.Logger.Interface
-    ) { }
+    ) {
+        super()
+    }
 
-    GET = zodApiMethod(schemas.GET, {
+    GET = this.loggedEndpoint('GET', {
         handler: async ({ activeUser, payload }) => {
-            const { newError } = errorFactory.inMethod('GET')
-            try {
-                const service = this.serviceFactory(activeUser.id)
-                const items = await service.list(payload)
-                return { items }
-            } catch (e) {
-                this.logger.error(
-                    newError({ error: 'Could not obtain items' }, e)
-                )
-                return { items: [] }
-            }
+            const service = this.serviceFactory(activeUser.id)
+            const items = await service.list(payload)
+            return { items }
         }
     })
 
-    POST = zodApiMethod(schemas.POST, {
+    POST = this.loggedEndpoint('POST', {
         handler: async ({ activeUser, payload, req }) => {
             const formData = await req.formData()
             const photos = formData.getAll('photos') as File[]
@@ -97,17 +95,26 @@ export class SyndicationRequestsController {
         }
     })
 
-    FromDraft_POST = zodApiMethod(schemas.FromDraft_POST, {
+    FromDraft_POST = this.loggedEndpoint('FromDraft_POST', {
         handler: async ({ activeUser, payload }) => {
             const service = this.draftsServiceFactory(activeUser.id)
             return await service.createRequest(payload.draftId)
         }
     })
 
-    Filters_GET = zodApiMethod(schemas.Filters_GET, {
-        handler: async ({ activeUser, payload }) => {
+    Filters_GET = this.loggedEndpoint('Filters_GET', {
+        handler: async ({ activeUser }) => {
             const service = this.serviceFactory(activeUser.id)
             return await service.allFilters()
+        }
+    })
+
+    PATCH = this.loggedEndpoint('PATCH', {
+        handler: async ({ payload: { id }, activeUser, req }) => {
+            const service = this.serviceFactory(activeUser.id)
+            const formData = await req.formData()
+            const photos = formData.getAll('photos') as File[]
+            await service.addPhotos({ photos, id })
         }
     })
 }

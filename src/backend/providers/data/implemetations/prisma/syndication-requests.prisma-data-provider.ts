@@ -72,9 +72,12 @@ const mappers = {
     toUpdatePayload: (source: UpdatePayload): Prisma.SyndicationRequestsUpdateInput => {
         return {
             status: source.status,
-            marketplaceLinks: {
+            marketplaceLinks: source.marketplaceLinks ? {
                 set: source.marketplaceLinks
-            }
+            } : undefined,
+            photoIds: source.photoIds ? {
+                push: source.photoIds
+            } : undefined
         };
     }
 }

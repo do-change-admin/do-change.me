@@ -62,15 +62,31 @@ export const useSyndicationRequestManualPosting = () => {
         mutationFn: async (payload) => {
             const formData = new FormData();
 
-            for (const photo of payload.photos) {
-                formData.append("photos", photo);
-            }
+            const [firstPhoto, ...otherPhotos] = payload.photos
 
-            const { photos, ...queryData } = payload;
-            await fetch(`${apiURL}${buildQueryString(queryData)}`, {
+            formData.append('photos', firstPhoto)
+
+            // for (const photo of payload.photos) {
+            //     formData.append("photos", photo);
+            // }
+
+            const { photos: [], ...queryData } = payload;
+            const result = await fetch(`${apiURL}${buildQueryString(queryData)}`, {
                 body: formData,
                 method: "POST",
             });
+
+            const { id: createdId } = await result.json()
+
+            for (const otherPhoto of otherPhotos) {
+                const formData = new FormData()
+                formData.append('photos', otherPhoto)
+
+                await fetch(`${apiURL}?id=${createdId}`, {
+                    body: formData,
+                    method: "PATCH",
+                })
+            }
         },
         onSuccess: () => {
             queryClient.invalidateQueries({

@@ -23,7 +23,8 @@ export type CreatePayload = Omit<Details, 'id' | 'userMail' | 'status' | 'market
 
 export type UpdatePayload = Partial<{
     status: SyndicationRequestActiveStatusNames,
-    marketplaceLinks: string[]
+    marketplaceLinks: string[],
+    photoIds: string[]
 }>
 
 export type FilterModels = { models: string[], makes: string[] }

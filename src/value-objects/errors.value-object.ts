@@ -1,16 +1,15 @@
-type ErrorBaseCreatingPayload = {
+export type ErrorBaseCreatingPayload = {
     error: unknown,
     code?: string,
-    details?: Record<string, string>
+    details?: any
 }
 
 export type ErrorBaseModel = {
     name: string;
     message: string;
     code: string;
-    stack: string | null;
     timestamp: number;
-    details: Record<string, string> | null;
+    details: any | null;
 }
 
 export type ProviderErrorModel = ErrorBaseModel & {
@@ -31,11 +30,57 @@ export type ControllerErrorModel = ErrorBaseModel & {
     module: string;
     method: string;
     source: "controller";
-    cause: ServiceErrorModel | ProviderErrorModel | ErrorBaseModel | null
+    cause: ServiceErrorModel | ProviderErrorModel | ErrorBaseModel | null;
+    statusCode: number;
 }
 
 
 export class ErrorFactory {
+    static isControllerError = (error: unknown): error is ControllerErrorModel => {
+        if (!error || typeof error !== 'object') {
+            return false
+        }
+        const argKeys = Object.keys(error)
+        const requiredKeys = ['name', 'message', 'code', 'module', 'method', 'source', 'timestamp', 'statusCode']
+        if (!requiredKeys.every(x => argKeys.includes(x))) {
+            return false
+        }
+
+        // @ts-ignore
+        const source = error['source'];
+        return source === 'controller'
+    }
+
+    static isServiceError = (arg: any): arg is ServiceErrorModel => {
+        if (typeof arg !== 'object' || !arg) {
+            return false
+        }
+        const argKeys = Object.keys(arg)
+        const requiredKeys = ['name', 'message', 'code', 'module', 'method', 'source', 'timestamp']
+        if (!requiredKeys.every(x => argKeys.includes(x))) {
+            return false
+        }
+
+        // @ts-ignore
+        const source = arg['source'];
+        return source === 'service'
+    }
+
+    static isProviderError = (arg: any): arg is ProviderErrorModel => {
+        if (typeof arg !== 'object' || !arg) {
+            return false
+        }
+        const argKeys = Object.keys(arg)
+        const requiredKeys = ['name', 'message', 'code', 'module', 'method', 'source', 'timestamp']
+        if (!requiredKeys.every(x => argKeys.includes(x))) {
+            return false
+        }
+
+        // @ts-ignore
+        const source = arg['source'];
+        return source === 'provider'
+    }
+
     private static base = ({ error, code, details }: ErrorBaseCreatingPayload): ErrorBaseModel => {
         let err: Error = error instanceof Error ? error : new Error('unknown error');
 
@@ -51,7 +96,6 @@ export class ErrorFactory {
         return {
             message: err.message,
             name: err.name,
-            stack: err.stack || null,
             timestamp: Date.now(),
             code: code || err.name,
             details: details || null
@@ -100,14 +144,15 @@ export class ErrorFactory {
         return {
             inMethod: (methodName: string) => {
                 return {
-                    newError: (payload: ErrorBaseCreatingPayload, cause?: unknown): ControllerErrorModel => {
+                    newError: (payload: ErrorBaseCreatingPayload & { statusCode: number }, cause?: unknown): ControllerErrorModel => {
                         const errorBase = ErrorFactory.base(payload)
                         return {
                             ...errorBase,
                             cause: cause ? ErrorFactory.fromUnknownError(cause) : null,
                             module: controllerName,
                             method: methodName,
-                            source: 'controller'
+                            source: 'controller',
+                            statusCode: payload.statusCode
                         }
                     }
                 }
@@ -125,45 +170,15 @@ export class ErrorFactory {
             return requiredKeys.every(x => argKeys.includes(x))
         }
 
-        const isProviderError = (arg: any): arg is ProviderErrorModel => {
-            if (typeof arg !== 'object' || !arg) {
-                return false
-            }
-            const argKeys = Object.keys(arg)
-            const requiredKeys = ['name', 'message', 'code', 'module', 'method', 'source', 'timestamp']
-            if (!requiredKeys.every(x => argKeys.includes(x))) {
-                return false
-            }
-
-            // @ts-ignore
-            const source = arg['source'];
-            return source === 'provider'
-        }
-
-        const isServiceError = (arg: any): arg is ServiceErrorModel => {
-            if (typeof arg !== 'object' || !arg) {
-                return false
-            }
-            const argKeys = Object.keys(arg)
-            const requiredKeys = ['name', 'message', 'code', 'module', 'method', 'source', 'timestamp']
-            if (!requiredKeys.every(x => argKeys.includes(x))) {
-                return false
-            }
-
-            // @ts-ignore
-            const source = arg['source'];
-            return source === 'service'
-        }
-
         if (isErrorBase(error)) {
             return error as ErrorBaseModel
         }
 
-        if (isProviderError(error)) {
+        if (ErrorFactory.isProviderError(error)) {
             return error as ProviderErrorModel
         }
 
-        if (isServiceError(error)) {
+        if (ErrorFactory.isServiceError(error)) {
             return error as ServiceErrorModel
         }
 
