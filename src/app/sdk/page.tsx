@@ -7,7 +7,7 @@ import {
     FaTimes, FaSearch, FaLink
 } from 'react-icons/fa';
 import styles from './page.module.css';
-import { Badge, Button, Loader, Select, Stack, TextInput } from "@mantine/core";
+import { ActionIcon, Badge, Button, Group, Loader, Select, Stack, TextInput } from "@mantine/core";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
 import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
@@ -16,6 +16,8 @@ import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from "
 import { PlaceholderSDK } from "@/client/components";
 import NoAccessPage from "@/app/sdk/no-access-page";
 import { useCurrentSubscriptionInfo } from '@/client/queries/subscription.queries';
+import { TbFilter } from "react-icons/tb";
+import cn from "classnames";
 
 const STATUS_OPTIONS = [
     // 'draft',
@@ -27,6 +29,7 @@ const STATUS_OPTIONS = [
 
 const CarSyndicationSection: FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
+    const [openedFilters, openFilters] = useState(false);
     const [vin, setVin] = useState("");
     const [debouncedVin] = useDebouncedValue(vin, 500);
     const [make, setMake] = useState<null | string>(null);
@@ -74,13 +77,13 @@ const CarSyndicationSection: FC = () => {
 
     const subscriptionLevel = subscriptionInfo?.level ?? 'no subscription'
 
-    // if (subscriptionLevel !== "premium plan") {
-    //     return (
-    //         <div className={styles.container}>
-    //             <NoAccessPage />
-    //         </div>
-    //     )
-    // }
+    if (subscriptionLevel !== "premium plan") {
+        return (
+            <div className={styles.container}>
+                <NoAccessPage />
+            </div>
+        )
+    }
 
     return (
         <div className={styles.dashboard}>
@@ -97,14 +100,15 @@ const CarSyndicationSection: FC = () => {
                 </motion.div>
                 {/* Filters Section */}
                 <div className={styles.actionLeft}>
-                    <Button className={styles.addButton}
-                        radius="lg"
+                    <Button
+                        fullWidth
+                        radius="lg" bg="var(--cl-fio)"
                         leftSection={<FaPlus />}
                         onClick={open}
                     >
                         Add Car
                     </Button>
-                    <div className={styles.selectWrapper}>
+                    <Group>
                         <Select
                             radius="lg"
                             placeholder="Select Status"
@@ -112,56 +116,71 @@ const CarSyndicationSection: FC = () => {
                             value={activeTab}
                             onChange={(value) => setActiveTab(value as any)}
                         />
-                    </div>
+                        <ActionIcon
+                            radius="lg"
+                            size="lg"
+                            variant={openedFilters ? "filled" : "outline"}
+                            color="var(--cl-fio)"
+                            onClick={() => openFilters(prev => !prev)}
+                        >
+                            <TbFilter />
+                        </ActionIcon>
+                    </Group>
                 </div>
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className={styles.filtersSection}>
-                    <div className={styles.filtersGrid}>
-                        <div className={styles.filterItem}>
-                            <TextInput
-                                placeholder="Enter VIN number..."
-                                label="Search by VIN Number"
-                                radius="lg"
-                                value={vin}
-                                onChange={(e) => setVin(e.currentTarget.value)}
-                                leftSection={<FaSearch />}
-                            />
-                        </div>
+                {openedFilters && (
+                    <div className={cn(styles.filtersSection, {
+                        [styles.openFilters]: openedFilters
+                    })}>
+                        <div className={styles.filtersGrid}>
+                            <div className={styles.filterItem}>
+                                <TextInput
+                                    placeholder="Enter VIN number..."
+                                    label="Search by VIN Number"
+                                    radius="lg"
+                                    value={vin}
+                                    onChange={(e) => setVin(e.currentTarget.value)}
+                                    leftSection={<FaSearch />}
+                                />
+                            </div>
 
-                        <div className={styles.filterItem}>
-                            <Select
-                                radius="lg"
-                                label="Makes"
-                                placeholder="All Makes"
-                                value={make}
-                                onChange={setMake}
-                                data={filters?.makes}
-                                rightSection={<FaChevronDown />}
-                            />
-                        </div>
+                            <div className={styles.filterItem}>
+                                <Select
+                                    radius="lg"
+                                    label="Makes"
+                                    placeholder="All Makes"
+                                    value={make}
+                                    onChange={setMake}
+                                    data={filters?.makes}
+                                    rightSection={<FaChevronDown />}
+                                />
+                            </div>
 
-                        <div className={styles.filterItem}>
-                            <Select
-                                radius="lg"
-                                label="Model"
-                                placeholder="All Makes"
-                                value={model}
-                                onChange={setModel}
-                                data={filters?.models}
-                                rightSection={<FaChevronDown />}
-                            />
-                        </div>
+                            <div className={styles.filterItem}>
+                                <Select
+                                    radius="lg"
+                                    label="Model"
+                                    placeholder="All Makes"
+                                    value={model}
+                                    onChange={setModel}
+                                    data={filters?.models}
+                                    rightSection={<FaChevronDown />}
+                                />
+                            </div>
 
-                        <div className={styles.filterItem}>
-                            <Button leftSection={<FaTimes />}
-                                onClick={handleClearFilters}
-                                radius="lg"
-                                variant="outline"
-                            >
-                                Clean
-                            </Button>
+                            <div className={styles.filterItem}>
+                                <Button
+                                    leftSection={<FaTimes />}
+                                    onClick={handleClearFilters}
+                                    radius="lg"
+                                    variant="outline"
+                                >
+                                    Clean
+                                </Button>
+                            </div>
                         </div>
                     </div>
-                </motion.div>
+                )}
+
                 {/* Vehicle Cards Grid */}
                 {!vehicles.length && <PlaceholderSDK />}
                 <div className={styles.vehicleGrid}>
