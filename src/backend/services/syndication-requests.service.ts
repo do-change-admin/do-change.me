@@ -4,13 +4,24 @@ import { SyndicationRequest } from "@/entities/syndication-request.entity";
 import { DataProviders } from "@/backend/providers";
 import { inject, injectable } from "inversify";
 import z from "zod";
+import { ZodService, ZodServiceSchemas } from "../utils/zod-service.utils";
 
 type DataListModel = DataProviders.SyndicationRequests.ListModel;
 type CreateDataPayload = DataProviders.SyndicationRequests.CreatePayload;
 type FindListPayload = DataProviders.SyndicationRequests.FindListPayload;
 
+export const syndicationRequestsServiceSchemas = {
+    addPhotos: {
+        payload: z.object({
+            photos: z.any(),
+            id: z.string().nonempty()
+        }),
+        response: z.object({})
+    }
+} satisfies ZodServiceSchemas
+
 @injectable()
-export class SyndicationRequestsService {
+export class SyndicationRequestsService extends ZodService('Syndication requests', syndicationRequestsServiceSchemas) {
     static dtoSchema = SyndicationRequest.modelShema.omit({
         userMail: true,
         userId: true,
@@ -23,7 +34,10 @@ export class SyndicationRequestsService {
         @inject(StoreTokens.syndicationRequestDrafts) private readonly drafts: DataProviders.SyndicationRequestDrafts.Interface,
         @inject(StoreTokens.pictures) private readonly pictures: DataProviders.Pictures.Interface,
         private readonly userId: string
-    ) { }
+    ) {
+        super()
+    }
+
 
     list = async (
         payload: Omit<FindListPayload, 'userId'>
@@ -67,6 +81,37 @@ export class SyndicationRequestsService {
 
         return { id }
     }
+
+    addPhotos = this.method('addPhotos', {
+        handler: async ({ payload: { id, photos }, serviceError }) => {
+            const details = await this.data.details({
+                id,
+                userId: this.userId
+            })
+
+            if (!details) {
+                throw serviceError({ error: 'No request was found', details: { id, userId: this.userId } })
+            }
+
+            let newPhotoIds = [] as string[]
+
+            for (const photo of photos) {
+                const { id, success } = await this.pictures.add(photo)
+                if (success) {
+                    newPhotoIds.push(id)
+                }
+            }
+
+            await this.data.updateOne({
+                id,
+                userId: this.userId
+            }, {
+                photoIds: newPhotoIds
+            })
+
+            return {}
+        }
+    })
 
     allFilters = async () => {
         const activeFilters = await this.data.filtersData(this.userId)

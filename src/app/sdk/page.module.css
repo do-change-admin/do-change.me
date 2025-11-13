@@ -45,7 +45,7 @@
 .title {
     font-size: 1.875rem;
     font-weight: 700;
-    color: var(--text-texas-blue);
+    color: var(--cl-fio);
 }
 .subtitle {
     margin-top: 0.25rem;
@@ -84,6 +84,7 @@
 
 .actionLeft {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     margin-bottom: 1rem;
 }
@@ -131,6 +132,12 @@
     border-radius: 2rem;
     box-shadow: var(--shadow);
     margin-bottom: 2rem;
+    height: 0;
+    transition: all 0.6s ease-in-out;
+}
+
+.openFilters {
+    height: auto;
 }
 .filtersHeader {
     display: flex;
@@ -153,6 +160,7 @@
         grid-template-columns: repeat(4, 1fr);
     }
 }
+
 
 /* Vehicle Cards Grid */
 .vehicleGrid {

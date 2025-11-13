@@ -19,7 +19,7 @@ export const CarNewAdder: React.FC<CarNewAdderProps> = ({
 
     const { data: baseInfo } = useBaseInfoByVIN(vin);
     const { mutateAsync: createDraft } = useSyndicationRequestDraftCreation();
-    const { mutateAsync: postNewCar } = useSyndicationRequestManualPosting();
+    const { mutateAsync: postNewCar, isPending } = useSyndicationRequestManualPosting();
 
     const handleCreateDraft = async (values: CarInfo) => {
         await createDraft({
@@ -55,6 +55,7 @@ export const CarNewAdder: React.FC<CarNewAdderProps> = ({
     return (
         <CarFormAdder
             mode="new"
+            isPending={isPending}
             onClose={onClose}
             setVin={setVin}
             vin={vin}

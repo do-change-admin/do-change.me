@@ -33,11 +33,6 @@
     cursor: pointer;
     transition: background-color 0.2s;
 }
-
-.button:hover {
-    background-color: #f9fafb;
-}
-
 .button svg {
     color: #6b7280;
     font-size: 1.2rem;
@@ -47,6 +42,15 @@
     font-size: 0.75rem;
     color: #4b5563;
     font-weight: 500;
+}
+
+.active {
+    svg {
+        fill: var(--cl-fio);
+    }
+    .label {
+        color: var(--cl-fio);
+    }
 }
 
 /* Center scanner button */

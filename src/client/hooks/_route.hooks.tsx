@@ -34,6 +34,7 @@ export const NAV_LINK: NavLink[] = [
 export function useNavMenu(handleOpenMenu: () => void) {
     const router = useRouter();
     const [subLinks, setSubLinks] = useState<SubLink[]>([]);
+    const [ currentLink, setCurrentLink] = useState('');
     const [collapsed, setCollapsed] = useState(false);
 
     const handleClick = useCallback(
@@ -46,6 +47,7 @@ export function useNavMenu(handleOpenMenu: () => void) {
             }
             setCollapsed(false);
             router.push(link.href);
+            setCurrentLink(link.href);
         },
         [router, handleOpenMenu]
     );
@@ -56,5 +58,6 @@ export function useNavMenu(handleOpenMenu: () => void) {
         collapsed,
         setCollapsed,
         handleClick,
+        currentLink
     };
 }

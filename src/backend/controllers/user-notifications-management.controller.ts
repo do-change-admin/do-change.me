@@ -39,7 +39,7 @@ export class UserNotificationsManagementController {
                 case 'warning':
                     return await service.notifyWithWarning({ message: payload.message, title: payload.title })
                 default:
-                    throw errorGenerator.newError({ error: 'Unsupported notification level', details: { level: payload.level } })
+                    throw errorGenerator.newError({ error: 'Unsupported notification level', details: { level: payload.level }, statusCode: 500 })
             }
         }
     })
