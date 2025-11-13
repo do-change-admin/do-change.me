@@ -1,14 +1,12 @@
 import {
     Button,
-    Divider, Drawer,
+    Divider,
     FileButton,
     Grid,
     Group,
-    LoadingOverlay,
     Modal,
     NumberInput,
     Paper,
-    Stack,
     Text,
     TextInput,
     Title,
@@ -25,6 +23,7 @@ import {
     FaXmark,
 } from "react-icons/fa6";
 import { FaSave } from "react-icons/fa";
+import {LoadingMinute} from "@/client/components";
 
 export type CarPhoto =
     | { type: "local"; file: File }
@@ -149,6 +148,10 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
 
     const isFormValidForDraft = vin?.length === 17;
 
+    if (isPending) {
+       return <LoadingMinute label="Uploading images..." />
+    }
+
     return (
         <Modal
             opened={opened}
@@ -162,7 +165,6 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
             pos={'relative'}
             className={styles.drawerWrapper}
         >
-            <LoadingOverlay visible={isPending} />
             <div>
                 <Group gap="xs">
                     <FaIdCard className={styles.iconBlue} />
