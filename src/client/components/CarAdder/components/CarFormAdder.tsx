@@ -158,205 +158,204 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
             zIndex={999999999}
             className={styles.drawerWrapper}
         >
-                <div>
-                    <Group gap="xs">
-                        <FaIdCard className={styles.iconBlue} />
-                        <Title order={4}>Vehicle Information</Title>
-                    </Group>
+            <div>
+                <Group gap="xs">
+                    <FaIdCard className={styles.iconBlue} />
+                    <Title order={4}>Vehicle Information</Title>
+                </Group>
 
-                    <Grid>
-                        <Grid.Col span={12}>
-                            <TextInput
-                                radius="lg"
-                                pt="lg"
-                                label="VIN Number *"
-                                placeholder="Enter 17-character VIN"
-                                maxLength={17}
-                                classNames={{
-                                    input: `${styles.input} ${
-                                        mode === "draft"
-                                            ? styles.readonlyInput
-                                            : ""
+                <Grid>
+                    <Grid.Col span={12}>
+                        <TextInput
+                            radius="lg"
+                            pt="lg"
+                            label="VIN Number *"
+                            placeholder="Enter 17-character VIN"
+                            maxLength={17}
+                            classNames={{
+                                input: `${styles.input} ${mode === "draft"
+                                        ? styles.readonlyInput
+                                        : ""
                                     }`,
-                                }}
-                                value={vin}
-                                onChange={(e) => setVin(e.currentTarget.value)}
-                                readOnly={mode === "draft"}
-                            />
-                            <Text size="xs" c="dimmed" mt={4}>
-                                Vehicle details will be automatically filled
-                                once VIN is entered
-                            </Text>
-                        </Grid.Col>
+                            }}
+                            value={vin}
+                            onChange={(e) => setVin(e.currentTarget.value)}
+                            readOnly={mode === "draft"}
+                        />
+                        <Text size="xs" c="dimmed" mt={4}>
+                            Vehicle details will be automatically filled
+                            once VIN is entered
+                        </Text>
+                    </Grid.Col>
 
-                        <Grid.Col span={{ base: 12, sm: 6 }}>
-                            <TextInput
-                                radius="lg"
-                                label="Make"
-                                placeholder="Auto-filled from VIN"
-                                value={make}
-                                onChange={(e) =>
-                                    handleMakeChange(e.currentTarget.value)
-                                }
-                            />
-                        </Grid.Col>
-                        <Grid.Col span={{ base: 12, sm: 6 }}>
-                            <TextInput
-                                radius="lg"
-                                label="Model"
-                                placeholder="Auto-filled from VIN"
-                                value={model}
-                                onChange={(e) =>
-                                    handleModelChange(e.currentTarget.value)
-                                }
-                            />
-                        </Grid.Col>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
+                        <TextInput
+                            radius="lg"
+                            label="Make"
+                            placeholder="Auto-filled from VIN"
+                            value={make}
+                            onChange={(e) =>
+                                handleMakeChange(e.currentTarget.value)
+                            }
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
+                        <TextInput
+                            radius="lg"
+                            label="Model"
+                            placeholder="Auto-filled from VIN"
+                            value={model}
+                            onChange={(e) =>
+                                handleModelChange(e.currentTarget.value)
+                            }
+                        />
+                    </Grid.Col>
 
-                        <Grid.Col span={{ base: 12, sm: 6 }}>
-                            <TextInput
-                                radius="lg"
-                                label="Year"
-                                placeholder="Auto-filled from VIN"
-                                value={year}
-                                type="number"
-                                min={1}
-                                onChange={(e) =>
-                                    handleYearChange(e.currentTarget.value)
-                                }
-                            />
-                        </Grid.Col>
-                        <Grid.Col span={{ base: 12, sm: 6 }}>
-                            <NumberInput
-                                radius="lg"
-                                label="Mileage *"
-                                placeholder="0"
-                                min={0}
-                                onChange={handleMileageChange}
-                                value={mileage}
-                            />
-                        </Grid.Col>
-                    </Grid>
-                </div>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
+                        <TextInput
+                            radius="lg"
+                            label="Year"
+                            placeholder="Auto-filled from VIN"
+                            value={year}
+                            type="number"
+                            min={1}
+                            onChange={(e) =>
+                                handleYearChange(e.currentTarget.value)
+                            }
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
+                        <NumberInput
+                            radius="lg"
+                            label="Mileage *"
+                            placeholder="0"
+                            min={0}
+                            onChange={handleMileageChange}
+                            value={mileage}
+                        />
+                    </Grid.Col>
+                </Grid>
+            </div>
 
-                <div>
-                    <Group gap="xs" mt="lg">
-                        <FaDollarSign className={styles.iconGreen} />
-                        <Title order={4}>Pricing</Title>
-                    </Group>
+            <div>
+                <Group gap="xs" mt="lg">
+                    <FaDollarSign className={styles.iconGreen} />
+                    <Title order={4}>Pricing</Title>
+                </Group>
 
-                    <Grid mt="md">
-                        <Grid.Col span={{ lg: 6, base: 12 }}>
-                            <NumberInput
-                                radius="lg"
-                                label="Listing Price *"
-                                placeholder="0.00"
-                                min={0}
-                                onChange={handlePriceChange}
-                                value={price}
-                                decimalScale={2}
-                                fixedDecimalScale
-                                thousandSeparator=","
-                            />
-                        </Grid.Col>
-                    </Grid>
-                </div>
+                <Grid mt="md">
+                    <Grid.Col span={{ lg: 6, base: 12 }}>
+                        <NumberInput
+                            radius="lg"
+                            label="Listing Price *"
+                            placeholder="0.00"
+                            min={0}
+                            onChange={handlePriceChange}
+                            value={price}
+                            decimalScale={2}
+                            fixedDecimalScale
+                            thousandSeparator=","
+                        />
+                    </Grid.Col>
+                </Grid>
+            </div>
 
-                <div>
-                    <Group mt="lg">
-                        <Group gap="xs">
-                            <FaCamera className={styles.iconPurple} />
-                            <Title order={4}>Photos *</Title>
-                            <Text size="sm" c="dimmed">
-                                (1–30 photos)
-                            </Text>
-                        </Group>
+            <div>
+                <Group mt="lg">
+                    <Group gap="xs">
+                        <FaCamera className={styles.iconPurple} />
+                        <Title order={4}>Photos *</Title>
                         <Text size="sm" c="dimmed">
-                            {photos.length}/30
+                            (1–30 photos)
                         </Text>
                     </Group>
+                    <Text size="sm" c="dimmed">
+                        {photos.length}/30
+                    </Text>
+                </Group>
 
-                    <Paper
-                        withBorder
-                        className={styles.uploadArea}
-                        mt="md"
-                        radius="md"
+                <Paper
+                    withBorder
+                    className={styles.uploadArea}
+                    mt="md"
+                    radius="md"
+                >
+                    <FileButton
+                        multiple
+                        onChange={handleAddPhotos}
+                        accept="image/*"
+                        disabled={photos.length >= 30}
                     >
-                        <FileButton
-                            multiple
-                            onChange={handleAddPhotos}
-                            accept="image/*"
-                            disabled={photos.length >= 30}
-                        >
-                            {(props) => (
-                                <div
-                                    {...props}
-                                    className={styles.uploadContent}
-                                >
-                                    <FaUpload className={styles.uploadIcon} />
-                                    <Text fw={500} mt={8}>
-                                        Drop photos here or click to browse
-                                    </Text>
-                                    <Text size="sm" c="dimmed">
-                                        JPG, PNG up to 10 MB each
-                                    </Text>
-                                </div>
-                            )}
-                        </FileButton>
-                    </Paper>
+                        {(props) => (
+                            <div
+                                {...props}
+                                className={styles.uploadContent}
+                            >
+                                <FaUpload className={styles.uploadIcon} />
+                                <Text fw={500} mt={8}>
+                                    Drop photos here or click to browse
+                                </Text>
+                                <Text size="sm" c="dimmed">
+                                    JPG, PNG up to 10 MB each
+                                </Text>
+                            </div>
+                        )}
+                    </FileButton>
+                </Paper>
 
-                    {photos.length > 0 && (
-                        <Grid mt="md">
-                            {photos.map((photo, idx) => (
-                                <Grid.Col
-                                    key={idx}
-                                    span={{ base: 6, sm: 4, md: 3, lg: 2 }}
+                {photos.length > 0 && (
+                    <Grid mt="md">
+                        {photos.map((photo, idx) => (
+                            <Grid.Col
+                                key={idx}
+                                span={{ base: 6, sm: 4, md: 3, lg: 2 }}
+                            >
+                                <Paper
+                                    withBorder
+                                    radius="md"
+                                    className={styles.photoItem}
                                 >
-                                    <Paper
-                                        withBorder
-                                        radius="md"
-                                        className={styles.photoItem}
+                                    <img
+                                        src={
+                                            photo.type === "local"
+                                                ? URL.createObjectURL(
+                                                    photo.file
+                                                )
+                                                : photo.url
+                                        }
+                                        alt={`Photo ${idx + 1}`}
+                                        className={styles.photoImage}
+                                    />
+                                    <div className={styles.photoIndex}>
+                                        {idx + 1}
+                                    </div>
+                                    <Button
+                                        size="xs"
+                                        variant="filled"
+                                        color="red"
+                                        onClick={() =>
+                                            handleRemovePhoto(idx)
+                                        }
+                                        style={{
+                                            position: "absolute",
+                                            top: 4,
+                                            right: 4,
+                                        }}
                                     >
-                                        <img
-                                            src={
-                                                photo.type === "local"
-                                                    ? URL.createObjectURL(
-                                                          photo.file
-                                                      )
-                                                    : photo.url
-                                            }
-                                            alt={`Photo ${idx + 1}`}
-                                            className={styles.photoImage}
-                                        />
-                                        <div className={styles.photoIndex}>
-                                            {idx + 1}
-                                        </div>
-                                        <Button
-                                            size="xs"
-                                            variant="filled"
-                                            color="red"
-                                            onClick={() =>
-                                                handleRemovePhoto(idx)
-                                            }
-                                            style={{
-                                                position: "absolute",
-                                                top: 4,
-                                                right: 4,
-                                            }}
-                                        >
-                                            X
-                                        </Button>
-                                    </Paper>
-                                </Grid.Col>
-                            ))}
-                        </Grid>
-                    )}
-                </div>
+                                        X
+                                    </Button>
+                                </Paper>
+                            </Grid.Col>
+                        ))}
+                    </Grid>
+                )}
+            </div>
 
             <Divider mt="lg" />
 
             <Group mt="lg">
                 <Group>
-                    <Button
+                    {/* <Button
                         radius="lg"
                         variant="outline"
                         leftSection={<FaSave />}
@@ -364,7 +363,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                         onClick={handleSaveAsDraft}
                     >
                         Save as Draft
-                    </Button>
+                    </Button> */}
                     <Button
                         radius="lg"
                         color="blue"

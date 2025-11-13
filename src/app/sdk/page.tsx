@@ -18,7 +18,7 @@ import NoAccessPage from "@/app/sdk/no-access-page";
 import { useCurrentSubscriptionInfo } from '@/client/queries/subscription.queries';
 
 const STATUS_OPTIONS = [
-    'draft',
+    // 'draft',
     'pending publisher',
     'active',
     'pending sales',
