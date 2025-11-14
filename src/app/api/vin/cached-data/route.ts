@@ -19,7 +19,8 @@ export const GET = async (req: NextRequest) => {
     if (!success) {
         const newError = errorFactory.inMethod("GET").newError({
             error: "Could not obtain cached-data",
-            details: { payload: vinFromRequest },
+            statusCode: 400,
+            details: vinFromRequest,
         });
 
         loggerProvider.error(newError);
@@ -70,10 +71,11 @@ export const GET = async (req: NextRequest) => {
                 },
             },
         });
-    } catch (e) {
+    } catch (e: any) {
         const newError = errorFactory.inMethod("GET").newError(
             {
                 error: "Could not obtain cached data",
+                statusCode: e.statusCode ?? 500,
                 details: { payload: vinFromRequest },
             },
             e

@@ -30,6 +30,7 @@ export async function GET() {
         const newError = errorFactory.inMethod("GET").newError(
             {
                 error: "Could not obtain stats",
+                statusCode: 500,
             },
             err
         );

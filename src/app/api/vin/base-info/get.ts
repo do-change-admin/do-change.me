@@ -66,15 +66,10 @@ export const method = zodApiMethod(schemas, {
             });
         }
     },
-    onError: async (error, ctx) => {
+    onError: async (error, cause) => {
         const loggerProvider = DIContainer().LoggerProvider();
 
-        const newError = errorFactory
-            .inMethod("GET")
-            .newError(
-                { error: "Could not obtain base info", details: ctx },
-                error
-            );
+        const newError = errorFactory.inMethod("GET").newError(error, cause);
 
         loggerProvider.error(newError);
     },

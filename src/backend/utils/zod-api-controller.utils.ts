@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import z, { ZodObject } from "zod";
 import { authOptions } from "../../app/api/auth/[...nextauth]/authOptions";
+import { ErrorBaseCreatingPayload } from "@/value-objects/errors.value-object";
 
 async function getCurrentUser() {
     const session = await getServerSession(authOptions);
@@ -125,13 +126,10 @@ export const zodApiMethod = <
             req: NextRequest;
         }) => Promise<boolean>;
         onError?: (
-            error: unknown,
-            context: {
-                stage: ErrorResponse["stage"];
-                request: NextRequest;
-                activeUser?: { id: string; email: string };
-                payload?: Record<string, any>;
-            }
+            error: ErrorBaseCreatingPayload & {
+                statusCode: number;
+            },
+            cause?: unknown
         ) => Promise<void>;
     }
 ) => {
@@ -140,14 +138,22 @@ export const zodApiMethod = <
         if (!user) {
             const stage: ErrorResponse["stage"] = "user obtaining";
             const error = { message: "Active user was not found" };
+            const statusCode = 401;
 
-            logic.onError?.(error, { stage, request });
-
-            return NextResponse.json<ErrorResponse>({
-                error,
-                success: false,
-                stage,
+            logic.onError?.({
+                error: error.message,
+                statusCode,
+                details: { stage, request, activeUser: user },
             });
+
+            return NextResponse.json<ErrorResponse>(
+                {
+                    error,
+                    success: false,
+                    stage,
+                },
+                { status: statusCode }
+            );
         }
         let resultObject = {};
         if (schemas.query) {
@@ -162,8 +168,18 @@ export const zodApiMethod = <
                     message: queryParamsParsed.error.message,
                     details: z.treeifyError(queryParamsParsed.error),
                 };
+                const statusCode = 400;
 
-                logic.onError?.(error, { stage, request, activeUser: user });
+                logic.onError?.({
+                    error: error.message,
+                    statusCode,
+                    details: {
+                        stage,
+                        request,
+                        activeUser: user,
+                        ...error.details,
+                    },
+                });
 
                 return NextResponse.json<ErrorResponse>(
                     {
@@ -171,7 +187,7 @@ export const zodApiMethod = <
                         stage,
                         success: false,
                     },
-                    { status: 400 }
+                    { status: statusCode }
                 );
             }
             resultObject = { ...resultObject, ...queryParamsParsed.data };
@@ -185,11 +201,17 @@ export const zodApiMethod = <
                     message: bodyParsed.error.message,
                     details: z.treeifyError(bodyParsed.error),
                 };
+                const statusCode = 400;
 
-                await logic.onError?.(error, {
-                    stage,
-                    request,
-                    activeUser: user,
+                logic.onError?.({
+                    error: error.message,
+                    statusCode,
+                    details: {
+                        stage,
+                        request,
+                        activeUser: user,
+                        ...error.details,
+                    },
                 });
 
                 return NextResponse.json<ErrorResponse>(
@@ -198,7 +220,7 @@ export const zodApiMethod = <
                         stage,
                         success: false,
                     },
-                    { status: 400 }
+                    { status: statusCode }
                 );
             }
             resultObject = { ...resultObject, ...bodyParsed.data };
@@ -236,12 +258,18 @@ export const zodApiMethod = <
                         message: resultParsed.error.message,
                         details: z.treeifyError(resultParsed.error),
                     };
+                    const statusCode = 500;
 
-                    logic.onError?.(error, {
-                        stage,
-                        request,
-                        activeUser: user,
-                        payload: resultObject,
+                    logic.onError?.({
+                        error: error.message,
+                        statusCode,
+                        details: {
+                            stage,
+                            request,
+                            activeUser: user,
+                            ...error.details,
+                            payload: resultObject,
+                        },
                     });
 
                     return NextResponse.json<ErrorResponse>(
@@ -250,7 +278,7 @@ export const zodApiMethod = <
                             stage,
                             success: false,
                         },
-                        { status: 500 }
+                        { status: statusCode }
                     );
                 }
                 if (logic.onSuccess) {
@@ -274,13 +302,21 @@ export const zodApiMethod = <
             );
         } catch (e) {
             const stage: ErrorResponse["stage"] = "api handler executing";
+            const statusCode = 500;
 
-            logic.onError?.(e, {
-                stage,
-                request,
-                activeUser: user,
-                payload: resultObject,
-            });
+            logic.onError?.(
+                {
+                    error: "Unhandled controller error",
+                    statusCode,
+                    details: {
+                        stage,
+                        request,
+                        activeUser: user,
+                        payload: resultObject,
+                    },
+                },
+                e
+            );
 
             if (isApplicationError(e)) {
                 return NextResponse.json<ErrorResponse>(
@@ -289,7 +325,7 @@ export const zodApiMethod = <
                         stage,
                         success: false,
                     },
-                    { status: e.error.statusCode ?? 500 }
+                    { status: e.error.statusCode ?? statusCode }
                 );
             }
             if (typeof e === "string") {
@@ -299,7 +335,7 @@ export const zodApiMethod = <
                         stage,
                         success: false,
                     },
-                    { status: 500 }
+                    { status: statusCode }
                 );
             }
             if (typeof e === "object" && e instanceof Error) {
@@ -309,7 +345,7 @@ export const zodApiMethod = <
                         stage,
                         success: false,
                     },
-                    { status: 500 }
+                    { status: statusCode }
                 );
             }
             return NextResponse.json<ErrorResponse>(
@@ -318,7 +354,7 @@ export const zodApiMethod = <
                     stage,
                     success: false,
                 },
-                { status: 500 }
+                { status: statusCode }
             );
         }
     };

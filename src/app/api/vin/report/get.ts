@@ -72,15 +72,10 @@ export const method = zodApiMethod(schemas, {
             },
         });
     },
-    onError: async (error, ctx) => {
+    onError: async (error, couse) => {
         const loggerProvider = DIContainer().LoggerProvider();
 
-        const newError = errorFactory
-            .inMethod("GET")
-            .newError(
-                { error: "Could not obtain report", details: ctx },
-                error
-            );
+        const newError = errorFactory.inMethod("GET").newError(error, couse);
 
         loggerProvider.error(newError);
     },

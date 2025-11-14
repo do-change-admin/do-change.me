@@ -34,6 +34,7 @@ export async function POST(req: Request) {
         const newError = errorFactory.inMethod("POST").newError(
             {
                 error: "Could not recognize",
+                statusCode: 500,
             },
             error
         );
