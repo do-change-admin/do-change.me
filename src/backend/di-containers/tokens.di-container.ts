@@ -10,7 +10,7 @@ export const StoreTokens = {
 };
 
 export const ProviderTokens = {
-    logger: Symbol.for("LOGGER-FUNCTIONAL-PROVIDER"),
+    logger: Symbol.for("LOGGER-PROVIDER"),
     mailer: Symbol.for("MAILER-PROVIDER"),
 };
 

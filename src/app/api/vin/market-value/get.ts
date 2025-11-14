@@ -1,11 +1,17 @@
 import z from "zod";
-import { ZodAPIMethod, zodApiMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller.utils";
+import {
+    ZodAPIMethod,
+    zodApiMethod,
+    ZodAPISchemas,
+} from "../../../../backend/utils/zod-api-controller.utils";
 import { businessError } from "@/lib-deprecated/errors";
 import { prismaClient } from "@/backend/infrastructure";
 import { ActionsHistoryService } from "@/backend/services";
 import { noSubscriptionGuard } from "@/backend/controllers/api-guards/no-subscription.api-guard";
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers";
 import { VIN } from "@/value-objects/vin.value-object";
+import { ErrorFactory } from "@/value-objects/errors.value-object";
+import { DIContainer } from "@/backend/di-containers";
 
 export const marketPricesSchema = z.object({
     market_prices: z.object({
@@ -17,12 +23,12 @@ export const marketPricesSchema = z.object({
                 group: z.object({
                     count: z.number(),
                     max: z.number(),
-                    min: z.number()
-                })
+                    min: z.number(),
+                }),
             })
-        )
-    })
-})
+        ),
+    }),
+});
 
 const schemas = {
     body: undefined,
@@ -30,21 +36,23 @@ const schemas = {
         vin: VIN.schema,
         mileage: z.coerce.number(),
     }),
-    response: marketPricesSchema
-} satisfies ZodAPISchemas
+    response: marketPricesSchema,
+} satisfies ZodAPISchemas;
 
-export type Method = ZodAPIMethod<typeof schemas>
+export type Method = ZodAPIMethod<typeof schemas>;
 
+const errorFactory = ErrorFactory.forController("vin / market-value");
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload, flags }) => {
-        const cachedData = await prismaClient.marketPriceAnalysisResult.findMany({
-            where: { vin: payload.vin, mileage: payload.mileage }
-        })
+        const cachedData =
+            await prismaClient.marketPriceAnalysisResult.findMany({
+                where: { vin: payload.vin, mileage: payload.mileage },
+            });
 
         if (cachedData.length) {
-            flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE] = true
-            return { market_prices: cachedData[0] }
+            flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE] = true;
+            return { market_prices: cachedData[0] };
         }
 
         const apiAnswer = await fetch(
@@ -53,18 +61,21 @@ export const method = zodApiMethod(schemas, {
                 headers: {
                     "x-rapidapi-key": process.env.RAPID_API_KEY!,
                     "x-rapidapi-host": process.env.MARKET_VALUE_HOST!,
-                }
+                },
             }
         );
-
 
         const json = await apiAnswer.json();
         const marketPrices = json?.market_prices;
         if (!marketPrices) {
-            throw businessError('No prices were found for this car', undefined, 404)
+            throw businessError(
+                "No prices were found for this car",
+                undefined,
+                404
+            );
         }
 
-        return { market_prices: marketPrices }
+        return { market_prices: marketPrices };
     },
 
     onSuccess: async ({ result, requestPayload, flags }) => {
@@ -76,22 +87,29 @@ export const method = zodApiMethod(schemas, {
                     above: result.market_prices.above,
                     average: result.market_prices.average,
                     below: result.market_prices.below,
-                    distribution: result.market_prices.distribution ?? []
-                }
-            })
-
+                    distribution: result.market_prices.distribution ?? [],
+                },
+            });
         }
-        const isDemo = await isDemoVin({ payload: requestPayload })
+        const isDemo = await isDemoVin({ payload: requestPayload });
         if (!isDemo) {
             await ActionsHistoryService.Register({
-                target: "market value", payload: {
+                target: "market value",
+                payload: {
                     vin: requestPayload.vin,
                     mileage: requestPayload.mileage,
-                    result: { market_prices: result.market_prices }
-                }
-            })
+                    result: { market_prices: result.market_prices },
+                },
+            });
         }
     },
+    onError: async (error, cause) => {
+        const loggerProvider = DIContainer().LoggerProvider();
+
+        const newError = errorFactory.inMethod("GET").newError(error, cause);
+
+        loggerProvider.error(newError);
+    },
     beforehandler: noSubscriptionGuard,
-    ignoreBeforeHandler: isDemoVin
-})
+    ignoreBeforeHandler: isDemoVin,
+});
