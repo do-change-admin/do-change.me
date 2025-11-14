@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { ServiceTokens } from "../di-containers/tokens.di-container";
 import { type UserNotificationsManagementServiceFactory } from "../di-containers/register-services";
-import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
+import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "../utils/zod-api-controller____DEPRECATED.utils";
 import { UserNotificationsManagementService } from "../services/user-notifications-management.service";
 import z from "zod";
 import { Notification } from "@/value-objects/notification.value-object";

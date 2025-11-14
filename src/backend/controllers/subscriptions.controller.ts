@@ -1,5 +1,5 @@
 import z from "zod";
-import { ZodAPIController, zodApiMethod, ZodAPISchemas, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
+import { ZodAPIController, zodApiMethod, ZodAPISchemas, ZodControllerSchemas } from "../utils/zod-api-controller____DEPRECATED.utils";
 import { injectable } from "inversify";
 import { prismaClient } from "../infrastructure";
 

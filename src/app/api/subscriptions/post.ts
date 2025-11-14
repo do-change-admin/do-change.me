@@ -4,7 +4,7 @@ import Stripe from "stripe";
 import {
     zodApiMethod_DEPRECATED,
     ZodAPIMethod_DEPRECATED,
-} from "../../../backend/utils/zod-api-controller.utils";
+} from "../../../backend/utils/zod-api-controller____DEPRECATED.utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-08-27.basil",

@@ -1,5 +1,5 @@
 import z from "zod";
-import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller.utils";
+import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller____DEPRECATED.utils";
 import { prismaClient } from "@/backend/infrastructure";
 import { FeatureKey } from "@/value-objects/feature-key.vo";
 

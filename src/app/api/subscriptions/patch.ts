@@ -2,7 +2,7 @@ import z from "zod";
 import {
     zodApiMethod_DEPRECATED,
     ZodAPIMethod_DEPRECATED,
-} from "../../../backend/utils/zod-api-controller.utils";
+} from "../../../backend/utils/zod-api-controller____DEPRECATED.utils";
 import { prismaClient } from "@/backend/infrastructure";
 import Stripe from "stripe";
 
