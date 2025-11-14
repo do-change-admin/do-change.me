@@ -20,7 +20,7 @@ export async function GET(req: Request) {
         // @ts-ignore
         while (!responseData.ok) {
             const currentKey = keys[keyIndex]
-            console.log(currentKey, 'KEY')
+
             if (!currentKey) {
                 return NextResponse.json(
                     { error: 'Failed to fetch vehicle history' },
