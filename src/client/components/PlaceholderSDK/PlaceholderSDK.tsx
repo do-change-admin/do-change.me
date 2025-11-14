@@ -6,7 +6,7 @@ import {FaBox, FaCar, FaPlus} from "react-icons/fa";
 import styles from "./PlaceholderSDK.module.css";
 import {Card} from "@mantine/core";
 
-export const PlaceholderSDK: FC = () => {
+export const PlaceholderSDK: FC<{title?: string, description?: string}> = ({title=" No items available yet", description="Your collection is currently empty. Add new items to start managing your inventory and keep everything organized in one place."}) => {
     return (
         <Card shadow="lg" radius="xl" p="xl">
             <motion.div
@@ -20,11 +20,11 @@ export const PlaceholderSDK: FC = () => {
                 </div>
 
                 <h2 className={styles.title}>
-                    No items available yet
+                    {title}
                 </h2>
 
                 <p className={styles.description}>
-                    Your collection is currently empty. Add new items to start managing your inventory and keep everything organized in one place.
+                    {description}
                 </p>
             </motion.div>
         </Card>
