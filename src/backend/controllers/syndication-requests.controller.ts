@@ -1,4 +1,3 @@
-import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller____DEPRECATED.utils";
 import { type SyndicationRequestDraftsServiceFactory, type SyndicationRequestsServiceFactory } from "@/backend/di-containers/register-services";
 import { ProviderTokens, ServiceTokens } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
@@ -8,7 +7,7 @@ import { ErrorFactory } from "@/value-objects/errors.value-object";
 import { VIN } from "@/value-objects/vin.value-object";
 import { inject, injectable } from "inversify";
 import z from "zod";
-import { ZodController } from "../utils/zod-controller.utils";
+import { ZodController, ZodControllerAPI, ZodControllerSchemas } from "../utils/zod-controller.utils";
 
 const schemas = {
     GET: {
@@ -124,5 +123,5 @@ export class SyndicationRequestsController extends ZodController('Syndication re
  * FormData с ключом photos, в котором находятся фотографии,
  * которые должны быть ассоциированы с создаваемой заявкой.
  */
-export type SyndicationRequestsAPI = ZodAPIController<typeof schemas>
+export type SyndicationRequestsAPI = ZodControllerAPI<typeof schemas>
 

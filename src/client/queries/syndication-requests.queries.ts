@@ -4,7 +4,7 @@ import type { SyndicationRequestStatusNames } from "@/entities/sindycation-reque
 import { apiRequest, buildQueryString } from "@/client/utils/api-request.utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-type API = SyndicationRequestsAPI;
+type API = SyndicationRequestsAPI['endpoints'];
 const apiURL = "/api/syndication-requests";
 
 export const useSyndicationRequests = (
