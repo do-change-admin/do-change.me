@@ -15,8 +15,9 @@ export async function middleware(req: NextRequest) {
         "/legal",
         "/home",
         "/api/webhooks/stripe",
-        '/manifest.json',
-        '/logo'
+        "/manifest.json",
+        "/logo",
+        "/api/email/verify",
     ];
 
     const authPaths = ["/auth/login", "/auth/register", "/auth/check-email"];
@@ -31,7 +32,9 @@ export async function middleware(req: NextRequest) {
         if (!user) {
             return NextResponse.redirect(new URL("/auth/login", req.url));
         }
-        if (!(process.env.ADMIN_EMAILS?.split(",") ?? []).includes(user.email)) {
+        if (
+            !(process.env.ADMIN_EMAILS?.split(",") ?? []).includes(user.email)
+        ) {
             return NextResponse.redirect(new URL("/", req.url));
         }
         return NextResponse.next();

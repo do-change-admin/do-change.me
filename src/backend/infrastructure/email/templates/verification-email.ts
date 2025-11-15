@@ -1,12 +1,11 @@
-import { VO } from "@/value-objects";
+import { EmailMessageSchema } from "@/value-objects/email-message.value-object";
 import type { User } from "@prisma/client";
 
 export function verificationEmail(user: User, tokenRow: string) {
     const verifyUrl = `${process.env.NEXTAUTH_URL}/api/email/verify?token=${tokenRow}`;
 
     return {
-        // TODO: временный email для разработки
-        from: "onboarding@resend.dev",
+        from: "info@do-change.com",
         to: user.email,
         subject: "Confirm your email",
         content: `
@@ -15,5 +14,5 @@ export function verificationEmail(user: User, tokenRow: string) {
               <a href="${verifyUrl}">Confirm email</a>
               <p>If you didn't request this, just ignore this email.</p>
             `,
-    } satisfies VO.EmailMessage.Model;
+    } satisfies EmailMessageSchema;
 }
