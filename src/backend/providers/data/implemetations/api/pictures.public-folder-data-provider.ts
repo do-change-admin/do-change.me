@@ -8,6 +8,7 @@ import { v4 } from "uuid";
 @injectable()
 export class PicturesInPublicFolder implements Interface {
     private uploadDir = path.resolve(process.cwd(), "public", "uploads");
+    private host = process.env.CURRENT_HOST || 'http://localhost:3000'
     add: Interface["add"] = async (file) => {
         try {
             const id = `${v4()}-${file.name}`;
@@ -25,11 +26,9 @@ export class PicturesInPublicFolder implements Interface {
         }
     };
     findOne: Interface["findOne"] = async (id) => {
-        const filePath = path.join(this.uploadDir, id);
-
         return {
             id,
-            src: "http://localhost:3000/uploads/" + id,
+            src: this.host + '/uploads/' + id,
         };
     };
 }

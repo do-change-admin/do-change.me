@@ -5,6 +5,7 @@ import { registerServices } from './register-services'
 import { registerControllers } from './register-controllers'
 import { NotificationStore } from '../stores/interfaces/notification.store'
 import { NotificationInMemoryStore } from '../stores/implementations/in-memory/notification.in-memory-store'
+import { PictureCombinedDataProvider } from '../providers/data/implemetations/api/pictures.combined-data-provider'
 
 const container = new Container()
 
@@ -23,7 +24,7 @@ const registerDataProviders = () => {
         .to(DataProvidersImplemetations.Prisma.VehicleHistoryReportsCache)
     container
         .bind<DataProviders.Pictures.Interface>(StoreTokens.pictures)
-        .to(DataProvidersImplemetations.API.PicturesInVercelBlob)
+        .to(PictureCombinedDataProvider)
     container
         .bind<NotificationStore>(StoreTokens.notifications)
         .to(NotificationInMemoryStore).inSingletonScope()
