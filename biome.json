@@ -22,9 +22,9 @@
             "project": "all"
         },
         "rules": {
+            "recommended": true,
             "correctness": {
                 "useImportExtensions": "off",
-                "useExhaustiveDependencies": "off",
                 "noUnusedImports": {
                     "level": "error",
                     "fix": "safe"
@@ -37,19 +37,11 @@
                     "level": "error"                
                 }
             },
-            "complexity": {
-                "noBannedTypes": "off"
-            },
             "suspicious": {
-                "noGlobalIsNan": "off",
                 "noExplicitAny": "off"
             },
             "style": {
-                "noNonNullAssertion": "off",
-                "useTemplate": {
-                    "fix": "safe",
-                    "level": "error"
-                }
+                "noNonNullAssertion": "off"
             }
         }
     },
