@@ -10,7 +10,7 @@
         "biome:format": "npx @biomejs/biome format --write",
         "biome:lint": "npx @biomejs/biome lint --write",
         "biome:check": "npx @biomejs/biome check",
-        "biome:check-staged": "npx @biomejs/biome check --staged",
+        "biome:check-staged": "npx @biomejs/biome check --staged --no-errors-on-unmatched",
         "prisma:generate": "prisma generate",
         "prisma:migrate:dev": "prisma migrate dev",
         "prisma:migrate:prod": "prisma migrate deploy",
