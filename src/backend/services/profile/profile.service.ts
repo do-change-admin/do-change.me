@@ -36,9 +36,13 @@ export class ProfileService {
 
         let photoLink: string | null = null;
         if (profile.photoFileId) {
-            photoLink = await this.fileProvider.obtainDownloadLink(
-                profile.photoFileId
-            );
+            try {
+                photoLink = await this.fileProvider.obtainDownloadLink(
+                    profile.photoFileId
+                );
+            } catch {
+
+            }
         }
 
         let auctionAccessQRLink: string | null = null;
