@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./Header.module.css";
-import {Text, Box, Group, Image} from "@mantine/core";
+import { Text, Box, Group, Image } from "@mantine/core";
 import { LanguageSelector } from "@/client/components";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -31,7 +31,7 @@ export const Header = () => {
                 {/*        <FaBell  size={22} />*/}
                 {/*    </ActionIcon>*/}
                 {/*</Tooltip>*/}
-                <LanguageSelector />
+                {/* <LanguageSelector /> */}
             </div>
         </header>
     );
