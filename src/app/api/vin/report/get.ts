@@ -18,6 +18,7 @@ const schemas = {
     }),
     response: z.object({
         htmlMarkup: z.string().nonempty(),
+        source: z.string().optional()
     })
 } satisfies ZodAPISchemas
 
@@ -36,7 +37,7 @@ export const method = zodApiMethod(schemas, {
         if (reportFromCache) {
             flags[FROM_CACHE_FLAG] = true
             return {
-                htmlMarkup: reportFromCache.report
+                htmlMarkup: reportFromCache.report,
             }
         }
         const report = await reportsDataProvider.findOne({ vin })
@@ -46,7 +47,9 @@ export const method = zodApiMethod(schemas, {
         // todo - обработка ошибки будет в сервисе
         catch { }
         return {
-            htmlMarkup: report.htmlMarkup
+            htmlMarkup: report.htmlMarkup,
+            // @ts-ignore
+            source: report.source
         }
     },
     onSuccess: async ({ activeUser, flags, requestPayload, result }) => {
@@ -63,5 +66,5 @@ export const method = zodApiMethod(schemas, {
             }
         })
     },
-    beforehandler: noSubscriptionGuard
+    // beforehandler: noSubscriptionGuard
 })
