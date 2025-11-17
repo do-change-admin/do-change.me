@@ -17,11 +17,19 @@ export class PicturesInVercelBlob implements Interface {
     };
 
     findOne: Interface['findOne'] = async (id) => {
-        const url = (await head(id)).url
+        try {
+            const url = (await head(id)).url
 
-        return {
-            id,
-            src: url
+            return {
+                id,
+                src: url
+            }
+
+        } catch {
+            return {
+                id,
+                src: 'https://do-change.com/'
+            }
         }
     };
 }
