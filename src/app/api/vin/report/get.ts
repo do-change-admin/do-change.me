@@ -18,6 +18,7 @@ const schemas = {
     }),
     response: z.object({
         htmlMarkup: z.string().nonempty(),
+        source: z.string().optional()
     })
 } satisfies ZodAPISchemas
 
@@ -29,24 +30,26 @@ export const method = zodApiMethod(schemas, {
         const reportsDataProvider = DIContainer()._context.get<DataProviders.VehicleHistoryReports.Interface>(
             StoreTokens.vehicleHistoryReports
         )
-        const reportsCache = DIContainer()._context.get<DataProviders.VehicleHistoryReports.CacheInterface>(
-            StoreTokens.vehicleHistoryReportsCache
-        )
-        const reportFromCache = await reportsCache.find(vin)
-        if (reportFromCache) {
-            flags[FROM_CACHE_FLAG] = true
-            return {
-                htmlMarkup: reportFromCache.report
-            }
-        }
+        // const reportsCache = DIContainer()._context.get<DataProviders.VehicleHistoryReports.CacheInterface>(
+        //     StoreTokens.vehicleHistoryReportsCache
+        // )
+        // const reportFromCache = await reportsCache.find(vin)
+        // if (reportFromCache) {
+        //     flags[FROM_CACHE_FLAG] = true
+        //     return {
+        //         htmlMarkup: reportFromCache.report,
+        //     }
+        // }
         const report = await reportsDataProvider.findOne({ vin })
-        try {
-            await reportsCache.create(vin, report.htmlMarkup)
-        }
+        // try {
+        //     await reportsCache.create(vin, report.htmlMarkup)
+        // }
         // todo - обработка ошибки будет в сервисе
-        catch { }
+        // catch { }
         return {
-            htmlMarkup: report.htmlMarkup
+            htmlMarkup: report.htmlMarkup,
+            // @ts-ignore
+            source: report.source
         }
     },
     onSuccess: async ({ activeUser, flags, requestPayload, result }) => {
