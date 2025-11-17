@@ -1,0 +1,103 @@
+.searchPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: end;
+    width: 100%;
+}
+
+.label {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+
+
+
+.analyzeBtn {
+    background: linear-gradient(to right, #3b82f6, #f59e0b);
+    color: white;
+    padding: 0.625rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+}
+
+.icon {
+    font-size: 16px;
+}
+
+/* QR Scan */
+.scanBox {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.qrBox {
+    text-align: center;
+    background: linear-gradient(to right, white, var(--text-texas-blue));
+    color: white;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.qrIcon {
+    color: white;
+}
+
+.scanButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    background: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.scanButton:hover {
+    transform: scale(1.05);
+}
+
+
+
+@media (max-width: 700px) {
+    .scanBox {
+        display: none;
+    }
+
+    .searchPanel {
+        gap: 1rem;
+    }
+
+    .analyzeBtn span {
+        display: none;
+    }
+
+    .mileageButtons button {
+        padding: 0.8rem;
+    }
+
+}

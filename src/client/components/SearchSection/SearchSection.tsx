@@ -11,6 +11,7 @@ import { VinSearch } from "./VinSearch/VinSearch";
 import cn from "classnames";
 import { FaHashtag } from "react-icons/fa";
 import { useVINAnalysisState } from "@/client/states/vin-analysis.state";
+import {VinCheck} from "@/client/components/SearchSection/VinCheck/VinCheck";
 
 interface SearchSectionProps {
     openSubscription?: () => void
@@ -63,7 +64,8 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                             </div>
                         </div>
                     </div>
-                    <VinSearch openSubscription={openSubscription} />
+                    {/*<VinSearch openSubscription={openSubscription} />*/}
+                    <VinCheck openSubscription={openSubscription} />
                 </div>
                 <SampleResults baseInfo={baseInfo} reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0} />
                 <SearchHistory searches={actionsHistory} isLoading={isFetching} />
