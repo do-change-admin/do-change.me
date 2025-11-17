@@ -66,5 +66,5 @@ export const method = zodApiMethod(schemas, {
             }
         })
     },
-    // beforehandler: noSubscriptionGuard
+    beforehandler: noSubscriptionGuard
 })
