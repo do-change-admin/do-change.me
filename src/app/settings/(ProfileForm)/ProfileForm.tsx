@@ -243,6 +243,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                     <input
                         style={{ display: "none" }}
                         id="photo-upload"
+                        data-testId={"changePhoto"}
                         type="file"
                         onChange={handleFileChange}
                     />
@@ -268,6 +269,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                     <input
                         type="text"
                         className={styles.input}
+                        data-testId={"firstName"}
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                     />
@@ -291,6 +293,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                     <input
                         type="text"
                         className={styles.input}
+                        data-testId={"lastName"}
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
@@ -324,6 +327,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                             input: styles.inputDateInput,
                         }}
                         maxDate={maxAllowedDate}
+                        data-testId={"birthDate"}
                         defaultDate={maxAllowedDate}
                         m={0}
                         p={0}
@@ -374,6 +378,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                         type="tel"
                         className={styles.input}
                         placeholder="Enter phone number"
+                        data-testId={"phone"}
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                     />
@@ -399,6 +404,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                         type="tel"
                         className={styles.input}
                         placeholder="Enter your street address"
+                        data-testId={"address"}
                         value={address || ""}
                         onChange={(e) => setAddress(e.target.value)}
                     />
@@ -424,6 +430,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                         type="tel"
                         className={styles.input}
                         placeholder="Enter Zip Code"
+                        data-testId={"zipCode"}
                         value={zipCode || ""}
                         onChange={(e) => setZipCode(e.target.value)}
                     />
@@ -449,6 +456,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                         value={state}
                         onChange={setState}
                         placeholder="Select a state"
+                        data-testId={"state"}
                         searchable
                         nothingFoundMessage="No state found"
                         radius="lg"
@@ -480,6 +488,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                         placeholder="Tell us about yourself..."
                         className={`${styles.input} ${styles.textarea}`}
                         value={bio}
+                        data-testId={"bio"}
                         onChange={(e) => setBio(e.target.value)}
                     />
                     {isApplicationForm && !Boolean(bio) && (
@@ -503,6 +512,7 @@ export const ProfileForm: FC<{ isApplicationForm?: boolean }> = ({
                     onClick={handleSubmitApplocation}
                     disabled={validateUser}
                     fullWidth
+                    data-testId={"submitButton"}
                     radius="lg"
                     h={50}
                     mt={32}

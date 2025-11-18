@@ -62,6 +62,7 @@ export const Sidebar = () => {
                                     closeMenu()
                                 }
                             }}
+                            data-testid={link.dataTestId}
                             role="button"
                             tabIndex={0}
                         >
