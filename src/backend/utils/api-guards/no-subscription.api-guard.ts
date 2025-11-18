@@ -8,15 +8,15 @@ export const noSubscriptionGuard = async ({ activeUser }: {
         id: string;
     }
 }) => {
-    // const service = new ProfileService(
-    //     activeUser.id,
-    //     // TODO - change with DI-ed version
-    //     new VercelBlobFileSystemProvider()
-    // )
-    // const { subscription } = await service.profileData() || {}
+    const service = new ProfileService(
+        activeUser.id,
+        // TODO - change with DI-ed version
+        new VercelBlobFileSystemProvider()
+    )
+    const { subscription } = await service.profileData() || {}
 
-    // if (!subscription) {
-    //     throw businessError('No subscription was found', undefined, 402)
-    // }
+    if (!subscription) {
+        throw businessError('No subscription was found', undefined, 402)
+    }
 
 }

@@ -13,7 +13,6 @@ import type { SubscriptionsController } from '../controllers/subscriptions.contr
 import type { VehicleAnalysisController } from '../controllers/vehicle-analysis'
 
 const getDIContainer = () => {
-    return stageContainer
     if (process.env['IN_TEST']) {
         // контейнер для тестового окружения
         return testContainer
