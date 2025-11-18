@@ -27,5 +27,6 @@ export const ControllerTokens = {
     syndicationRequestManagement: Symbol.for("SYNDICATION-REQUEST-MANAGEMENT-CONTROLLER"),
     userNotifications: Symbol.for("USER-NOTIFICATIONS-CONTROLLER"),
     userNotificationsManagement: Symbol.for("USER-NOTIFICATIONS-MANAGEMENT-CONTROLLER"),
-    subscriptions: Symbol()
+    subscriptions: Symbol(),
+    vehicleAnalysis: Symbol()
 }

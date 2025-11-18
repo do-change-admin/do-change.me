@@ -1,0 +1,1 @@
+export { VehicleAnalysisController } from './vehicle-analysis.controller'

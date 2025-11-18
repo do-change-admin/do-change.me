@@ -1,8 +1,7 @@
-import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../../../backend/utils/zod-api-controller.utils";
+import { zodApiMethod_DEPRECATED, ZodAPIMethod_DEPRECATED } from "../../../../backend/utils/zod-api-controller____DEPRECATED.utils";
 import { businessError } from "@/lib-deprecated/errors";
 import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
 import { ProfileService } from "@/backend/services";
-import { EmailAddress } from "@/value-objects/email-address.vo";
 
 export type Method = ZodAPIMethod_DEPRECATED<undefined, undefined, undefined>
 
@@ -16,6 +15,6 @@ export const handler = zodApiMethod_DEPRECATED(undefined, undefined, undefined, 
 
 
     const fileSystemProvider = new VercelBlobFileSystemProvider()
-    const service = new ProfileService(EmailAddress.create(activeUser.email), fileSystemProvider)
+    const service = new ProfileService(activeUser.id, fileSystemProvider)
     await service.uploadPhoto(photo)
 })

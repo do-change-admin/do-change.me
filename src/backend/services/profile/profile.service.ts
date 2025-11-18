@@ -9,14 +9,13 @@ import { businessError } from "@/lib-deprecated/errors";
 
 export class ProfileService {
     constructor(
-        private readonly email: EmailAddress,
+        private readonly id: string,
         private readonly fileProvider: ProvidesFileUploading & ProvidesFileLink
     ) { }
 
     profileData = async (): Promise<ProfileData> => {
-        const rawEmail = this.email.address();
         const profile = await prismaClient.user.findUnique({
-            where: { email: rawEmail },
+            where: { id: this.id },
             include: {
                 userPlan: {
                     where: { status: "active" },
@@ -90,7 +89,6 @@ export class ProfileService {
     };
 
     update = async (payload: UpdateProfilePayload) => {
-        const rawEmail = this.email.address();
         const {
             bio,
             firstName,
@@ -102,7 +100,7 @@ export class ProfileService {
             state,
         } = payload;
         await prismaClient.user.update({
-            where: { email: rawEmail },
+            where: { id: this.id },
             data: {
                 bio,
                 firstName,
@@ -121,7 +119,7 @@ export class ProfileService {
         await this.fileProvider.upload(file, id, file.name);
         await prismaClient.user.update({
             data: { photoFileId: id },
-            where: { email: this.email.address() },
+            where: { id: this.id },
         });
     };
 }

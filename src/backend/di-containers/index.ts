@@ -10,8 +10,10 @@ import type { SyndicationRequestManagementController } from '@/backend/controlle
 import type { UserNotificationsController } from '../controllers/user-notifications.controller'
 import type { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller'
 import type { SubscriptionsController } from '../controllers/subscriptions.controller'
+import type { VehicleAnalysisController } from '../controllers/vehicle-analysis'
 
 const getDIContainer = () => {
+    return stageContainer
     if (process.env['IN_TEST']) {
         // контейнер для тестового окружения
         return testContainer
@@ -55,6 +57,10 @@ export const DIContainer = () => {
         },
         SubscriptionsController: () => {
             return container.get<SubscriptionsController>(ControllerTokens.subscriptions)
+        },
+        VehicleAnalysisControler: () => {
+            return container.get<VehicleAnalysisController>(ControllerTokens.vehicleAnalysis)
+
         }
     }
 }

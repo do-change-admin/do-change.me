@@ -11,9 +11,9 @@ export class AuctionAccessRequestsUserService {
         private readonly fileUploader: ProvidesFileUploading & ProvidesFileLink
     ) { }
 
-    create = async (rawEmail: string) => {
+    create = async (id: string, rawEmail: string) => {
         const email = EmailAddress.create(rawEmail);
-        const profileService = new ProfileService(email, this.fileUploader);
+        const profileService = new ProfileService(id, this.fileUploader);
         const profileData = await profileService.profileData();
 
         await prismaClient.auctionAccessRequest.create({

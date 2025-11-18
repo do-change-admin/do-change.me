@@ -5,9 +5,9 @@ import { ActionsHistoryService } from "@/backend/services";
 import { CachedData_GET_Response } from "@/app/api/vin/cached-data/models";
 import { MarketValueAPI } from "@/app/api/vin/market-value/route";
 import { apiRequest } from "@/client/utils/api-request.utils";
-import { ReportsAPI } from "@/app/api/vin/report/route";
 import { SalvageAPI } from "@/app/api/vin/salvage/route";
 import { VIN } from "@/value-objects/vin.value-object";
+import { VehicleAnalysisAPI } from "@/backend/controllers/vehicle-analysis/vehicle-analysis.controller";
 
 const VIN_LENGTH = 17;
 
@@ -140,17 +140,17 @@ export const useCachedInfo = (vin: string | null) => {
 };
 
 export const useReport = () => {
+    type Method = VehicleAnalysisAPI['endpoints']['GET_Report']
     const router = useRouter();
 
     return useMutation<
-        ReportsAPI["GET"]["response"],
-        ReportsAPI["GET"]["error"],
-        ReportsAPI["GET"]["payload"]
+        Method["response"],
+        Method["error"],
+        Method["payload"]
     >({
         mutationFn: apiRequest("/api/vin/report", "GET"),
-        onSuccess: ({ htmlMarkup, source }, { query }) => {
+        onSuccess: ({ htmlMarkup }, { query }) => {
             sessionStorage.setItem("report", htmlMarkup);
-            sessionStorage.setItem("source", source || "");
             router.push(`/report/${query.vin}`);
         },
     });

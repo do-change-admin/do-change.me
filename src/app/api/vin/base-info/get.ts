@@ -1,9 +1,9 @@
 import z from "zod";
-import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller.utils";
+import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller____DEPRECATED.utils";
 import { baseVehicleInfoSchema } from "./schemas";
 import { prismaClient } from "@/backend/infrastructure";
 import { businessError } from "@/lib-deprecated/errors";
-import { noSubscriptionGuard } from "@/backend/controllers/api-guards/no-subscription.api-guard";
+import { noSubscriptionGuard } from "@/backend/utils/api-guards/no-subscription.api-guard";
 import { ActionsHistoryService } from "@/backend/services";
 import { isDemoVin, VinAPIFlags } from "../vin-api.helpers";
 import { VIN } from "@/value-objects/vin.value-object";

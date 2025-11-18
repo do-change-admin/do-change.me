@@ -1,8 +1,8 @@
 "use client";
 
-import React, {FC} from "react";
+import React, { FC } from "react";
 import styles from "./Salvage.module.css";
-import {AiOutlineCheck, AiOutlineClose} from "react-icons/ai";
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import cn from "classnames";
 
 export interface ISalvage {
@@ -10,7 +10,7 @@ export interface ISalvage {
     isPending: boolean;
 }
 
-export const Salvage: FC<ISalvage> = ({hasSalvage, isPending}) => {
+export const Salvage: FC<ISalvage> = ({ hasSalvage, isPending }) => {
 
 
     return (
@@ -19,11 +19,11 @@ export const Salvage: FC<ISalvage> = ({hasSalvage, isPending}) => {
                 [styles.red]: hasSalvage,
                 [styles.green]: !hasSalvage,
             })}>
-                    <span className={styles.text}>
-                        {hasSalvage ? "Total Loss" : "Clean VIN"}
-                    </span>
+                <span className={styles.text}>
+                    {hasSalvage ? "Total Loss" : "Clean VIN"}
+                </span>
                 <span className={styles.icon}>
-          </span>
+                </span>
             </div>
         </div>
     );

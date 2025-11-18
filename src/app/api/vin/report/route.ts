@@ -1,7 +1,5 @@
-import * as Get from './get'
+import { DIContainer } from '@/backend/di-containers'
 
-export const GET = Get.method
+const controller = DIContainer().VehicleAnalysisControler()
 
-export type ReportsAPI = {
-    GET: Get.Method
-}
+export const GET = controller.GET_Report

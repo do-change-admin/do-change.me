@@ -26,21 +26,21 @@ export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
     const requestVIN = useVINAnalysisState(x => x.requestVIN)
 
     const { data: odometerData, isLoading, isFetched } = useOdometer(requestVIN);
-    const lastMileageRecord = odometerData?.at()?.miles;
+    const lastMileageRecordWithMileage = odometerData?.at()?.miles || odometerData?.find((x: any) => !!x.miles)?.miles;
     const [miles, setMiles] = useState<number>(0)
     const [debouncedMiles] = useDebouncedValue(miles, 1500)
     const { data: mileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(requestVIN, debouncedMiles);
 
     useEffect(() => {
-        if (!!lastMileageRecord && !isLoadingMileage && !miles) {
-            setMiles(lastMileageRecord);
+        if (!!lastMileageRecordWithMileage && !isLoadingMileage && !miles) {
+            setMiles(lastMileageRecordWithMileage);
             return
         }
 
-        if (isFetched && !miles && !lastMileageRecord) {
+        if (isFetched && !miles && !lastMileageRecordWithMileage) {
             setMiles(1)
         }
-    }, [lastMileageRecord, isLoadingMileage, isFetched])
+    }, [lastMileageRecordWithMileage, isLoadingMileage, isFetched])
 
     return (
         <section className={styles.sampleResults}>
@@ -55,7 +55,7 @@ export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
                                         <Text size="sm" fw={500}>
                                             {miles?.toLocaleString()} miles
                                         </Text>
-                                        {miles === lastMileageRecord && (
+                                        {miles === lastMileageRecordWithMileage && (
                                             <>
                                                 <Badge variant="light" size="xs" c="gray">
                                                     Latest Record

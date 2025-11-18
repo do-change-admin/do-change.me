@@ -113,8 +113,10 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
     }) => Promise<void>,
 ) => {
     const endpointLogic = <Method extends keyof T>(method: Method, logic: EndpointLogic<T[Method]>) => {
+
         return async (request: NextRequest) => {
             const errorFactory = ErrorFactory.forController(controller).inMethod(method as string)
+            let currentUserId = 'NOT PROVIDED'
             try {
                 const endpointSchemas = schemas[method]!
 
@@ -131,6 +133,9 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
                         error: 'No authenticated error was found',
                         statusCode: 401,
                     })
+                }
+                if (userId) {
+                    currentUserId = userId
                 }
                 const activeUser: Id = { id: userId || '' }
 
@@ -243,10 +248,17 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
 
                 if (!ErrorFactory.isControllerError(e)) {
                     controllerError = errorFactory.newError({
-                        error: 'Unhandled controller error',
+                        error: 'Internal error',
                         statusCode: 500,
+                        details: { userId: currentUserId }
                     }, e)
                 }
+
+                if (!controllerError.details || typeof controllerError.details !== 'object') {
+                    controllerError.details = {}
+                }
+
+                controllerError.details = { ...controllerError.details, userId: currentUserId }
 
                 if (logic.onError) {
                     try {
@@ -293,7 +305,12 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
 }
 
 
-export type ZodControllerSchemas = Record<string, ZodAPISchemas>
+type ZodControllerSchemas = Record<string, ZodAPISchemas>
+
+export type ZodControllerMetadata<T = ZodControllerSchemas> = {
+    name: string,
+    schemas: T,
+}
 
 export type ZodControllerAPI<
     Schemas extends Record<string, { body: unknown, query: unknown, response: unknown }>,
@@ -303,10 +320,7 @@ export type ZodControllerAPI<
     DTOs: DTOs extends undefined ? {} : DTOs
 }
 
-export function ZodController<T extends ZodControllerSchemas>(
-    name: string,
-    schemas: T
-) {
+export function ZodController<T extends ZodControllerSchemas>(metadata: ZodControllerMetadata<T>) {
     class ZODController<T extends ZodControllerSchemas> {
         public constructor(
             protected readonly name: string,
@@ -322,7 +336,7 @@ export function ZodController<T extends ZodControllerSchemas>(
 
     return class extends ZODController<T> {
         constructor() {
-            super(name, schemas);
+            super(metadata.name, metadata.schemas);
         }
     }
 }

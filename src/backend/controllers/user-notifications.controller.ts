@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
+import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "../utils/zod-api-controller____DEPRECATED.utils";
 import z from "zod";
 import { UserNotificationsService } from "../services/user-notifications.service";
 import { ServiceTokens } from "../di-containers/tokens.di-container";
