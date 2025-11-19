@@ -1,0 +1,120 @@
+/* EXISTING STYLES — unchanged (do not delete) */
+.tableContainer {
+    background-color: white;
+    border-radius: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.tableHeader {
+    background: var(--text-texas-blue);
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-weight: 600;
+}
+
+.searchBox {
+    padding: 1rem 1.5rem;
+    background: #fafafa;
+}
+
+.searchInput {
+    width: 100%;
+}
+
+.tableContent {
+    overflow-x: auto;
+    padding: 1rem 1.5rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    text-align: left;
+    padding: 0.8rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.sortable { cursor: pointer; }
+
+.sortArrow {
+    margin-left: 6px;
+    font-size: 0.7rem;
+    opacity: 0.5;
+}
+
+.table tbody tr:hover {
+    background-color: #f3f4f6;
+}
+
+.table tbody td {
+    padding: 1rem 1rem;
+}
+
+.flexRow {
+    display: flex;
+    flex-direction: column;
+}
+
+.paginationWrapper {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #eee;
+}
+
+/* NEW — skeleton wrapper */
+.skeletonWrapper {
+    padding: 2rem;
+}
+
+/* NEW — empty state */
+.emptyState {
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    color: #6b7280;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Mobile Adaptation */
+@media (max-width: 600px) {
+    .tableHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 1.5rem 1rem;
+    }
+
+    .tableContent {
+        padding: 0.5rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.6rem;
+        font-size: 0.7rem;
+    }
+
+    .paginationWrapper {
+        padding: 0.5rem;
+    }
+
+    .searchBox {
+        padding: 0.5rem 1rem;
+    }
+}

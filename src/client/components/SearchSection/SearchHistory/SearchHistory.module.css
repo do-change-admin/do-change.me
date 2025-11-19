@@ -165,6 +165,54 @@
     background-color: #f9fafb;
 }
 
+/* Vehicle link */
+.vehicleLink {
+    color: #3b82f6;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.vehicleLink:hover {
+    color: #2563eb;
+}
+
+/* VIN row wrapper */
+.vinCopyWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* VIN text */
+
+@media (max-width: 600px) {
+    .vehicleLink {
+        font-size: 0.8rem;
+    }
+
+    .vinText {
+        font-size: 0.7rem;
+    }
+
+}
+
+/* Copy button */
+.copyBtn {
+    background: #e5e7eb;
+    border: none;
+    padding: 0.3rem 0.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.copyBtn:hover {
+    background: #d1d5db;
+}
+
+
 @media (max-width: 700px) {
     .searchHistory {
         margin: 2rem 0;
