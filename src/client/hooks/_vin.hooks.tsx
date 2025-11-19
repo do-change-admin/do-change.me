@@ -71,6 +71,58 @@ export const useMileagePriceQuery = (
 };
 
 
+
+export const useMarketCheckPriceQuery = (
+    vin: string | null,
+    mileage: number | string
+) => {
+
+    return useQuery({
+        queryKey: ["marketcheckPrice", vin, mileage],
+
+        queryFn: async () => {
+            const url = new URL(
+                "https://api.marketcheck.com/v2/predict/car/us/marketcheck_price/comparables/decode"
+            );
+
+            url.searchParams.set("api_key", "JHyfx78TdLsZLcoQaJEUBuAADcGhJfAS");
+            url.searchParams.set("vin", vin || "");
+            url.searchParams.set("miles", String(mileage));
+            url.searchParams.set("dealer_type", "independent");
+            url.searchParams.set("zip", "77007");
+            url.searchParams.set("is_certified", "false");
+
+            const res = await fetch(url.toString(), {
+                method: "GET",
+                headers: { Accept: "application/json" },
+                cache: "no-cache" // важно!
+            });
+
+            if (!res.ok) {
+                throw new Error(`MarketCheck Error: ${res.status}`);
+            }
+
+            return res.json();
+        },
+
+        enabled: () => {
+            if (!vin) return false;
+            if (!mileage) return false;
+
+            // Простая и надёжная валидация VIN
+            const isValidVin = /^[A-HJ-NPR-Z0-9]{17}$/.test(vin);
+            if (!isValidVin) return false;
+
+            return true;
+        },
+
+        staleTime: 5 * 60 * 1000, // 5 минут кэш
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+    });
+};
+
+
 export const useActionsHistory = () => {
     return useQuery<ActionsHistoryService.VinAnalysisResult>({
         queryKey: ["actions-history", 0, 1000],
