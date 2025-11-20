@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { useBaseInfoByVIN, useActionsHistory, useSalvageCheck, useProfile } from "@/client/hooks";
 import { VinSearch } from "./VinSearch/VinSearch";
 import cn from "classnames";
-import { FaHashtag } from "react-icons/fa";
+import { FaHashtag} from "react-icons/fa";
 import { useVINAnalysisState } from "@/client/states/vin-analysis.state";
 import {VinCheck} from "@/client/components/SearchSection/VinCheck/VinCheck";
 

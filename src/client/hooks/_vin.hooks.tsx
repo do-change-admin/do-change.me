@@ -198,8 +198,9 @@ export const useReport = () => {
         ReportsAPI["GET"]["payload"]
     >({
         mutationFn: apiRequest("/api/vin/report", "GET"),
-        onSuccess: ({ htmlMarkup }, { query }) => {
+        onSuccess: ({ htmlMarkup, source }, { query }) => {
             sessionStorage.setItem("report", htmlMarkup);
+            sessionStorage.setItem("source", source || "");
             router.push(`/report/${query.vin}`);
         },
     });
