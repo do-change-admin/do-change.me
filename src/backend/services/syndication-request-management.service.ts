@@ -15,7 +15,7 @@ export class SyndicationRequestManagementService {
 
     public constructor(
         @inject(StoreTokens.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
-        @inject(StoreTokens.pictures) private readonly pictures: DataProviders.Pictures.Interface,
+        @inject(StoreTokens.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface,
     ) { }
 
     requests = async (

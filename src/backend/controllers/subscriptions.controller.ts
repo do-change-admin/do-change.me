@@ -12,7 +12,8 @@ const schemas = {
                 'no subscription',
                 'basic plan',
                 'premium plan'
-            ])
+            ]),
+            isAdmin: z.boolean()
         })
 
     }
@@ -30,23 +31,25 @@ export class SubscriptionsController {
                 include: { userPlan: { include: { plan: true } } }
             })
 
+            const isAdmin = (process.env.ADMIN_EMAILS?.split(",") ?? []).includes(user?.email ?? '')
+
             if (!user?.userPlan || !user?.userPlan?.length) {
-                return { level: 'no subscription' } as const
+                return { level: 'no subscription', isAdmin } as const
             }
 
             const alwaysPremiumOnAnySubscription = process.env.PREMIUM_ON_ANY_SUBSCRIPTION_USERS_IDS?.split(',') ?? []
 
             if (alwaysPremiumOnAnySubscription.includes(id)) {
-                return { level: 'premium plan' } as const
+                return { level: 'premium plan', isAdmin } as const
             }
 
             const [currentPlan] = user.userPlan;
 
             if (currentPlan.plan.slug === 'auction access') {
-                return { level: 'premium plan' } as const
+                return { level: 'premium plan', isAdmin } as const
             }
 
-            return { level: 'basic plan' } as const
+            return { level: 'basic plan', isAdmin } as const
         }
     })
 }

@@ -21,7 +21,7 @@ export const registerServices = (container: Container) => {
                 const dataProvider = ctx.get<DataProviders.SyndicationRequests.Interface>(StoreTokens.syndicationRequests)
                 const draftsDataProvider = ctx.get<DataProviders.SyndicationRequestDrafts.Interface>(StoreTokens.syndicationRequestDrafts)
 
-                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(StoreTokens.pictures)
+                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(StoreTokens.reserve_pictures)
                 return new SyndicationRequestsService(
                     dataProvider,
                     draftsDataProvider,
@@ -38,7 +38,7 @@ export const registerServices = (container: Container) => {
                 const dataProvider = ctx.get<DataProviders.SyndicationRequestDrafts.Interface>(StoreTokens.syndicationRequestDrafts)
                 const requestsDataProvider = ctx.get<DataProviders.SyndicationRequests.Interface>(StoreTokens.syndicationRequests)
 
-                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(StoreTokens.pictures)
+                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(StoreTokens.reserve_pictures)
                 return new SyndicationRequestDraftsService(
                     dataProvider,
                     requestsDataProvider,

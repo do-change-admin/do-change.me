@@ -5,6 +5,7 @@ import { registerServices } from './register-services'
 import { registerControllers } from './register-controllers'
 import { NotificationStore } from '../stores/interfaces/notification.store'
 import { NotificationInMemoryStore } from '../stores/implementations/in-memory/notification.in-memory-store'
+import { PicturesS3DataProvider } from '../providers/data/implemetations/api/pictures.s3-data-provider'
 
 const container = new Container()
 
@@ -27,6 +28,10 @@ const registerDataProviders = () => {
     container
         .bind<NotificationStore>(StoreTokens.notifications)
         .to(NotificationInMemoryStore).inSingletonScope()
+    container
+        .bind<DataProviders.Pictures.Interface>(StoreTokens.reserve_pictures)
+        .to(PicturesS3DataProvider)
+
 }
 
 const registerFunctionProviders = () => {
