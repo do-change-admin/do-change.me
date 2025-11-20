@@ -76,26 +76,27 @@ export const useMarketCheckPriceQuery = (
     vin: string | null,
     mileage: number | string
 ) => {
-
     return useQuery({
         queryKey: ["marketcheckPrice", vin, mileage],
 
         queryFn: async () => {
+            if (!vin) throw new Error("VIN required");
+            if (!mileage) throw new Error("Mileage required");
+
             const url = new URL(
-                "https://api.marketcheck.com/v2/predict/car/us/marketcheck_price/comparables/decode"
+                "https://vehicle-pricing-api.p.rapidapi.com/1837/get%2Bvehicle%2Bprice%2Bdata"
             );
 
-            url.searchParams.set("api_key", "JHyfx78TdLsZLcoQaJEUBuAADcGhJfAS");
-            url.searchParams.set("vin", vin || "");
-            url.searchParams.set("miles", String(mileage));
-            url.searchParams.set("dealer_type", "independent");
-            url.searchParams.set("zip", "77007");
-            url.searchParams.set("is_certified", "false");
+            url.searchParams.set("vin", vin);
+            url.searchParams.set("mileage", String(mileage));
 
             const res = await fetch(url.toString(), {
                 method: "GET",
-                headers: { Accept: "application/json" },
-                cache: "no-cache" // важно!
+                headers: {
+                    "x-rapidapi-host": "vehicle-pricing-api.p.rapidapi.com",
+                    "x-rapidapi-key": "d16afd4483mshe9d9cb03237a7d0p1d9a1ejsnd49c0c6071de",
+                    "Accept": "application/json"
+                }
             });
 
             if (!res.ok) {
@@ -109,14 +110,11 @@ export const useMarketCheckPriceQuery = (
             if (!vin) return false;
             if (!mileage) return false;
 
-            // Простая и надёжная валидация VIN
-            const isValidVin = /^[A-HJ-NPR-Z0-9]{17}$/.test(vin);
-            if (!isValidVin) return false;
-
-            return true;
+            // VIN валидация
+            return /^[A-HJ-NPR-Z0-9]{17}$/.test(vin);
         },
 
-        staleTime: 5 * 60 * 1000, // 5 минут кэш
+        staleTime: 5 * 60 * 1000,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
     });

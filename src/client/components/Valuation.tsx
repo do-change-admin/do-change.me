@@ -1,35 +1,90 @@
 "use client";
 
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useMemo, useState, useEffect } from "react";
 import {
-    Box,
-    Card,
     Container,
-    Divider,
-    Group,
     NumberInput,
     Select,
-    SimpleGrid,
-    Stack,
     Switch,
     Text,
-    Title,
+    Button,
 } from "@mantine/core";
-import {useMarketCheckPriceQuery, useMileagePriceQuery} from "@/client/hooks";
 
-// ====== БАЗОВЫЕ КОНСТАНТЫ (можно подстраивать) ======
-const AVERAGE_MILEAGE = 155000; // базовый средний пробег (можешь менять под свои данные)
+import {
+    FaChartLine,
+    FaArrowUp,
+    FaArrowDown,
+    FaGauge,
+    FaClockRotateLeft,
+    FaChevronUp,
+    FaChevronDown,
+    FaStar,
+    FaTriangleExclamation,
+    FaFileLines,
+    FaCalculator,
+} from "react-icons/fa6";
 
-// штраф за милю (по калибровке с MMR, ~0.055–0.057 $/миля)
-const MILEAGE_PER_MILE = 0.056;
+import { useMarketCheckPriceQuery } from "@/client/hooks";
+import classes from "./Valuation.module.css";
 
-// наценка для розницы (Manheim Retail ~ +35–42% к wholesale)
+/* -------------------------------------------------
+    TYPE DEFINITIONS
+-------------------------------------------------- */
+
+type Region = "national" | "south" | "midwest" | "east" | "west" | "texas";
+type Grade = "1.0" | "2.0" | "3.0" | "4.0" | "5.0";
+type Demand = "low" | "normal" | "high";
+type Segment = "economy" | "standard" | "luxury" | "suv";
+
+interface HistoryRecord {
+    type: string;
+    date: string;
+}
+
+interface MileageAdjustment {
+    adjustment: number;
+    average: number;
+    input: number;
+}
+
+interface HistoryAdjustment {
+    records: HistoryRecord[];
+    adjustment: number;
+}
+
+interface Adjustments {
+    mileage: MileageAdjustment;
+    history: HistoryAdjustment;
+    condition: { input: number | null; adjustment: number };
+    known_damage: { input: number | null; adjustment: number };
+}
+
+interface PriceDistribution {
+    group: { count: number; min: number; max: number };
+}
+
+interface PriceData {
+    above: number;
+    average: number;
+    below: number;
+    distribution: PriceDistribution[];
+}
+
+interface VehicleData {
+    vin: string;
+    vehicle: string;
+    prices: PriceData;
+    adjustments: Adjustments;
+}
+
+/* -------------------------------------------------
+    CONSTANTS (STRICTLY TYPED)
+-------------------------------------------------- */
+
+const AVERAGE_MILEAGE = 105000;
 const RETAIL_FACTOR = 1.38;
-
-// влияние "build options"
 const BUILD_OPTIONS_FACTOR = 0.02;
 
-// региональные поправки
 const REGION_FACTORS: Record<string, number> = {
     national: 0,
     south: -0.02,
@@ -39,7 +94,6 @@ const REGION_FACTORS: Record<string, number> = {
     texas: 0.02,
 };
 
-// поправки по grade (приблизительно как в MMR)
 const GRADE_FACTORS: Record<string, number> = {
     "1.0": -0.15,
     "2.0": -0.08,
@@ -48,307 +102,283 @@ const GRADE_FACTORS: Record<string, number> = {
     "5.0": 0.12,
 };
 
-// поправки по спросу
 const DEMAND_FACTORS: Record<string, number> = {
     low: -0.05,
     normal: 0,
     high: 0.07,
 };
 
-// калиброванные коэффициенты для типов авто (под твои 3 VIN’а)
-const SEGMENT_RATIOS: Record<string, number> = {
-    // 3KPF24AD6KE090701 (Kia Forte): 16,795 * 0.385 ≈ 6,475 (MMR BASE)
-    economy: 0.385,
-    // 1FTEW1EG5HFB21471 (F150): 29,999 * 0.677 ≈ 20,300 (MMR BASE)
-    standard: 0.677,
-    // WP1AB2A22ELA55998 (Cayenne): 15,999 * 0.611 ≈ 9,775 (MMR BASE)
-    luxury: 0.611,
+const SEGMENT_RATIOS: Record<Segment, number> = {
+    economy: 0.62,
+    standard: 1.08,
+    luxury: 0.64,
+    suv: 0.78,
 };
 
-const formatCurrency = (value: number) =>
-    value.toLocaleString("en-US", {
+const MILEAGE_FACTORS: Record<Segment, number> = {
+    economy: 1.35,
+    standard: 1.05,
+    luxury: 1.55,
+    suv: 0.67,
+};
+
+const SEGMENT_DETECT_MAP: { segment: Segment; keywords: string[] }[] = [
+    { segment: "economy", keywords: ["kia", "corolla", "civic", "elantra", "sentra", "accent"] },
+    { segment: "standard", keywords: ["f-150", "silverado", "ram", "tacoma", "frontier", "sierra"] },
+    { segment: "luxury", keywords: ["porsche", "bmw", "mercedes", "audi", "lexus"] },
+    { segment: "suv", keywords: ["yukon", "tahoe", "suburban", "escalade", "explorer"] },
+];
+
+/* -------------------------------------------------
+    HELPERS
+-------------------------------------------------- */
+
+function detectVehicleSegment(vehicle: string | undefined): Segment {
+    if (!vehicle) return "standard";
+    const v = vehicle.toLowerCase();
+    for (const r of SEGMENT_DETECT_MAP) {
+        if (r.keywords.some((k) => v.includes(k))) return r.segment;
+    }
+    return "standard";
+}
+
+function formatCurrency(value: number): string {
+    return value.toLocaleString("en-US", {
         style: "currency",
         currency: "USD",
         maximumFractionDigits: 0,
     });
-
-// тип для price-статистики (Format №2)
-type PriceStats = {
-    min: number;
-    max: number;
-    count: number;
-    mean?: number;
-    median?: number;
-    percentiles?: Record<string, number>;
-};
-
-// вычисляем Base MMR из блока "price" + выбранный тип авто
-function calculateBaseMmrFromPrice(
-    price: PriceStats | undefined,
-    segment: string
-): number {
-    if (!price) return 0;
-
-    const median = price.median ?? price.mean ?? 0;
-    if (!median) return 0;
-
-    const ratio = SEGMENT_RATIOS[segment] ?? SEGMENT_RATIOS.standard;
-
-    return Math.round(median * ratio);
 }
 
-export const Valuation: FC<{ vin: string | null }> = ({ vin }) => {
-    const [odo, setOdo] = useState<number | string>(AVERAGE_MILEAGE);
-    const [region, setRegion] = useState("national");
-    const [grade, setGrade] = useState<string>("1.0");
-    const [demand, setDemand] = useState("normal");
-    const [includeBuildOptions, setIncludeBuildOptions] = useState(true);
-    const [segment, setSegment] = useState<string>("standard");
+/* -------------------------------------------------
+    MAIN COMPONENT
+-------------------------------------------------- */
 
-    const { data: mileageData } = useMarketCheckPriceQuery(vin, odo);
-    const priceStats: PriceStats | undefined = mileageData?.comparables.stats.price;
+export const Valuation: FC<{ vin: string | null }> = ({ vin }) => {
+    const [odo, setOdo] = useState<number>(AVERAGE_MILEAGE);
+    const [region, setRegion] = useState<string>("national");
+    const [grade, setGrade] = useState<string>("3.0");
+    const [demand, setDemand] = useState<string>("normal");
+    const [includeBuildOptions, setIncludeBuildOptions] = useState<boolean>(true);
+
+    const { data } = useMarketCheckPriceQuery(vin, odo);
+    const mileageData: VehicleData | undefined = data?.data;
+
+    const [segment, setSegment] = useState<Segment>("standard");
+    const [historyOpened, setHistoryOpened] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (mileageData?.vehicle) {
+            setSegment(detectVehicleSegment(mileageData.vehicle));
+        }
+    }, [mileageData]);
+
+    /* ---------------------- CALCULATIONS ---------------------- */
 
     const {
         baseMmr,
         adjustedMmr,
-        adjustedRangeLow,
-        adjustedRangeHigh,
         retail,
-        retailLow,
-        retailHigh,
         mileageAdj,
         regionAdj,
         gradeAdj,
         demandAdj,
         buildAdj,
+        lowVal,
+        highVal,
     } = useMemo(() => {
-        // 1️⃣ Base MMR, восстановленный из Format №2
-        const baseMmr = calculateBaseMmrFromPrice(priceStats, segment);
+        if (!mileageData)
+            return {
+                baseMmr: 0,
+                adjustedMmr: 0,
+                retail: 0,
+                lowVal: 0,
+                highVal: 0,
+                mileageAdj: 0,
+                regionAdj: 0,
+                gradeAdj: 0,
+                demandAdj: 0,
+                buildAdj: 0,
+            };
 
-        // 2️⃣ корректировка по пробегу
-        const odoValue = typeof odo === "number" ? odo : AVERAGE_MILEAGE;
-        const milesDiff = odoValue - AVERAGE_MILEAGE;
-        const mileageAdj = -(milesDiff * MILEAGE_PER_MILE);
+        const avg = mileageData.prices.average;
+        const apiMileageAdj = mileageData.adjustments.mileage.adjustment;
 
-        // 3️⃣ регион
-        const regionFactor = REGION_FACTORS[region] ?? 0;
-        const regionAdj = baseMmr * regionFactor;
+        const segRatio = SEGMENT_RATIOS[segment];
+        const mileageFactor = MILEAGE_FACTORS[segment];
 
-        // 4️⃣ grade
-        const gradeFactor = GRADE_FACTORS[grade] ?? 0;
-        const gradeAdj = baseMmr * gradeFactor;
+        const baseMmr = Math.round(avg * segRatio);
+        const mileageAdj = Math.round(apiMileageAdj * mileageFactor);
+        const regionAdj = Math.round(baseMmr * REGION_FACTORS[region]);
+        const gradeAdj = Math.round(baseMmr * GRADE_FACTORS[grade]);
+        const demandAdj = Math.round(baseMmr * DEMAND_FACTORS[demand]);
+        const buildAdj = includeBuildOptions ? Math.round(baseMmr * BUILD_OPTIONS_FACTOR) : 0;
 
-        // 5️⃣ спрос
-        const demandFactor = DEMAND_FACTORS[demand] ?? 0;
-        const demandAdj = baseMmr * demandFactor;
+        const adjustedMmr = Math.round(
+            baseMmr + mileageAdj + regionAdj + gradeAdj + demandAdj + buildAdj
+        );
 
-        // 6️⃣ build options
-        const buildAdj = includeBuildOptions ? baseMmr * BUILD_OPTIONS_FACTOR : 0;
-
-        // 7️⃣ итоговый Adjusted MMR
-        const adjustedRaw =
-            baseMmr + mileageAdj + regionAdj + gradeAdj + demandAdj + buildAdj;
-        const adjustedMmr = Math.round(adjustedRaw);
-
-        // 8️⃣ диапазон (примерно в стиле MMR)
-        const adjustedRangeLow = Math.round(adjustedMmr * 0.85);
-        const adjustedRangeHigh = Math.round(adjustedMmr * 1.15);
-
-        // 9️⃣ розничная цена
         const retail = Math.round(adjustedMmr * RETAIL_FACTOR);
-        const retailLow = Math.round(retail * 0.9);
-        const retailHigh = Math.round(retail * 1.12);
+
+        const lowVal = mileageData.prices.below;
+        const highVal = mileageData.prices.above;
 
         return {
             baseMmr,
             adjustedMmr,
-            adjustedRangeLow,
-            adjustedRangeHigh,
             retail,
-            retailLow,
-            retailHigh,
             mileageAdj,
             regionAdj,
             gradeAdj,
             demandAdj,
             buildAdj,
+            lowVal,
+            highVal,
         };
-    }, [
-        priceStats,
-        segment,
-        odo,
-        region,
-        grade,
-        demand,
-        includeBuildOptions,
-    ]);
+    }, [mileageData, odo, region, grade, demand, includeBuildOptions, segment]);
+
+    if (!mileageData) return null;
+
+    const history = mileageData.adjustments.history.records;
+    const historyAdj = mileageData.adjustments.history.adjustment;
+
+    /* ---------------------- RENDER ---------------------- */
 
     return (
-        <Container size="sm" py="lg">
-            <Stack gap="lg">
-                {/* MAIN BLOCK */}
-                <Card withBorder radius="md" shadow="sm" p="lg">
-                    <Stack gap="sm">
-                        <Title order={3}>VALUATION</Title>
+        <Container size="sm" className={classes.wrapper}>
+            <div className={classes.card}>
 
-                        {/* BASE */}
-                        <Card withBorder padding="md" radius="md">
-                            <SimpleGrid cols={{ base: 1, sm: 3 }}>
-                                <Stack>
-                                    <Text size="xs" c="dimmed">
-                                        BASE MMR
-                                    </Text>
-                                    <Text fw={700} size="lg">
-                                        {formatCurrency(baseMmr)}
-                                    </Text>
-                                </Stack>
+                {/* ADJUSTED VALUE */}
+                <div className={classes.centerBlock}>
+                    <p className={classes.label}>Adjusted Market Value</p>
+                    <div className={classes.adjustedValue}>{formatCurrency(adjustedMmr)}</div>
+                    {/* BADGES */}
+                    <div className={classes.badgeRow}>
+                        <div className={`${classes.badge} ${classes.badgeFio}`}>
+                            <FaChartLine />
+                            <span>Avg: {formatCurrency(mileageData.prices.average)}</span>
+                        </div>
 
-                                <Stack>
-                                    <Text size="xs" c="dimmed">
-                                        Est. Avg Odo (mi)
-                                    </Text>
-                                    <Text fw={600}>{AVERAGE_MILEAGE.toLocaleString()}</Text>
-                                </Stack>
+                        <div className={`${classes.badge} ${classes.badgeFio}`}>
+                            <FaArrowUp />
+                            <span>High: {formatCurrency(highVal)}</span>
+                        </div>
 
-                                <Stack>
-                                    <Text size="xs" c="dimmed">
-                                        Avg Grade
-                                    </Text>
-                                    <Text fw={600}>{grade}</Text>
-                                </Stack>
-                            </SimpleGrid>
-                        </Card>
+                        <div className={`${classes.badge} ${classes.badgeYellow}`}>
+                            <FaArrowDown />
+                            <span>Low: {formatCurrency(lowVal)}</span>
+                        </div>
+                    </div>
 
-                        {/* Adjusted MMR */}
-                        <Card withBorder padding="md" radius="md" mt="sm">
-                            <Stack gap="xs">
-                                <Text size="xs" c="dimmed">
-                                    Adj MMR Range
-                                </Text>
-                                <Text fw={600}>
-                                    {formatCurrency(adjustedRangeLow)} –{" "}
-                                    {formatCurrency(adjustedRangeHigh)}
-                                </Text>
+                    <div className={classes.badgeRow}>
+                        <div className={`${classes.badge} ${classes.badgeYellow}`}>
+                            <FaGauge />
+                            <span>Mileage: {formatCurrency(mileageAdj)}</span>
+                        </div>
 
-                                <Divider my="sm" />
+                        <div
+                            className={`${classes.badge} ${classes.badgePrimary} ${classes.clickable}`}
+                            onClick={() => setHistoryOpened((p) => !p)}
+                        >
+                            <FaClockRotateLeft />
+                            <span>History: {formatCurrency(historyAdj)}</span>
+                            {historyOpened ? <FaChevronUp /> : <FaChevronDown />}
+                        </div>
 
-                                <Text size="xs" c="dimmed">
-                                    ADJUSTED MMR
-                                </Text>
-                                <Title order={2}>{formatCurrency(adjustedMmr)}</Title>
+                        <div className={`${classes.badge} ${classes.badgeFio}`}>
+                            <FaStar />
+                            <span>Condition: {formatCurrency(gradeAdj)}</span>
+                        </div>
 
-                                <Divider my="sm" />
+                        <div className={`${classes.badge} ${classes.badgePrimary}`}>
+                            <FaTriangleExclamation />
+                            <span>Damage: {formatCurrency(buildAdj)}</span>
+                        </div>
+                    </div>
+                </div>
 
-                                <Text size="xs" c="dimmed">
-                                    Estimated Retail Value
-                                </Text>
-                                <Text fw={600}>{formatCurrency(retail)}</Text>
-                                <Text size="sm" c="dimmed">
-                                    Typical Range: {formatCurrency(retailLow)} –{" "}
-                                    {formatCurrency(retailHigh)}
-                                </Text>
-                            </Stack>
-                        </Card>
+                {/* HISTORY */}
+                {historyOpened && (
+                    <div className={classes.historySection}>
+                        <p className={classes.historyTitle}>
+                            <FaFileLines className={classes.historyIcon} /> History Report Details
+                        </p>
 
-                        {/* Adjustments details */}
-                        <Box mt="sm">
-                            <Text size="xs" c="dimmed" mb={4}>
-                                Adjustments detail (vs Base MMR)
-                            </Text>
-                            <SimpleGrid cols={{ base: 1, sm: 3 }}>
-                                <Text size="xs">Mileage: {formatCurrency(mileageAdj)}</Text>
-                                <Text size="xs">Region: {formatCurrency(regionAdj)}</Text>
-                                <Text size="xs">Grade: {formatCurrency(gradeAdj)}</Text>
-                                <Text size="xs">Demand: {formatCurrency(demandAdj)}</Text>
-                                <Text size="xs">
-                                    Build options: {formatCurrency(buildAdj)}
-                                </Text>
-                            </SimpleGrid>
-                        </Box>
-                    </Stack>
-                </Card>
+                        <div className={classes.historyGrid}>
+                            {history.map((h, i) => (
+                                <div key={i} className={classes.historyItem}>
+                                    <div className={classes.historyRow}>
+                                        <span className={classes.historyType}>{h.type.toUpperCase()}</span>
+                                        <span className={classes.historyAdj}>
+                      {formatCurrency(historyAdj / history.length)}
+                    </span>
+                                    </div>
+                                    <p className={classes.historyDate}>{h.date}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
-                {/* INPUTS */}
-                <Card withBorder radius="md" shadow="sm" p="lg">
-                    <Stack gap="md">
-                        <Title order={4}>MMR Inputs</Title>
+                {/* SELECTS */}
+                <div className={classes.inputsInline}>
+                    <Select
+                        label="Region"
+                        value={region}
+                        onChange={(v) => setRegion(v || "national")}
+                        data={[
+                            { value: "national", label: "National" },
+                            { value: "texas", label: "Texas" },
+                            { value: "south", label: "South" },
+                            { value: "midwest", label: "Midwest" },
+                            { value: "east", label: "East" },
+                            { value: "west", label: "West" },
+                        ]}
+                        className={classes.smallSelect}
+                    />
 
-                        <NumberInput
-                            label="Enter Odo"
-                            value={odo}
-                            onChange={setOdo}
-                            step={1000}
-                            thousandSeparator=","
+                    <Select
+                        label="Grade"
+                        value={grade}
+                        onChange={(v) => setGrade(v || "3.0")}
+                        data={[
+                            { value: "1.0", label: "1.0 Rough" },
+                            { value: "2.0", label: "2.0 Below Avg" },
+                            { value: "3.0", label: "3.0 Average" },
+                            { value: "4.0", label: "4.0 Above Avg" },
+                            { value: "5.0", label: "5.0 Extra Clean" },
+                        ]}
+                        className={classes.smallSelect}
+                    />
+
+                    <Select
+                        label="Demand"
+                        value={demand}
+                        onChange={(v) => setDemand(v || "normal")}
+                        data={[
+                            { value: "low", label: "Low" },
+                            { value: "normal", label: "Normal" },
+                            { value: "high", label: "High" },
+                        ]}
+                        className={classes.smallSelect}
+                    />
+
+                    <div className={classes.switchBlock}>
+                        <Text>Build Options</Text>
+                        <Switch
+                            checked={includeBuildOptions}
+                            onChange={(e) => setIncludeBuildOptions(e.currentTarget.checked)}
                         />
+                    </div>
+                </div>
+            </div>
 
-                        <Select
-                            label="Vehicle segment"
-                            value={segment}
-                            onChange={(val) => setSegment(val || "standard")}
-                            data={[
-                                { value: "economy", label: "Economy (Kia / Corolla / Civic)" },
-                                {
-                                    value: "standard",
-                                    label: "Standard / Truck / Mainstream (F-150, Silverado)",
-                                },
-                                {
-                                    value: "luxury",
-                                    label: "Luxury / Premium (Porsche, BMW, Mercedes)",
-                                },
-                            ]}
-                        />
-
-                        <Select
-                            label="Region"
-                            value={region}
-                            onChange={(val) => setRegion(val || "national")}
-                            data={[
-                                { value: "national", label: "National" },
-                                { value: "texas", label: "Texas" },
-                                { value: "south", label: "South" },
-                                { value: "midwest", label: "Midwest" },
-                                { value: "east", label: "East" },
-                                { value: "west", label: "West" },
-                            ]}
-                        />
-
-                        <Select
-                            label="AutoGrade"
-                            value={grade}
-                            onChange={(val) => setGrade(val || "3.0")}
-                            data={[
-                                { value: "1.0", label: "1.0 – Rough" },
-                                { value: "2.0", label: "2.0 – Below Average" },
-                                { value: "3.0", label: "3.0 – Average" },
-                                { value: "4.0", label: "4.0 – Above Average" },
-                                { value: "5.0", label: "5.0 – Extra Clean" },
-                            ]}
-                        />
-
-                        <Select
-                            label="Demand"
-                            value={demand}
-                            onChange={(val) => setDemand(val || "normal")}
-                            data={[
-                                { value: "low", label: "Low demand" },
-                                { value: "normal", label: "Normal" },
-                                { value: "high", label: "High demand" },
-                            ]}
-                        />
-
-                        <Group justify="space-between">
-                            <Text size="sm">Include Build Options?</Text>
-                            <Switch
-                                checked={includeBuildOptions}
-                                onChange={(e) =>
-                                    setIncludeBuildOptions(e.currentTarget.checked)
-                                }
-                                label={includeBuildOptions ? "YES" : "NO"}
-                            />
-                        </Group>
-                    </Stack>
-                </Card>
-            </Stack>
+            {/* NOTE */}
+            <div className={classes.noteCard}>
+                <p className={classes.noteText}>
+                    <strong>Note:</strong> Adjustments are based on market data, history, grade and mileage.
+                </p>
+            </div>
         </Container>
     );
 };
