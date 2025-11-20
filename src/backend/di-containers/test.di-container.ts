@@ -25,6 +25,10 @@ const registerDataProviders = () => {
         .bind<DataProviders.Pictures.Interface>(StoreTokens.pictures)
         .to(DataProvidersImplemetations.Mock.Pictures)
     container
+        .bind<DataProviders.Pictures.Interface>(StoreTokens.reserve_pictures)
+        .to(DataProvidersImplemetations.Mock.Pictures)
+
+    container
         .bind<NotificationStore>(StoreTokens.notifications)
         .to(NotificationInMemoryStore).inSingletonScope()
 }

@@ -32,7 +32,7 @@ export class SyndicationRequestsService extends ZodService('Syndication requests
     public constructor(
         @inject(StoreTokens.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
         @inject(StoreTokens.syndicationRequestDrafts) private readonly drafts: DataProviders.SyndicationRequestDrafts.Interface,
-        @inject(StoreTokens.pictures) private readonly pictures: DataProviders.Pictures.Interface,
+        @inject(StoreTokens.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface,
         private readonly userId: string
     ) {
         super()
@@ -84,19 +84,24 @@ export class SyndicationRequestsService extends ZodService('Syndication requests
 
     addPhotos = this.method('addPhotos', {
         handler: async ({ payload: { id, photos }, serviceError }) => {
+            console.log("HERE 1")
             const details = await this.data.details({
                 id,
                 userId: this.userId
             })
 
+            console.log(details, "details")
             if (!details) {
                 throw serviceError({ error: 'No request was found', details: { id, userId: this.userId } })
             }
 
             let newPhotoIds = [] as string[]
+            console.log(photos)
 
             for (const photo of photos) {
+                console.log("SSS")
                 const { id, success } = await this.pictures.add(photo)
+                console.log(id, success)
                 if (success) {
                     newPhotoIds.push(id)
                 }

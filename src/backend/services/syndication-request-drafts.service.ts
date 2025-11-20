@@ -29,7 +29,7 @@ export class SyndicationRequestDraftsService {
     public constructor(
         @inject(StoreTokens.syndicationRequestDrafts) private readonly data: DataProviders.SyndicationRequestDrafts.Interface,
         @inject(StoreTokens.syndicationRequests) private readonly requests: DataProviders.SyndicationRequests.Interface,
-        @inject(StoreTokens.pictures) private readonly pictures: DataProviders.Pictures.Interface,
+        @inject(StoreTokens.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface,
         private readonly userId: string,
     ) { }
 
