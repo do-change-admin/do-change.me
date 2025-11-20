@@ -135,6 +135,7 @@ export default function SettingsContent() {
                     leftSection={<FaSignOutAlt />}
                     color="red"
                     variant="light"
+                    data-testId={"logoutButton"}
                     radius="lg"
                     onClick={() => signOut({ callbackUrl: "/home" })}
                 >

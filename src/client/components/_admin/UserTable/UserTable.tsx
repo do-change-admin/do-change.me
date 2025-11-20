@@ -46,7 +46,7 @@ export const UserTable: FC<UserTableProps> = ({ requests }) => {
                         </thead>
                         <tbody className={styles.tbody}>
                             {requests.map(request => (
-                                <tr key={request.id} onClick={() => router.push(`/admin/${request.id}`)}>
+                                <tr key={request.id} data-testId={request.email} onClick={() => router.push(`/admin/${request.id}`)}>
                                     <td className={styles.td}>
                                         <img src={request.photoLink} alt={request.firstName} className={styles.avatar} />
                                     </td>

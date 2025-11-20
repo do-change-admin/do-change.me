@@ -20,6 +20,7 @@ const AUCTION_CARDS = [
         btnClass: styles.dealersBtn,
         headerClass: styles.dealers,
         highlight: false,
+        dataTestId: "dealerAuctions",
     },
     // {
     //     id: "/auctions/insurance",
@@ -39,11 +40,12 @@ export const AuctionsServicesCards = () => {
     const router = useRouter();
     const { closeMenu } = useSlideMenu();
     return (
-        <div className={styles.main}>
+        <div className={styles.main} >
             <div className={styles.menuOptions}>
                 {/* Dealer Auctions */}
                 <motion.div
                     whileHover={{ scale: 1.02 }}
+                    data-testid="dealerAuctions"
                     className={styles.card}
                     onClick={() => {
                         router.push("/auctions/dealer");
