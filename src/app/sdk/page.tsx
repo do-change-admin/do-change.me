@@ -18,7 +18,7 @@ import NoAccessPage from "@/app/sdk/no-access-page";
 import { useCurrentSubscriptionInfo } from '@/client/queries/subscription.queries';
 import { TbFilter } from "react-icons/tb";
 import cn from "classnames";
-import {useProfile} from "@/client/hooks";
+import { useProfile } from "@/client/hooks";
 
 const STATUS_OPTIONS = [
     // 'draft',
@@ -29,8 +29,7 @@ const STATUS_OPTIONS = [
 ];
 
 const CarSyndicationSection: FC = () => {
-    const [opened, {open, close}] = useDisclosure(false);
-    const {data: user} = useProfile()
+    const [opened, { open, close }] = useDisclosure(false);
     const [openedFilters, openFilters] = useState(false);
     const [vin, setVin] = useState("");
     const [debouncedVin] = useDebouncedValue(vin, 500);
@@ -40,15 +39,15 @@ const CarSyndicationSection: FC = () => {
     const [activeTab, setActiveTab] =
         useState<SyndicationRequestStatusNames>("pending publisher");
 
-    const {data: subscriptionInfo, isFetching: subscriptionLevelIsFetching} = useCurrentSubscriptionInfo()
+    const { data: subscriptionInfo, isFetching: subscriptionLevelIsFetching } = useCurrentSubscriptionInfo()
 
-    const {data, isLoading, isPending} = useSyndicationRequests({
+    const { data, isLoading } = useSyndicationRequests({
         make: make ?? "",
         model: model ?? "",
         status: activeTab,
         vin: debouncedVin,
     });
-    const {data: filters, isLoading: isLoadingFilters} = useSyndicationRequestFilters();
+    const { data: filters, isLoading: isLoadingFilters } = useSyndicationRequestFilters();
 
     const vehicles = data?.items ?? [];
 
@@ -72,7 +71,7 @@ const CarSyndicationSection: FC = () => {
     if (isLoading || isLoadingFilters || subscriptionLevelIsFetching) {
         return (
             <div className={styles.loader}>
-                <Loader/>
+                <Loader />
             </div>
         )
     }
@@ -82,18 +81,18 @@ const CarSyndicationSection: FC = () => {
     if (subscriptionLevel !== "premium plan") {
         return (
             <div className={styles.container}>
-                <NoAccessPage/>
+                <NoAccessPage />
             </div>
         )
     }
 
 
     //todo: убрать после полного тестирования
-    if ((process.env.ADMIN_EMAILS?.split(",") ?? []).includes(user?.email || '')) {
+    if (!subscriptionInfo?.isAdmin) {
         return (
             <div className={styles.dashboard}>
                 <div className={styles.container}>
-                    <PlaceholderSDK title="Page Temporarily Unavailable" description="This page is currently unavailable. Please try again later."/>
+                    <PlaceholderSDK title="Page Temporarily Unavailable" description="This page is currently unavailable. Please try again later." />
                 </div>
             </div>
         )
@@ -104,8 +103,8 @@ const CarSyndicationSection: FC = () => {
             <div className={styles.container}>
 
                 {/* Header */}
-                <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.5}}
-                            className={styles.header}>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}
+                    className={styles.header}>
                     <div className={styles.headerLeft}>
                         <div>
                             <h1 className={styles.title}>Vehicle Syndication</h1>
@@ -119,7 +118,7 @@ const CarSyndicationSection: FC = () => {
                     <Button
                         fullWidth
                         radius="lg" bg="var(--cl-fio)"
-                        leftSection={<FaPlus/>}
+                        leftSection={<FaPlus />}
                         onClick={open}
                     >
                         Add Car
@@ -139,7 +138,7 @@ const CarSyndicationSection: FC = () => {
                             color="var(--cl-fio)"
                             onClick={() => openFilters(prev => !prev)}
                         >
-                            <TbFilter/>
+                            <TbFilter />
                         </ActionIcon>
                     </Group>
                 </div>
@@ -155,7 +154,7 @@ const CarSyndicationSection: FC = () => {
                                     radius="lg"
                                     value={vin}
                                     onChange={(e) => setVin(e.currentTarget.value)}
-                                    leftSection={<FaSearch/>}
+                                    leftSection={<FaSearch />}
                                 />
                             </div>
 
@@ -167,7 +166,7 @@ const CarSyndicationSection: FC = () => {
                                     value={make}
                                     onChange={setMake}
                                     data={filters?.makes}
-                                    rightSection={<FaChevronDown/>}
+                                    rightSection={<FaChevronDown />}
                                 />
                             </div>
 
@@ -179,13 +178,13 @@ const CarSyndicationSection: FC = () => {
                                     value={model}
                                     onChange={setModel}
                                     data={filters?.models}
-                                    rightSection={<FaChevronDown/>}
+                                    rightSection={<FaChevronDown />}
                                 />
                             </div>
 
                             <div className={styles.filterItem}>
                                 <Button
-                                    leftSection={<FaTimes/>}
+                                    leftSection={<FaTimes />}
                                     onClick={handleClearFilters}
                                     radius="lg"
                                     variant="outline"
@@ -198,13 +197,13 @@ const CarSyndicationSection: FC = () => {
                 )}
 
                 {/* Vehicle Cards Grid */}
-                {!vehicles.length && <PlaceholderSDK/>}
+                {!vehicles.length && <PlaceholderSDK />}
                 <div className={styles.vehicleGrid}>
 
                     {(vehicles ?? []).map((car, i) => (
-                        <motion.div key={i} whileHover={{scale: 1.03}} className={styles.vehicleCard}>
+                        <motion.div key={i} whileHover={{ scale: 1.03 }} className={styles.vehicleCard}>
                             <div className={styles.vehicleImageWrapper}>
-                                <img src={car.photoLinks[0]} alt=""/>
+                                <img src={car.photoLinks[0]} alt="" />
                             </div>
                             <div className={styles.vehicleContent}>
                                 <div className={styles.vehicleTop}>
@@ -223,7 +222,7 @@ const CarSyndicationSection: FC = () => {
                             </div>
                             <Stack gap="xs" p="lg">
                                 {car.marketplaceLinks.map((link) => {
-                                    const {color, label} =
+                                    const { color, label } =
                                         getVisualDataByCarSaleMarketplaceLink(
                                             link
                                         );
@@ -233,7 +232,7 @@ const CarSyndicationSection: FC = () => {
                                             variant="light"
                                             color={color}
                                             fullWidth
-                                            rightSection={<FaLink/>}
+                                            rightSection={<FaLink />}
                                             styles={{
                                                 root: {
                                                     justifyContent:
