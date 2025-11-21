@@ -85,6 +85,9 @@ export class SyndicationRequests implements Interface {
     list: Interface['list'] = async (payload, { pageSize, zeroBasedIndex }) => {
         const list = await prismaClient.syndicationRequests.findMany({
             where: mappers.toFindListPayload(payload),
+            orderBy: {
+                createdAt: 'desc'
+            },
             skip: zeroBasedIndex * pageSize,
             take: pageSize,
             include: { user: true }

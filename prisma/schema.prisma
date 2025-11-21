@@ -349,7 +349,7 @@ model StripeEvent {
   rawPayload Json
   processed  Boolean  @default(false)
   attempts   Int      @default(1)
-  createdAt  DateTime @default(now())
+  createdAt  DateTime @default(now()) 
   updatedAt  DateTime @updatedAt
 }
 
@@ -438,6 +438,8 @@ model SyndicationRequests {
 
   photoIds         String[]
   marketplaceLinks String[] @default([])
+
+  createdAt       DateTime @default(now())
 
   @@index([model, make])
 }

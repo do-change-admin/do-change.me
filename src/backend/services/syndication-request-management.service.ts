@@ -66,7 +66,11 @@ export class SyndicationRequestManagementService {
     }
 
     allFilters = async () => {
-        return await this.data.filtersData()
+        const data = await this.data.filtersData()
+        return {
+            makes: [...new Set(data.makes)],
+            models: [...new Set(data.models)]
+        }
     }
 }
 
