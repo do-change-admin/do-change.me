@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { StoreTokens } from "../di-containers/tokens.di-container";
-import type { NotificationStore } from "../stores/interfaces/notification.store";
+import type { NotificationStore } from "../stores/notification/notification.store";
 import z from "zod";
 import { X } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
@@ -26,7 +26,7 @@ export class UserNotificationsManagementService {
 
     notify = async ({ message, title }: UserNotificationPayload) => {
         return await this.notifications.create({
-            level: 'warning',
+            level: 'info',
             message,
             title,
             userId: this.userId
@@ -35,7 +35,7 @@ export class UserNotificationsManagementService {
 
     notifyWithWarning = async ({ message, title }: UserNotificationPayload) => {
         return await this.notifications.create({
-            level: 'info',
+            level: 'warning',
             message,
             title,
             userId: this.userId

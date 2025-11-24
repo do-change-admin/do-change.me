@@ -5,7 +5,7 @@ import { SyndicationRequestsService } from "@/backend/services/syndication-reque
 import { SyndicationRequestDraftsService } from "@/backend/services/syndication-request-drafts.service"
 import { SyndicationRequestManagementService } from "@/backend/services/syndication-request-management.service"
 import { UserNotificationsService } from "../services/user-notifications.service"
-import type { NotificationStore } from "../stores/interfaces/notification.store"
+import type { NotificationStore } from "../stores/notification/notification.store"
 import { UserNotificationsManagementService } from "../services/user-notifications-management.service"
 
 export type SyndicationRequestsServiceFactory = (userId: string) => SyndicationRequestsService

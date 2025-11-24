@@ -3,7 +3,7 @@ import { StoreTokens } from "../di-containers/tokens.di-container";
 import { Notification } from "@/value-objects/notification.value-object";
 import z from "zod";
 import { ErrorFactory } from "@/value-objects/errors.value-object";
-import type { NotificationStore } from "../stores/interfaces/notification.store";
+import type { NotificationStore } from "../stores/notification/notification.store";
 
 export type NotificationDTO = z.infer<typeof UserNotificationsService.notificationDTO>
 

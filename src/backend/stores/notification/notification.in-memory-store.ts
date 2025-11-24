@@ -1,5 +1,5 @@
-import { NotificationStore } from '../../interfaces/notification.store'
-import { newInMemoryStore } from '../../helpers/in-memory-store.store-helpers'
+import { NotificationStore } from '../notification/notification.store'
+import { newInMemoryStore } from '../helpers/in-memory-store.store-helpers'
 import { v4 } from 'uuid'
 
 const NotificationInMemoryStore = newInMemoryStore<NotificationStore>({
