@@ -1,6 +1,6 @@
 import { UserNotificationsListProps } from "@/client/features/notifications/user";
 import { Badge, Text, Card, Group} from "@mantine/core";
-import {FaCheckCircle, FaExclamationTriangle, FaInfo, FaInfoCircle, FaRegCircle, FaTimesCircle} from 'react-icons/fa'
+import { FaCheckCircle, FaExclamationTriangle, FaInfoCircle, FaRegCircle, FaTimesCircle } from 'react-icons/fa'
 
 const ICONS = {
     info: <FaInfoCircle color="var(--cl-fio)" />,
