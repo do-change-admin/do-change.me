@@ -18,5 +18,17 @@
             "\treturn undefined",
             "}"
         ],
+    },
+    "Widget Component": {
+        "prefix": "_WIDGET",
+        "body": [
+            "import type { FC } from 'react'",
+            "",
+            "export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}WidgetProps = {}",
+            "",
+            "export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Widget: FC<${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}WidgetProps> = () => {",
+            "\treturn undefined",
+            "}"
+        ],
     }
 }

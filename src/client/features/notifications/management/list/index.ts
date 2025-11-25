@@ -1,0 +1,1 @@
+export { AdminNotificationsList, type AdminNotificationsListProps } from './admin-notifications-list.feature'
