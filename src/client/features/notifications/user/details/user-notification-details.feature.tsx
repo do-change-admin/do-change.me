@@ -7,15 +7,24 @@ import { useUserNotificationReading } from './user-notification-details.feature.
 
 export type UserNotificationDetailsProps = {
     views: {
+        /**
+         * Вёрстка детального вида уведомления.
+         */
         NotificationDetails: FC<{
             currentItem: Omit<UserNotificationDTO, 'seen' | 'id'>,
             clearSelectedItem: Function,
             seen: { status: true } | { status: false, read: Function, mutationStatus: MutationStatus }
         }>,
+        /**
+         * Вёрстка, которая будет показываться, если никакого уведомления не выбрано для детального просмотра.
+         */
         NoSelectedItemDetails: FC
     }
 }
 
+/**
+ * Детальная информация по выбранному пользователем в списке уведомлении.
+ */
 export const UserNotificationDetails: FC<UserNotificationDetailsProps> = ({
     views
 }) => {

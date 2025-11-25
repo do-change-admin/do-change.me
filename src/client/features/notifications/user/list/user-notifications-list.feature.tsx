@@ -7,15 +7,33 @@ import { currentSelectedDetailsItemAtom } from '../notifications.user.feature.st
 
 export type UserNotificationsListProps = {
     views: {
+        /**
+         * Вёрстка одного уведомления.
+         */
         NotificationItem: FC<Omit<UserNotificationDTO, 'id'> & {  selectForDetailView: Function }>,
+        /**
+         * Лэйаут фичи.
+         */
         Layout: FC<{
+            /**
+             * Готовая разметка уведомлений.
+             */
             notificationsMarkup: ReactNode,
+            /**
+             * Статус запроса уведомлений.
+             */
             fetchingStatus: QueryStatus,
+            /**
+             * Флаг, показывающий, что запрос данных закончился успешно, но данных не пришло.
+             */
             noItems: boolean,
         }>
     }
 }
 
+/**
+ * Список текущих уведомлений пользователя.
+ */
 export const UserNotificationsList: FC<UserNotificationsListProps> = ({
     views
 }) => {

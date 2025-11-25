@@ -17,6 +17,9 @@ export const useUserNotifications = () => {
     })
 }
 
+/**
+ * Получение количества непрочитанных уведомлений у пользователя.
+ */
 export const useUnreadNotificationsCount = () => {
     const { data, isFetching }  = useUserNotifications()
 

@@ -4,15 +4,33 @@ import { QueryStatus } from '@tanstack/react-query'
 
 export type AdminNotificationsListProps = {
     views: {
+        /**
+         * Вёрстка одного уведомления.
+         */
         NotificationItem: FC<AdminNotificationDTO>,
+        /**
+         * Лэйаут фичи.
+         */
         Layout: FC<{
+            /**
+             * Готовая вёрстка уведомлений.
+             */
             notificationsMarkup: ReactNode,
+            /**
+             * Текущий статус запроса уведомлений.
+             */
             status: QueryStatus,
+            /**
+             * Флаг, показывающий, что запрос данных закончился успешно, но данных не пришло.
+             */
             noItems: boolean
         }>
     }
 }
 
+/**
+ * Список уведомлений у всех пользователей, доступный администратору.
+ */
 export const AdminNotificationsList: FC<AdminNotificationsListProps> = ({
     views
 }) => {

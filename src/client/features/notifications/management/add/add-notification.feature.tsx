@@ -6,17 +6,41 @@ import { MutationStatus } from "@tanstack/react-query"
 
 export type AddNotificationProps = {
     views: {
+        /**
+         * Лэйаут фичи.
+         */
         Layout: FC<{
+            /**
+             * Текущий статус добавления уведомления пользователю.
+             */
             status: MutationStatus,
+            /**
+             * Инпут с id пользователя.
+             */
             userIdInput: ReactNode,
+            /**
+             * Инпут с тайтлом уведоления.
+             */
             titleInput: ReactNode,
+            /**
+             * Инпут с телом уведомления.
+             */
             messageInput: ReactNode,
+            /**
+             * Селект с выбором уровня уведомления.
+             */
             levelSelect: ReactNode,
+            /**
+             * Кнопка добавления уведомления.
+             */
             addNotificationButton: ReactNode,
         }>
     },
 }
 
+/**
+ * Точеченое добавление уведомления пользователю по его идентификатору.
+ */
 export const AddNotification: FC<AddNotificationProps> = ({ views }) => {
     const { Layout } = views
 
