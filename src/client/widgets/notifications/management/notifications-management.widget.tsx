@@ -9,12 +9,11 @@ export type NotificationsManagementWidgetProps = {}
 
 export const NotificationsManagementWidget: FC<NotificationsManagementWidgetProps> = () => {
     return <div className={styles.container}>
-        <h3 style={{textAlign: 'center'}}>Add notification</h3>
+        <h3 style={{textAlign: 'center'}}>Notify user</h3>
         <AddNotification views={{
             Layout: AddNotificationLayout
         }} />
-
-        <h4 style={{textAlign: 'center'}}>All notifications list</h4>
+        <h3 style={{textAlign: 'center'}}>Notifications list</h3>
         <AdminNotificationsList views={{
             Layout: NotificationsListLayout,
             NotificationItem: NotificationRow

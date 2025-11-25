@@ -53,7 +53,7 @@ export const AddNotification: FC<AddNotificationProps> = ({ views }) => {
         loading={status === 'pending'}
         onClick={() => addNotification()}
     >
-        Add
+        Add notification
     </Button>
 
     return <Layout 
