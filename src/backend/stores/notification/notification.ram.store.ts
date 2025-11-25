@@ -1,6 +1,6 @@
-import { RAMStore } from '@/backend/utils/store/store.utils.ram'
-import type { NotificationStore } from './notification.store'
-import { v4 } from 'uuid'
+import { v4 } from 'uuid';
+import { RAMStore } from '@/backend/utils/store/store.utils.ram';
+import type { NotificationStore } from './notification.store';
 
 const NotificationRAMStore = RAMStore<NotificationStore>({
     mappers: {
@@ -11,11 +11,10 @@ const NotificationRAMStore = RAMStore<NotificationStore>({
                 message: payload.message,
                 seen: false,
                 title: payload.title,
-                userId: payload.userId,
-            }
-
+                userId: payload.userId
+            };
         }
     }
-})
+});
 
-export { NotificationRAMStore }
+export { NotificationRAMStore };
