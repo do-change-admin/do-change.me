@@ -20,7 +20,7 @@ export const UserListWidget: FC<UserListWidgetProps> = () => {
             size={16} 
             offset={7}
             position="top-end" 
-            color="red" 
+            color={!isFetching && !count ? "lightblue" : "red"} 
             withBorder 
             processing={isFetching}  
             label={isFetching ? undefined : count}

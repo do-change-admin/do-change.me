@@ -8,7 +8,7 @@ export const NotificationsLayout: UserNotificationsListProps['views']['Layout'] 
     return <Box pos='relative'>
         <LoadingOverlay visible={fetchingStatus === 'pending'} />
         <ScrollArea>
-            <Stack gap="sx">
+            <Stack gap="sx" p="lg">
                 {notificationsMarkup}
             </Stack>
         </ScrollArea>
