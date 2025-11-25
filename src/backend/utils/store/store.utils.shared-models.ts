@@ -1,26 +1,26 @@
-import { PaginationModel } from "@/value-objects/pagination.value-object";
+import type { PaginationModel } from '@/value-objects/pagination.value-object';
 
 export type CRUDStore<
     Models extends { list: unknown; detail: unknown },
     SearchPayload extends { list: unknown; specific: unknown },
-    ActionsPayload extends { create: unknown; update: unknown },
+    ActionsPayload extends { create: unknown; update: unknown }
 > = {
     list: (
         searchPayload: SearchPayload['list'],
-        pagination: PaginationModel,
+        pagination: PaginationModel
     ) => Promise<Models['list'][]>;
     details: (
-        searchPayload: SearchPayload['specific'],
+        searchPayload: SearchPayload['specific']
     ) => Promise<Models['detail'] | null>;
     create: (
-        creationPayload: ActionsPayload['create'],
+        creationPayload: ActionsPayload['create']
     ) => Promise<{ id: string }>;
     updateOne: (
         searchPayload: SearchPayload['specific'],
-        updatePayload: ActionsPayload['update'],
+        updatePayload: ActionsPayload['update']
     ) => Promise<{ success: boolean }>;
     deleteOne: (
-        payload: SearchPayload['specific'],
+        payload: SearchPayload['specific']
     ) => Promise<{ success: boolean }>;
 };
 

@@ -1,8 +1,8 @@
-import { isApplicationError } from "@/lib-deprecated/errors";
-import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
-import z, { ZodObject } from "zod";
-import { authOptions } from "../../app/api/auth/[...nextauth]/authOptions";
+import { type NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import z, { type ZodObject } from 'zod';
+import { isApplicationError } from '@/lib-deprecated/errors';
+import { authOptions } from '../../app/api/auth/[...nextauth]/authOptions';
 
 async function getCurrentUser() {
     const session = await getServerSession(authOptions);
@@ -13,10 +13,9 @@ async function getCurrentUser() {
 
     return {
         id: session.user.id,
-        email: session.user.email,
+        email: session.user.email
     };
 }
-
 
 export type ZodObjectData = Readonly<{
     [k: string]: z.core.$ZodType<
@@ -29,13 +28,13 @@ export type ZodObjectData = Readonly<{
 type ZodAPIPayload<QueryParams, BodyParams> = (QueryParams extends undefined
     ? {}
     : {
-        query: z.infer<QueryParams>;
-    }) &
+          query: z.infer<QueryParams>;
+      }) &
     (BodyParams extends undefined
         ? {}
         : {
-            body: z.infer<BodyParams>;
-        });
+              body: z.infer<BodyParams>;
+          });
 
 type SuccessResponse<ResponseZodSchema> = ResponseZodSchema extends undefined
     ? {}
@@ -43,23 +42,23 @@ type SuccessResponse<ResponseZodSchema> = ResponseZodSchema extends undefined
 
 type ErrorResponse = {
     error: {
-        message: string,
-        details?: object
+        message: string;
+        details?: object;
     };
     stage:
-    | "query params parsing"
-    | "request body parsing"
-    | "result parsing"
-    | "api handler executing"
-    | "user obtaining";
+        | 'query params parsing'
+        | 'request body parsing'
+        | 'result parsing'
+        | 'api handler executing'
+        | 'user obtaining';
     success: false;
 };
 
 export type ZodAPISchemas = {
-    body: ZodObject | undefined,
-    query: ZodObject | undefined,
-    response: ZodObject | undefined
-}
+    body: ZodObject | undefined;
+    query: ZodObject | undefined;
+    response: ZodObject | undefined;
+};
 
 export type ZodAPIMethod_DEPRECATED<Query, Body, Response> = {
     payload: ZodAPIPayload<Query, Body>;
@@ -67,11 +66,13 @@ export type ZodAPIMethod_DEPRECATED<Query, Body, Response> = {
     error: ErrorResponse;
 };
 
-export type ZodAPIMethod<Schemas extends { body: unknown, query: unknown, response: unknown }> = {
+export type ZodAPIMethod<
+    Schemas extends { body: unknown; query: unknown; response: unknown }
+> = {
     payload: ZodAPIPayload<Schemas['query'], Schemas['body']>;
     response: SuccessResponse<Schemas['response']>;
     error: ErrorResponse;
-}
+};
 
 export const zodApiMethod = <
     QueryParams extends ZodObjectData | undefined,
@@ -79,44 +80,59 @@ export const zodApiMethod = <
     ReturnData extends ZodObjectData | undefined
 >(
     schemas: {
-        query: QueryParams extends ZodObjectData ? z.ZodObject<QueryParams> : undefined,
-        body: BodyParams extends ZodObjectData ? z.ZodObject<BodyParams> : undefined,
-        response: ReturnData extends ZodObjectData ? z.ZodObject<ReturnData> : undefined,
+        query: QueryParams extends ZodObjectData
+            ? z.ZodObject<QueryParams>
+            : undefined;
+        body: BodyParams extends ZodObjectData
+            ? z.ZodObject<BodyParams>
+            : undefined;
+        response: ReturnData extends ZodObjectData
+            ? z.ZodObject<ReturnData>
+            : undefined;
     },
     logic: {
         handler: (request: {
-            payload: z.infer<typeof schemas.query> & z.infer<typeof schemas.body>,
-            activeUser: { id: string; email: string },
-            req: NextRequest,
-            flags: Record<string, boolean>
-        }) => Promise<ReturnData extends ZodObjectData ? z.infer<typeof schemas.response> : void
-        >,
+            payload: z.infer<typeof schemas.query> &
+                z.infer<typeof schemas.body>;
+            activeUser: { id: string; email: string };
+            req: NextRequest;
+            flags: Record<string, boolean>;
+        }) => Promise<
+            ReturnData extends ZodObjectData
+                ? z.infer<typeof schemas.response>
+                : void
+        >;
         beforehandler?: (request: {
-            payload: z.infer<typeof schemas.query> & z.infer<typeof schemas.body>,
-            activeUser: { id: string; email: string },
-            req: NextRequest
-        }) => Promise<void>,
+            payload: z.infer<typeof schemas.query> &
+                z.infer<typeof schemas.body>;
+            activeUser: { id: string; email: string };
+            req: NextRequest;
+        }) => Promise<void>;
         onSuccess?: (data: {
-            requestPayload: z.infer<typeof schemas.query> & z.infer<typeof schemas.body>,
-            activeUser: { id: string; email: string },
-            req: NextRequest
-            result: ReturnData extends ZodObjectData ? z.infer<typeof schemas.response> : undefined,
-            flags: Record<string, boolean>
-        }) => Promise<void>,
+            requestPayload: z.infer<typeof schemas.query> &
+                z.infer<typeof schemas.body>;
+            activeUser: { id: string; email: string };
+            req: NextRequest;
+            result: ReturnData extends ZodObjectData
+                ? z.infer<typeof schemas.response>
+                : undefined;
+            flags: Record<string, boolean>;
+        }) => Promise<void>;
         ignoreBeforeHandler?: (request: {
-            payload: z.infer<typeof schemas.query> & z.infer<typeof schemas.body>,
-            activeUser: { id: string; email: string },
-            req: NextRequest
-        }) => Promise<boolean>
-    },
+            payload: z.infer<typeof schemas.query> &
+                z.infer<typeof schemas.body>;
+            activeUser: { id: string; email: string };
+            req: NextRequest;
+        }) => Promise<boolean>;
+    }
 ) => {
     return async (request: NextRequest) => {
         const user = await getCurrentUser();
         if (!user) {
             return NextResponse.json<ErrorResponse>({
-                error: { message: "Active user was not found" },
+                error: { message: 'Active user was not found' },
                 success: false,
-                stage: "user obtaining",
+                stage: 'user obtaining'
             });
         }
         let resultObject = {};
@@ -133,8 +149,8 @@ export const zodApiMethod = <
                             details: z.treeifyError(queryParamsParsed.error),
                             message: queryParamsParsed.error.message
                         },
-                        stage: "query params parsing",
-                        success: false,
+                        stage: 'query params parsing',
+                        success: false
                     },
                     { status: 400 }
                 );
@@ -151,8 +167,8 @@ export const zodApiMethod = <
                             details: z.treeifyError(bodyParsed.error),
                             message: bodyParsed.error.message
                         },
-                        stage: "request body parsing",
-                        success: false,
+                        stage: 'request body parsing',
+                        success: false
                     },
                     { status: 400 }
                 );
@@ -161,23 +177,23 @@ export const zodApiMethod = <
         }
         try {
             if (logic.beforehandler) {
-                let ignoreBeforeHandler = false
+                let ignoreBeforeHandler = false;
                 if (logic.ignoreBeforeHandler) {
                     ignoreBeforeHandler = await logic.ignoreBeforeHandler({
                         activeUser: user,
                         payload: resultObject as any,
-                        req: request,
-                    })
+                        req: request
+                    });
                 }
                 if (!ignoreBeforeHandler) {
                     await logic.beforehandler({
                         activeUser: user,
                         payload: resultObject as any,
                         req: request
-                    })
+                    });
                 }
             }
-            let flags: Parameters<typeof logic['handler']>[0]['flags'] = {}
+            const flags: Parameters<(typeof logic)['handler']>[0]['flags'] = {};
             const result = await logic.handler({
                 activeUser: user,
                 payload: resultObject as any,
@@ -193,8 +209,8 @@ export const zodApiMethod = <
                                 details: z.treeifyError(resultParsed.error),
                                 message: resultParsed.error.message
                             },
-                            stage: "result parsing",
-                            success: false,
+                            stage: 'result parsing',
+                            success: false
                         },
                         { status: 500 }
                     );
@@ -206,7 +222,7 @@ export const zodApiMethod = <
                         result: resultParsed.data as any,
                         requestPayload: resultObject as any,
                         flags
-                    })
+                    });
                 }
                 return NextResponse.json<SuccessResponse<unknown>>(
                     resultParsed.data,
@@ -220,44 +236,46 @@ export const zodApiMethod = <
             );
         } catch (e) {
             if (isApplicationError(e)) {
-                return NextResponse.json<ErrorResponse>({
-                    error: { message: e.error.message },
-                    stage: 'api handler executing',
-                    success: false
-                }, { status: e.error.statusCode ?? 500 })
+                return NextResponse.json<ErrorResponse>(
+                    {
+                        error: { message: e.error.message },
+                        stage: 'api handler executing',
+                        success: false
+                    },
+                    { status: e.error.statusCode ?? 500 }
+                );
             }
-            if (typeof e === "string") {
+            if (typeof e === 'string') {
                 return NextResponse.json<ErrorResponse>(
                     {
                         error: { message: e },
-                        stage: "api handler executing",
-                        success: false,
+                        stage: 'api handler executing',
+                        success: false
                     },
                     { status: 500 }
                 );
             }
-            if (typeof e === "object" && e instanceof Error) {
+            if (typeof e === 'object' && e instanceof Error) {
                 return NextResponse.json<ErrorResponse>(
                     {
                         error: { message: e.message },
-                        stage: "api handler executing",
-                        success: false,
+                        stage: 'api handler executing',
+                        success: false
                     },
                     { status: 500 }
                 );
             }
             return NextResponse.json<ErrorResponse>(
                 {
-                    error: { message: "unknown error" },
-                    stage: "api handler executing",
-                    success: false,
+                    error: { message: 'unknown error' },
+                    stage: 'api handler executing',
+                    success: false
                 },
                 { status: 500 }
             );
         }
     };
 };
-
 
 export const zodApiMethod_DEPRECATED = <
     QueryParams extends ZodObjectData | undefined,
@@ -281,25 +299,29 @@ export const zodApiMethod_DEPRECATED = <
         req: NextRequest
     ) => Promise<
         ReturnData extends ZodObjectData
-        ? z.infer<typeof returnDataSchema>
-        : void
+            ? z.infer<typeof returnDataSchema>
+            : void
     >,
-    beforeHandler?: (payload: z.infer<typeof queryParamsSchema> &
-        z.infer<typeof bodyParamsSchema> & {
-            activeUser: { id: string; email: string };
-        }) => Promise<void>,
-    onSuccess?: (payload: z.infer<typeof queryParamsSchema> &
-        z.infer<typeof bodyParamsSchema> & {
-            activeUser: { id: string; email: string };
-        } & { result: z.infer<typeof returnDataSchema> }) => Promise<void>
+    beforeHandler?: (
+        payload: z.infer<typeof queryParamsSchema> &
+            z.infer<typeof bodyParamsSchema> & {
+                activeUser: { id: string; email: string };
+            }
+    ) => Promise<void>,
+    onSuccess?: (
+        payload: z.infer<typeof queryParamsSchema> &
+            z.infer<typeof bodyParamsSchema> & {
+                activeUser: { id: string; email: string };
+            } & { result: z.infer<typeof returnDataSchema> }
+    ) => Promise<void>
 ) => {
     return async (request: NextRequest) => {
         const user = await getCurrentUser();
         if (!user) {
             return NextResponse.json<ErrorResponse>({
-                error: { message: "Active user was not found" },
+                error: { message: 'Active user was not found' },
                 success: false,
-                stage: "user obtaining",
+                stage: 'user obtaining'
             });
         }
         let resultObject = { activeUser: user };
@@ -316,8 +338,8 @@ export const zodApiMethod_DEPRECATED = <
                             details: z.treeifyError(queryParamsParsed.error),
                             message: queryParamsParsed.error.message
                         },
-                        stage: "query params parsing",
-                        success: false,
+                        stage: 'query params parsing',
+                        success: false
                     },
                     { status: 400 }
                 );
@@ -334,8 +356,8 @@ export const zodApiMethod_DEPRECATED = <
                             details: z.treeifyError(bodyParsed.error),
                             message: bodyParsed.error.message
                         },
-                        stage: "request body parsing",
-                        success: false,
+                        stage: 'request body parsing',
+                        success: false
                     },
                     { status: 400 }
                 );
@@ -344,7 +366,7 @@ export const zodApiMethod_DEPRECATED = <
         }
         try {
             if (beforeHandler) {
-                await beforeHandler(resultObject as any)
+                await beforeHandler(resultObject as any);
             }
             const result = await handler(
                 resultObject as Parameters<typeof handler>[0],
@@ -359,14 +381,14 @@ export const zodApiMethod_DEPRECATED = <
                                 details: z.treeifyError(resultParsed.error),
                                 message: resultParsed.error.message
                             },
-                            stage: "result parsing",
-                            success: false,
+                            stage: 'result parsing',
+                            success: false
                         },
                         { status: 500 }
                     );
                 }
                 if (onSuccess) {
-                    onSuccess({ ...resultObject, result } as any)
+                    onSuccess({ ...resultObject, result } as any);
                 }
                 return NextResponse.json<SuccessResponse<unknown>>(
                     resultParsed.data,
@@ -380,37 +402,40 @@ export const zodApiMethod_DEPRECATED = <
             );
         } catch (e) {
             if (isApplicationError(e)) {
-                return NextResponse.json<ErrorResponse>({
-                    error: { message: e.error.message },
-                    stage: 'api handler executing',
-                    success: false
-                }, { status: e.error.statusCode ?? 500 })
+                return NextResponse.json<ErrorResponse>(
+                    {
+                        error: { message: e.error.message },
+                        stage: 'api handler executing',
+                        success: false
+                    },
+                    { status: e.error.statusCode ?? 500 }
+                );
             }
-            if (typeof e === "string") {
+            if (typeof e === 'string') {
                 return NextResponse.json<ErrorResponse>(
                     {
                         error: { message: e },
-                        stage: "api handler executing",
-                        success: false,
+                        stage: 'api handler executing',
+                        success: false
                     },
                     { status: 500 }
                 );
             }
-            if (typeof e === "object" && e instanceof Error) {
+            if (typeof e === 'object' && e instanceof Error) {
                 return NextResponse.json<ErrorResponse>(
                     {
                         error: { message: e.message },
-                        stage: "api handler executing",
-                        success: false,
+                        stage: 'api handler executing',
+                        success: false
                     },
                     { status: 500 }
                 );
             }
             return NextResponse.json<ErrorResponse>(
                 {
-                    error: { message: "unknown error" },
-                    stage: "api handler executing",
-                    success: false,
+                    error: { message: 'unknown error' },
+                    stage: 'api handler executing',
+                    success: false
                 },
                 { status: 500 }
             );
@@ -418,17 +443,24 @@ export const zodApiMethod_DEPRECATED = <
     };
 };
 
-export type ZodControllerSchemas = Record<string, ZodAPISchemas>
+export type ZodControllerSchemas = Record<string, ZodAPISchemas>;
 
-export type ZodAPIController_DEPRECATED<Schemas extends Record<string, { body: unknown, query: unknown, response: unknown }>> = {
-    [k in keyof Schemas]: ZodAPIMethod<Schemas[k]>
-}
-
+export type ZodAPIController_DEPRECATED<
+    Schemas extends Record<
+        string,
+        { body: unknown; query: unknown; response: unknown }
+    >
+> = {
+    [k in keyof Schemas]: ZodAPIMethod<Schemas[k]>;
+};
 
 export type ZodController<
-    Schemas extends Record<string, { body: unknown, query: unknown, response: unknown }>,
+    Schemas extends Record<
+        string,
+        { body: unknown; query: unknown; response: unknown }
+    >,
     DTOs extends Record<string, unknown> | undefined = undefined
 > = {
-    endpoints: { [k in keyof Schemas]: ZodAPIMethod<Schemas[k]> },
-    DTOs: DTOs extends undefined ? {} : DTOs
-}
+    endpoints: { [k in keyof Schemas]: ZodAPIMethod<Schemas[k]> };
+    DTOs: DTOs extends undefined ? {} : DTOs;
+};
