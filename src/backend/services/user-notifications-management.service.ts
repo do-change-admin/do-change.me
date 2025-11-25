@@ -3,6 +3,7 @@ import { StoreTokens } from "../di-containers/tokens.di-container";
 import type { NotificationStore } from "../stores/notification/notification.store";
 import z from "zod";
 import { X } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
+import { prismaClient } from "../infrastructure";
 
 type UserNotificationPayload = z.infer<typeof UserNotificationsManagementService.notificationPayloadSchema>
 
@@ -22,6 +23,11 @@ export class UserNotificationsManagementService {
         const data = await this.notifications.list({}, { pageSize: 1000, zeroBasedIndex: 0 })
 
         return data
+    }
+
+    availableUsers = () => {
+        // ! TODO - extract in user store !
+        return prismaClient.user.findMany({ select: { id: true, email: true } })
     }
 
     notify = async ({ message, title }: UserNotificationPayload) => {

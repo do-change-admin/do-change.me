@@ -6,10 +6,10 @@ export const AddNotificationLayout: AddNotificationProps['views']['Layout'] = ({
     levelSelect,
     messageInput,
     titleInput,
-    userIdInput
+    userSelect
 }) => {
     return <div className={styles.container}>
-        <div>UserID: {userIdInput}</div>
+        <div>User: {userSelect}</div>
         <div>Title: {titleInput}</div>
         <div>Message: {messageInput}</div>
         <div>Level: {levelSelect}</div>

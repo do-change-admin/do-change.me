@@ -23,6 +23,12 @@ const schemas = {
         query: undefined,
         response: z.object({ items: z.array(Notification.modelSchema.extend({ userId: z.string().nonempty() })) }),
         body: undefined,
+    },
+    
+    AvailableUsers_GET: {
+        query: undefined,
+        response: z.object({ data: z.array(z.object({ id: z.string(), email: z.string() })) }),
+        body: undefined
     }
 } satisfies ZodControllerSchemas
 
@@ -56,6 +62,15 @@ export class UserNotificationsManagementController {
             const items = await service.all()
 
             return { items }
+        }
+    })
+
+    AvaliableUsers_GET = zodApiMethod(schemas.AvailableUsers_GET, {
+        handler: async () => {
+            const service = this.serviceFactory(' ')
+            const data = await service.availableUsers()
+
+            return { data }
         }
     })
 }

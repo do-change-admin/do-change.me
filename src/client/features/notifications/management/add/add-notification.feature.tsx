@@ -1,7 +1,7 @@
 import type { NotificationLevel } from "@/value-objects/notification.value-object"
 import { useState, type FC, type ReactNode } from "react"
 import { Select, Input, Button } from "@/client/components/_ui"
-import { useNotificationAdding } from "./add-notification.feature.api"
+import { useAvailableUsers, useNotificationAdding } from "./add-notification.feature.api"
 import { MutationStatus } from "@tanstack/react-query"
 
 export type AddNotificationProps = {
@@ -15,9 +15,9 @@ export type AddNotificationProps = {
              */
             status: MutationStatus,
             /**
-             * Инпут с id пользователя.
+             * Селект с доступными пользователями.
              */
-            userIdInput: ReactNode,
+            userSelect: ReactNode,
             /**
              * Инпут с тайтлом уведоления.
              */
@@ -45,6 +45,7 @@ export const AddNotification: FC<AddNotificationProps> = ({ views }) => {
     const { Layout } = views
 
     const { mutate, status } = useNotificationAdding()
+    const { data: users, isFetching } = useAvailableUsers()
 
     const [userId, setUserId] = useState('')
     const [title, setTitle] = useState('')
@@ -60,7 +61,11 @@ export const AddNotification: FC<AddNotificationProps> = ({ views }) => {
 
     const messageInput = <Input value={message} onChange={(x) => { setMessage(x.target.value) }} />
     const titleInput = <Input value={title} onChange={(x) => { setTitle(x.target.value) }} />
-    const userIdInput = <Input value={userId} onChange={(x) => { setUserId(x.target.value) }} />
+    const userSelect = <Select
+        value={userId}
+        data={users?.data?.map(x => ({ label: x.email, value: x.id })) ?? []}
+        onChange={(x) => { setUserId(x || "") }}
+    />
 
     const levelSelect = <Select
         value={level}
@@ -86,6 +91,6 @@ export const AddNotification: FC<AddNotificationProps> = ({ views }) => {
         levelSelect={levelSelect}
         messageInput={messageInput}
         titleInput={titleInput}
-        userIdInput={userIdInput}
+        userSelect={userSelect}
     />
 }
