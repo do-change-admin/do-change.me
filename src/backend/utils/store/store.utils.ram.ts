@@ -210,7 +210,7 @@ export const RAMStore = <Store>(options?: {
                 this.specificSearchLogic(x, searchPayload)
             );
 
-            this.data = this.data.filter((x, i) => i !== index);
+            this.data = this.data.filter((_x, i) => i !== index);
 
             return { success: index > -1 };
         };
