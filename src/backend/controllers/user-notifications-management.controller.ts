@@ -27,7 +27,7 @@ const schemas = {
     
     AvailableUsers_GET: {
         query: undefined,
-        response: z.object({ data: z.array(z.object({ id: z.string(), email: z.string() })) }),
+        response: z.object({ data: z.array(z.object({ id: z.string(), email: z.string(), firstName: z.string().nullable(), lastName: z.string().nullable() })) }),
         body: undefined
     }
 } satisfies ZodControllerSchemas

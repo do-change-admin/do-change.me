@@ -27,7 +27,7 @@ export class UserNotificationsManagementService {
 
     availableUsers = () => {
         // ! TODO - extract in user store !
-        return prismaClient.user.findMany({ select: { id: true, email: true } })
+        return prismaClient.user.findMany({ select: { id: true, email: true, firstName: true, lastName: true } })
     }
 
     notify = async ({ message, title }: UserNotificationPayload) => {

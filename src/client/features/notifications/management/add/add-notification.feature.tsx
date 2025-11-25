@@ -45,7 +45,7 @@ export const AddNotification: FC<AddNotificationProps> = ({ views }) => {
     const { Layout } = views
 
     const { mutate, status } = useNotificationAdding()
-    const { data: users, isFetching } = useAvailableUsers()
+    const { data: users } = useAvailableUsers()
 
     const [userId, setUserId] = useState('')
     const [title, setTitle] = useState('')
@@ -63,7 +63,7 @@ export const AddNotification: FC<AddNotificationProps> = ({ views }) => {
     const titleInput = <Input value={title} onChange={(x) => { setTitle(x.target.value) }} />
     const userSelect = <Select
         value={userId}
-        data={users?.data?.map(x => ({ label: x.email, value: x.id })) ?? []}
+        data={users?.data?.map(x => ({ label: `${x.firstName} ${x.lastName} (${x.email})`, value: x.id })) ?? []}
         onChange={(x) => { setUserId(x || "") }}
     />
 
