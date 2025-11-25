@@ -4,12 +4,12 @@ import { StoreTokens, ProviderTokens } from './tokens.di-container'
 import { registerServices } from './register-services'
 import { registerControllers } from './register-controllers'
 import { NotificationStore } from '../stores/notification/notification.store'
-import { NotificationInMemoryStore } from '../stores/notification/notification.in-memory-store'
+import { NotificationRAMStore } from '../stores/notification/notification.ram.store'
 
 const container = new Container()
 
 const registerDataProviders = () => {
-    const d = new NotificationInMemoryStore()
+    const d = new NotificationRAMStore()
     container
         .bind<DataProviders.SyndicationRequests.Interface>(StoreTokens.syndicationRequests)
         .to(DataProvidersImplemetations.Prisma.SyndicationRequests)

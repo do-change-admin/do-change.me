@@ -4,7 +4,7 @@ import { StoreTokens, ProviderTokens } from './tokens.di-container'
 import { registerServices } from './register-services'
 import { registerControllers } from './register-controllers'
 import { NotificationStore } from '../stores/notification/notification.store'
-import { NotificationInMemoryStore } from '../stores/notification/notification.in-memory-store'
+import { NotificationRAMStore } from '../stores/notification/notification.ram.store'
 
 const container = new Container()
 
@@ -26,7 +26,7 @@ const registerDataProviders = () => {
         .to(DataProvidersImplemetations.API.PicturesInVercelBlob)
     container
         .bind<NotificationStore>(StoreTokens.notifications)
-        .to(NotificationInMemoryStore).inSingletonScope()
+        .to(NotificationRAMStore).inSingletonScope()
 }
 
 const registerFunctionProviders = () => {

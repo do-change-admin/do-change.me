@@ -1,22 +1,24 @@
-import { NotificationModel } from '@/value-objects/notification.value-object'
-import { ActionsPayload, Models, CRUDStore, SearchPayload } from '../helpers/abstract-models.store-helpers'
-import { Id, UserId } from '@/backend/utils/shared-models.utils'
+import z from 'zod'
+import { ZodCRUDStore, ZodStoreSchemas } from '@/backend/utils/store/store.utils.zod'
+import { Notification } from '@/value-objects/notification.value-object'
 
-// ITEM CONTRACTS
-export type NotificationList = NotificationModel & Id & UserId
-export type NotificationDetails = NotificationList
+const itemSchema = Notification.modelSchema.extend({ id: z.string(), userId: z.string() })
 
-// SEARCH CONTRACTS
-export type FindNotificationPayload = Id
-export type FindNotificationsPayload = Partial<UserId & { seen: boolean }>
+export const notificationStoreSchemas = {
+    models: {
+        list: itemSchema,
+        details: itemSchema,
+    },
 
-// ACTION CONTRACTS
-export type CreateNotificationPayload = Omit<NotificationDetails, 'id' | 'seen'>
-export type UpdateNotificationPayload = Partial<Pick<NotificationDetails, 'seen' | 'level'>>
+    searchPayload: {
+        list: itemSchema.pick({ userId: true, seen: true }).partial(),
+        specific: itemSchema.pick({ id: true }),
+    },
 
-// DATA PROVIDER INTERFACE
-export type NotificationStore = CRUDStore<
-    Models<NotificationList, NotificationDetails>,
-    SearchPayload<FindNotificationsPayload, FindNotificationPayload>,
-    ActionsPayload<CreateNotificationPayload, UpdateNotificationPayload>
->
+    actionsPayload: {
+        create: itemSchema.omit({ id: true, seen: true }),
+        update: itemSchema.pick({ seen: true, level: true }).partial(),
+    },
+} satisfies ZodStoreSchemas
+
+export type NotificationStore = ZodCRUDStore<typeof notificationStoreSchemas>

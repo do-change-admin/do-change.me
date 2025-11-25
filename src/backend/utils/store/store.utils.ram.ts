@@ -1,39 +1,30 @@
 import { injectable } from "inversify";
 import { v4 } from "uuid";
-import { CRUDStore } from "./abstract-models.store-helpers";
+import { CRUDStore, StoreTypes } from "./store.utils.shared-models";
 
-type ExtractCRUDParams<T> =
-    T extends {
-        list: (search: infer SList, pagination: any) => Promise<Array<infer MList>>;
-        details: (search: infer SDetail) => Promise<infer MDetail>;
-        create: (payload: infer ACreate) => Promise<any>;
-        updateOne: (search: any, payload: infer AUpdate) => Promise<any>;
-        deleteOne: (payload: any) => Promise<any>;
-    }
-    ? {
-        Models: { list: NonNullable<MList>; detail: NonNullable<MDetail> };
-        SearchPayload: { list: SList; specific: SDetail };
-        ActionsPayload: { create: ACreate; update: AUpdate };
-    }
-    : never;
-
-export const newInMemoryStore = <Store>(options?: {
+export const RAMStore = <Store>(options?: {
     searchLogic?: {
-        list?: (entity: ExtractCRUDParams<Store>['Models']['detail'], pattern: ExtractCRUDParams<Store>['SearchPayload']['list']) => boolean,
-        specific?: (entity: ExtractCRUDParams<Store>['Models']['detail'], pattern: ExtractCRUDParams<Store>['SearchPayload']['specific']) => boolean,
+        list?: (entity: StoreTypes<Store>['details'], pattern: StoreTypes<Store>['findListPayload']) => boolean,
+        specific?: (entity: StoreTypes<Store>['details'], pattern: StoreTypes<Store>['findOnePayload']) => boolean,
     },
     mappers?: {
-        detailToList?: (details: ExtractCRUDParams<Store>['Models']['detail']) => ExtractCRUDParams<Store>['Models']['list'],
-        createPayloadToDetail?: (details: ExtractCRUDParams<Store>['ActionsPayload']['create']) => ExtractCRUDParams<Store>['Models']['detail'],
-        updatePayloadToDetail?: (prevValue: ExtractCRUDParams<Store>['Models']['detail'], update: ExtractCRUDParams<Store>['ActionsPayload']['update']) => ExtractCRUDParams<Store>['Models']['detail']
+        detailToList?: (details: StoreTypes<Store>['details']) => StoreTypes<Store>['listModel'],
+        createPayloadToDetail?: (details: StoreTypes<Store>['createPayload']) => StoreTypes<Store>['details'],
+        updatePayloadToDetail?: (prevValue: StoreTypes<Store>['details'], update: StoreTypes<Store>['updatePayload']) => StoreTypes<Store>['details']
     },
-    initialData?: Array<ExtractCRUDParams<Store>['Models']['detail']>
+    initialData?: Array<StoreTypes<Store>['details']>
 }) => {
-    @injectable()
-    class InMemoryCRUDProvider implements CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']> {
-        protected data = [] as Array<ExtractCRUDParams<Store>['Models']['detail']>
+    type StoreContract = CRUDStore<
+        { list: StoreTypes<Store>['listModel'], detail: StoreTypes<Store>['details'] },
+        { list: StoreTypes<Store>['findListPayload'], specific: StoreTypes<Store>['findOnePayload'] },
+        { create: StoreTypes<Store>['createPayload'], update: StoreTypes<Store>['updatePayload'] }
+    >
 
-        protected listSearchLogic = (entity: ExtractCRUDParams<Store>['Models']['detail'], pattern: ExtractCRUDParams<Store>['SearchPayload']['list']) => {
+    @injectable()
+    class RAMStore implements StoreContract {
+        protected data = [] as Array<StoreTypes<Store>['details']>
+
+        protected listSearchLogic = (entity: StoreTypes<Store>['details'], pattern: StoreTypes<Store>['findListPayload']) => {
             const patternKeys = Object.entries(pattern as object).filter(([_, value]) => !!value).map(x => x[0]);;
             const entityAsObject = entity as object
 
@@ -42,7 +33,7 @@ export const newInMemoryStore = <Store>(options?: {
             })
         }
 
-        protected specificSearchLogic = (entity: ExtractCRUDParams<Store>['Models']['detail'], pattern: ExtractCRUDParams<Store>['SearchPayload']['specific']) => {
+        protected specificSearchLogic = (entity: StoreTypes<Store>['details'], pattern: StoreTypes<Store>['findOnePayload']) => {
             const patternKeys = Object.entries(pattern as object).filter(([_, value]) => !!value).map(x => x[0]);
             const entityAsObject = entity as object
 
@@ -51,18 +42,18 @@ export const newInMemoryStore = <Store>(options?: {
             })
         }
 
-        protected mapDetailToList = (entity: ExtractCRUDParams<Store>['Models']['detail']): ExtractCRUDParams<Store>['Models']['list'] => {
-            return entity as ExtractCRUDParams<Store>['Models']['list']
+        protected mapDetailToList = (entity: StoreTypes<Store>['details']): StoreTypes<Store>['listModel'] => {
+            return entity as StoreTypes<Store>['listModel']
         }
 
-        protected mapCreatePayloadToDetail = (payload: ExtractCRUDParams<Store>['ActionsPayload']['create']): ExtractCRUDParams<Store>['Models']['detail'] => {
+        protected mapCreatePayloadToDetail = (payload: StoreTypes<Store>['createPayload']): StoreTypes<Store>['details'] => {
             return {
                 ...payload as object,
                 id: v4()
             }
         }
 
-        protected mapUpdatePayloadToDetail = (prevValue: ExtractCRUDParams<Store>['Models']['detail'], update: ExtractCRUDParams<Store>['ActionsPayload']['update']): ExtractCRUDParams<Store>['Models']['detail'] => {
+        protected mapUpdatePayloadToDetail = (prevValue: StoreTypes<Store>['details'], update: StoreTypes<Store>['updatePayload']): StoreTypes<Store>['details'] => {
             return {
                 ...prevValue as object,
                 ...update as object
@@ -101,8 +92,7 @@ export const newInMemoryStore = <Store>(options?: {
             }
         }
 
-        list: CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']>['list'] = async (searchPayload, pagination) => {
-            console.log(this.data)
+        list: StoreContract['list'] = async (searchPayload, pagination) => {
             const afterFiltration = this.data.filter((x) => this.listSearchLogic(x, searchPayload))
             const afterPagination = afterFiltration.filter((_, i) => {
                 return i >= pagination.pageSize * pagination.zeroBasedIndex && i < (pagination.zeroBasedIndex + 1) * pagination.pageSize
@@ -110,7 +100,7 @@ export const newInMemoryStore = <Store>(options?: {
             return afterPagination.map((x) => this.mapDetailToList(x))
         }
 
-        details: CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']>['details'] = async (searchPayload) => {
+        details: StoreContract['details'] = async (searchPayload) => {
             const details = this.data.find(x => this.specificSearchLogic(x, searchPayload))
 
             if (!details) {
@@ -120,13 +110,13 @@ export const newInMemoryStore = <Store>(options?: {
             return details
         };
 
-        create: CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']>['create'] = async (payload) => {
+        create: StoreContract['create'] = async (payload) => {
             const newItem = this.mapCreatePayloadToDetail(payload)
             this.data = this.data.concat(newItem)
             return { id: (newItem as { id: string }).id }
         };
 
-        updateOne: CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']>['updateOne'] = async (searchPayload, updatePayload) => {
+        updateOne: StoreContract['updateOne'] = async (searchPayload, updatePayload) => {
             const index = this.data.findIndex((x) => this.specificSearchLogic(x, searchPayload))
 
             this.data = this.data.map((x, i) => {
@@ -140,7 +130,7 @@ export const newInMemoryStore = <Store>(options?: {
             return { success: index > -1 }
         };
 
-        deleteOne: CRUDStore<ExtractCRUDParams<Store>['Models'], ExtractCRUDParams<Store>['SearchPayload'], ExtractCRUDParams<Store>['ActionsPayload']>['deleteOne'] = async (searchPayload) => {
+        deleteOne: StoreContract['deleteOne'] = async (searchPayload) => {
             const index = this.data.findIndex((x) => this.specificSearchLogic(x, searchPayload))
 
             this.data = this.data.filter((x, i) => i !== index)
@@ -148,5 +138,5 @@ export const newInMemoryStore = <Store>(options?: {
             return { success: index > -1 }
         }
     }
-    return InMemoryCRUDProvider
+    return RAMStore
 }

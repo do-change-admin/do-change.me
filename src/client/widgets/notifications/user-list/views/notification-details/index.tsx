@@ -9,7 +9,9 @@ export const NotificationDetails: UserNotificationDetailsProps['views']['Notific
     return <Modal 
         opened 
         zIndex={99999999999} 
-        title={<h3>{currentItem.level}: {currentItem.title}</h3>} 
+        title={<h3>{currentItem.title}</h3>}
+        centered
+        radius='lg'
         onClose={() => {
             if (!seen.status) {
                 seen.read()
@@ -17,7 +19,7 @@ export const NotificationDetails: UserNotificationDetailsProps['views']['Notific
             clearSelectedItem()
         }}
     >
-        {currentItem.message}
+            {currentItem.message}
     </Modal>
 
 }
