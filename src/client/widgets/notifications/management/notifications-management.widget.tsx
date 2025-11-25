@@ -7,6 +7,10 @@ import { AddNotificationLayout, NotificationsListLayout, NotificationRow } from 
 
 export type NotificationsManagementWidgetProps = {}
 
+/**
+ * Управление уведомлениями пользователей - точечное добавление уведомлений
+ * и список уведомлений всех пользователей.
+ */
 export const NotificationsManagementWidget: FC<NotificationsManagementWidgetProps> = () => {
     return <div className={styles.container}>
         <h3 style={{textAlign: 'center'}}>Notify user</h3>

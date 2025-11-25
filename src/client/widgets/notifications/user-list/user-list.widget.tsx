@@ -7,6 +7,9 @@ import { NotificationsLayout, NotificationListItem, NotificationDetails } from '
 
 export type UserListWidgetProps = {}
 
+/**
+ * Список уведомлений текущего пользователя.
+ */
 export const UserListWidget: FC<UserListWidgetProps> = () => {
     const { count, isFetching } = useUnreadNotificationsCount();
     const [opened, { open, close }] = useDisclosure(false);
@@ -47,7 +50,6 @@ export const UserListWidget: FC<UserListWidgetProps> = () => {
             }} />
         </Drawer>
         <UserNotificationDetails views={{
-            NoSelectedItemDetails: () => undefined,
             NotificationDetails
         }} />
     </>

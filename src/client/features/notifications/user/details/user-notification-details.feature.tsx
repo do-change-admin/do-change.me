@@ -18,7 +18,7 @@ export type UserNotificationDetailsProps = {
         /**
          * Вёрстка, которая будет показываться, если никакого уведомления не выбрано для детального просмотра.
          */
-        NoSelectedItemDetails: FC
+        NoSelectedItemDetails?: FC
     }
 }
 
@@ -38,7 +38,7 @@ export const UserNotificationDetails: FC<UserNotificationDetailsProps> = ({
     }
 
     if (!currentDetails) {
-        return <NoSelectedItemDetails />
+        return NoSelectedItemDetails ? <NoSelectedItemDetails /> : undefined
     }
 
     return <NotificationDetails 
