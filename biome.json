@@ -12,7 +12,7 @@
     "formatter": {
         "enabled": true,
         "indentStyle": "space",
-        "lineWidth": 80,
+        "lineWidth": 140,
         "indentWidth": 4
     },
     "linter": {
@@ -34,8 +34,7 @@
                     "fix": "safe"
                 },
                 "noUnusedFunctionParameters": {
-                    "level": "error",
-                    "fix": "safe"
+                    "level": "error"                
                 }
             },
             "complexity": {
