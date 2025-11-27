@@ -3,16 +3,16 @@ import { Container } from 'inversify'
 import { DIStores, DIProviders } from './tokens.di-container'
 import { registerServices } from './register-services'
 import { registerControllers } from './register-controllers'
-import { NotificationStore } from '../stores/interfaces/notification.store'
-import { NotificationInMemoryStore } from '../stores/implementations/in-memory/notification.in-memory-store'
 import { PicturesS3DataProvider } from '../providers/data/implemetations/api/pictures.s3-data-provider'
 import { S3Client } from '../providers/s3-client/s3-client.provider'
 import { S3ClientAWSSDK } from '../providers/s3-client/s3-client.provider.aws-sdk'
 import { RemotePicturesStore } from '../stores/remote-pictures/remote-pictures.store'
 import { RemotePicturesS3ClientStore } from '../stores/remote-pictures/remote-pictures.store.s3-client'
+import { NotificationStore } from '../stores/notification/notification.store'
+import { NotificationPrismaStore } from '../stores/notification/notification.prisma.store'
 
 
-const container = new Container()
+const container = new Container();
 
 const registerDataProviders = () => {
     container
@@ -32,7 +32,7 @@ const registerDataProviders = () => {
         .to(DataProvidersImplemetations.API.PicturesInPublicFolder)
     container
         .bind<NotificationStore>(DIStores.notifications)
-        .to(NotificationInMemoryStore).inSingletonScope()
+        .to(NotificationPrismaStore).inSingletonScope()
     container
         .bind<DataProviders.Pictures.Interface>(DIStores.reserve_pictures)
         .to(PicturesS3DataProvider)
@@ -62,4 +62,4 @@ registerFunctionProviders()
 registerServices(container)
 registerControllers(container)
 
-export { container as devContainer }
+export { container as devContainer };

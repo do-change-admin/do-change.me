@@ -1,8 +1,8 @@
-import { NotificationStore } from '../../interfaces/notification.store'
-import { newInMemoryStore } from '../../helpers/in-memory-store.store-helpers'
-import { v4 } from 'uuid'
+import { v4 } from 'uuid';
+import { RAMStore } from '@/backend/utils/store/store.utils.ram';
+import type { NotificationStore } from './notification.store';
 
-const NotificationInMemoryStore = newInMemoryStore<NotificationStore>({
+const NotificationRAMStore = RAMStore<NotificationStore>({
     mappers: {
         createPayloadToDetail: (payload) => {
             return {
@@ -12,9 +12,9 @@ const NotificationInMemoryStore = newInMemoryStore<NotificationStore>({
                 seen: false,
                 title: payload.title,
                 userId: payload.userId
-            }
+            };
         }
     }
-})
+});
 
-export { NotificationInMemoryStore }
+export { NotificationRAMStore };

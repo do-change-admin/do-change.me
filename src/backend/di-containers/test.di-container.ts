@@ -3,12 +3,12 @@ import { Container } from 'inversify'
 import { DIStores, DIProviders } from './tokens.di-container'
 import { registerServices } from './register-services'
 import { registerControllers } from './register-controllers'
-import { NotificationStore } from '../stores/interfaces/notification.store'
-import { NotificationInMemoryStore } from '../stores/implementations/in-memory/notification.in-memory-store'
 import { S3Client } from '../providers/s3-client/s3-client.provider'
 import { S3ClientAWSSDK } from '../providers/s3-client/s3-client.provider.aws-sdk'
 import { RemotePicturesStore } from '../stores/remote-pictures/remote-pictures.store'
 import { RemotePicturesS3ClientStore } from '../stores/remote-pictures/remote-pictures.store.s3-client'
+import { NotificationRAMStore } from '../stores/notification/notification.ram.store'
+import { NotificationStore } from '../stores/notification/notification.store'
 
 const container = new Container()
 
@@ -34,10 +34,13 @@ const registerDataProviders = () => {
 
     container
         .bind<NotificationStore>(DIStores.notifications)
-        .to(NotificationInMemoryStore).inSingletonScope()
+        .to(NotificationRAMStore).inSingletonScope()
 
     container.bind<RemotePicturesStore>(DIStores.remotePictures)
         .to(RemotePicturesS3ClientStore)
+
+    container.bind<NotificationStore>(DIStores.notifications)
+        .to(NotificationRAMStore).inSingletonScope()
 }
 
 const registerFunctionProviders = () => {

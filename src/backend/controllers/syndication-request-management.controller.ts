@@ -1,4 +1,4 @@
-import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
+import { ZodAPIController_DEPRECATED, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
 import { ServiceTokens } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
 import { SyndicationRequestManagementService } from "@/backend/services/syndication-request-management.service";
@@ -89,4 +89,4 @@ export class SyndicationRequestManagementController {
     })
 }
 
-export type SyndicationRequestManagementAPI = ZodAPIController<typeof schemas>
+export type SyndicationRequestManagementAPI = ZodAPIController_DEPRECATED<typeof schemas>

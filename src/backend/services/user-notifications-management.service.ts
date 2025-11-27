@@ -1,7 +1,8 @@
 import { inject, injectable } from "inversify";
 import { DIStores } from "../di-containers/tokens.di-container";
-import type { NotificationStore } from "../stores/interfaces/notification.store";
+import type { NotificationStore } from "../stores/notification/notification.store";
 import z from "zod";
+import { prismaClient } from "../infrastructure";
 
 type UserNotificationPayload = z.infer<typeof UserNotificationsManagementService.notificationPayloadSchema>
 
@@ -17,9 +18,20 @@ export class UserNotificationsManagementService {
         private readonly userId: string,
     ) { }
 
+    all = async () => {
+        const data = await this.notifications.list({}, { pageSize: 1000, zeroBasedIndex: 0 })
+
+        return data
+    }
+
+    availableUsers = () => {
+        // ! TODO - extract in user store !
+        return prismaClient.user.findMany({ select: { id: true, email: true, firstName: true, lastName: true } })
+    }
+
     notify = async ({ message, title }: UserNotificationPayload) => {
         return await this.notifications.create({
-            level: 'warning',
+            level: 'info',
             message,
             title,
             userId: this.userId
@@ -28,7 +40,7 @@ export class UserNotificationsManagementService {
 
     notifyWithWarning = async ({ message, title }: UserNotificationPayload) => {
         return await this.notifications.create({
-            level: 'info',
+            level: 'warning',
             message,
             title,
             userId: this.userId

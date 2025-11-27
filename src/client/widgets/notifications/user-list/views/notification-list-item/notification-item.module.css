@@ -1,0 +1,22 @@
+.seenItem {
+    border: green;
+}
+
+.unseenItem {
+    border: red;
+}
+
+.warning {
+    font-weight: 500;
+    color: orange;
+}
+
+.error {
+    font-weight: 600;
+    text-decoration: underline;
+    background-color: red;
+}
+
+.info {
+    color: black
+}

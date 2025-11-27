@@ -5,9 +5,11 @@ import { FeatureKey } from "@/value-objects/feature-key.vo";
 import { DIContainer } from "@/backend/di-containers";
 import { DataProviders } from "@/backend/providers";
 import { DIStores } from "@/backend/di-containers/tokens.di-container";
+import { ServiceTokens } from "@/backend/di-containers/tokens.di-container";
 import { noSubscriptionGuard } from "@/backend/controllers/api-guards/no-subscription.api-guard";
 import { ActionsHistoryService } from "@/backend/services";
 import { VIN } from "@/value-objects/vin.value-object";
+import { type UserNotificationsManagementServiceFactory } from "@/backend/di-containers/register-services";
 
 const FROM_CACHE_FLAG = 'FROM_CACHE'
 
@@ -25,7 +27,7 @@ const schemas = {
 export type Method = ZodAPIMethod<typeof schemas>
 
 export const method = zodApiMethod(schemas, {
-    handler: async ({ payload: { vin }, flags }) => {
+    handler: async ({ payload: { vin }, flags, activeUser }) => {
         // TODO - вынести в сервис
         const reportsDataProvider = DIContainer()._context.get<DataProviders.VehicleHistoryReports.Interface>(
             DIStores.vehicleHistoryReports
