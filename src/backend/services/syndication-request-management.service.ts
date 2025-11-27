@@ -1,4 +1,4 @@
-import { StoreTokens } from "@/backend/di-containers/tokens.di-container";
+import { DIStores } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestActiveStatusNames, SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
 import { SyndicationRequest } from "@/entities/syndication-request.entity";
 import { DataProviders } from "@/backend/providers";
@@ -14,8 +14,8 @@ export class SyndicationRequestManagementService {
     static dtoSchema = SyndicationRequest.modelShema
 
     public constructor(
-        @inject(StoreTokens.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
-        @inject(StoreTokens.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface,
+        @inject(DIStores.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
+        @inject(DIStores.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface,
     ) { }
 
     requests = async (

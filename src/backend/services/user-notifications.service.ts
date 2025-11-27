@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { StoreTokens } from "../di-containers/tokens.di-container";
+import { DIStores } from "../di-containers/tokens.di-container";
 import { Notification } from "@/value-objects/notification.value-object";
 import z from "zod";
 import { ErrorFactory } from "@/value-objects/errors.value-object";
@@ -16,7 +16,7 @@ export class UserNotificationsService {
     })
 
     public constructor(
-        @inject(StoreTokens.notifications) private readonly notifications: NotificationStore,
+        @inject(DIStores.notifications) private readonly notifications: NotificationStore,
         private readonly userId: string
     ) { }
 

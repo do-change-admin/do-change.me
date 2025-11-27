@@ -26,6 +26,7 @@ export class PicturesS3DataProvider implements Interface {
                     Bucket: bucket,
                     Key: id,
                     Body: Buffer.from(await file.arrayBuffer()),
+                    // ContentType: ''
                 })
             );
 
@@ -45,8 +46,6 @@ export class PicturesS3DataProvider implements Interface {
             const signedUrl = await getSignedUrl(s3Client, command, {
                 expiresIn: 3600,
             });
-
-            // console.log(signedUrl, "SIGNED")
 
             return {
                 id,

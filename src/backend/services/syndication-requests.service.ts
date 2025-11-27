@@ -1,4 +1,4 @@
-import { StoreTokens } from "@/backend/di-containers/tokens.di-container";
+import { DIStores } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
 import { SyndicationRequest } from "@/entities/syndication-request.entity";
 import { DataProviders } from "@/backend/providers";
@@ -30,9 +30,9 @@ export class SyndicationRequestsService extends ZodService('Syndication requests
     })
 
     public constructor(
-        @inject(StoreTokens.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
-        @inject(StoreTokens.syndicationRequestDrafts) private readonly drafts: DataProviders.SyndicationRequestDrafts.Interface,
-        @inject(StoreTokens.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface,
+        @inject(DIStores.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
+        @inject(DIStores.syndicationRequestDrafts) private readonly drafts: DataProviders.SyndicationRequestDrafts.Interface,
+        @inject(DIStores.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface,
         private readonly userId: string
     ) {
         super()
@@ -63,60 +63,14 @@ export class SyndicationRequestsService extends ZodService('Syndication requests
         return items
     }
 
-    post = async (payload: Omit<CreateDataPayload, 'userId' | 'photoIds'> & { photos: File[] }) => {
-        let photoIds: string[] = []
-
-        for (const photo of payload.photos) {
-            const { id, success } = await this.pictures.add(photo)
-            if (success) {
-                photoIds.push(id)
-            }
-        }
-
+    post = async (payload: Omit<CreateDataPayload, 'userId'>) => {
         const { id } = await this.data.create({
             userId: this.userId,
-            photoIds,
             ...payload
         })
 
         return { id }
     }
-
-    addPhotos = this.method('addPhotos', {
-        handler: async ({ payload: { id, photos }, serviceError }) => {
-            console.log("HERE 1")
-            const details = await this.data.details({
-                id,
-                userId: this.userId
-            })
-
-            console.log(details, "details")
-            if (!details) {
-                throw serviceError({ error: 'No request was found', details: { id, userId: this.userId } })
-            }
-
-            let newPhotoIds = [] as string[]
-            console.log(photos)
-
-            for (const photo of photos) {
-                console.log("SSS")
-                const { id, success } = await this.pictures.add(photo)
-                console.log(id, success)
-                if (success) {
-                    newPhotoIds.push(id)
-                }
-            }
-
-            await this.data.updateOne({
-                id,
-                userId: this.userId
-            }, {
-                photoIds: newPhotoIds
-            })
-
-            return {}
-        }
-    })
 
     allFilters = async () => {
         const activeFilters = await this.data.filtersData(this.userId)

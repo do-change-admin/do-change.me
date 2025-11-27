@@ -1,5 +1,5 @@
 import { Container } from "inversify"
-import { StoreTokens, ServiceTokens } from "./tokens.di-container"
+import { DIStores, ServiceTokens } from "./tokens.di-container"
 import { DataProviders } from "@/backend/providers"
 import { SyndicationRequestsService } from "@/backend/services/syndication-requests.service"
 import { SyndicationRequestDraftsService } from "@/backend/services/syndication-request-drafts.service"
@@ -18,10 +18,10 @@ export const registerServices = (container: Container) => {
         bind<SyndicationRequestsServiceFactory>(ServiceTokens.syndicationRequestsFactory)
         .toFactory(ctx => {
             return (userId) => {
-                const dataProvider = ctx.get<DataProviders.SyndicationRequests.Interface>(StoreTokens.syndicationRequests)
-                const draftsDataProvider = ctx.get<DataProviders.SyndicationRequestDrafts.Interface>(StoreTokens.syndicationRequestDrafts)
+                const dataProvider = ctx.get<DataProviders.SyndicationRequests.Interface>(DIStores.syndicationRequests)
+                const draftsDataProvider = ctx.get<DataProviders.SyndicationRequestDrafts.Interface>(DIStores.syndicationRequestDrafts)
 
-                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(StoreTokens.reserve_pictures)
+                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(DIStores.reserve_pictures)
                 return new SyndicationRequestsService(
                     dataProvider,
                     draftsDataProvider,
@@ -35,10 +35,10 @@ export const registerServices = (container: Container) => {
         bind<SyndicationRequestDraftsServiceFactory>(ServiceTokens.syndicationRequestDraftsFactory)
         .toFactory(ctx => {
             return (userId) => {
-                const dataProvider = ctx.get<DataProviders.SyndicationRequestDrafts.Interface>(StoreTokens.syndicationRequestDrafts)
-                const requestsDataProvider = ctx.get<DataProviders.SyndicationRequests.Interface>(StoreTokens.syndicationRequests)
+                const dataProvider = ctx.get<DataProviders.SyndicationRequestDrafts.Interface>(DIStores.syndicationRequestDrafts)
+                const requestsDataProvider = ctx.get<DataProviders.SyndicationRequests.Interface>(DIStores.syndicationRequests)
 
-                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(StoreTokens.reserve_pictures)
+                const picturesDataProvider = ctx.get<DataProviders.Pictures.Interface>(DIStores.reserve_pictures)
                 return new SyndicationRequestDraftsService(
                     dataProvider,
                     requestsDataProvider,
@@ -56,7 +56,7 @@ export const registerServices = (container: Container) => {
         .bind<UserNotificationsServiceFactory>(ServiceTokens.userNotificationsFactory)
         .toFactory((ctx) => {
             return (userId) => {
-                const notifications = ctx.get<NotificationStore>(StoreTokens.notifications)
+                const notifications = ctx.get<NotificationStore>(DIStores.notifications)
                 return new UserNotificationsService(notifications, userId)
             }
         })
@@ -65,7 +65,7 @@ export const registerServices = (container: Container) => {
         .bind<UserNotificationsManagementServiceFactory>(ServiceTokens.userNotificationsManagementFactory)
         .toFactory((ctx) => {
             return (userId) => {
-                const notifications = ctx.get<NotificationStore>(StoreTokens.notifications)
+                const notifications = ctx.get<NotificationStore>(DIStores.notifications)
                 return new UserNotificationsManagementService(notifications, userId)
             }
         })

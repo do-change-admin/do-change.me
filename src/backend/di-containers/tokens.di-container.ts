@@ -1,16 +1,18 @@
-export const StoreTokens = {
+export const DIStores = {
     vehicleHistoryReports: Symbol.for("VEHICLE-HISTORY-REPORTS-DATA-PROVIDER"),
     vehicleHistoryReportsCache: Symbol.for("VEHICLE-HISTORY-REPORTS-CACHE-DATA-PROVIDER"),
     pictures: Symbol.for("PICTURES-DATA-PROVIDER"),
     reserve_pictures: Symbol(),
     syndicationRequests: Symbol.for("SYNDICATION-REQUESTS-DATA-PROVIDER"),
     syndicationRequestDrafts: Symbol.for("SYNDICATION-REQUEST-DRAFTS"),
-    notifications: Symbol.for("NOTIFICATIONS-DATA-PROVIDER")
+    notifications: Symbol.for("NOTIFICATIONS-DATA-PROVIDER"),
+    remotePictures: Symbol()
 }
 
-export const ProviderTokens = {
+export const DIProviders = {
     email: Symbol.for("EMAIL-FUNCTIONAL-PROVIDER"),
-    logger: Symbol.for("LOGGER-FUNCTIONAL-PROVIDER")
+    logger: Symbol.for("LOGGER-FUNCTIONAL-PROVIDER"),
+    s3Client: Symbol()
 }
 
 export const ServiceTokens = {

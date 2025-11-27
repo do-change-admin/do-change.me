@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { StoreTokens } from "../di-containers/tokens.di-container";
+import { DIStores } from "../di-containers/tokens.di-container";
 import type { NotificationStore } from "../stores/interfaces/notification.store";
 import z from "zod";
 
@@ -13,7 +13,7 @@ export class UserNotificationsManagementService {
     })
 
     public constructor(
-        @inject(StoreTokens.notifications) private readonly notifications: NotificationStore,
+        @inject(DIStores.notifications) private readonly notifications: NotificationStore,
         private readonly userId: string,
     ) { }
 

@@ -1,6 +1,6 @@
 import { ZodAPIController, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
 import { type SyndicationRequestDraftsServiceFactory, type SyndicationRequestsServiceFactory } from "@/backend/di-containers/register-services";
-import { ProviderTokens, ServiceTokens } from "@/backend/di-containers/tokens.di-container";
+import { DIProviders, DIStores, ServiceTokens } from "@/backend/di-containers/tokens.di-container";
 import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
 import { FunctionProviders } from "@/backend/providers";
 import { SyndicationRequestsService, syndicationRequestsServiceSchemas } from "@/backend/services/syndication-requests.service";
@@ -9,6 +9,7 @@ import { VIN } from "@/value-objects/vin.value-object";
 import { inject, injectable } from "inversify";
 import z from "zod";
 import { ZodController } from "../utils/zod-controller.utils";
+import { type RemotePicturesStore } from "../stores/remote-pictures/remote-pictures.store";
 
 const schemas = {
     GET: {
@@ -28,15 +29,16 @@ const schemas = {
         response: z.object({
             id: z.string()
         }),
-        query: z.object({
+        query: undefined,
+        body: z.object({
             make: z.string().nonempty(),
             mileage: z.coerce.number(),
             model: z.string().nonempty(),
             price: z.coerce.number(),
             vin: VIN.schema,
-            year: z.coerce.number()
-        }),
-        body: undefined
+            year: z.coerce.number(),
+            photoIds: z.array(z.string())
+        })
     },
 
     FromDraft_POST: {
@@ -59,9 +61,9 @@ const schemas = {
     },
 
     PATCH: {
-        body: undefined,
-        query: syndicationRequestsServiceSchemas.addPhotos.payload.pick({ id: true }),
-        response: undefined
+        body: z.object({ fileName: z.string(), fileType: z.string() }),
+        query: undefined,
+        response: z.object({ id: z.string(), uploadUrl: z.string() })
     }
 } satisfies ZodControllerSchemas
 
@@ -70,6 +72,7 @@ export class SyndicationRequestsController extends ZodController('Syndication re
     public constructor(
         @inject(ServiceTokens.syndicationRequestsFactory) private readonly serviceFactory: SyndicationRequestsServiceFactory,
         @inject(ServiceTokens.syndicationRequestDraftsFactory) private readonly draftsServiceFactory: SyndicationRequestDraftsServiceFactory,
+        @inject(DIStores.remotePictures) private readonly remotePicturesStore: RemotePicturesStore
     ) {
         super()
     }
@@ -83,13 +86,9 @@ export class SyndicationRequestsController extends ZodController('Syndication re
     })
 
     POST = this.loggedEndpoint('POST', {
-        handler: async ({ activeUser, payload, req }) => {
-            const formData = await req.formData()
-            const photos = formData.getAll('photos') as File[]
-
+        handler: async ({ activeUser, payload }) => {
             const service = this.serviceFactory(activeUser.id)
             return await service.post({
-                photos,
                 ...payload
             })
         }
@@ -110,11 +109,13 @@ export class SyndicationRequestsController extends ZodController('Syndication re
     })
 
     PATCH = this.loggedEndpoint('PATCH', {
-        handler: async ({ payload: { id }, activeUser, req }) => {
-            const service = this.serviceFactory(activeUser.id)
-            const formData = await req.formData()
-            const photos = formData.getAll('photos') as File[]
-            await service.addPhotos({ photos, id })
+        handler: async ({ payload: { fileName, fileType } }) => {
+            const { id, uploadLink } = await this.remotePicturesStore.uploadLink({
+                fileName,
+                fileType
+            })
+
+            return { id, uploadUrl: uploadLink }
         }
     })
 }

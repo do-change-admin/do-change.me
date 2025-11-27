@@ -57,36 +57,53 @@ export const useSyndicationRequestManualPosting = () => {
     return useMutation<
         void,
         API["POST"]["error"],
-        API["POST"]["payload"]["query"] & { photos: File[] }
+        Omit<API["POST"]["payload"]["body"], 'photoIds'> & { photos: File[] }
     >({
         mutationFn: async (payload) => {
-            const formData = new FormData();
+            let photoIds: string[] = []
+            for (const photo of payload.photos) {
+                try {                
+                    const fileName = photo.name
+                    const fileType = photo.type
 
-            const [firstPhoto, ...otherPhotos] = payload.photos
+                    const result = await fetch(apiURL, {
+                        body: JSON.stringify({ fileName, fileType }) ,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        method: "PATCH",
+                    });
 
-            formData.append('photos', firstPhoto)
+                    const { id, uploadUrl } = await result.json() as { id: string, uploadUrl: string }
 
-            // for (const photo of payload.photos) {
-            //     formData.append("photos", photo);
-            // }
+                    
+                    const data = await fetch(uploadUrl, {
+                        body: photo,
+                        method: 'PUT',
+                        headers: {
+                            "Content-Type": photo.type,
+                        },
+                    })
+
+                    console.log(data)
+
+                    
+                    photoIds.push(id)
+
+                } catch(e) {
+                    console.log(e)
+                }
+            }
 
             const { photos: [], ...queryData } = payload;
-            const result = await fetch(`${apiURL}${buildQueryString(queryData)}`, {
-                body: formData,
+            
+            await fetch(apiURL, {
+                body: JSON.stringify({...queryData, photoIds}),
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 method: "POST",
             });
-
-            const { id: createdId } = await result.json()
-
-            for (const otherPhoto of otherPhotos) {
-                const formData = new FormData()
-                formData.append('photos', otherPhoto)
-
-                await fetch(`${apiURL}?id=${createdId}`, {
-                    body: formData,
-                    method: "PATCH",
-                })
-            }
         },
         onSuccess: () => {
             queryClient.invalidateQueries({

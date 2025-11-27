@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import z, { ZodObject } from "zod";
 import { DIContainer } from "../di-containers";
 import { FunctionProviders } from "../providers";
-import { ProviderTokens } from "../di-containers/tokens.di-container";
+import { DIProviders } from "../di-containers/tokens.di-container";
 
 async function getCurrentUser() {
     const session = await getServerSession(authOptions);
@@ -313,7 +313,7 @@ export function ZodController<T extends ZodControllerSchemas>(
             protected readonly schemas: T
         ) { }
 
-        protected logger = DIContainer()._context.get<FunctionProviders.Logger.Interface>(ProviderTokens.logger)
+        protected logger = DIContainer()._context.get<FunctionProviders.Logger.Interface>(DIProviders.logger)
 
         protected loggedEndpoint = zodAPIEndpointFactory(this.schemas, this.name, async ({ error }) => { await this.logger.error(error) })
 

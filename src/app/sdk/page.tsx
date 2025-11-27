@@ -78,13 +78,13 @@ const CarSyndicationSection: FC = () => {
 
     const subscriptionLevel = subscriptionInfo?.level ?? 'no subscription'
 
-    if (subscriptionLevel !== "premium plan") {
-        return (
-            <div className={styles.container}>
-                <NoAccessPage />
-            </div>
-        )
-    }
+    // if (subscriptionLevel !== "premium plan") {
+    //     return (
+    //         <div className={styles.container}>
+    //             <NoAccessPage />
+    //         </div>
+    //     )
+    // }
 
 
     //todo: убрать после полного тестирования
