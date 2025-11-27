@@ -1,5 +1,5 @@
 import z from "zod";
-import { ZodAPIController, zodApiMethod, ZodAPISchemas, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
+import { ZodController, zodApiMethod, ZodAPISchemas, ZodControllerSchemas } from "../utils/zod-api-controller.utils";
 import { injectable } from "inversify";
 import { prismaClient } from "../infrastructure";
 
@@ -54,4 +54,4 @@ export class SubscriptionsController {
     })
 }
 
-export type SubscriptionsAPI = ZodAPIController<typeof schemas>
+export type SubscriptionsAPI = ZodController<typeof schemas>

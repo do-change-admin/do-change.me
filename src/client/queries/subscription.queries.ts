@@ -2,7 +2,7 @@ import type { SubscriptionsAPI } from "@/backend/controllers/subscriptions.contr
 import { useQuery } from "@tanstack/react-query"
 import { apiRequest } from "../utils/api-request.utils"
 
-type CurrentInfo_GET = SubscriptionsAPI['CurrentInfo_GET']
+type CurrentInfo_GET = SubscriptionsAPI['endpoints']['CurrentInfo_GET']
 
 const endpoint = '/api/subscriptions/current-info'
 
