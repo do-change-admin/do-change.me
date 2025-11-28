@@ -15,7 +15,9 @@ export class SyndicationRequest {
         make: z.string().nonempty(),
         year: z.number(),
         model: z.string().nonempty(),
-        marketplaceLinks: z.array(z.url())
+        marketplaceLinks: z.array(z.url()),
+        createdAt: z.date(),
+        updatedAt: z.date(),
     })
 
     private constructor(private readonly data: SyndicationRequestModel) {

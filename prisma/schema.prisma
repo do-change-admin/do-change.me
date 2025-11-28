@@ -404,43 +404,39 @@ model PlanPrice {
 }
 
 model SyndicationRequestDrafts {
-  id String @id @default(uuid())
+  id        String    @id @default(uuid())
+  userId    String
+  vin       String?
+  make      String?
+  model     String?
+  mileage   Int?
+  price     Int?
+  year      Int?
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  vin   String?
-  make  String?
-  model String?
-
-  mileage Int?
-  price   Int?
-  year    Int?
-
-  photoIds String[] @default([])
+  user      User      @relation(fields: [userId], references: [id])
+  photoIds  String[]  @default([])
 
   @@index([model, make])
 }
 
 model SyndicationRequests {
-  id String @id @default(uuid())
+  id                String    @id @default(uuid())
+  userId            String
+  status            String
+  make              String
+  model             String
+  vin               String
+  mileage           Int
+  price             Int
+  year              Int
+  photoIds          String[]
+  marketplaceLinks  String[]  @default([])
+  updatedAt         DateTime  @updatedAt
+  createdAt         DateTime  @default(now())
 
   user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  status String
-  make   String
-  model  String
-  vin    String
-
-  mileage Int
-  price   Int
-  year    Int
-
-  photoIds         String[]
-  marketplaceLinks String[] @default([])
-
-  createdAt       DateTime @default(now())
 
   @@index([model, make])
 }
