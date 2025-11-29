@@ -1,10 +1,10 @@
-import { ZodAPIController_DEPRECATED, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
-import { type SyndicationRequestDraftsServiceFactory } from "@/backend/di-containers/register-services";
-import { ServiceTokens } from "@/backend/di-containers/tokens.di-container";
-import { SyndicationRequestDraftsService } from "@/backend/services/syndication-request-drafts.service";
-import { VIN } from "@/value-objects/vin.value-object";
-import { inject, injectable } from "inversify";
-import z from "zod";
+import { inject, injectable } from 'inversify';
+import z from 'zod';
+import type { SyndicationRequestDraftsServiceFactory } from '@/backend/di-containers/register-services';
+import { ServiceTokens } from '@/backend/di-containers/tokens.di-container';
+import { SyndicationRequestDraftsService } from '@/backend/services/syndication-request-drafts.service';
+import { type ZodAPIController_DEPRECATED, type ZodControllerSchemas, zodApiMethod } from '@/backend/utils/zod-api-controller.utils';
+import { VIN } from '@/value-objects/vin.value-object';
 
 const schemas = {
     GET: {
@@ -15,9 +15,7 @@ const schemas = {
         }),
         body: undefined,
         response: z.object({
-            items: z.array(
-                SyndicationRequestDraftsService.dtoSchema
-            )
+            items: z.array(SyndicationRequestDraftsService.dtoSchema)
         })
     },
 
@@ -38,7 +36,10 @@ const schemas = {
             price: z.coerce.number().optional(),
             vin: VIN.schema.optional(),
             year: z.coerce.number().optional(),
-            photoIdsToBeRemoved: z.string().optional().transform(x => x ? x.split(',') : undefined)
+            photoIdsToBeRemoved: z
+                .string()
+                .optional()
+                .transform((x) => (x ? x.split(',') : undefined))
         }),
         body: undefined,
         response: undefined
@@ -51,62 +52,61 @@ const schemas = {
             model: z.string().nonempty().optional(),
             price: z.coerce.number().optional(),
             vin: VIN.schema.optional(),
-            year: z.coerce.number().optional(),
+            year: z.coerce.number().optional()
         }),
         body: undefined,
         response: z.object({
             id: z.string().nonempty()
         })
-
     }
-} satisfies ZodControllerSchemas
+} satisfies ZodControllerSchemas;
 
 @injectable()
 export class SyndicationRequestDraftsController {
     public constructor(
         @inject(ServiceTokens.syndicationRequestDraftsFactory) private readonly serviceFactory: SyndicationRequestDraftsServiceFactory
-    ) { }
+    ) {}
 
     GET = zodApiMethod(schemas.GET, {
         handler: async ({ activeUser, payload }) => {
-            const service = this.serviceFactory(activeUser.id)
-            const items = await service.list(payload)
-            return { items }
+            const service = this.serviceFactory(activeUser.id);
+            const items = await service.list(payload);
+            return { items };
         }
-    })
+    });
 
     Details_GET = zodApiMethod(schemas.Details_GET, {
         handler: async ({ activeUser, payload }) => {
-            const service = this.serviceFactory(activeUser.id)
-            return await service.details(payload.id)
+            const service = this.serviceFactory(activeUser.id);
+            return await service.details(payload.id);
         }
-    })
+    });
 
     PATCH = zodApiMethod(schemas.PATCH, {
         handler: async ({ activeUser, payload, req }) => {
-            const formData = await req.formData()
-            const photos = (formData?.getAll('photos') ?? []) as File[]
+            const formData = await req.formData();
+            const photos = (formData?.getAll('photos') ?? []) as File[];
 
-            const service = this.serviceFactory(activeUser.id)
+            const service = this.serviceFactory(activeUser.id);
             await service.update({
                 ...payload,
                 photos: photos.length > 0 ? photos : undefined
-            })
+            });
         }
-    })
+    });
 
     POST = zodApiMethod(schemas.POST, {
         handler: async ({ activeUser, payload, req }) => {
-            const formData = await req.formData()
-            const photos = (formData?.getAll('photos') ?? []) as File[]
+            const formData = await req.formData();
+            const photos = (formData?.getAll('photos') ?? []) as File[];
 
-            const service = this.serviceFactory(activeUser.id)
+            const service = this.serviceFactory(activeUser.id);
             return await service.post({
                 ...payload,
                 photos: photos.length > 0 ? photos : undefined
-            })
+            });
         }
-    })
+    });
 }
 
 /**
@@ -114,4 +114,4 @@ export class SyndicationRequestDraftsController {
  * FormData с ключом photos, в котором находятся фотографии,
  * которые должны быть ассоциированы с черновиком заявки.
  */
-export type SyndicationRequestDraftsAPI = ZodAPIController_DEPRECATED<typeof schemas>
+export type SyndicationRequestDraftsAPI = ZodAPIController_DEPRECATED<typeof schemas>;

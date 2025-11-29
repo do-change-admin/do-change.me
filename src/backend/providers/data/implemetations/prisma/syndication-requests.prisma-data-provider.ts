@@ -1,7 +1,15 @@
-import { Interface, ListModel, Details, FindOnePayload, FindListPayload, CreatePayload, UpdatePayload, FilterModels } from '../../contracts/syndication-requests.data-provider'
+import type { Prisma } from '@prisma/client';
 import { prismaClient } from '@/backend/infrastructure';
-import { Prisma } from '@prisma/client'
 import type { SyndicationRequestActiveStatusNames } from '@/entities/sindycation-request-status.entity';
+import type {
+    CreatePayload,
+    Details,
+    FindListPayload,
+    FindOnePayload,
+    Interface,
+    ListModel,
+    UpdatePayload
+} from '../../contracts/syndication-requests.data-provider';
 
 const mappers = {
     toFindOnePayload: (source: FindOnePayload): Prisma.SyndicationRequestsWhereUniqueInput => {
@@ -32,7 +40,9 @@ const mappers = {
             userId: source.user.id,
             userMail: source.user.email,
             vin: source.vin,
-            year: source.year
+            year: source.year,
+            createdAt: source.createdAt,
+            updatedAt: source.updatedAt
         };
     },
     toDetails: (source: Prisma.SyndicationRequestsGetPayload<{ include: { user: true } }>): Details => {
@@ -48,8 +58,9 @@ const mappers = {
             userId: source.user.id,
             userMail: source.user.email,
             vin: source.vin,
-            year: source.year
-
+            year: source.year,
+            createdAt: source.createdAt,
+            updatedAt: source.updatedAt
         };
     },
     toCreatePayload: (source: CreatePayload): Prisma.SyndicationRequestsCreateInput => {
@@ -63,7 +74,7 @@ const mappers = {
             mileage: source.mileage,
             model: source.model,
             price: source.price,
-            status: "pending publisher" satisfies SyndicationRequestActiveStatusNames,
+            status: 'pending publisher' satisfies SyndicationRequestActiveStatusNames,
             vin: source.vin,
             year: source.year,
             photoIds: source.photoIds
@@ -72,15 +83,19 @@ const mappers = {
     toUpdatePayload: (source: UpdatePayload): Prisma.SyndicationRequestsUpdateInput => {
         return {
             status: source.status,
-            marketplaceLinks: source.marketplaceLinks ? {
-                set: source.marketplaceLinks
-            } : undefined,
-            photoIds: source.photoIds ? {
-                push: source.photoIds
-            } : undefined
+            marketplaceLinks: source.marketplaceLinks
+                ? {
+                      set: source.marketplaceLinks
+                  }
+                : undefined,
+            photoIds: source.photoIds
+                ? {
+                      push: source.photoIds
+                  }
+                : undefined
         };
     }
-}
+};
 export class SyndicationRequests implements Interface {
     list: Interface['list'] = async (payload, { pageSize, zeroBasedIndex }) => {
         const list = await prismaClient.syndicationRequests.findMany({
@@ -91,57 +106,55 @@ export class SyndicationRequests implements Interface {
             skip: zeroBasedIndex * pageSize,
             take: pageSize,
             include: { user: true }
-        })
+        });
 
-        return list.map(mappers.toListModel)
+        return list.map(mappers.toListModel);
     };
 
     details: Interface['details'] = async (payload) => {
         const details = await prismaClient.syndicationRequests.findUnique({
             where: mappers.toFindOnePayload(payload),
             include: { user: true }
-        })
+        });
 
         if (!details) {
-            return null
+            return null;
         }
 
-        return mappers.toDetails(details)
+        return mappers.toDetails(details);
     };
 
     create: Interface['create'] = async (payload) => {
         const { id } = await prismaClient.syndicationRequests.create({
             data: mappers.toCreatePayload(payload),
             select: { id: true }
-        })
+        });
 
-        return { id }
+        return { id };
     };
 
     updateOne: Interface['updateOne'] = async (searchPayload, updatePayload) => {
         try {
             await prismaClient.syndicationRequests.update({
                 where: mappers.toFindOnePayload(searchPayload),
-                data: mappers.toUpdatePayload(updatePayload),
-            })
+                data: mappers.toUpdatePayload(updatePayload)
+            });
 
-            return { success: true }
-        }
-        catch {
-            return { success: false }
+            return { success: true };
+        } catch {
+            return { success: false };
         }
     };
 
     deleteOne: Interface['deleteOne'] = async (searchPayload) => {
         try {
             await prismaClient.syndicationRequests.delete({
-                where: mappers.toFindOnePayload(searchPayload),
-            })
+                where: mappers.toFindOnePayload(searchPayload)
+            });
 
-            return { success: true }
-        }
-        catch {
-            return { success: false }
+            return { success: true };
+        } catch {
+            return { success: false };
         }
     };
 
@@ -150,11 +163,11 @@ export class SyndicationRequests implements Interface {
             select: { make: true, model: true },
             where: { userId },
             distinct: ['make', 'model']
-        })
+        });
 
         return {
-            makes: data.map(x => x.make),
-            models: data.map(x => x.model)
-        }
-    }
-};
+            makes: data.map((x) => x.make),
+            models: data.map((x) => x.model)
+        };
+    };
+}

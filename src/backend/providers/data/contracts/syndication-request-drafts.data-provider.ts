@@ -1,27 +1,27 @@
-import type { SyndicationRequestDraftModel } from '@/entities/syndication-request-draft.entity'
-import type { ActionsPayload, Models, DataCRUDProvider, SearchPayload } from '../types'
+import type { SyndicationRequestDraftModel } from '@/entities/syndication-request-draft.entity';
+import type { ActionsPayload, DataCRUDProvider, Models, SearchPayload } from '../types';
 
 // ITEM CONTRACTS
 export type Details = Omit<SyndicationRequestDraftModel, 'photoLinks'> & {
-    photoIds?: string[]
-}
-export type ListModel = Details
+    photoIds?: string[];
+};
+export type ListModel = Details;
 
 // SEARCH CONTRACTS
-export type FindOnePayload = { id: string, userId: string }
+export type FindOnePayload = { id: string; userId: string };
 export type FindListPayload = {
     userId: string;
 } & Partial<{
     make: string;
     model: string;
     vin: string;
-}>
+}>;
 
 // ACTION CONTRACTS
-export type CreatePayload = Omit<Details, 'id'>
-export type UpdatePayload = Partial<Omit<CreatePayload, 'userId'>>
+export type CreatePayload = Omit<Details, 'id' | 'createdAt' | 'updatedAt'>;
+export type UpdatePayload = Partial<Omit<CreatePayload, 'userId'>>;
 
-export type FilterModels = { models: string[], makes: string[] }
+export type FilterModels = { models: string[]; makes: string[] };
 
 // DATA PROVIDER INTERFACE
 export type Interface = DataCRUDProvider<
@@ -29,5 +29,5 @@ export type Interface = DataCRUDProvider<
     SearchPayload<FindListPayload, FindOnePayload>,
     ActionsPayload<CreatePayload, UpdatePayload>
 > & {
-    filtersData: (userId: string) => Promise<FilterModels>,
-}
+    filtersData: (userId: string) => Promise<FilterModels>;
+};
