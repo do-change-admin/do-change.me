@@ -11,7 +11,6 @@ import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import { useShallow } from 'zustand/react/shallow'
 import { VIN } from '@/value-objects/vin.value-object';
 import {ActionIcon} from "@mantine/core";
-import {Valuation} from "@/client/components/Valuation";
 
 export const VinCheck = ({ openSubscription }: { openSubscription?: () => void }) => {
     const router = useRouter();
@@ -78,7 +77,6 @@ export const VinCheck = ({ openSubscription }: { openSubscription?: () => void }
                     </>}
                 />
             </div>
-            <Valuation vin={vin}/>
         </div>
     );
 }

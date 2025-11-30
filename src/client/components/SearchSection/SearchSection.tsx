@@ -12,6 +12,7 @@ import cn from "classnames";
 import { FaHashtag} from "react-icons/fa";
 import { useVINAnalysisState } from "@/client/states/vin-analysis.state";
 import {VinCheck} from "@/client/components/SearchSection/VinCheck/VinCheck";
+import {ValueSummary} from "@/client/components/ValueSummary";
 
 interface SearchSectionProps {
     openSubscription?: () => void
@@ -49,7 +50,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                         <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
                     </div>
                     <Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />
-                    {(isLoading || salvageIsLoading || isFetching) && <LoadingMinute label="" />}
+                    {(isLoading || salvageIsLoading || isFetching) && <LoadingMinute label="teest" />}
                     <div className={styles.searchSectionHeader}>
                         <div className={styles.header}>
                             <div className={styles.headerFlex}>
@@ -64,9 +65,10 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                             </div>
                         </div>
                     </div>
-                    {/*<VinSearch openSubscription={openSubscription} />*/}
-                    <VinCheck openSubscription={openSubscription} />
+                    <VinSearch openSubscription={openSubscription} />
+                    {/*<VinCheck openSubscription={openSubscription} />*/}
                 </div>
+                {/*<ValueSummary adjustedValue="12" miles={123} onMileageChange={() => console.log("")}/>*/}
                 <SampleResults baseInfo={baseInfo} reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0} />
                 <SearchHistory searches={actionsHistory} isLoading={isFetching} />
             </div>

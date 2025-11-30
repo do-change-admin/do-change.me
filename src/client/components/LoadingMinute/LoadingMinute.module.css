@@ -30,6 +30,23 @@
     font-size: 16px;
 }
 
+.shimmerLabel {
+    font-weight: 600;
+    margin-bottom: 16px;
+    background: linear-gradient(
+            90deg,
+            #ffffff 0%,
+            #e4e4e4 25%,
+            #626263 50%,
+            #373737 75%,
+            #ffffff 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
 .track {
     height: 12px;
     width: 100%;
