@@ -1,7 +1,7 @@
-import { IMailerProvider } from "../mailer.provider";
-import { Resend as ResendSender } from "resend";
-import { injectable } from "inversify";
-import { EmailMessage } from "@/value-objects/email-message.value-object";
+import { injectable } from 'inversify';
+import { Resend as ResendSender } from 'resend';
+import type { EmailMessage } from '@/value-objects/email-message.value-object';
+import type { IMailerProvider } from '../mailer.provider';
 
 @injectable()
 export class ResendMailerProvider implements IMailerProvider {
@@ -18,7 +18,7 @@ export class ResendMailerProvider implements IMailerProvider {
             from: message.from,
             to: message.to,
             subject: message.subject,
-            html: message.content,
+            html: message.content
         });
 
         if (error) {
