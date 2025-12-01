@@ -10,7 +10,7 @@ export const DIStores = {
 };
 
 export const DIProviders = {
-    email: Symbol.for('EMAIL-FUNCTIONAL-PROVIDER'),
+    mailer: Symbol.for('MAILER-FUNCTIONAL-PROVIDER'),
     logger: Symbol.for('LOGGER-FUNCTIONAL-PROVIDER'),
     s3Client: Symbol()
 };

@@ -5,6 +5,8 @@ import {
     type FunctionProviders,
     FunctionProvidersImplementations
 } from '@/backend/providers';
+import { ConsoleMailerProvider } from '../providers/mailer/console-mailer/console-mailer.provider';
+import type { IMailerProvider } from '../providers/mailer/mailer.provider';
 import type { S3Client } from '../providers/s3-client/s3-client.provider';
 import { S3ClientAWSSDK } from '../providers/s3-client/s3-client.provider.aws-sdk';
 import { NotificationRAMStore } from '../stores/notification/notification.ram.store';
@@ -44,7 +46,7 @@ const registerDataProviders = () => {
 };
 
 const registerFunctionProviders = () => {
-    container.bind<FunctionProviders.Email.Interface>(DIProviders.email).to(FunctionProvidersImplementations.Mock.Email);
+    container.bind<IMailerProvider>(DIProviders.mailer).to(ConsoleMailerProvider);
 
     container.bind<FunctionProviders.Logger.Interface>(DIProviders.logger).to(FunctionProvidersImplementations.Mock.Logger);
 

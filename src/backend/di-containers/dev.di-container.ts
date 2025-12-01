@@ -6,6 +6,8 @@ import {
     FunctionProvidersImplementations
 } from '@/backend/providers';
 import { PicturesS3DataProvider } from '../providers/data/implemetations/api/pictures.s3-data-provider';
+import type { IMailerProvider } from '../providers/mailer/mailer.provider';
+import { ResendMailerProvider } from '../providers/mailer/resend-mailer/resend-mailer.provider';
 import type { S3Client } from '../providers/s3-client/s3-client.provider';
 import { S3ClientAWSSDK } from '../providers/s3-client/s3-client.provider.aws-sdk';
 import { NotificationPrismaStore } from '../stores/notification/notification.prisma.store';
@@ -39,7 +41,7 @@ const registerDataProviders = () => {
 };
 
 const registerFunctionProviders = () => {
-    container.bind<FunctionProviders.Email.Interface>(DIProviders.email).to(FunctionProvidersImplementations.Mock.Email);
+    container.bind<IMailerProvider>(DIProviders.mailer).to(ResendMailerProvider);
 
     container.bind<FunctionProviders.Logger.Interface>(DIProviders.logger).to(FunctionProvidersImplementations.Mock.Logger);
 
