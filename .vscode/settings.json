@@ -5,7 +5,9 @@
   "editor.formatOnSave": true,
   "biome.requireConfiguration": true,
   "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
 		"source.organizeImports.biome": "explicit",
+    "source.action.useSortedProperties.biome": "explicit",
 		"source.fixAll.biome": "explicit",
   }
 }

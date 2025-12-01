@@ -34,7 +34,7 @@
                     "fix": "safe"
                 },
                 "noUnusedFunctionParameters": {
-                    "level": "error"                
+                    "level": "error"
                 }
             },
             "suspicious": {
@@ -62,6 +62,11 @@
         }
     },
     "css": {
+        "formatter": {
+            "enabled": true
+        }
+    },
+    "json": {
         "formatter": {
             "enabled": true
         }

@@ -4,3 +4,4 @@ pre-commit:
         #   run: npm run validate-branch-name
         - name: "🧹 Biome lint & format 🧹"
           run: npm run biome:check-staged
+ 
