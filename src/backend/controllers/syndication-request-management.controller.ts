@@ -1,10 +1,10 @@
-import { ZodAPIController_DEPRECATED, zodApiMethod, ZodControllerSchemas } from "@/backend/utils/zod-api-controller.utils";
-import { ServiceTokens } from "@/backend/di-containers/tokens.di-container";
-import { SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
-import { SyndicationRequestManagementService } from "@/backend/services/syndication-request-management.service";
-import { VIN } from "@/value-objects/vin.value-object";
-import { inject, injectable } from "inversify";
-import z from "zod";
+import { inject, injectable } from 'inversify';
+import z from 'zod';
+import { ServiceTokens } from '@/backend/di-containers/tokens.di-container';
+import { SyndicationRequestManagementService } from '@/backend/services/syndication-request-management.service';
+import { type ZodAPIController_DEPRECATED, type ZodControllerSchemas, zodApiMethod } from '@/backend/utils/zod-api-controller.utils';
+import { SyndicationRequestStatus } from '@/entities/sindycation-request-status.entity';
+import { VIN } from '@/value-objects/vin.value-object';
 
 const schemas = {
     GET: {
@@ -49,21 +49,19 @@ const schemas = {
             models: z.array(z.string())
         })
     }
-} satisfies ZodControllerSchemas
+} satisfies ZodControllerSchemas;
 
 @injectable()
 export class SyndicationRequestManagementController {
-    public constructor(
-        @inject(ServiceTokens.syndicationRequestManagement) private readonly service: SyndicationRequestManagementService
-    ) { }
+    public constructor(@inject(ServiceTokens.syndicationRequestManagement) private readonly service: SyndicationRequestManagementService) {}
 
     GET = zodApiMethod(schemas.GET, {
         handler: async ({ payload }) => {
-            const items = await this.service.requests(payload)
+            const items = await this.service.requests(payload);
 
-            return { items }
+            return { items };
         }
-    })
+    });
 
     PATCH = zodApiMethod(schemas.PATCH, {
         handler: async ({ payload }) => {
@@ -72,21 +70,21 @@ export class SyndicationRequestManagementController {
                 userId: payload.userId,
                 marketplaceLinks: payload.marketplaceLinks,
                 status: payload.status
-            })
+            });
         }
-    })
+    });
 
     Details_GET = zodApiMethod(schemas.Details_GET, {
         handler: async ({ payload }) => {
-            return await this.service.requestDetails(payload.id, payload.userId)
+            return await this.service.requestDetails(payload.id, payload.userId);
         }
-    })
+    });
 
     Filters_GET = zodApiMethod(schemas.Filters_GET, {
         handler: async () => {
-            return await this.service.allFilters()
+            return await this.service.allFilters();
         }
-    })
+    });
 }
 
-export type SyndicationRequestManagementAPI = ZodAPIController_DEPRECATED<typeof schemas>
+export type SyndicationRequestManagementAPI = ZodAPIController_DEPRECATED<typeof schemas>;

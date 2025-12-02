@@ -1,80 +1,85 @@
-import { DIStores } from "@/backend/di-containers/tokens.di-container";
-import { SyndicationRequestActiveStatusNames, SyndicationRequestStatus } from "@/entities/sindycation-request-status.entity";
-import { SyndicationRequest } from "@/entities/syndication-request.entity";
-import { DataProviders } from "@/backend/providers";
-import { inject, injectable } from "inversify";
-import z from "zod";
+import { inject, injectable } from 'inversify';
+import type z from 'zod';
+import { DIStores } from '@/backend/di-containers/tokens.di-container';
+import type { DataProviders } from '@/backend/providers';
+import type { SyndicationRequestActiveStatusNames } from '@/entities/sindycation-request-status.entity';
+import { SyndicationRequest } from '@/entities/syndication-request.entity';
 
-type DataListModel = DataProviders.SyndicationRequests.ListModel
-type FindDataPayload = DataProviders.SyndicationRequests.FindListPayload
-type UpdatePayload = DataProviders.SyndicationRequests.UpdatePayload
+type DataListModel = DataProviders.SyndicationRequests.ListModel;
+type FindDataPayload = DataProviders.SyndicationRequests.FindListPayload;
+type UpdatePayload = DataProviders.SyndicationRequests.UpdatePayload;
 
 @injectable()
 export class SyndicationRequestManagementService {
-    static dtoSchema = SyndicationRequest.modelShema
+    static dtoSchema = SyndicationRequest.modelShema;
 
     public constructor(
         @inject(DIStores.syndicationRequests) private readonly data: DataProviders.SyndicationRequests.Interface,
-        @inject(DIStores.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface,
-    ) { }
+        @inject(DIStores.reserve_pictures) private readonly pictures: DataProviders.Pictures.Interface
+    ) {}
 
     requests = async (
         payload: Omit<FindDataPayload, 'userId' | 'status'> & { status: SyndicationRequestActiveStatusNames }
     ): Promise<SyndicationRequestAdminDTO[]> => {
-        const data = await this.data.list(payload, { pageSize: 100, zeroBasedIndex: 0 })
+        const data = await this.data.list(payload, { pageSize: 100, zeroBasedIndex: 0 });
 
-        const items = await Promise.all(data.map(async (x) => {
-            let photoLinks: string[] = []
+        const items = await Promise.all(
+            data.map(async (x) => {
+                const photoLinks: string[] = [];
 
-            for (const photoId of (x.photoIds ?? [])) {
-                const photo = await this.pictures.findOne(photoId);
-                if (photo) {
-                    photoLinks.push(photo.src)
+                for (const photoId of x.photoIds ?? []) {
+                    const photo = await this.pictures.findOne(photoId);
+                    if (photo) {
+                        photoLinks.push(photo.src);
+                    }
                 }
-            }
 
-            return mapFromDataLayer(x, photoLinks)
-        }))
+                return mapFromDataLayer(x, photoLinks);
+            })
+        );
 
-        return items
-    }
+        return items;
+    };
 
     requestDetails = async (id: string, userId: string): Promise<SyndicationRequestAdminDTO> => {
-        const data = await this.data.details({ id, userId })
+        const data = await this.data.details({ id, userId });
         if (!data) {
-            throw 'Not found'
+            throw 'Not found';
         }
-        let photoLinks = []
-        for (const photoId of (data.photoIds ?? [])) {
+        const photoLinks = [];
+        for (const photoId of data.photoIds ?? []) {
             const photo = await this.pictures.findOne(photoId);
             if (photo) {
-                photoLinks.push(photo.src)
+                photoLinks.push(photo.src);
             }
         }
 
-        return mapFromDataLayer(data, photoLinks)
-    }
+        return mapFromDataLayer(data, photoLinks);
+    };
 
-    updateRequest = async (payload: UpdatePayload & { id: string, userId: string }) => {
-        return await this.data.updateOne({
-            id: payload.id,
-            userId: payload.userId
-        }, {
-            marketplaceLinks: payload.marketplaceLinks,
-            status: payload.status
-        })
-    }
+    updateRequest = async (payload: UpdatePayload & { id: string; userId: string }) => {
+        return await this.data.updateOne(
+            {
+                id: payload.id,
+                userId: payload.userId
+            },
+            {
+                marketplaceLinks: payload.marketplaceLinks,
+                status: payload.status
+            }
+        );
+    };
 
     allFilters = async () => {
-        const data = await this.data.filtersData()
+        const data = await this.data.filtersData();
         return {
             makes: [...new Set(data.makes)],
             models: [...new Set(data.models)]
-        }
-    }
+        };
+    };
 }
 
-export type SyndicationRequestAdminDTO = z.infer<typeof SyndicationRequestManagementService.dtoSchema>
+export type SyndicationRequestAdminDTO = z.infer<typeof SyndicationRequestManagementService.dtoSchema>;
 
 const mapFromDataLayer = (source: DataListModel, photoLinks: string[]): SyndicationRequestAdminDTO => {
     return {
@@ -89,6 +94,8 @@ const mapFromDataLayer = (source: DataListModel, photoLinks: string[]): Syndicat
         status: source.status,
         userMail: source.userMail,
         vin: source.vin,
-        year: source.year
-    }
-} 
+        year: source.year,
+        createdAt: source.createdAt,
+        updatedAt: source.updatedAt
+    };
+};
