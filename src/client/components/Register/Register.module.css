@@ -1,6 +1,6 @@
 .wrapper {
-    background: linear-gradient(to bottom right, #ebf8ff, #cce3ff);
     min-height: 100vh;
+    background: linear-gradient(to bottom right, #ebf8ff, #cce3ff);
 }
 
 .authContainer {
@@ -9,73 +9,77 @@
 }
 
 .registerSection {
-    width: 50%;
+    position: relative;
     display: flex;
     flex-direction: column;
+    width: 50%;
     background: linear-gradient(to bottom right, #ebf8ff, #dbeafe);
-    position: relative;
 }
 
 /* Logo */
 .logoSection {
     position: absolute;
-    cursor: pointer;
     top: 2rem;
     left: 2rem;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .logoWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 2rem;
     height: 2rem;
+    margin-right: 0.75rem;
     background: linear-gradient(to right, #60a5fa, #3b82f6);
     border-radius: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 0.75rem;
 }
 
 .logoIcon {
-    color: white;
     font-size: 1rem;
+    color: white;
 }
 
 .logoText {
-    font-weight: 700;
     font-size: 1rem;
+    font-weight: 700;
     color: #1f2937;
 }
 
 .formWrapper {
-    flex: 1;
     display: flex;
-    justify-content: center;
+    flex: 1;
     align-items: center;
-    padding-left: 1rem;
+    justify-content: center;
     padding-right: 1rem;
+    padding-left: 1rem;
 }
 
 .formCard {
     width: 100%;
     max-width: 35rem;
+    padding: 1.5rem;
     background: white;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
 }
 
 .welcomeSection {
-    text-align: center;
     margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.logo {
+    margin: 0 auto;
 }
 
 .welcomeSection h2 {
+    margin-bottom: 0.25rem;
     font-size: 1.5rem;
     font-weight: 700;
     color: #1f2937;
-    margin-bottom: 0.25rem;
 }
 
 .welcomeSection p {
@@ -98,9 +102,9 @@
 
 .form label {
     display: block;
+    margin-bottom: 0.25rem;
     font-size: 0.75rem;
     font-weight: 500;
-    margin-bottom: 0.25rem;
     color: #374151;
 }
 
@@ -108,9 +112,9 @@
     width: 100%;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
+    outline: none;
     border: 1px solid #d1d5db;
     border-radius: 0.5rem;
-    outline: none;
     transition: all 0.2s;
 }
 
@@ -120,31 +124,30 @@
 }
 
 .form .checkbox {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    position: relative;
+    display: inline-block;
 
     width: 1rem;
     height: 1rem;
     padding: 0;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
     accent-color: #3b82f6;
-    border-radius: 0.25rem;
-    border: 1px solid #d1d5db;
-    outline-offset: 2px;
     outline-color: #3b82f6;
+    outline-offset: 2px;
     background-color: white;
-
-    position: relative;
-    display: inline-block;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
 }
 
 .checkbox:checked::after {
-    content: "";
     position: absolute;
     top: 50%;
     left: 50%;
     width: 5px;
     height: 9px;
+    content: "";
     border: solid #3b82f6;
     border-width: 0 2px 2px 0;
     transform: translate(-50%, -50%) rotate(45deg);
@@ -165,15 +168,15 @@
 }
 
 .registerButton {
-    background: linear-gradient(to right, #38bdf8, #0ea5e9);
-    color: white;
     padding: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(to right, #38bdf8, #0ea5e9);
     border: none;
     border-radius: 0.5rem;
-    font-weight: 600;
-    font-size: 0.875rem;
-    transition: background 0.3s;
     box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    transition: background 0.3s;
 }
 
 .registerButton:hover {
@@ -181,15 +184,14 @@
 }
 
 .registerButton:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
 }
-
 
 .divider {
     display: flex;
-    align-items: center;
     gap: 0.75rem;
+    align-items: center;
     margin-bottom: 1rem;
 }
 
@@ -212,16 +214,16 @@
 
 .socialButtons button {
     display: flex;
+    gap: 0.25rem;
     align-items: center;
     justify-content: center;
     padding: 0.5rem;
     font-size: 0.75rem;
     font-weight: 500;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    gap: 0.25rem;
     color: #374151;
     background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
     transition: background 0.2s;
 }
 
@@ -234,14 +236,14 @@
 }
 
 .signinLink {
-    text-align: center;
     font-size: 0.75rem;
     color: #6b7280;
+    text-align: center;
 }
 
 .imageSection {
-    width: 50%;
     position: relative;
+    width: 50%;
     overflow: hidden;
 }
 
@@ -270,8 +272,8 @@
 .imageOverlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom right, rgba(147, 51, 234, 0.2), rgba(30, 64, 175, 0.3));
     z-index: 10;
+    background: linear-gradient(to bottom right, rgba(147, 51, 234, 0.2), rgba(30, 64, 175, 0.3));
 }
 
 .imageContent {
@@ -279,38 +281,38 @@
     inset: 0;
     z-index: 20;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     padding: 3rem;
-    text-align: center;
     color: white;
+    text-align: center;
     pointer-events: none;
 }
 
 .imageText h3 {
+    margin-bottom: 1rem;
     font-size: 2.25rem;
     font-weight: 700;
-    margin-bottom: 1rem;
 }
 
 .imageText p {
-    font-size: 1.125rem;
     margin-bottom: 1.5rem;
+    font-size: 1.125rem;
     color: #bfdbfe;
 }
 
 .iconRow {
     display: flex;
     gap: 1rem;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     font-size: 1.5rem;
 }
 
 .validationError {
-    color: red;
-    font-size: 0.75rem;
     margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: red;
 }
 
 @media (max-width: 640px) {
