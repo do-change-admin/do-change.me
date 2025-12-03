@@ -1,10 +1,6 @@
 .wrapper {
-    background: linear-gradient(
-            to bottom right,
-            #e0f2fe, /* light-blue-50 */
-            #bfdbfe /* blue-100 */
-    );
     min-height: 100vh;
+    background: linear-gradient(to bottom right, #e0f2fe /* light-blue-50 */, #bfdbfe /* blue-100 */);
 }
 
 .authContainer {
@@ -14,67 +10,64 @@
 
 /* Left side */
 .loginSection {
-    width: 50%;
+    position: relative;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(
-            to bottom right,
-            #e0f2fe, /* light-blue-50 */
-            #dbeafe /* light-blue-100 */
-    );
-    position: relative;
+    width: 50%;
+    background: linear-gradient(to bottom right, #e0f2fe /* light-blue-50 */, #dbeafe /* light-blue-100 */);
 }
 
 /* Logo */
 .logoSection {
     position: absolute;
-    cursor: pointer;
     top: 2rem;
     left: 2rem;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .logoWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 2rem;
     height: 2rem;
+    margin-right: 0.75rem;
     background: linear-gradient(to right, #60a5fa, #3b82f6);
     border-radius: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 0.75rem;
 }
 
 .logoIcon {
-    color: white;
     font-size: 1rem;
+    color: white;
 }
 
 .logoText {
-    font-weight: 700;
     font-size: 1rem;
+    font-weight: 700;
     color: #1f2937;
 }
 
 /* Form wrapper */
 .formWrapper {
-    flex: 1;
     display: flex;
-    justify-content: center;
+    flex: 1;
     align-items: center;
-    padding-left: 1rem;
+    justify-content: center;
     padding-right: 1rem;
+    padding-left: 1rem;
 }
 
 .formCard {
     width: 100%;
     max-width: 35rem;
+    padding: 2rem;
     background: white;
     border-radius: 1rem;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-    0 4px 6px -4px rgb(0 0 0 / 0.1);
-    padding: 2rem;
+    box-shadow:
+        0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 .welcomeSection {
@@ -82,11 +75,15 @@
     text-align: center;
 }
 
+.logo {
+    margin: 0 auto;
+}
+
 .title {
-    font-weight: 700;
-    font-size: 1.875rem;
-    color: #1f2937; /* gray-800 */
     margin-bottom: 0.5rem;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1f2937;
 }
 
 .subtitle {
@@ -95,26 +92,26 @@
 
 /* Form */
 .loginForm {
-    margin-bottom: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .label {
     display: block;
+    margin-bottom: 0.5rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #374151; /* gray-700 */
-    margin-bottom: 0.5rem;
+    color: #374151;
 }
 
 .input {
     width: 100%;
     padding: 0.75rem 1rem;
+    outline: none;
     border: 1px solid #d1d5db; /* gray-300 */
     border-radius: 0.5rem;
-    outline: none;
     transition: all 0.2s;
 }
 
@@ -133,17 +130,17 @@
 
 .eyeButton {
     position: absolute;
-    right: 0.75rem;
     top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: #6b7280; /* gray-500 */
-    font-size: 1.25rem;
+    right: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.25rem;
+    color: #6b7280; /* gray-500 */
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transform: translateY(-50%);
 }
 
 .eyeIcon {
@@ -157,8 +154,8 @@
 /* Options */
 .options {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
 
 .rememberMeLabel {
@@ -168,30 +165,29 @@
 }
 
 .checkbox {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    position: relative;
+    display: inline-block;
 
     width: 1rem;
     height: 1rem;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
     accent-color: #3b82f6;
-    border-radius: 0.25rem;
-    border: 1px solid #d1d5db;
-    outline-offset: 2px;
     outline-color: #3b82f6;
+    outline-offset: 2px;
     background-color: white;
-
-    position: relative;
-    display: inline-block;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
 }
 
 .checkbox:checked::after {
-    content: "";
     position: absolute;
     top: 50%;
     left: 50%;
     width: 5px;
     height: 9px;
+    content: "";
     border: solid #3b82f6;
     border-width: 0 2px 2px 0;
     transform: translate(-50%, -50%) rotate(45deg);
@@ -217,14 +213,14 @@
 /* Submit Button */
 .submitButton {
     width: 100%;
-    background: linear-gradient(to right, #3b82f6, #2563eb);
-    color: white;
     padding: 0.75rem 0;
-    border-radius: 0.5rem;
-    font-weight: 500;
     font-size: 1rem;
+    font-weight: 500;
+    color: white;
     cursor: pointer;
+    background: linear-gradient(to right, #3b82f6, #2563eb);
     border: none;
+    border-radius: 0.5rem;
     box-shadow: 0 10px 15px -3px rgb(59 130 246 / 0.7);
     transition: background 0.2s;
 }
@@ -247,8 +243,8 @@
 
 .orText {
     padding: 0 1rem;
-    color: #6b7280;
     font-size: 0.875rem;
+    color: #6b7280;
 }
 
 /* Social login */
@@ -264,13 +260,13 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    background: white;
-    cursor: pointer;
     font-size: 0.875rem;
     font-weight: 500;
     color: #374151;
+    cursor: pointer;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
     transition: background-color 0.2s;
 }
 
@@ -279,27 +275,27 @@
 }
 
 .googleIcon {
-    color: #ef4444; /* red-500 */
     margin-right: 0.5rem;
     font-size: 1.125rem;
+    color: #ef4444;
 }
 
 .facebookIcon {
-    color: #2563eb; /* blue-600 */
     margin-right: 0.5rem;
     font-size: 1.125rem;
+    color: #2563eb;
 }
 
 /* Signup link */
 .signupLink {
-    text-align: center;
-    color: #4b5563;
     font-size: 0.875rem;
+    color: #4b5563;
+    text-align: center;
 }
 
 .signupText {
-    color: #3b82f6;
     font-weight: 500;
+    color: #3b82f6;
     cursor: pointer;
     transition: color 0.2s;
 }
@@ -310,28 +306,24 @@
 
 /* Right side - image */
 .imageSection {
-    width: 50%;
     position: relative;
+    width: 50%;
     overflow: hidden;
 }
 
 .imageOverlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-            to bottom right,
-            rgba(96, 165, 250, 0.125),
-            rgba(59, 130, 246, 0.188)
-    );
     z-index: 10;
+    background: linear-gradient(to bottom right, rgba(96, 165, 250, 0.125), rgba(59, 130, 246, 0.188));
 }
 
 .backgroundImage {
+    position: relative;
+    z-index: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    position: relative;
-    z-index: 0;
     animation: zoomFade 10s ease-in-out infinite;
 }
 
@@ -356,53 +348,53 @@
     z-index: 20;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     padding: 3rem;
-    text-align: center;
     color: white;
+    text-align: center;
 }
 
 .overlayBox {
-    background: rgba(255 255 255 / 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 1rem;
-    padding: 2rem;
     max-width: 22rem;
+    padding: 2rem;
+    background: rgba(255 255 255 / 0.1);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
 }
 
 .overlayIcon {
-    font-size: 2.5rem;
     margin-bottom: 1.5rem;
+    font-size: 2.5rem;
     color: #60a5fa; /* accent */
 }
 
 .overlayTitle {
-    font-weight: 700;
-    font-size: 1.5rem;
     margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 .overlayDescription {
+    margin-bottom: 1.5rem;
     font-size: 1.125rem;
     opacity: 0.9;
-    margin-bottom: 1.5rem;
 }
 
 .iconRow {
     display: flex;
-    justify-content: center;
     gap: 1rem;
+    justify-content: center;
 }
 
 .iconCircle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 3rem;
     height: 3rem;
     background: rgba(255 255 255 / 0.2);
     border-radius: 9999px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     backdrop-filter: blur(8px);
 }
 

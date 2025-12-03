@@ -1,6 +1,7 @@
 'use client';
 
 import { LoadingOverlay } from '@mantine/core';
+import { Image, LoadingOverlay } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
@@ -132,6 +133,7 @@ export const Login = () => {
                 <div className={styles.formWrapper}>
                     <div className={styles.formCard}>
                         <div className={styles.welcomeSection}>
+                            <Image alt="DoChange logo" className={styles.logo} h={40} src="/logo/logo.png" w="auto" />
                             <h2 className={styles.title}>Login</h2>
                             <p className={styles.subtitle}>Sign in to access your dashboard</p>
                         </div>
@@ -178,10 +180,6 @@ export const Login = () => {
                             </div>
 
                             <div className={styles.options}>
-                                {/* <label className={styles.rememberMeLabel}>
-                                    <input className={styles.checkbox} type="checkbox" />
-                                    <span className={styles.rememberMeText}>Remember me</span>
-                                </label> */}
                                 <span
                                     className={styles.forgotPassword}
                                     onClick={() => {
@@ -205,10 +203,6 @@ export const Login = () => {
                             <span className={styles.orText}>or</span>
                             <div className={styles.line}></div>
                         </div>
-
-                        {/* <div className={styles.socialLogin}>
-              <GoogleButton text="Continue with Google" />
-            </div> */}
 
                         <div className={styles.signupLink}>
                             <p>
