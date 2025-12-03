@@ -1,5 +1,6 @@
 'use client';
 
+import { LoadingOverlay } from '@mantine/core';
 import { Image, LoadingOverlay } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -178,26 +179,20 @@ export const Login = () => {
                                 </div>
                             </div>
 
-                            {/* <div className={styles.options}>
-                <label className={styles.rememberMeLabel}>
-                  <input type="checkbox" className={styles.checkbox} />
-                  <span className={styles.rememberMeText}>Remember me</span>
-                </label>
-                <span
-                  className={styles.forgotPassword}
-                  onClick={() => {
-                    setModalMessage(
-                      "Enter your email and we’ll send you a reset link."
-                    );
-                    setModalMode("password");
-                    setButtonText("Send reset link");
-                    setModalVisible(true);
-                  }}
-                >
-                  Forgot password?
-                </span>
-              </div>
- */}
+                            <div className={styles.options}>
+                                <span
+                                    className={styles.forgotPassword}
+                                    onClick={() => {
+                                        setModalMessage('Enter your email and we’ll send you a reset link.');
+                                        setModalMode('password');
+                                        setButtonText('Send reset link');
+                                        setModalVisible(true);
+                                    }}
+                                >
+                                    Forgot password?
+                                </span>
+                            </div>
+
                             <button className={styles.submitButton} type="submit">
                                 Sign In
                             </button>
@@ -208,10 +203,6 @@ export const Login = () => {
                             <span className={styles.orText}>or</span>
                             <div className={styles.line}></div>
                         </div>
-
-                        {/* <div className={styles.socialLogin}>
-              <GoogleButton text="Continue with Google" />
-            </div> */}
 
                         <div className={styles.signupLink}>
                             <p>

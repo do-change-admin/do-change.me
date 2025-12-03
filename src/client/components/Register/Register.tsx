@@ -77,22 +77,8 @@ export const Register = () => {
                 })
             });
 
-            const result = await signIn('credentials', {
-                email,
-                password,
-                redirect: false
-            });
+            router.push("/auth/check-email")
 
-            if (result?.ok) {
-                window.location.reload();
-                return;
-            }
-
-            if (!result || !result.ok) {
-                throw result?.error || 'Error while logging in';
-            }
-
-            // router.push("/auth/check-email")
         } catch (err) {
             if ((err as AppError).error) {
                 const message = handleApiError(err as AppError);

@@ -28,16 +28,16 @@ export const authOptions: AuthOptions = {
                     );
                 }
 
-                // if (!user.emailVerifiedAt) {
-                //     throw new Error(
-                //         JSON.stringify(
-                //             businessError(
-                //                 "Email not verified",
-                //                 "EMAIL_NOT_VERIFIED"
-                //             )
-                //         )
-                //     );
-                // }
+                if (!user.emailVerifiedAt) {
+                    throw new Error(
+                        JSON.stringify(
+                            businessError(
+                                "Email not verified",
+                                "EMAIL_NOT_VERIFIED"
+                            )
+                        )
+                    );
+                }
 
                 const valid = await compare(credentials.password, user.password);
 
