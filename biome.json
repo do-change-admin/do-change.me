@@ -22,9 +22,9 @@
             "project": "all"
         },
         "rules": {
+            "recommended": true,
             "correctness": {
                 "useImportExtensions": "off",
-                "useExhaustiveDependencies": "off",
                 "noUnusedImports": {
                     "level": "error",
                     "fix": "safe"
@@ -34,22 +34,14 @@
                     "fix": "safe"
                 },
                 "noUnusedFunctionParameters": {
-                    "level": "error"                
+                    "level": "error"
                 }
             },
-            "complexity": {
-                "noBannedTypes": "off"
-            },
             "suspicious": {
-                "noGlobalIsNan": "off",
                 "noExplicitAny": "off"
             },
             "style": {
-                "noNonNullAssertion": "off",
-                "useTemplate": {
-                    "fix": "safe",
-                    "level": "error"
-                }
+                "noNonNullAssertion": "off"
             }
         }
     },
@@ -70,6 +62,11 @@
         }
     },
     "css": {
+        "formatter": {
+            "enabled": true
+        }
+    },
+    "json": {
         "formatter": {
             "enabled": true
         }
