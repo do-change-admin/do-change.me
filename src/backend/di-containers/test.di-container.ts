@@ -13,6 +13,11 @@ import { NotificationRAMStore } from '../stores/notification/notification.ram.st
 import type { NotificationStore } from '../stores/notification/notification.store';
 import type { RemotePicturesStore } from '../stores/remote-pictures/remote-pictures.store';
 import { RemotePicturesS3ClientStore } from '../stores/remote-pictures/remote-pictures.store.s3-client';
+import { UserSyndicationRequestRAMStore, type UserSyndicationRequestStore } from '../stores/user-syndication-request';
+import {
+    UserSyndicationRequestDraftRAMStore,
+    type UserSyndicationRequestDraftStore
+} from '../stores/user-syndication-request-draft';
 import { registerControllers } from './register-controllers';
 import { registerServices } from './register-services';
 import { DIProviders, DIStores } from './tokens.di-container';
@@ -21,12 +26,12 @@ const container = new Container();
 
 const registerDataProviders = () => {
     container
-        .bind<DataProviders.SyndicationRequests.Interface>(DIStores.syndicationRequests)
-        .to(DataProvidersImplemetations.InMemory.SyndicationRequests)
+        .bind<UserSyndicationRequestStore>(DIStores.syndicationRequests)
+        .to(UserSyndicationRequestRAMStore)
         .inSingletonScope();
     container
-        .bind<DataProviders.SyndicationRequestDrafts.Interface>(DIStores.syndicationRequestDrafts)
-        .to(DataProvidersImplemetations.InMemory.SyndicationRequestDrafts)
+        .bind<UserSyndicationRequestDraftStore>(DIStores.syndicationRequestDrafts)
+        .to(UserSyndicationRequestDraftRAMStore)
         .inSingletonScope();
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DIStores.vehicleHistoryReports)
@@ -36,7 +41,9 @@ const registerDataProviders = () => {
         .to(DataProvidersImplemetations.InMemory.VehicleHistoryReportsCache)
         .inSingletonScope();
     container.bind<DataProviders.Pictures.Interface>(DIStores.pictures).to(DataProvidersImplemetations.Mock.Pictures);
-    container.bind<DataProviders.Pictures.Interface>(DIStores.reserve_pictures).to(DataProvidersImplemetations.Mock.Pictures);
+    container
+        .bind<DataProviders.Pictures.Interface>(DIStores.reserve_pictures)
+        .to(DataProvidersImplemetations.Mock.Pictures);
 
     container.bind<NotificationStore>(DIStores.notifications).to(NotificationRAMStore).inSingletonScope();
 
@@ -48,7 +55,9 @@ const registerDataProviders = () => {
 const registerFunctionProviders = () => {
     container.bind<IMailerProvider>(DIProviders.mailer).to(ConsoleMailerProvider);
 
-    container.bind<FunctionProviders.Logger.Interface>(DIProviders.logger).to(FunctionProvidersImplementations.Mock.Logger);
+    container
+        .bind<FunctionProviders.Logger.Interface>(DIProviders.logger)
+        .to(FunctionProvidersImplementations.Mock.Logger);
 
     container.bind<S3Client>(DIProviders.s3Client).to(S3ClientAWSSDK);
 };

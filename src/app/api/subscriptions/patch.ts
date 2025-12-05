@@ -1,70 +1,56 @@
-import z from "zod";
+import Stripe from 'stripe';
+import z from 'zod';
+import { prismaClient } from '@/backend/infrastructure';
 import {
-    zodApiMethod_DEPRECATED,
-    ZodAPIMethod_DEPRECATED,
-} from "../../../backend/utils/zod-api-controller.utils";
-import { prismaClient } from "@/backend/infrastructure";
-import Stripe from "stripe";
+    type ZodAPIMethod_DEPRECATED,
+    zodApiMethod_DEPRECATED
+} from '../../../backend/DEPRECATED-HELPERS/zod-api-controller.utils____DEPRECATED';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2025-08-27.basil",
+    apiVersion: '2025-08-27.basil'
 });
 
 const bodySchema = z.object({
-    priceId: z.string().nonempty(),
+    priceId: z.string().nonempty()
 });
 
-export type Method = ZodAPIMethod_DEPRECATED<
-    undefined,
-    typeof bodySchema,
-    undefined
->;
+export type Method = ZodAPIMethod_DEPRECATED<undefined, typeof bodySchema, undefined>;
 
-export const handler = zodApiMethod_DEPRECATED(
-    undefined,
-    bodySchema,
-    undefined,
-    async (payload) => {
-        const { activeUser, priceId } = payload;
+export const handler = zodApiMethod_DEPRECATED(undefined, bodySchema, undefined, async (payload) => {
+    const { activeUser, priceId } = payload;
 
-        const userPlan = await prismaClient.userPlan.findFirst({
-            where: { userId: activeUser.id },
-        });
+    const userPlan = await prismaClient.userPlan.findFirst({
+        where: { userId: activeUser.id }
+    });
 
-        if (!userPlan) {
-            throw new Error("Active subscription not found");
-        }
-
-        const subscriptionItems =
-            await prismaClient.stripeSubscriptionItem.findMany({
-                where: {
-                    subscription: {
-                        stripeSubscriptionId: userPlan.stripeSubscriptionId,
-                    },
-                },
-            });
-
-        if (subscriptionItems.length === 0) {
-            throw new Error(
-                "Subscription item not found (no items for that subscription)"
-            );
-        }
-
-        if (subscriptionItems.length > 1) {
-            throw new Error(
-                "Invariant violated: multiple subscription items found — aborting to preserve one-item rule"
-            );
-        }
-
-        const subscriptionItem = subscriptionItems[0];
-
-        await stripe.subscriptions.update(userPlan.stripeSubscriptionId, {
-            items: [
-                { id: subscriptionItem.stripeItemId, deleted: true },
-                { price: priceId, quantity: 1 },
-            ],
-            proration_behavior: "none",
-            billing_cycle_anchor: "now",
-        });
+    if (!userPlan) {
+        throw new Error('Active subscription not found');
     }
-);
+
+    const subscriptionItems = await prismaClient.stripeSubscriptionItem.findMany({
+        where: {
+            subscription: {
+                stripeSubscriptionId: userPlan.stripeSubscriptionId
+            }
+        }
+    });
+
+    if (subscriptionItems.length === 0) {
+        throw new Error('Subscription item not found (no items for that subscription)');
+    }
+
+    if (subscriptionItems.length > 1) {
+        throw new Error('Invariant violated: multiple subscription items found — aborting to preserve one-item rule');
+    }
+
+    const subscriptionItem = subscriptionItems[0];
+
+    await stripe.subscriptions.update(userPlan.stripeSubscriptionId, {
+        items: [
+            { id: subscriptionItem.stripeItemId, deleted: true },
+            { price: priceId, quantity: 1 }
+        ],
+        proration_behavior: 'none',
+        billing_cycle_anchor: 'now'
+    });
+});

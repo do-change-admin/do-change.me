@@ -32,11 +32,11 @@
         ],
     },
 
-    "Store contract": {
+	"Store contract": {
 		"prefix": "_STORE-CONTRACT",
 		"body": [
 			"import z from 'zod'",
-			"import { ZodCRUDStore, ZodStoreSchemas } from '@/backend/utils/store/store.utils.zod'",
+			"import { ZodCRUDStore, ZodStoreSchemas } from '@/backend/utils/store/store.zod.utils'",
 			"",
 			"export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}StoreSchemas = {",
 			"\tmodels: {",
@@ -59,13 +59,13 @@
 		]
 	},
 
-    "Prisma store implementation": {
+	"Prisma store implementation": {
 		"prefix": "_STORE-PRISMA",
 		"body": [
 			"import { prismaClient as prisma } from '@/backend/infrastructure'",
 			"import { injectable } from 'inversify'",
 			"import type { Prisma } from '@prisma/client'",
-			"import type { StoreTypes } from '@/backend/utils/store/store.utils.shared-models'",
+			"import type { StoreTypes } from '@/backend/utils/store/store.shared-models.utils'",
 			"import type { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store } from './${TM_FILENAME_BASE/\\..*$//}.store'",
 			"",
 			"type Types = StoreTypes<${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store>",
@@ -170,12 +170,104 @@
 	"RAM CRUD implementation": {
 		"prefix": "_STORE-RAM",
 		"body": [
-			"import { RAMStore } from '@/backend/utils/store/store.utils.ram'",
+			"import { injectable } from 'inversify'",
+			"import { RAMStore } from '@/backend/utils/store/store.ram.utils'",
 			"import type { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store } from './${TM_FILENAME_BASE/\\..*$//}.store'",
 			"",
-			"const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}RAMStore = RAMStore<${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store>()",
+			"const CRUDInRAM = RAMStore<${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store>()",
 			"",
-			"export { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}RAMStore }"
+			"@injectable()",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}RAMStore extends CRUDInRAM implements ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store {",
+			"\t",
+			"}",
+			""
+		]
+	},
+
+	"Service Metadata": {
+		"prefix": "_SERVICE-METADATA",
+		"body": [
+			"import type { ZodServiceDTOs, ZodServiceMetadata } from '@/backend/utils/zod-service.utils'",
+			"",
+			"export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMetadata = {",
+			"\tname: '${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}',",
+			"\tschemas: {$1}",
+			"} satisfies ZodServiceMetadata",
+			"",
+			"export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}ServiceDTOs = ZodServiceDTOs<typeof ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMetadata>"
+		]
+	},
+
+	"Service": {
+		"prefix": "_SERVICE",
+		"body": [
+			"import { injectable } from 'inversify'",
+			"import { ZodService } from '@/backend/utils/zod-service.utils'",
+			"import { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMetadata } from './${TM_FILENAME_BASE/\\..*$//}.service.metadata'",
+			"",
+			"@injectable()",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Service extends ZodService(${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMetadata) {$1}"
+		]
+	},
+
+	"Service Mappers": {
+		"prefix": "_SERVICE_MAPPERS",
+		"body": [
+			"export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMappers = {}"
+		]
+	},
+
+	"Controller Metadata": {
+		"prefix": "_CONTROLLER-METADATA",
+		"body": [
+			"import type { ZodControllerAPI, ZodControllerMetadata } from '@/backend/utils/zod-controller.utils'",
+			"",
+			"export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ControllerMetadata = {",
+			"\tname: '${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}',",
+			"\tschemas: {$1}",
+			"} satisfies ZodControllerMetadata",
+			"",
+			"export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}API = ZodControllerAPI<typeof ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ControllerMetadata>"
+		]
+	},
+
+	"Controller": {
+		"prefix": "_CONTROLLER",
+		"body": [
+			"import { injectable } from 'inversify'",
+			"import { ZodController } from '@/backend/utils/zod-controller.utils'",
+			"import { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ControllerMetadata } from './${TM_FILENAME_BASE/\\..*$//}.controller.metadata'",
+			"",
+			"@injectable()",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Controller extends ZodController(${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ControllerMetadata) {}"
+		]
+	},
+
+	"Entity": {
+		"prefix": "_ENTITY",
+		"body": [
+			"import z from 'zod'",
+			"import { Identifier } from '@/utils/entities/identifier'",
+			"",
+			"export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Model = z.infer<typeof ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}.schema>",
+			"",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/} {",
+			"\tstatic schema = z.object({",
+			"\t\tid: Identifier.schema,",
+			"\t\t$1",
+			"\t})",
+			"\t",
+			"\tprivate constructor(private readonly data: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Model) {}",
+			"\t",
+			"\tstatic create = (data: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Model) => {",
+			"\t\tconst parsedModel = ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}.schema.parse(data)",
+			"\t\treturn new ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}(parsedModel)",
+			"\t}",
+			"\t",
+			"\tget model(): ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Model {",
+			"\t\treturn this.data",
+			"\t}",
+			"}"
 		]
 	}
 }

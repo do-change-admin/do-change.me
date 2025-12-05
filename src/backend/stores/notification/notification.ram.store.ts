@@ -1,8 +1,9 @@
+import { injectable } from 'inversify';
 import { v4 } from 'uuid';
-import { RAMStore } from '@/backend/utils/store/store.utils.ram';
+import { RAMStore } from '@/backend/utils/store/store.ram.utils';
 import type { NotificationStore } from './notification.store';
 
-const NotificationRAMStore = RAMStore<NotificationStore>({
+const CRUDInRAM = RAMStore<NotificationStore>({
     mappers: {
         createPayloadToDetail: (payload) => {
             return {
@@ -17,4 +18,5 @@ const NotificationRAMStore = RAMStore<NotificationStore>({
     }
 });
 
-export { NotificationRAMStore };
+@injectable()
+export class NotificationRAMStore extends CRUDInRAM implements NotificationStore {}

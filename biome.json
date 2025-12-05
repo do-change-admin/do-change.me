@@ -12,7 +12,7 @@
     "formatter": {
         "enabled": true,
         "indentStyle": "space",
-        "lineWidth": 140,
+        "lineWidth": 120,
         "indentWidth": 4
     },
     "linter": {
@@ -22,16 +22,23 @@
             "project": "all"
         },
         "rules": {
+            "a11y": {
+                "noRedundantAlt": "off"
+            },
             "recommended": true,
+            "performance": {
+                "noImgElement": "off"
+            },
             "correctness": {
                 "useImportExtensions": "off",
+                "noEmptyPattern": "off",
+                "useExhaustiveDependencies": "off",
                 "noUnusedImports": {
                     "level": "error",
                     "fix": "safe"
                 },
                 "noUnusedVariables": {
-                    "level": "error",
-                    "fix": "safe"
+                    "level": "error"
                 },
                 "noUnusedFunctionParameters": {
                     "level": "error"

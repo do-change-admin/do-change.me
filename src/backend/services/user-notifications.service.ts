@@ -21,7 +21,10 @@ export class UserNotificationsService {
     ) {}
 
     allUnseen = async (): Promise<NotificationDTO[]> => {
-        const data = await this.notifications.list({ userId: this.userId, seen: false }, { pageSize: 1000, zeroBasedIndex: 0 });
+        const data = await this.notifications.list(
+            { userId: this.userId, seen: false },
+            { pageSize: 1000, zeroBasedIndex: 0 }
+        );
 
         return data;
     };

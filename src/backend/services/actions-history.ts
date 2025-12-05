@@ -1,29 +1,29 @@
-import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
-import { PricesResultDTO } from "@/app/api/vin/market-value/models";
-import { getServerSession } from "next-auth";
-import { prismaClient } from "@/backend/infrastructure/prisma/client";
+import { getServerSession } from 'next-auth';
+import type { VehicleBaseInfoDTO } from '@/app/api/vin/base-info/models';
+import type { PricesResultDTO } from '@/app/api/vin/market-value/models';
+import { prismaClient } from '@/backend/infrastructure/prisma/client';
 
 export type Item = { registeredAt: Date } & (
     | {
-        target: "report";
-        payload: {
-            vin: string;
-            service: "carfax" | "autocheck";
-            result: { type: string; data: string };
-        };
-    }
+          target: 'report';
+          payload: {
+              vin: string;
+              service: 'carfax' | 'autocheck';
+              result: { type: string; data: string };
+          };
+      }
     | {
-        target: "base info";
-        payload: { vin: string; result: VehicleBaseInfoDTO };
-    }
+          target: 'base info';
+          payload: { vin: string; result: VehicleBaseInfoDTO };
+      }
     | {
-        target: "market value";
-        payload: { vin: string; mileage: number; result: PricesResultDTO };
-    }
+          target: 'market value';
+          payload: { vin: string; mileage: number; result: PricesResultDTO };
+      }
     | {
-        target: "salvage";
-        payload: { vin: string; result: boolean };
-    }
+          target: 'salvage';
+          payload: { vin: string; result: boolean };
+      }
 );
 
 export type VinAnalysisResult = Record<
@@ -48,7 +48,7 @@ export type VinAnalysisResult = Record<
 export const getCurrentUserMail = async () => {
     const session = await getServerSession();
     if (!session) {
-        throw new Error("No server session was found");
+        throw new Error('No server session was found');
     }
     return session.user.email;
 };
@@ -56,15 +56,15 @@ export const getCurrentUserMail = async () => {
 /**
  * Must be used with try/catch.
  */
-export const Register = async (item: Omit<Item, "registeredAt">) => {
+export const Register = async (item: Omit<Item, 'registeredAt'>) => {
     const userMail = await getCurrentUserMail();
     const action = await prismaClient.action.create({
         data: {
             userMail,
             target: item.target,
             payload: JSON.stringify(item.payload),
-            registeredAt: new Date(),
-        },
+            registeredAt: new Date()
+        }
     });
     return action.id;
 };
@@ -76,42 +76,39 @@ export const ShowCurrentHistory = async (): Promise<VinAnalysisResult> => {
     const userMail = await getCurrentUserMail();
     const data = await prismaClient.action.findMany({
         where: { userMail },
-        orderBy: { registeredAt: "desc" },
+        orderBy: { registeredAt: 'desc' }
     });
     const result = data.map(
         ({ target, payload, registeredAt }) =>
-        ({
-            target,
-            payload: payload.startsWith("{")
-                ? JSON.parse(payload)
-                : payload,
-            registeredAt,
-        } as Item)
+            ({
+                target,
+                payload: payload.startsWith('{') ? JSON.parse(payload) : payload,
+                registeredAt
+            }) as Item
     );
 
     const toReturn = result.reduce((accumulator, currentItem) => {
         const vin = currentItem.payload.vin;
         if (!accumulator[vin]) {
-            // @ts-ignore
+            // @ts-expect-error
             accumulator[vin] = {};
         }
 
-        if (currentItem.target === "base info") {
+        if (currentItem.target === 'base info') {
             accumulator[vin].baseInfo = currentItem.payload.result;
             accumulator[vin].registeredAt = currentItem.registeredAt;
         }
 
-        if (currentItem.target === "market value") {
+        if (currentItem.target === 'market value') {
             accumulator[vin].marketValue = currentItem.payload.result;
             accumulator[vin].mileage = currentItem.payload.mileage;
         }
 
-        if (currentItem.target === "report") {
-            accumulator[vin][currentItem.payload.service] =
-                currentItem.payload.result;
+        if (currentItem.target === 'report') {
+            accumulator[vin][currentItem.payload.service] = currentItem.payload.result;
         }
 
-        if (currentItem.target === "salvage") {
+        if (currentItem.target === 'salvage') {
             accumulator[vin].salvage = currentItem.payload.result;
         }
 

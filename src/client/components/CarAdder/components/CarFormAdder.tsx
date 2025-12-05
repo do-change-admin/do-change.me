@@ -9,25 +9,16 @@ import {
     Paper,
     Text,
     TextInput,
-    Title,
-} from "@mantine/core";
-import React, { useEffect, useState } from "react";
+    Title
+} from '@mantine/core';
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import { FaSave } from 'react-icons/fa';
+import { FaCamera, FaDollarSign, FaIdCard, FaPaperPlane, FaUpload } from 'react-icons/fa6';
+import { LoadingMinute } from '@/client/components';
+import styles from './CarFormAdder.module.css';
 
-import styles from "./CarFormAdder.module.css";
-import {
-    FaCamera,
-    FaDollarSign,
-    FaIdCard,
-    FaPaperPlane,
-    FaUpload,
-    FaXmark,
-} from "react-icons/fa6";
-import { FaSave } from "react-icons/fa";
-import {LoadingMinute} from "@/client/components";
-
-export type CarPhoto =
-    | { type: "local"; file: File }
-    | { type: "remote"; url: string; id: string };
+export type CarPhoto = { type: 'local'; file: File } | { type: 'remote'; url: string; id: string };
 
 export type CarInfo = {
     make?: string;
@@ -38,7 +29,7 @@ export type CarInfo = {
     photos: CarPhoto[];
 };
 
-type Mode = "new" | "draft";
+type Mode = 'new' | 'draft';
 
 export interface CarFormAdderProps {
     opened: boolean;
@@ -63,15 +54,9 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
     setVin,
     isPending
 }) => {
-    const [mileage, setMileage] = useState<number | undefined>(
-        initialCarInfo?.mileage
-    );
-    const [price, setPrice] = useState<number | undefined>(
-        initialCarInfo?.price
-    );
-    const [photos, setPhotos] = useState<CarPhoto[]>(
-        initialCarInfo?.photos || []
-    );
+    const [mileage, setMileage] = useState<number | undefined>(initialCarInfo?.mileage);
+    const [price, setPrice] = useState<number | undefined>(initialCarInfo?.price);
+    const [photos, setPhotos] = useState<CarPhoto[]>(initialCarInfo?.photos || []);
     const [make, setMake] = useState(initialCarInfo?.make);
     const [model, setModel] = useState(initialCarInfo?.model);
     const [year, setYear] = useState(initialCarInfo?.year);
@@ -83,13 +68,13 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
     }, [initialCarInfo]);
 
     const handleMileageChange = (val: number | string) => {
-        if (typeof val === "string" || val < 0) return;
+        if (typeof val === 'string' || val < 0) return;
 
         setMileage(val);
     };
 
     const handlePriceChange = (val: number | string) => {
-        if (typeof val === "string" || val < 0) return;
+        if (typeof val === 'string' || val < 0) return;
 
         setPrice(val);
     };
@@ -112,12 +97,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
         if (!files.length) return;
         setPhotos((prev) => {
             const free = Math.max(0, 30 - prev.length);
-            return [
-                ...prev,
-                ...files
-                    .slice(0, free)
-                    .map((f) => ({ type: "local", file: f } as const)),
-            ];
+            return [...prev, ...files.slice(0, free).map((f) => ({ type: 'local', file: f }) as const)];
         });
     };
 
@@ -139,31 +119,31 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
         vin?.length === 17 &&
         make?.length &&
         model?.length &&
-        typeof mileage === "number" &&
+        typeof mileage === 'number' &&
         mileage >= 0 &&
-        typeof price === "number" &&
+        typeof price === 'number' &&
         price >= 0 &&
-        typeof year === "number" &&
+        typeof year === 'number' &&
         photos.length > 0;
 
     const isFormValidForDraft = vin?.length === 17;
 
     if (isPending) {
-       return <LoadingMinute label="Uploading images..." />
+        return <LoadingMinute label="Uploading images..." />;
     }
 
     return (
         <Modal
-            opened={opened}
-            onClose={onClose}
-            fullScreen
-            padding="xl"
-            overlayProps={{ blur: 2, opacity: 0.55 }}
-            size="100%"
-            radius="xl"
-            zIndex={999999999}
-            pos={'relative'}
             className={styles.drawerWrapper}
+            fullScreen
+            onClose={onClose}
+            opened={opened}
+            overlayProps={{ blur: 2, opacity: 0.55 }}
+            padding="xl"
+            pos={'relative'}
+            radius="xl"
+            size="100%"
+            zIndex={999999999}
         >
             <div>
                 <Group gap="xs">
@@ -174,70 +154,60 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                 <Grid>
                     <Grid.Col span={12}>
                         <TextInput
-                            radius="lg"
-                            pt="lg"
-                            label="VIN Number *"
-                            placeholder="Enter 17-character VIN"
-                            maxLength={17}
                             classNames={{
-                                input: `${styles.input} ${mode === "draft"
-                                    ? styles.readonlyInput
-                                    : ""
-                                    }`,
+                                input: `${styles.input} ${mode === 'draft' ? styles.readonlyInput : ''}`
                             }}
-                            value={vin}
+                            label="VIN Number *"
+                            maxLength={17}
                             onChange={(e) => setVin(e.currentTarget.value)}
-                            readOnly={mode === "draft"}
+                            placeholder="Enter 17-character VIN"
+                            pt="lg"
+                            radius="lg"
+                            readOnly={mode === 'draft'}
+                            value={vin}
                         />
-                        <Text size="xs" c="dimmed" mt={4}>
-                            Vehicle details will be automatically filled
-                            once VIN is entered
+                        <Text c="dimmed" mt={4} size="xs">
+                            Vehicle details will be automatically filled once VIN is entered
                         </Text>
                     </Grid.Col>
 
                     <Grid.Col span={{ base: 12, sm: 6 }}>
                         <TextInput
-                            radius="lg"
                             label="Make"
+                            onChange={(e) => handleMakeChange(e.currentTarget.value)}
                             placeholder="Auto-filled from VIN"
+                            radius="lg"
                             value={make}
-                            onChange={(e) =>
-                                handleMakeChange(e.currentTarget.value)
-                            }
                         />
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, sm: 6 }}>
                         <TextInput
-                            radius="lg"
                             label="Model"
+                            onChange={(e) => handleModelChange(e.currentTarget.value)}
                             placeholder="Auto-filled from VIN"
+                            radius="lg"
                             value={model}
-                            onChange={(e) =>
-                                handleModelChange(e.currentTarget.value)
-                            }
                         />
                     </Grid.Col>
 
                     <Grid.Col span={{ base: 12, sm: 6 }}>
                         <TextInput
-                            radius="lg"
                             label="Year"
-                            placeholder="Auto-filled from VIN"
-                            value={year}
-                            type="number"
                             min={1}
-                            onChange={(e) =>
-                                handleYearChange(e.currentTarget.value)
-                            }
+                            onChange={(e) => handleYearChange(e.currentTarget.value)}
+                            placeholder="Auto-filled from VIN"
+                            radius="lg"
+                            type="number"
+                            value={year}
                         />
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, sm: 6 }}>
                         <NumberInput
-                            radius="lg"
                             label="Mileage *"
-                            placeholder="0"
                             min={0}
                             onChange={handleMileageChange}
+                            placeholder="0"
+                            radius="lg"
                             value={mileage}
                         />
                     </Grid.Col>
@@ -253,15 +223,15 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                 <Grid mt="md">
                     <Grid.Col span={{ lg: 6, base: 12 }}>
                         <NumberInput
-                            radius="lg"
-                            label="Listing Price *"
-                            placeholder="0.00"
-                            min={0}
-                            onChange={handlePriceChange}
-                            value={price}
                             decimalScale={2}
                             fixedDecimalScale
+                            label="Listing Price *"
+                            min={0}
+                            onChange={handlePriceChange}
+                            placeholder="0.00"
+                            radius="lg"
                             thousandSeparator=","
+                            value={price}
                         />
                     </Grid.Col>
                 </Grid>
@@ -272,37 +242,24 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     <Group gap="xs">
                         <FaCamera className={styles.iconPurple} />
                         <Title order={4}>Photos *</Title>
-                        <Text size="sm" c="dimmed">
+                        <Text c="dimmed" size="sm">
                             (1–30 photos)
                         </Text>
                     </Group>
-                    <Text size="sm" c="dimmed">
+                    <Text c="dimmed" size="sm">
                         {photos.length}/30
                     </Text>
                 </Group>
 
-                <Paper
-                    withBorder
-                    className={styles.uploadArea}
-                    mt="md"
-                    radius="md"
-                >
-                    <FileButton
-                        multiple
-                        onChange={handleAddPhotos}
-                        accept="image/*"
-                        disabled={photos.length >= 30}
-                    >
+                <Paper className={styles.uploadArea} mt="md" radius="md" withBorder>
+                    <FileButton accept="image/*" disabled={photos.length >= 30} multiple onChange={handleAddPhotos}>
                         {(props) => (
-                            <div
-                                {...props}
-                                className={styles.uploadContent}
-                            >
+                            <div {...props} className={styles.uploadContent}>
                                 <FaUpload className={styles.uploadIcon} />
                                 <Text fw={500} mt={8}>
                                     Drop photos here or click to browse
                                 </Text>
-                                <Text size="sm" c="dimmed">
+                                <Text c="dimmed" size="sm">
                                     JPG, PNG up to 10 MB each
                                 </Text>
                             </div>
@@ -313,41 +270,24 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                 {photos.length > 0 && !isPending && (
                     <Grid mt="md">
                         {photos.map((photo, idx) => (
-                            <Grid.Col
-                                key={idx}
-                                span={{ base: 6, sm: 4, md: 3, lg: 2 }}
-                            >
-                                <Paper
-                                    withBorder
-                                    radius="md"
-                                    className={styles.photoItem}
-                                >
+                            <Grid.Col key={idx} span={{ base: 6, sm: 4, md: 3, lg: 2 }}>
+                                <Paper className={styles.photoItem} radius="md" withBorder>
                                     <img
-                                        src={
-                                            photo.type === "local"
-                                                ? URL.createObjectURL(
-                                                    photo.file
-                                                )
-                                                : photo.url
-                                        }
                                         alt={`Photo ${idx + 1}`}
                                         className={styles.photoImage}
+                                        src={photo.type === 'local' ? URL.createObjectURL(photo.file) : photo.url}
                                     />
-                                    <div className={styles.photoIndex}>
-                                        {idx + 1}
-                                    </div>
+                                    <div className={styles.photoIndex}>{idx + 1}</div>
                                     <Button
-                                        size="xs"
-                                        variant="filled"
                                         color="red"
-                                        onClick={() =>
-                                            handleRemovePhoto(idx)
-                                        }
+                                        onClick={() => handleRemovePhoto(idx)}
+                                        size="xs"
                                         style={{
-                                            position: "absolute",
+                                            position: 'absolute',
                                             top: 4,
-                                            right: 4,
+                                            right: 4
                                         }}
+                                        variant="filled"
                                     >
                                         X
                                     </Button>
@@ -362,21 +302,21 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
 
             <Group mt="lg">
                 <Group>
-                    {/* <Button
+                    <Button
+                        disabled={!isFormValidForDraft}
+                        leftSection={<FaSave />}
+                        onClick={handleSaveAsDraft}
                         radius="lg"
                         variant="outline"
-                        leftSection={<FaSave />}
-                        disabled={!isFormValidForDraft}
-                        onClick={handleSaveAsDraft}
                     >
                         Save as Draft
-                    </Button> */}
+                    </Button>
                     <Button
-                        radius="lg"
                         color="blue"
-                        leftSection={<FaPaperPlane />}
                         disabled={!isFormValidForSyndication}
+                        leftSection={<FaPaperPlane />}
                         onClick={handleSubmitForSyndication}
+                        radius="lg"
                     >
                         Submit for Syndication
                     </Button>

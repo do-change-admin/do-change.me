@@ -1,18 +1,16 @@
-import { VercelBlobFileSystemProvider } from "@/backend/providers/implementations";
+import { VercelBlobFileSystemProvider } from '@/backend/providers/implementations';
+import { ProfileService, profileSchema } from '@/backend/services';
+import { EmailAddress } from '@/value-objects/email-address.value-object';
 import {
-    zodApiMethod,
-    ZodAPIMethod,
-    zodApiMethod_DEPRECATED,
-    ZodAPIMethod_DEPRECATED,
-    ZodAPISchemas,
-} from "../../../backend/utils/zod-api-controller.utils";
-import { profileSchema, ProfileService } from "@/backend/services";
-import { EmailAddress } from "@/value-objects/email-address.value-object";
+    type ZodAPIMethod,
+    type ZodAPISchemas,
+    zodApiMethod
+} from '../../../backend/DEPRECATED-HELPERS/zod-api-controller.utils____DEPRECATED';
 
 const schemas = {
     body: undefined,
     query: undefined,
-    response: profileSchema,
+    response: profileSchema
 } satisfies ZodAPISchemas;
 
 export type Method = ZodAPIMethod<typeof schemas>;
@@ -21,12 +19,9 @@ export const handler = zodApiMethod(schemas, {
     handler: async ({ activeUser }) => {
         const { email } = activeUser;
         const emailValueObject = EmailAddress.create(email);
-        const service = new ProfileService(
-            emailValueObject,
-            new VercelBlobFileSystemProvider()
-        );
+        const service = new ProfileService(emailValueObject, new VercelBlobFileSystemProvider());
         const profileData = await service.profileData();
 
         return profileData;
-    },
+    }
 });

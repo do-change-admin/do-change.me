@@ -1,55 +1,40 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-
-import styles from "./page.module.css";
+import { Badge, Button, Card, Group, Select, Stack, Tabs, Text, TextInput } from '@mantine/core';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
+import { useState } from 'react';
+import { FaSearch, FaTimes } from 'react-icons/fa';
+import { FaChevronDown, FaLink } from 'react-icons/fa6';
+import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from '@/app/sdk/sdk.utils';
+import { CardSlider } from '@/client/components';
+import { CarEditor } from '@/client/components/_admin/CarEditor/CarEditor';
 import {
-    Badge,
-    Button,
-    Card,
-    Group,
-    Select,
-    Stack,
-    Tabs,
-    Text,
-    TextInput,
-} from "@mantine/core";
-import { FaChevronDown, FaLink } from "react-icons/fa6";
-import { FaSearch, FaTimes } from "react-icons/fa";
-import {
-    getColorByCarSaleStatus,
-    getVisualDataByCarSaleMarketplaceLink,
-} from "@/app/sdk/sdk.utils";
-import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
-import { SyndicationRequestActiveStatusNames } from "@/entities/sindycation-request-status.entity";
-import { CardSlider } from "@/client/components";
-import { CarEditor } from "@/client/components/_admin/CarEditor/CarEditor";
-import { useAdminSyndicationRequestFilters, useAdminSyndicationRequests } from "@/client/queries/syndication-request-management.queries";
+    useAdminSyndicationRequestFilters,
+    useAdminSyndicationRequests
+} from '@/client/queries/syndication-request-management.queries';
+import type { SyndicationRequestStatus } from '@/entities/syndication-request';
+import styles from './page.module.css';
 
 export default function VehiclesPage() {
     const [opened, { open, close }] = useDisclosure(false);
     const [editingCarId, setEditingCarId] = useState<string | undefined>();
-    const [editingUserCarId, setEditingUserCarId] = useState<
-        string | undefined
-    >();
-    const [vin, setVin] = useState("");
+    const [vin, setVin] = useState('');
     const [debouncedVin] = useDebouncedValue(vin, 500);
     const [make, setMake] = useState<null | string>(null);
     const [model, setModel] = useState<null | string>(null);
-    const [activeTab, setActiveTab] =
-        useState<SyndicationRequestActiveStatusNames>("active");
+    const [activeTab, setActiveTab] = useState<SyndicationRequestStatus>('active');
 
     const { data } = useAdminSyndicationRequests({
-        make: make ?? "",
-        model: model ?? "",
+        make: make ?? '',
+        model: model ?? '',
         status: activeTab,
-        vin: debouncedVin,
+        vin: debouncedVin
     });
 
     const { data: filters } = useAdminSyndicationRequestFilters();
 
     const handleClearFilters = () => {
-        setVin("");
+        setVin('');
         setMake(null);
         setModel(null);
     };
@@ -59,9 +44,8 @@ export default function VehiclesPage() {
         close();
     };
 
-    const handleEdit = (id: string, userId: string) => {
+    const handleEdit = (id: string) => {
         setEditingCarId(id);
-        setEditingUserCarId(userId);
         open();
     };
 
@@ -69,78 +53,64 @@ export default function VehiclesPage() {
 
     return (
         <div className={styles.container}>
-            <Tabs
-                value={activeTab}
-                onChange={(value) => setActiveTab(value as any)}
-                mb="lg"
-            >
+            <Tabs mb="lg" onChange={(value) => setActiveTab(value as any)} value={activeTab}>
                 <Tabs.List>
                     <Tabs.Tab value="pending publisher">
-                        Pending Review{" "}
-                        <Badge color="orange" variant="light" ml={5}>
+                        Pending Review{' '}
+                        <Badge color="orange" ml={5} variant="light">
                             {/*vehicles.filter(v => v.status === 'Pending').length*/}
                         </Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="active">
-                        Active{" "}
-                        <Badge color="green" variant="light" ml={5}>
+                        Active{' '}
+                        <Badge color="green" ml={5} variant="light">
                             {/*vehicles.filter(v => v.status === 'Sold').length*/}
                         </Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="pending sales">
-                        Pending Sales{" "}
-                        <Badge color="gray" variant="light" ml={5}>
+                        Pending Sales{' '}
+                        <Badge color="gray" ml={5} variant="light">
                             {/*vehicles.filter(v => v.status === 'Draft').length*/}
                         </Badge>
                     </Tabs.Tab>
                     <Tabs.Tab value="sold">
-                        Sold{" "}
-                        <Badge color="gray" variant="light" ml={5}>
+                        Sold{' '}
+                        <Badge color="gray" ml={5} variant="light">
                             {/*vehicles.filter(v => v.status === 'Draft').length*/}
                         </Badge>
                     </Tabs.Tab>
                 </Tabs.List>
             </Tabs>
 
-            <Card
-                shadow="sm"
-                radius="md"
-                withBorder
-                className={styles.filtersCard}
-            >
+            <Card className={styles.filtersCard} radius="md" shadow="sm" withBorder>
                 <Stack>
                     <TextInput
-                        placeholder="Enter VIN number..."
                         label="Search by VIN Number"
-                        value={vin}
-                        onChange={(e) => setVin(e.currentTarget.value)}
                         leftSection={<FaSearch />}
+                        onChange={(e) => setVin(e.currentTarget.value)}
+                        placeholder="Enter VIN number..."
+                        value={vin}
                     />
                     <Group>
                         <Select
-                            label="Makes"
-                            placeholder="All Makes"
-                            value={make}
-                            onChange={setMake}
                             data={filters?.makes}
+                            label="Makes"
+                            onChange={setMake}
+                            placeholder="All Makes"
                             rightSection={<FaChevronDown />}
+                            value={make}
                         />
                         <Select
-                            label="Models"
-                            placeholder="All Models"
-                            value={model}
-                            onChange={setModel}
                             data={filters?.models}
+                            label="Models"
+                            onChange={setModel}
+                            placeholder="All Models"
                             rightSection={<FaChevronDown />}
+                            value={model}
                         />
                     </Group>
                     <Group align="right">
-                        <Button
-                            variant="outline"
-                            color="gray"
-                            leftSection={<FaTimes />}
-                            onClick={handleClearFilters}
-                        >
+                        <Button color="gray" leftSection={<FaTimes />} onClick={handleClearFilters} variant="outline">
                             Clear Filters
                         </Button>
                     </Group>
@@ -148,74 +118,57 @@ export default function VehiclesPage() {
             </Card>
 
             <div className={styles.vehicleGrid}>
-                {vehicles.map((v) => (
-                    <Card
-                        shadow="sm"
-                        radius="md"
-                        withBorder
-                        className={styles.vehicleCard}
-                        onClick={() => handleEdit(v.id, v.userId)}
-                    >
-                        <Card.Section style={{ position: "relative" }}>
-                            {v.photoLinks.length > 0 ? (
-                                <CardSlider images={v.photoLinks} />
-                            ) : null}
-                            <Badge
-                                color={getColorByCarSaleStatus(v.status)}
-                                className={styles.statusBadge}
-                            >
-                                {v.status}
-                            </Badge>
-                        </Card.Section>
-                        <Stack mt="sm">
-                            <Text fw={600}>{v.make}</Text>
-                            <Text size="sm" c="dimmed">
-                                {v.model} ({v.year})
-                            </Text>
-                            <Text
-                                size="xs"
-                                c="dimmed"
-                                style={{ fontFamily: "monospace" }}
-                            >
-                                VIN: {v.vin}
-                            </Text>
-                            <Stack gap="xs" mt="xs">
-                                {v.marketplaceLinks.map((link) => {
-                                    const { color, label } =
-                                        getVisualDataByCarSaleMarketplaceLink(
-                                            link
+                {vehicles.map((v) => {
+                    const photoLinks = [v.mainPhotoLink, ...v.additionalPhotoLinks];
+                    return (
+                        <Card
+                            className={styles.vehicleCard}
+                            onClick={() => handleEdit(v.id)}
+                            radius="md"
+                            shadow="sm"
+                            withBorder
+                        >
+                            <Card.Section style={{ position: 'relative' }}>
+                                {<CardSlider images={photoLinks} />}
+                                <Badge className={styles.statusBadge} color={getColorByCarSaleStatus(v.status)}>
+                                    {v.status}
+                                </Badge>
+                            </Card.Section>
+                            <Stack mt="sm">
+                                <Text fw={600}>{v.make}</Text>
+                                <Text c="dimmed" size="sm">
+                                    {v.model} ({v.year})
+                                </Text>
+                                <Text c="dimmed" size="xs" style={{ fontFamily: 'monospace' }}>
+                                    VIN: {v.vin}
+                                </Text>
+                                <Stack gap="xs" mt="xs">
+                                    {v.marketplaceLinks.map((link) => {
+                                        const { color, label } = getVisualDataByCarSaleMarketplaceLink(link);
+                                        return (
+                                            <Button
+                                                color={color}
+                                                fullWidth
+                                                key={link}
+                                                rightSection={<FaLink />}
+                                                styles={{
+                                                    root: {
+                                                        justifyContent: 'space-between'
+                                                    }
+                                                }}
+                                                variant="light"
+                                            >
+                                                {label}
+                                            </Button>
                                         );
-                                    return (
-                                        <Button
-                                            key={link}
-                                            variant="light"
-                                            color={color}
-                                            fullWidth
-                                            rightSection={<FaLink />}
-                                            styles={{
-                                                root: {
-                                                    justifyContent:
-                                                        "space-between",
-                                                },
-                                            }}
-                                        >
-                                            {label}
-                                        </Button>
-                                    );
-                                })}
+                                    })}
+                                </Stack>
                             </Stack>
-                        </Stack>
-                    </Card>
-                ))}
+                        </Card>
+                    );
+                })}
             </div>
-            {opened && editingCarId && editingUserCarId && (
-                <CarEditor
-                    carId={editingCarId}
-                    opened={opened}
-                    onClose={handleClose}
-                    userId={editingUserCarId}
-                />
-            )}
+            {opened && editingCarId && <CarEditor carId={editingCarId} onClose={handleClose} opened={opened} />}
         </div>
     );
 }

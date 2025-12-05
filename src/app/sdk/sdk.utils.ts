@@ -1,30 +1,30 @@
-import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
-import { DefaultMantineColor } from "@mantine/core";
+import type { DefaultMantineColor } from '@mantine/core';
+import type { SyndicationRequestStatusNames } from '@/entities/sindycation-request-status.entity';
 
 export const getColorByCarSaleStatus = (status: SyndicationRequestStatusNames): DefaultMantineColor => {
     switch (status) {
         case 'active':
-            return 'green'
+            return 'green';
         case 'pending publisher':
-            return 'orange'
+            return 'orange';
         case 'pending sales':
-            return 'red'
+            return 'red';
         case 'sold':
-            return 'blue'
+            return 'blue';
         default:
-            return 'green'
+            return 'green';
     }
-}
+};
 
-export const getVisualDataByCarSaleMarketplaceLink = (link: string): { label: string, color: DefaultMantineColor } => {
+export const getVisualDataByCarSaleMarketplaceLink = (link: string): { label: string; color: DefaultMantineColor } => {
     if (link.includes('cruz.com')) {
-        return { label: 'cruz.com', color: 'blue' }
+        return { label: 'cruz.com', color: 'blue' };
     }
     if (link.includes('carsforsale.com')) {
-        return { label: 'carsforsale.com', color: 'orange' }
+        return { label: 'carsforsale.com', color: 'orange' };
     }
     if (link.includes('cargurus.com')) {
-        return { label: 'cargurus.com', color: 'green' }
+        return { label: 'cargurus.com', color: 'green' };
     }
-    return { label: link, color: 'gray' }
-}
+    return { label: link, color: 'gray' };
+};

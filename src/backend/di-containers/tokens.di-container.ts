@@ -15,11 +15,12 @@ export const DIProviders = {
     s3Client: Symbol()
 };
 
-export const ServiceTokens = {
+export const DIServices = {
     email: Symbol.for('EMAIL-SERVICE'),
-    syndicationRequestsFactory: Symbol.for('SYNDICATION-REQUESTS-SERVICE-FACTORY'),
-    syndicationRequestDraftsFactory: Symbol.for('SYNDICATION-REQUEST-DRAFTS-SERVICE-FACTORY'),
-    syndicationRequestManagement: Symbol.for('SYNDICATION-REQUEST-MANAGEMENT-SERVICE'),
+
+    userSyndicationRequests: Symbol(),
+    userSyndicationRequestDrafts: Symbol(),
+
     userNotificationsFactory: Symbol.for('USER-NOTIFICATIONS-SERVICE'),
     userNotificationsManagementFactory: Symbol.for('USER-NOTIFICATIONS-MANAGEMENT-SERVICE')
 };
@@ -30,5 +31,6 @@ export const ControllerTokens = {
     syndicationRequestManagement: Symbol.for('SYNDICATION-REQUEST-MANAGEMENT-CONTROLLER'),
     userNotifications: Symbol.for('USER-NOTIFICATIONS-CONTROLLER'),
     userNotificationsManagement: Symbol.for('USER-NOTIFICATIONS-MANAGEMENT-CONTROLLER'),
-    subscriptions: Symbol()
+    subscriptions: Symbol(),
+    remotePictures: Symbol()
 };

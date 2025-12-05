@@ -1,6 +1,5 @@
 'use client';
 
-import { LoadingOverlay } from '@mantine/core';
 import { Image, LoadingOverlay } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -84,7 +83,9 @@ export const Login = () => {
                 if (isBusinessError(parsedError)) {
                     const { code } = parsedError.error;
                     if (code === 'EMAIL_NOT_VERIFIED') {
-                        setModalMessage('Your email is not verified. Please check your inbox or you can request a new confirmation email.');
+                        setModalMessage(
+                            'Your email is not verified. Please check your inbox or you can request a new confirmation email.'
+                        );
                         setModalMode('email');
                         setButtonText('Resend email');
                         setModalVisible(true);

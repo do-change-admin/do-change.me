@@ -1,16 +1,14 @@
 {
-	"prisma.pinToPrisma6": true,
+  "prisma.pinToPrisma6": true,
   "editor.defaultFormatter": "biomejs.biome",
   "biome.enabled": true,
   "editor.formatOnSave": true,
-  "biome.requireConfiguration": true,
-  "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit",
+	"biome.requireConfiguration": true,
+	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit",
-    "source.action.useSortedProperties.biome": "explicit",
 		"source.fixAll.biome": "explicit",
-  },
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  },
+	},
+	"[prisma]": {
+		"editor.defaultFormatter": "Prisma.prisma"
+	}
 }

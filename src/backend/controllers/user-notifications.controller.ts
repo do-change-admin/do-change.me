@@ -1,9 +1,13 @@
 import { inject, injectable } from 'inversify';
 import z from 'zod';
+import {
+    type ZodController,
+    type ZodControllerSchemas,
+    zodApiMethod
+} from '../DEPRECATED-HELPERS/zod-api-controller.utils____DEPRECATED';
 import type { UserNotificationsServiceFactory } from '../di-containers/register-services';
-import { ServiceTokens } from '../di-containers/tokens.di-container';
+import { DIServices } from '../di-containers/tokens.di-container';
 import { UserNotificationsService } from '../services/user-notifications.service';
-import { type ZodController, type ZodControllerSchemas, zodApiMethod } from '../utils/zod-api-controller.utils';
 
 const schemas = {
     GET: {
@@ -31,7 +35,9 @@ const schemas = {
 
 @injectable()
 export class UserNotificationsController {
-    public constructor(@inject(ServiceTokens.userNotificationsFactory) private readonly serviceFactory: UserNotificationsServiceFactory) {}
+    public constructor(
+        @inject(DIServices.userNotificationsFactory) private readonly serviceFactory: UserNotificationsServiceFactory
+    ) {}
 
     GET = zodApiMethod(schemas.GET, {
         handler: async ({ activeUser }) => {

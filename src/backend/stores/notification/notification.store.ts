@@ -1,8 +1,5 @@
 import z from 'zod';
-import type {
-    ZodCRUDStore,
-    ZodStoreSchemas
-} from '@/backend/utils/store/store.utils.zod';
+import type { ZodCRUDStore, ZodStoreSchemas } from '@/backend/utils/store/store.zod.utils';
 import { Notification } from '@/value-objects/notification.value-object';
 
 const itemSchema = Notification.modelSchema.extend({

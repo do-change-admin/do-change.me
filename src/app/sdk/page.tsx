@@ -1,51 +1,39 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { ActionIcon, Badge, Button, Group, Loader, Select, Stack, TextInput } from '@mantine/core';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
+import cn from 'classnames';
 import { motion } from 'framer-motion';
-import {
-    FaPlus, FaChevronDown,
-    FaTimes, FaSearch, FaLink
-} from 'react-icons/fa';
-import styles from './page.module.css';
-import { ActionIcon, Badge, Button, Group, Loader, Select, Stack, TextInput } from "@mantine/core";
-import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
-import { SyndicationRequestStatusNames } from "@/entities/sindycation-request-status.entity";
-import { useSyndicationRequestFilters, useSyndicationRequests } from "@/client/queries/syndication-requests.queries";
-import { CarAdder } from "@/client/components/CarAdder/CarAdder";
-import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from "@/app/sdk/sdk.utils";
-import { PlaceholderSDK } from "@/client/components";
-import NoAccessPage from "@/app/sdk/no-access-page";
+import { type FC, useState } from 'react';
+import { FaChevronDown, FaLink, FaPlus, FaSearch, FaTimes } from 'react-icons/fa';
+import { TbFilter } from 'react-icons/tb';
+import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from '@/app/sdk/sdk.utils';
+import { PlaceholderSDK } from '@/client/components';
+import { CarAdder } from '@/client/components/CarAdder/CarAdder';
 import { useCurrentSubscriptionInfo } from '@/client/queries/subscription.queries';
-import { TbFilter } from "react-icons/tb";
-import cn from "classnames";
-import { useProfile } from "@/client/hooks";
+import { useSyndicationRequestFilters, useSyndicationRequests } from '@/client/queries/syndication-requests.queries';
+import type { SyndicationRequestStatus } from '@/entities/syndication-request';
+import styles from './page.module.css';
 
-const STATUS_OPTIONS = [
-    // 'draft',
-    'pending publisher',
-    'active',
-    'pending sales',
-    'sold',
-];
+const STATUS_OPTIONS = ['draft', 'all active', 'pending publisher', 'active', 'pending sales', 'sold'];
 
 const CarSyndicationSection: FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
     const [openedFilters, openFilters] = useState(false);
-    const [vin, setVin] = useState("");
+    const [vin, setVin] = useState('');
     const [debouncedVin] = useDebouncedValue(vin, 500);
     const [make, setMake] = useState<null | string>(null);
     const [model, setModel] = useState<null | string>(null);
     const [editingId, setEditingId] = useState<string | undefined>();
-    const [activeTab, setActiveTab] =
-        useState<SyndicationRequestStatusNames>("pending publisher");
+    const [activeTab, setActiveTab] = useState<SyndicationRequestStatus | 'draft' | 'all active'>('all active');
 
-    const { data: subscriptionInfo, isFetching: subscriptionLevelIsFetching } = useCurrentSubscriptionInfo()
+    const { data: subscriptionInfo, isFetching: subscriptionLevelIsFetching } = useCurrentSubscriptionInfo();
 
     const { data, isLoading } = useSyndicationRequests({
-        make: make ?? "",
-        model: model ?? "",
+        make: make ?? '',
+        model: model ?? '',
         status: activeTab,
-        vin: debouncedVin,
+        vin: debouncedVin
     });
     const { data: filters, isLoading: isLoadingFilters } = useSyndicationRequestFilters();
 
@@ -62,21 +50,20 @@ const CarSyndicationSection: FC = () => {
     };
 
     const handleClearFilters = () => {
-        setVin("");
+        setVin('');
         setMake(null);
         setModel(null);
     };
-
 
     if (isLoading || isLoadingFilters || subscriptionLevelIsFetching) {
         return (
             <div className={styles.loader}>
                 <Loader />
             </div>
-        )
+        );
     }
 
-    const subscriptionLevel = subscriptionInfo?.level ?? 'no subscription'
+    const _subscriptionLevel = subscriptionInfo?.level ?? 'no subscription';
 
     // if (subscriptionLevel !== "premium plan") {
     //     return (
@@ -86,99 +73,102 @@ const CarSyndicationSection: FC = () => {
     //     )
     // }
 
-
     //todo: убрать после полного тестирования
     if (!subscriptionInfo?.isAdmin) {
         return (
             <div className={styles.dashboard}>
                 <div className={styles.container}>
-                    <PlaceholderSDK title="Page Temporarily Unavailable" description="This page is currently unavailable. Please try again later." />
+                    <PlaceholderSDK
+                        description="This page is currently unavailable. Please try again later."
+                        title="Page Temporarily Unavailable"
+                    />
                 </div>
             </div>
-        )
+        );
     }
 
     return (
         <div className={styles.dashboard}>
             <div className={styles.container}>
-
                 {/* Header */}
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}
-                    className={styles.header}>
+                <motion.div
+                    animate={{ opacity: 1 }}
+                    className={styles.header}
+                    initial={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <div className={styles.headerLeft}>
                         <div>
                             <h1 className={styles.title}>Vehicle Syndication</h1>
-                            <p className={styles.subtitle}>Manage and publish your inventory across multiple
-                                platforms</p>
+                            <p className={styles.subtitle}>
+                                Manage and publish your inventory across multiple platforms
+                            </p>
                         </div>
                     </div>
                 </motion.div>
                 {/* Filters Section */}
                 <div className={styles.actionLeft}>
-                    <Button
-                        fullWidth
-                        radius="lg" bg="var(--cl-fio)"
-                        leftSection={<FaPlus />}
-                        onClick={open}
-                    >
+                    <Button bg="var(--cl-fio)" fullWidth leftSection={<FaPlus />} onClick={open} radius="lg">
                         Add Car
                     </Button>
                     <Group>
                         <Select
-                            radius="lg"
-                            placeholder="Select Status"
                             data={STATUS_OPTIONS}
-                            value={activeTab}
                             onChange={(value) => setActiveTab(value as any)}
+                            placeholder="Select Status"
+                            radius="lg"
+                            value={activeTab}
                         />
                         <ActionIcon
+                            color="var(--cl-fio)"
+                            onClick={() => openFilters((prev) => !prev)}
                             radius="lg"
                             size="lg"
-                            variant={openedFilters ? "filled" : "outline"}
-                            color="var(--cl-fio)"
-                            onClick={() => openFilters(prev => !prev)}
+                            variant={openedFilters ? 'filled' : 'outline'}
                         >
                             <TbFilter />
                         </ActionIcon>
                     </Group>
                 </div>
                 {openedFilters && (
-                    <div className={cn(styles.filtersSection, {
-                        [styles.openFilters]: openedFilters
-                    })}>
+                    <div
+                        className={cn(styles.filtersSection, {
+                            [styles.openFilters]: openedFilters
+                        })}
+                    >
                         <div className={styles.filtersGrid}>
                             <div className={styles.filterItem}>
                                 <TextInput
-                                    placeholder="Enter VIN number..."
                                     label="Search by VIN Number"
+                                    leftSection={<FaSearch />}
+                                    onChange={(e) => setVin(e.currentTarget.value)}
+                                    placeholder="Enter VIN number..."
                                     radius="lg"
                                     value={vin}
-                                    onChange={(e) => setVin(e.currentTarget.value)}
-                                    leftSection={<FaSearch />}
                                 />
                             </div>
 
                             <div className={styles.filterItem}>
                                 <Select
-                                    radius="lg"
-                                    label="Makes"
-                                    placeholder="All Makes"
-                                    value={make}
-                                    onChange={setMake}
                                     data={filters?.makes}
+                                    label="Makes"
+                                    onChange={setMake}
+                                    placeholder="All Makes"
+                                    radius="lg"
                                     rightSection={<FaChevronDown />}
+                                    value={make}
                                 />
                             </div>
 
                             <div className={styles.filterItem}>
                                 <Select
-                                    radius="lg"
-                                    label="Model"
-                                    placeholder="All Makes"
-                                    value={model}
-                                    onChange={setModel}
                                     data={filters?.models}
+                                    label="Model"
+                                    onChange={setModel}
+                                    placeholder="All Makes"
+                                    radius="lg"
                                     rightSection={<FaChevronDown />}
+                                    value={model}
                                 />
                             </div>
 
@@ -199,46 +189,41 @@ const CarSyndicationSection: FC = () => {
                 {/* Vehicle Cards Grid */}
                 {!vehicles.length && <PlaceholderSDK />}
                 <div className={styles.vehicleGrid}>
-
                     {(vehicles ?? []).map((car, i) => (
-                        <motion.div key={i} whileHover={{ scale: 1.03 }} className={styles.vehicleCard}>
+                        <motion.div className={styles.vehicleCard} key={i} whileHover={{ scale: 1.03 }}>
                             <div className={styles.vehicleImageWrapper}>
-                                <img src={car.photoLinks[0]} alt="" />
+                                <img alt="" src={car.mainPhotoLink} />
                             </div>
                             <div className={styles.vehicleContent}>
                                 <div className={styles.vehicleTop}>
-                                    <Badge
-                                        color={getColorByCarSaleStatus(car.status)}
-                                        className={styles.statusBadge}
-                                    >
+                                    <Badge className={styles.statusBadge} color={getColorByCarSaleStatus(car.status)}>
                                         {car.status}
                                     </Badge>
                                     <span className={styles.vin}>VIN: {car.vin}</span>
                                 </div>
-                                <h3> {car.make} {car.model} ({car.year})</h3>
+                                <h3>
+                                    {' '}
+                                    {car.make} {car.model} ({car.year})
+                                </h3>
                                 <div className={styles.vehicleBottom}>
                                     <span className={styles.price}>${(car?.price / 1000).toFixed(3)}</span>
                                 </div>
                             </div>
                             <Stack gap="xs" p="lg">
                                 {car.marketplaceLinks.map((link) => {
-                                    const { color, label } =
-                                        getVisualDataByCarSaleMarketplaceLink(
-                                            link
-                                        );
+                                    const { color, label } = getVisualDataByCarSaleMarketplaceLink(link);
                                     return (
                                         <Button
-                                            key={link}
-                                            variant="light"
                                             color={color}
                                             fullWidth
+                                            key={link}
                                             rightSection={<FaLink />}
                                             styles={{
                                                 root: {
-                                                    justifyContent:
-                                                        "space-between",
-                                                },
+                                                    justifyContent: 'space-between'
+                                                }
                                             }}
+                                            variant="light"
                                         >
                                             {label}
                                         </Button>
@@ -246,22 +231,15 @@ const CarSyndicationSection: FC = () => {
                                 })}
                             </Stack>
                             <Stack>
-                                {car.status === "draft" && (
-                                    <Button onClick={() => handleEdit(car.id)}>
-                                        Edit
-                                    </Button>
-                                )}
+                                {
+                                    // @ts-expect-error
+                                    car.status === 'draft' && <Button onClick={() => handleEdit(car.id)}>Edit</Button>
+                                }
                             </Stack>
                         </motion.div>
                     ))}
                 </div>
-                {opened && (
-                    <CarAdder
-                        draftId={editingId}
-                        opened={opened}
-                        onClose={handleClose}
-                    />
-                )}
+                {opened && <CarAdder draftId={editingId} onClose={handleClose} opened={opened} />}
             </div>
         </div>
     );

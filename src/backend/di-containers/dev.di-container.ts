@@ -14,6 +14,14 @@ import { NotificationPrismaStore } from '../stores/notification/notification.pri
 import type { NotificationStore } from '../stores/notification/notification.store';
 import type { RemotePicturesStore } from '../stores/remote-pictures/remote-pictures.store';
 import { RemotePicturesS3ClientStore } from '../stores/remote-pictures/remote-pictures.store.s3-client';
+import {
+    UserSyndicationRequestPrismaStore,
+    type UserSyndicationRequestStore
+} from '../stores/user-syndication-request';
+import {
+    UserSyndicationRequestDraftPrismaStore,
+    type UserSyndicationRequestDraftStore
+} from '../stores/user-syndication-request-draft';
 import { registerControllers } from './register-controllers';
 import { registerServices } from './register-services';
 import { DIProviders, DIStores } from './tokens.di-container';
@@ -21,19 +29,19 @@ import { DIProviders, DIStores } from './tokens.di-container';
 const container = new Container();
 
 const registerDataProviders = () => {
+    container.bind<UserSyndicationRequestStore>(DIStores.syndicationRequests).to(UserSyndicationRequestPrismaStore);
     container
-        .bind<DataProviders.SyndicationRequests.Interface>(DIStores.syndicationRequests)
-        .to(DataProvidersImplemetations.Prisma.SyndicationRequests);
-    container
-        .bind<DataProviders.SyndicationRequestDrafts.Interface>(DIStores.syndicationRequestDrafts)
-        .to(DataProvidersImplemetations.Prisma.SyndicationRequestDrafts);
+        .bind<UserSyndicationRequestDraftStore>(DIStores.syndicationRequestDrafts)
+        .to(UserSyndicationRequestDraftPrismaStore);
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DIStores.vehicleHistoryReports)
         .to(DataProvidersImplemetations.Mock.VehicleHistoryReports);
     container
         .bind<DataProviders.VehicleHistoryReports.CacheInterface>(DIStores.vehicleHistoryReportsCache)
         .to(DataProvidersImplemetations.InMemory.VehicleHistoryReportsCache);
-    container.bind<DataProviders.Pictures.Interface>(DIStores.pictures).to(DataProvidersImplemetations.API.PicturesInPublicFolder);
+    container
+        .bind<DataProviders.Pictures.Interface>(DIStores.pictures)
+        .to(DataProvidersImplemetations.API.PicturesInPublicFolder);
     container.bind<NotificationStore>(DIStores.notifications).to(NotificationPrismaStore).inSingletonScope();
     container.bind<DataProviders.Pictures.Interface>(DIStores.reserve_pictures).to(PicturesS3DataProvider);
 
@@ -43,7 +51,9 @@ const registerDataProviders = () => {
 const registerFunctionProviders = () => {
     container.bind<IMailerProvider>(DIProviders.mailer).to(ResendMailerProvider);
 
-    container.bind<FunctionProviders.Logger.Interface>(DIProviders.logger).to(FunctionProvidersImplementations.Mock.Logger);
+    container
+        .bind<FunctionProviders.Logger.Interface>(DIProviders.logger)
+        .to(FunctionProvidersImplementations.Mock.Logger);
 
     container.bind<S3Client>(DIProviders.s3Client).to(S3ClientAWSSDK);
 };
