@@ -1,7 +1,7 @@
 import type { DefaultMantineColor } from '@mantine/core';
-import type { SyndicationRequestStatusNames } from '@/entities/sindycation-request-status.entity';
+import type { SyndicationRequestStatus } from '@/entities/syndication-request';
 
-export const getColorByCarSaleStatus = (status: SyndicationRequestStatusNames): DefaultMantineColor => {
+export const getColorByCarSaleStatus = (status: SyndicationRequestStatus): DefaultMantineColor => {
     switch (status) {
         case 'active':
             return 'green';

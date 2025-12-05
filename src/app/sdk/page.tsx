@@ -13,6 +13,7 @@ import { CarAdder } from '@/client/components/CarAdder/CarAdder';
 import { useCurrentSubscriptionInfo } from '@/client/queries/subscription.queries';
 import { useSyndicationRequestFilters, useSyndicationRequests } from '@/client/queries/syndication-requests.queries';
 import type { SyndicationRequestStatus } from '@/entities/syndication-request';
+import NoAccessPage from './no-access-page';
 import styles from './page.module.css';
 
 const STATUS_OPTIONS = ['draft', 'all active', 'pending publisher', 'active', 'pending sales', 'sold'];
@@ -63,15 +64,15 @@ const CarSyndicationSection: FC = () => {
         );
     }
 
-    const _subscriptionLevel = subscriptionInfo?.level ?? 'no subscription';
+    const subscriptionLevel = subscriptionInfo?.level ?? 'no subscription';
 
-    // if (subscriptionLevel !== "premium plan") {
-    //     return (
-    //         <div className={styles.container}>
-    //             <NoAccessPage />
-    //         </div>
-    //     )
-    // }
+    if (subscriptionLevel !== 'premium plan') {
+        return (
+            <div className={styles.container}>
+                <NoAccessPage />
+            </div>
+        );
+    }
 
     //todo: убрать после полного тестирования
     if (!subscriptionInfo?.isAdmin) {
