@@ -3,6 +3,7 @@
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import Alert from '@/client/components/Alert/Alert';
+import { EMailAddress } from '@/utils/entities/email-address';
 import styles from './LoginModal.module.css';
 
 interface ModalProps {
@@ -13,7 +14,13 @@ interface ModalProps {
     mode?: 'password' | 'email'; // режим кнопки
 }
 
-export const LoginModal: React.FC<ModalProps> = ({ message, onClose, showEmailInput = false, buttonText = 'Send', mode = 'email' }) => {
+export const LoginModal: React.FC<ModalProps> = ({
+    message,
+    onClose,
+    showEmailInput = false,
+    buttonText = 'Send',
+    mode = 'email'
+}) => {
     const [emailInput, setEmailInput] = useState('');
     const [statusMessage, setStatusMessage] = useState(message);
     const [sentSuccessfully, setSentSuccessfully] = useState(false);
@@ -24,8 +31,7 @@ export const LoginModal: React.FC<ModalProps> = ({ message, onClose, showEmailIn
         setStatusMessage(message);
     }, [message]);
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isEmailValid = emailRegex.test(emailInput);
+    const isEmailValid = EMailAddress.schema.safeParse(emailInput).success;
 
     const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) onClose();
@@ -70,7 +76,7 @@ export const LoginModal: React.FC<ModalProps> = ({ message, onClose, showEmailIn
     return (
         <div className={styles.overlay} onClick={handleOverlayClick}>
             <div className={styles.modal}>
-                <button aria-label="Close modal" className={styles.closeButton} onClick={onClose}>
+                <button aria-label="Close modal" className={styles.closeButton} onClick={onClose} type="button">
                     ✕
                 </button>
 
@@ -90,7 +96,12 @@ export const LoginModal: React.FC<ModalProps> = ({ message, onClose, showEmailIn
                             {!isEmailValid && emailInput.length > 0 && (
                                 <p className={styles.errorText}>Please enter a valid email address</p>
                             )}
-                            <button className={styles.actionButton} disabled={!emailInput || !isEmailValid} onClick={handleButtonClick}>
+                            <button
+                                className={styles.actionButton}
+                                disabled={!emailInput || !isEmailValid}
+                                onClick={handleButtonClick}
+                                type="button"
+                            >
                                 {buttonText}
                             </button>
                         </>

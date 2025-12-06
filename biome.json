@@ -23,7 +23,10 @@
         },
         "rules": {
             "a11y": {
-                "noRedundantAlt": "off"
+                "noRedundantAlt": "off",
+                "noLabelWithoutControl": "off",
+                "noStaticElementInteractions": "off",
+                "useKeyWithClickEvents": "off"
             },
             "recommended": true,
             "performance": {

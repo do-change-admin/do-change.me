@@ -8,7 +8,7 @@ export class EMailAddress {
     private constructor(private readonly data: EMailAddressModel) {}
 
     static create = (data: EMailAddressModel) => {
-        return new EMailAddress(EMailAddress.schema.parse(data));
+        return new EMailAddress(EMailAddress.schema.parse(data.trim()));
     };
 
     get model(): EMailAddressModel {

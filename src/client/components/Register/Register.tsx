@@ -3,12 +3,12 @@
 import { Image } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
 import type React from 'react';
 import { useState } from 'react';
 import Alert from '@/client/components/Alert/Alert';
 import type { AppError } from '@/lib-deprecated/errors';
 import { handleApiError } from '@/lib-deprecated/handleApiError';
+import { EMailAddress } from '@/utils/entities/email-address';
 import styles from './Register.module.css';
 
 // import {GoogleButton} from "@/components/GoogleButton/GoogleButton";
@@ -46,8 +46,7 @@ export const Register = () => {
     const [alertType, setAlertType] = useState<'success' | 'error'>('success');
 
     const passwordsMatch = password === confirmPassword;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isEmailValid = emailRegex.test(email);
+    const isEmailValid = EMailAddress.schema.safeParse(email).success;
     const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
     const isPasswordValid = passwordRegex.test(password);
 
@@ -61,8 +60,6 @@ export const Register = () => {
         passwordsMatch &&
         agree;
 
-    const _handleClick = () => router.push('/');
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
@@ -70,15 +67,14 @@ export const Register = () => {
             await apiFetch<{ message: string }>('/api/auth/register', {
                 method: 'POST',
                 body: JSON.stringify({
-                    email,
-                    password,
+                    email: EMailAddress.create(email).model,
+                    password: password.trim(),
                     firstName,
                     lastName
                 })
             });
 
-            router.push("/auth/check-email")
-
+            router.push('/auth/check-email');
         } catch (err) {
             if ((err as AppError).error) {
                 const message = handleApiError(err as AppError);
@@ -130,7 +126,12 @@ export const Register = () => {
                             </div>
                             <div>
                                 <label>Last Name</label>
-                                <input onChange={(e) => setLastName(e.target.value)} placeholder="Doe" type="text" value={lastName} />
+                                <input
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    placeholder="Doe"
+                                    type="text"
+                                    value={lastName}
+                                />
                             </div>
                             <div>
                                 <label>Email</label>
@@ -168,7 +169,9 @@ export const Register = () => {
                                     type="password"
                                     value={confirmPassword}
                                 />
-                                {!passwordsMatch && <span className={styles.validationError}>Passwords do not match</span>}
+                                {!passwordsMatch && (
+                                    <span className={styles.validationError}>Passwords do not match</span>
+                                )}
                             </div>
 
                             <div className={styles.terms}>
@@ -180,13 +183,22 @@ export const Register = () => {
                                 />
                                 <span>
                                     I agree to{' '}
-                                    <Link className={styles.link} href="/legal" rel="noopener noreferrer" target="_blank">
+                                    <Link
+                                        className={styles.link}
+                                        href="/legal"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
                                         Terms and Privacy
                                     </Link>
                                 </span>
                             </div>
 
-                            <button className={styles.registerButton} disabled={!isFormValid || isLoading} type="submit">
+                            <button
+                                className={styles.registerButton}
+                                disabled={!isFormValid || isLoading}
+                                type="submit"
+                            >
                                 Create Account
                             </button>
                         </form>

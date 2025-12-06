@@ -10,6 +10,7 @@ import Alert from '@/client/components/Alert/Alert';
 // import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 import { type AppError, isBusinessError } from '@/lib-deprecated/errors';
 import { handleApiError } from '@/lib-deprecated/handleApiError';
+import { EMailAddress } from '@/utils/entities/email-address';
 import { LoginModal } from '../LoginModal/LoginModal';
 import styles from './Login.module.css';
 
@@ -64,8 +65,8 @@ export const Login = () => {
 
         setLoading(true);
         const result = await signIn('credentials', {
-            email,
-            password,
+            email: EMailAddress.create(email).model,
+            password: password.trim(),
             redirect: false
         });
 

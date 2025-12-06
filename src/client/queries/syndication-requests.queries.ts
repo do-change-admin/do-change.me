@@ -104,7 +104,7 @@ export const useSyndicationRequestManualPosting = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['syndication-requests', 'user', { status: 'pending publisher' }]
+                queryKey: ['syndication-requests', 'user']
             });
         }
     });
@@ -121,10 +121,7 @@ export const useSyndicationRequestPostingFromDraft = () => {
         mutationFn: apiRequest(`${apiURL}/create-from-draft`, 'POST'),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['syndication-requests', 'user', { status: 'pending publisher' }]
-            });
-            queryClient.invalidateQueries({
-                queryKey: ['syndication-requests', 'user', { status: 'draft' }]
+                queryKey: ['syndication-requests', 'user']
             });
         }
     });
