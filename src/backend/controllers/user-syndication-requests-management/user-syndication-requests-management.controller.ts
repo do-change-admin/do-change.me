@@ -23,7 +23,6 @@ export class UserSyndicationRequestsManagementController extends ZodController(
 
     PATCH = this.loggedEndpoint('PATCH', {
         handler: ({ payload }) => {
-            console.log(payload, 'p');
             return this.userSyndicationRequestsService.update(payload);
         }
     });

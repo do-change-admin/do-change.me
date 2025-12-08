@@ -123,7 +123,8 @@ export class UserSyndicationRequestsService extends ZodService(userSyndicationRe
                 {
                     additionalPhotoIds: payload.additionalPhotoIds,
                     mainPhotoId: payload.mainPhotoId,
-                    status: payload.status
+                    status: payload.status,
+                    marketplaceLinks: payload.marketplaceLinks
                 }
             );
             return {};

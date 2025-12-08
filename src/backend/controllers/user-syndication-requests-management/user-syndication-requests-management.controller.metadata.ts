@@ -17,8 +17,8 @@ export const userSyndicationRequestsManagementControllerMetadata = {
         },
 
         PATCH: {
-            query: userSyndicationRequestsServiceMetadata.schemas.update.payload,
-            body: undefined,
+            query: undefined,
+            body: userSyndicationRequestsServiceMetadata.schemas.update.payload,
             response: userSyndicationRequestsServiceMetadata.schemas.update.response
         },
 

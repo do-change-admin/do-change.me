@@ -77,7 +77,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
 
     const handleSave = async () => {
         await updateCar({
-            query: {
+            body: {
                 id: carId,
                 marketplaceLinks: marketplaceLinks.length ? marketplaceLinks : undefined,
                 status: status ?? undefined
