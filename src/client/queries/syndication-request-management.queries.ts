@@ -1,56 +1,46 @@
-import type { SyndicationRequestManagementAPI } from "@/backend/controllers/syndication-request-management.controller";
-import { apiRequest } from "@/client/utils/api-request.utils";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { UserSyndicationRequestsManagementAPI } from '@/backend/controllers/user-syndication-requests-management';
+import { apiRequest } from '@/client/utils/api-request.utils';
 
-type API = SyndicationRequestManagementAPI;
-const apiURL = "/api/syndication-requests/management";
+type API = UserSyndicationRequestsManagementAPI['endpoints'];
+const apiURL = '/api/user-syndication-requests/management';
 
-export const useAdminSyndicationRequests = (query: API["GET"]["payload"]["query"]) => {
-    return useQuery<API["GET"]["response"], API["GET"]["error"]>({
-        queryKey: ["syndication-requests", "management", query],
+export const useAdminSyndicationRequests = (query: API['GET']['payload']['query']) => {
+    return useQuery<API['GET']['response'], API['GET']['error']>({
+        queryKey: ['syndication-requests', 'management', query],
         queryFn: () => {
-            return apiRequest(apiURL, "GET")({ query });
-        },
+            return apiRequest(apiURL, 'GET')({ query });
+        }
     });
 };
 
-export const useAdminSyndicationRequestDetails = (query: API["Details_GET"]["payload"]["query"]) => {
-    return useQuery<
-        API["Details_GET"]["response"],
-        API["Details_GET"]["error"]
-    >({
-        queryKey: ["syndication-requests", "management", "details", query],
+export const useAdminSyndicationRequestDetails = (query: API['Details_GET']['payload']['query']) => {
+    return useQuery<API['Details_GET']['response'], API['Details_GET']['error']>({
+        queryKey: ['syndication-requests', 'management', 'details', query],
         queryFn: () => {
-            return apiRequest(apiURL + "/details", "GET")({ query });
+            return apiRequest(`${apiURL}/details`, 'GET')({ query });
         },
-        enabled: !!query.id,
+        enabled: !!query.id
     });
 };
 
 export const useAdminSyndicationRequestUpdate = () => {
     const queryClient = useQueryClient();
-    return useMutation<
-        API["PATCH"]["response"],
-        API["PATCH"]["error"],
-        API["PATCH"]["payload"]
-    >({
-        mutationFn: apiRequest(apiURL, "PATCH"),
+    return useMutation<API['PATCH']['response'], API['PATCH']['error'], API['PATCH']['payload']>({
+        mutationFn: apiRequest(apiURL, 'PATCH'),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["syndication-requests"],
+                queryKey: ['syndication-requests']
             });
-        },
+        }
     });
 };
 
 export const useAdminSyndicationRequestFilters = () => {
-    return useQuery<
-        API["Filters_GET"]["response"],
-        API["Filters_GET"]["error"]
-    >({
-        queryKey: ["syndication-requests", "management", "filters"],
+    return useQuery<API['Filters_GET']['response'], API['Filters_GET']['error']>({
+        queryKey: ['syndication-requests', 'management', 'filters'],
         queryFn: () => {
-            return apiRequest(apiURL + "/filters", "GET")({});
-        },
+            return apiRequest(`${apiURL}/filters`, 'GET')({});
+        }
     });
 };

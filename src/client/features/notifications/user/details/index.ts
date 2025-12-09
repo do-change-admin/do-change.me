@@ -1,0 +1,1 @@
+export { UserNotificationDetails, type UserNotificationDetailsProps } from './user-notification-details.feature'

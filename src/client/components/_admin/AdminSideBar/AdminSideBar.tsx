@@ -5,11 +5,14 @@ import { usePathname } from "next/navigation";
 import { Stack, Box, Group, Text } from "@mantine/core";
 import { FaTachometerAlt, FaLayerGroup, FaClipboardList } from "react-icons/fa";
 import styles from "./AdminSideBar.module.css";
+import {FaBell} from "react-icons/fa6";
+import React from "react";
 
 const links = [
     { label: "Dashboard", href: "/admin/dashboard", icon: <FaTachometerAlt /> },
     { label: "Auction Access", href: "/admin", icon: <FaClipboardList /> },
     { label: "SDK", href: "/admin/sdk", icon: <FaLayerGroup /> },
+    { label: "Notifications", href: "/admin/notifications", icon:  <FaBell /> },
 ];
 
 export const AdminSideBar = () => {

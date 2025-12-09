@@ -1,35 +1,39 @@
-import z from "zod";
-import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../../../backend/utils/zod-api-controller.utils";
-import { RequestsMeteringService } from "@/backend/services/requests-metering/requests-metering.service";
-import { FeatureKey } from "@/value-objects/feature-key.vo";
-import { DIContainer } from "@/backend/di-containers";
-import { DataProviders } from "@/backend/providers";
-import { StoreTokens } from "@/backend/di-containers/tokens.di-container";
-import { noSubscriptionGuard } from "@/backend/controllers/api-guards/no-subscription.api-guard";
-import { ActionsHistoryService } from "@/backend/services";
-import { VIN } from "@/value-objects/vin.value-object";
+import z from 'zod';
+import { noSubscriptionGuard } from '@/backend/api-guards/no-subscription.api-guard';
+import { DIContainer } from '@/backend/di-containers';
+import { DIStores } from '@/backend/di-containers/tokens.di-container';
+import type { DataProviders } from '@/backend/providers';
+import { ActionsHistoryService } from '@/backend/services';
+import { RequestsMeteringService } from '@/backend/services/requests-metering/requests-metering.service';
+import { FeatureKey } from '@/value-objects/feature-key.vo';
+import { VIN } from '@/value-objects/vin.value-object';
+import {
+    type ZodAPIMethod,
+    type ZodAPISchemas,
+    zodApiMethod
+} from '../../../../backend/DEPRECATED-HELPERS/zod-api-controller.utils____DEPRECATED';
 
-const FROM_CACHE_FLAG = 'FROM_CACHE'
+const FROM_CACHE_FLAG = 'FROM_CACHE';
 
 const schemas = {
     body: undefined,
     query: z.object({
-        vin: VIN.schema,
+        vin: VIN.schema
     }),
     response: z.object({
         htmlMarkup: z.string().nonempty(),
         source: z.string().optional()
     })
-} satisfies ZodAPISchemas
+} satisfies ZodAPISchemas;
 
-export type Method = ZodAPIMethod<typeof schemas>
+export type Method = ZodAPIMethod<typeof schemas>;
 
 export const method = zodApiMethod(schemas, {
-    handler: async ({ payload: { vin }, flags }) => {
+    handler: async ({ payload: { vin } }) => {
         // TODO - вынести в сервис
         const reportsDataProvider = DIContainer()._context.get<DataProviders.VehicleHistoryReports.Interface>(
-            StoreTokens.vehicleHistoryReports
-        )
+            DIStores.vehicleHistoryReports
+        );
         // const reportsCache = DIContainer()._context.get<DataProviders.VehicleHistoryReports.CacheInterface>(
         //     StoreTokens.vehicleHistoryReportsCache
         // )
@@ -40,7 +44,7 @@ export const method = zodApiMethod(schemas, {
         //         htmlMarkup: reportFromCache.report,
         //     }
         // }
-        const report = await reportsDataProvider.findOne({ vin })
+        const report = await reportsDataProvider.findOne({ vin });
         // try {
         //     await reportsCache.create(vin, report.htmlMarkup)
         // }
@@ -48,14 +52,14 @@ export const method = zodApiMethod(schemas, {
         // catch { }
         return {
             htmlMarkup: report.htmlMarkup,
-            // @ts-ignore
+            // @ts-expect-error
             source: report.source
-        }
+        };
     },
     onSuccess: async ({ activeUser, flags, requestPayload, result }) => {
         if (!flags[FROM_CACHE_FLAG]) {
-            const service = new RequestsMeteringService(activeUser.id)
-            await service.incrementUsage(FeatureKey.Report)
+            const service = new RequestsMeteringService(activeUser.id);
+            await service.incrementUsage(FeatureKey.Report);
         }
         await ActionsHistoryService.Register({
             target: 'report' as const,
@@ -64,7 +68,7 @@ export const method = zodApiMethod(schemas, {
                 service: 'carfax',
                 result: { type: 'html', data: result.htmlMarkup }
             }
-        })
+        });
     },
     beforehandler: noSubscriptionGuard
-})
+});

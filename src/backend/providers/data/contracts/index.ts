@@ -1,4 +1,2 @@
-export * as SyndicationRequests from './syndication-requests.data-provider'
-export * as SyndicationRequestDrafts from './syndication-request-drafts.data-provider'
-export * as VehicleHistoryReports from './vehicle-history-reports.data-provider'
-export * as Pictures from './pictures.data-provider'
+export * as Pictures from './pictures.data-provider';
+export * as VehicleHistoryReports from './vehicle-history-reports.data-provider';

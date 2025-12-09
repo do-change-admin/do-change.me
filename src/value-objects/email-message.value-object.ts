@@ -1,17 +1,33 @@
+import { EmailAddress } from "./email-address.value-object";
 import z from "zod";
 
-export const schema = z.object({
-    from: z.email(),
-    to: z.email(),
-    subject: z.string(),
-    content: z.string()
-})
+export class EmailMessage {
+    static emailMessageSchema = z.object({
+        from: EmailAddress.emailAddressschema,
+        to: EmailAddress.emailAddressschema,
+        subject: z.string().min(1, "Subject is required"),
+        content: z.string().min(1, "Content is required"),
+    });
 
-export type Model = z.infer<typeof schema>
+    private constructor(private readonly emailMessage: EmailMessageSchema) {}
 
-export const areSame = (a: Model, b: Model) => {
-    return a.from === b.from
-        && a.to === b.to
-        && a.subject === b.subject
-        && a.content === b.content
+    /**
+     * Unsafe.
+     */
+    static create(data: EmailMessageSchema): EmailMessage {
+        return new EmailMessage(EmailMessage.emailMessageSchema.parse(data));
+    }
+
+    get message(): EmailMessageSchema {
+        return {
+            content: this.emailMessage.content,
+            from: this.emailMessage.from,
+            subject: this.emailMessage.subject,
+            to: this.emailMessage.to,
+        };
+    }
 }
+
+export type EmailMessageSchema = z.infer<
+    typeof EmailMessage.emailMessageSchema
+>;

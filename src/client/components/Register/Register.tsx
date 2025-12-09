@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import styles from "./Register.module.css";
-import Link from "next/link";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import Alert from "@/client/components/Alert/Alert";
-import { AppError } from "@/lib-deprecated/errors";
-import { handleApiError } from "@/lib-deprecated/handleApiError";
-import { signIn } from "next-auth/react";
+import { Image } from '@mantine/core';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useState } from 'react';
+import Alert from '@/client/components/Alert/Alert';
+import type { AppError } from '@/lib-deprecated/errors';
+import { handleApiError } from '@/lib-deprecated/handleApiError';
+import { EMailAddress } from '@/utils/entities/email-address';
+import styles from './Register.module.css';
+
 // import {GoogleButton} from "@/components/GoogleButton/GoogleButton";
 
-async function apiFetch<T>(
-    url: string,
-    options?: RequestInit
-): Promise<T> {
+async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
     const res = await fetch(url, {
         ...options,
         headers: {
-            "Content-Type": "application/json",
-            ...options?.headers,
-        },
+            'Content-Type': 'application/json',
+            ...options?.headers
+        }
     });
 
     if (!res.ok) {
@@ -32,22 +32,21 @@ async function apiFetch<T>(
 
 export const Register = () => {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
 
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [agree, setAgree] = useState(false);
 
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
     const [alertVisible, setAlertVisible] = useState(false);
-    const [alertType, setAlertType] = useState<"success" | "error">("success");
+    const [alertType, setAlertType] = useState<'success' | 'error'>('success');
 
     const passwordsMatch = password === confirmPassword;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isEmailValid = emailRegex.test(email);
+    const isEmailValid = EMailAddress.schema.safeParse(email).success;
     const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
     const isPasswordValid = passwordRegex.test(password);
 
@@ -61,53 +60,34 @@ export const Register = () => {
         passwordsMatch &&
         agree;
 
-    const handleClick = () => router.push("/");
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true)
+        setIsLoading(true);
         try {
-            await apiFetch<{ message: string }>("/api/auth/register", {
-                method: "POST",
+            await apiFetch<{ message: string }>('/api/auth/register', {
+                method: 'POST',
                 body: JSON.stringify({
-                    email,
-                    password,
+                    email: EMailAddress.create(email).model,
+                    password: password.trim(),
                     firstName,
-                    lastName,
-                }),
+                    lastName
+                })
             });
 
-            const result = await signIn("credentials", {
-                email,
-                password,
-                redirect: false,
-            });
-
-            if (result?.ok) {
-                window.location.reload();
-                return;
-            }
-
-            if (!result || !result.ok) {
-                throw result?.error || "Error while logging in"
-            }
-
-            // router.push("/auth/check-email")
-
+            router.push('/auth/check-email');
         } catch (err) {
             if ((err as AppError).error) {
                 const message = handleApiError(err as AppError);
                 setAlertMessage(message);
-                setAlertType("error");
+                setAlertType('error');
                 setAlertVisible(true);
             } else {
-                setAlertMessage("Network error");
-                setAlertType("error");
+                setAlertMessage('Network error');
+                setAlertType('error');
                 setAlertVisible(true);
             }
-        }
-        finally {
-            setIsLoading(false)
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -116,12 +96,12 @@ export const Register = () => {
             {alertVisible && alertMessage && (
                 <Alert
                     message={alertMessage}
-                    type={alertType}
-                    visible={alertVisible}
                     onClose={() => {
                         setAlertVisible(false);
                         setAlertMessage(null);
                     }}
+                    type={alertType}
+                    visible={alertVisible}
                 />
             )}
 
@@ -129,6 +109,7 @@ export const Register = () => {
                 <div className={styles.formWrapper}>
                     <div className={styles.formCard}>
                         <div className={styles.welcomeSection}>
+                            <Image alt="DoChange logo" className={styles.logo} h={40} src="/logo/logo.png" w="auto" />
                             <h2>Create Account</h2>
                         </div>
 
@@ -136,44 +117,42 @@ export const Register = () => {
                             <div>
                                 <label>First Name</label>
                                 <input
-                                    type="text"
-                                    placeholder="John"
-                                    data-testid={"first-name"}
-                                    value={firstName}
+                                    data-testid={'first-name'}
                                     onChange={(e) => setFirstName(e.target.value)}
+                                    placeholder="John"
+                                    type="text"
+                                    value={firstName}
                                 />
                             </div>
                             <div>
                                 <label>Last Name</label>
                                 <input
-                                    type="text"
-                                    placeholder="Doe"
-                                    value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
+                                    placeholder="Doe"
+                                    type="text"
+                                    value={lastName}
                                 />
                             </div>
                             <div>
                                 <label>Email</label>
                                 <input
-                                    type="email"
-                                    placeholder="john@example.com"
-                                    value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="john@example.com"
+                                    type="email"
+                                    value={email}
                                 />
                                 {email.length > 0 && !isEmailValid && (
-                                    <span className={styles.validationError}>
-                                        Please enter a valid email
-                                    </span>
+                                    <span className={styles.validationError}>Please enter a valid email</span>
                                 )}
                             </div>
 
                             <div>
                                 <label>Password</label>
                                 <input
-                                    type="password"
-                                    placeholder="Password"
-                                    value={password}
                                     onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Password"
+                                    type="password"
+                                    value={password}
                                 />
                                 {password.length > 0 && !isPasswordValid && (
                                     <span className={styles.validationError}>
@@ -185,37 +164,40 @@ export const Register = () => {
                             <div>
                                 <label>Confirm</label>
                                 <input
-                                    type="password"
-                                    placeholder="Confirm"
-                                    value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
+                                    placeholder="Confirm"
+                                    type="password"
+                                    value={confirmPassword}
                                 />
                                 {!passwordsMatch && (
-                                    <span className={styles.validationError}>
-                                        Passwords do not match
-                                    </span>
+                                    <span className={styles.validationError}>Passwords do not match</span>
                                 )}
                             </div>
 
                             <div className={styles.terms}>
                                 <input
-                                    type="checkbox"
-                                    className={styles.checkbox}
                                     checked={agree}
+                                    className={styles.checkbox}
                                     onChange={(e) => setAgree(e.target.checked)}
+                                    type="checkbox"
                                 />
                                 <span>
-                                    I agree to{" "}
-                                    <Link href="/legal" target="_blank" rel="noopener noreferrer" className={styles.link}>
+                                    I agree to{' '}
+                                    <Link
+                                        className={styles.link}
+                                        href="/legal"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
                                         Terms and Privacy
                                     </Link>
                                 </span>
                             </div>
 
                             <button
-                                type="submit"
                                 className={styles.registerButton}
                                 disabled={!isFormValid || isLoading}
+                                type="submit"
                             >
                                 Create Account
                             </button>
@@ -233,8 +215,8 @@ export const Register = () => {
 
                         <div className={styles.signinLink}>
                             <p>
-                                Have an account?{" "}
-                                <Link href="/auth/login" className={styles.link}>
+                                Have an account?{' '}
+                                <Link className={styles.link} href="/auth/login">
                                     Sign in
                                 </Link>
                             </p>

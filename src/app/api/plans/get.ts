@@ -1,12 +1,16 @@
-import z from "zod";
-import { zodApiMethod, ZodAPIMethod, ZodAPISchemas } from "../../../backend/utils/zod-api-controller.utils";
-import { prismaClient } from "@/backend/infrastructure";
+import z from 'zod';
+import { prismaClient } from '@/backend/infrastructure';
+import {
+    type ZodAPIMethod,
+    type ZodAPISchemas,
+    zodApiMethod
+} from '../../../backend/DEPRECATED-HELPERS/zod-api-controller.utils____DEPRECATED';
 
 const querySchema = z.object({
     available: z
         .string()
-        .transform((v) => v === "true")
-        .optional(),
+        .transform((v) => v === 'true')
+        .optional()
 });
 
 const planPriceSchema = z.object({
@@ -16,7 +20,7 @@ const planPriceSchema = z.object({
     interval: z.string(),
     amount: z.number(),
     currency: z.string(),
-    stripePriceId: z.string(),
+    stripePriceId: z.string()
 });
 
 const planSchema = z.object({
@@ -28,7 +32,7 @@ const planSchema = z.object({
     stripeProductId: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    prices: z.array(planPriceSchema),
+    prices: z.array(planPriceSchema)
 });
 
 const schemas = {
@@ -36,8 +40,8 @@ const schemas = {
     query: querySchema,
     response: z.object({
         basic: planSchema.nullable(),
-        auctionAccess: planSchema.nullable(),
-    }),
+        auctionAccess: planSchema.nullable()
+    })
 } satisfies ZodAPISchemas;
 
 export type Method = ZodAPIMethod<typeof schemas>;
@@ -46,32 +50,29 @@ export const method = zodApiMethod(schemas, {
     handler: async (res) => {
         const { payload, activeUser } = res;
 
-        let excludePlanId: number | undefined = undefined;
+        let excludePlanId: number | undefined;
 
         if (payload.available) {
             const userPlan = await prismaClient.userPlan.findFirst({
-                where: { userId: activeUser.id },
+                where: { userId: activeUser.id }
             });
             excludePlanId = userPlan?.planId;
         }
 
         const [basic, auctionAccess] = await Promise.all([
             prismaClient.plan.findFirst({
-                where: { slug: "basic" },
-                include: { prices: true },
+                where: { slug: 'basic' },
+                include: { prices: true }
             }),
             prismaClient.plan.findFirst({
-                where: { slug: "auction access" },
-                include: { prices: true },
-            }),
+                where: { slug: 'auction access' },
+                include: { prices: true }
+            })
         ]);
 
         return {
             basic: basic && basic.id !== excludePlanId ? basic : null,
-            auctionAccess:
-                auctionAccess && auctionAccess.id !== excludePlanId
-                    ? auctionAccess
-                    : null,
+            auctionAccess: auctionAccess && auctionAccess.id !== excludePlanId ? auctionAccess : null
         };
-    },
+    }
 });

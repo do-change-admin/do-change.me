@@ -1,0 +1,273 @@
+{
+    "Feature Component": {
+        "prefix": "_FEATURE",
+        "body": [
+            "import type { FC } from 'react'",
+            "",
+            "export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Props = {",
+            "\tviews: {",
+            "\t\t",
+            "\t}",
+            "}",
+            "",
+            "export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}: FC<${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Props> = ({",
+            "\tviews",
+            "}) => {",
+            "\tconst { } = views",
+            "",
+            "\treturn undefined",
+            "}"
+        ],
+    },
+    "Widget Component": {
+        "prefix": "_WIDGET",
+        "body": [
+            "import type { FC } from 'react'",
+            "",
+            "export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}WidgetProps = {}",
+            "",
+            "export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Widget: FC<${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}WidgetProps> = () => {",
+            "\treturn undefined",
+            "}"
+        ],
+    },
+
+	"Store contract": {
+		"prefix": "_STORE-CONTRACT",
+		"body": [
+			"import z from 'zod'",
+			"import { ZodCRUDStore, ZodStoreSchemas } from '@/backend/utils/store/store.zod.utils'",
+			"",
+			"export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}StoreSchemas = {",
+			"\tmodels: {",
+			"\t\tlist: z.object({ $1 }),",
+			"\t\tdetails: z.object({ $2 }),",
+			"\t},",
+			"",
+			"\tsearchPayload: {",
+			"\t\tlist: z.object({ $3 }),",
+			"\t\tspecific: z.object({ $4 }),",
+			"\t},",
+			"",
+			"\tactionsPayload: {",
+			"\t\tcreate: z.object({ $5 }),",
+			"\t\tupdate: z.object({ $6 }),",
+			"\t},",
+			"} satisfies ZodStoreSchemas",
+			"",
+			"export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store = ZodCRUDStore<typeof ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}StoreSchemas>"
+		]
+	},
+
+	"Prisma store implementation": {
+		"prefix": "_STORE-PRISMA",
+		"body": [
+			"import { prismaClient as prisma } from '@/backend/infrastructure'",
+			"import { injectable } from 'inversify'",
+			"import type { Prisma } from '@prisma/client'",
+			"import type { StoreTypes } from '@/backend/utils/store/store.shared-models.utils'",
+			"import type { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store } from './${TM_FILENAME_BASE/\\..*$//}.store'",
+			"",
+			"type Types = StoreTypes<${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store>",
+			"",
+			"const mappers = {",
+			"\ttoFindOnePayload: (source: Types['findOnePayload']): Prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}WhereUniqueInput => {",
+			"\t\treturn {",
+			"\t\t\t",
+			"\t\t};",
+			"\t},",
+			"\ttoFindListPayload: (source: Types['findListPayload']): Prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}WhereInput => {",
+			"\t\treturn {",
+			"\t\t\t",
+			"\t\t};",
+			"\t},",
+			"\ttoListModel: (source: Prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}GetPayload<{}>): Types['listModel'] => {",
+			"\t\treturn {",
+			"\t\t\t",
+			"\t\t};",
+			"\t},",
+			"\ttoDetails: (source: Prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}GetPayload<{ include: { } }>): Types['details'] => {",
+			"\t\treturn {",
+			"\t\t\t",
+			"\t\t};",
+			"\t},",
+			"\ttoCreatePayload: (source: Types['createPayload']): Prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}CreateInput => {",
+			"\t\treturn {",
+			"\t\t\t",
+			"\t\t};",
+			"\t},",
+			"\ttoUpdatePayload: (source: Types['updatePayload']): Prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}UpdateInput => {",
+			"\t\treturn {",
+			"\t\t\t",
+			"\t\t};",
+			"\t}",
+			"}",
+			"",
+			"@injectable()",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}PrismaStore implements ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store {",
+			"\tlist: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store['list'] = async (payload, { pageSize, zeroBasedIndex }) => {",
+			"\t\tconst list = await prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}.findMany({",
+			"\t\t\twhere: mappers.toFindListPayload(payload),",
+			"\t\t\tskip: zeroBasedIndex * pageSize,",
+			"\t\t\ttake: pageSize",
+			"\t\t})",
+			"\t\t",
+			"\t\treturn list.map(mappers.toListModel)",
+			"\t};",
+			"",
+			"\tdetails: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store['details'] = async (payload) => {",
+			"\t\tconst details = await prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}.findUnique({",
+			"\t\t\twhere: mappers.toFindOnePayload(payload),",
+			"\t\t\tinclude: {}",
+			"\t\t})",
+			"",
+			"\t\tif (!details) {",
+			"\t\t\treturn null",
+			"\t\t}",
+			"",
+			"\t\treturn mappers.toDetails(details)",
+			"\t};",
+			"",
+			"\tcreate: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store['create'] = async (payload) => {",
+			"\t\tconst { id } = await prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}.create({",
+			"\t\t\tdata: mappers.toCreatePayload(payload),",
+			"\t\t\tselect: { id: true }",
+			"\t\t})",
+			"",
+			"\t\treturn { id }",
+			"\t};",
+			"",
+			"\tupdateOne: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store['updateOne'] = async (searchPayload, updatePayload) => {",
+			"\t\ttry {",
+			"\t\t\tawait prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}.update({",
+			"\t\t\t\twhere: mappers.toFindOnePayload(searchPayload),",
+			"\t\t\t\tdata: mappers.toUpdatePayload(updatePayload),",
+			"\t\t\t})",
+			"",
+			"\t\t\treturn { success: true }",
+			"\t\t}",
+			"\t\tcatch {",
+			"\t\t\treturn { success: false }",
+			"\t\t}",
+			"\t};",
+			"",
+			"\tdeleteOne: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store['deleteOne'] = async (searchPayload) => {",
+			"\t\ttry {",
+			"\t\t\tawait prisma.${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}.delete({",
+			"\t\t\t\twhere: mappers.toFindOnePayload(searchPayload),",
+			"\t\t\t})",
+			"",
+			"\t\t\treturn { success: true }",
+			"\t\t}",
+			"\t\tcatch {",
+			"\t\t\treturn { success: false }",
+			"\t\t}",
+			"\t};",
+			"};"
+		],
+	},
+
+	"RAM CRUD implementation": {
+		"prefix": "_STORE-RAM",
+		"body": [
+			"import { injectable } from 'inversify'",
+			"import { RAMStore } from '@/backend/utils/store/store.ram.utils'",
+			"import type { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store } from './${TM_FILENAME_BASE/\\..*$//}.store'",
+			"",
+			"const CRUDInRAM = RAMStore<${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store>()",
+			"",
+			"@injectable()",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}RAMStore extends CRUDInRAM implements ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Store {",
+			"\t",
+			"}",
+			""
+		]
+	},
+
+	"Service Metadata": {
+		"prefix": "_SERVICE-METADATA",
+		"body": [
+			"import type { ZodServiceDTOs, ZodServiceMetadata } from '@/backend/utils/zod-service.utils'",
+			"",
+			"export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMetadata = {",
+			"\tname: '${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}',",
+			"\tschemas: {$1}",
+			"} satisfies ZodServiceMetadata",
+			"",
+			"export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}ServiceDTOs = ZodServiceDTOs<typeof ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMetadata>"
+		]
+	},
+
+	"Service": {
+		"prefix": "_SERVICE",
+		"body": [
+			"import { injectable } from 'inversify'",
+			"import { ZodService } from '@/backend/utils/zod-service.utils'",
+			"import { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMetadata } from './${TM_FILENAME_BASE/\\..*$//}.service.metadata'",
+			"",
+			"@injectable()",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Service extends ZodService(${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMetadata) {$1}"
+		]
+	},
+
+	"Service Mappers": {
+		"prefix": "_SERVICE_MAPPERS",
+		"body": [
+			"export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ServiceMappers = {}"
+		]
+	},
+
+	"Controller Metadata": {
+		"prefix": "_CONTROLLER-METADATA",
+		"body": [
+			"import type { ZodControllerAPI, ZodControllerMetadata } from '@/backend/utils/zod-controller.utils'",
+			"",
+			"export const ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ControllerMetadata = {",
+			"\tname: '${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}',",
+			"\tschemas: {$1}",
+			"} satisfies ZodControllerMetadata",
+			"",
+			"export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}API = ZodControllerAPI<typeof ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ControllerMetadata>"
+		]
+	},
+
+	"Controller": {
+		"prefix": "_CONTROLLER",
+		"body": [
+			"import { injectable } from 'inversify'",
+			"import { ZodController } from '@/backend/utils/zod-controller.utils'",
+			"import { ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ControllerMetadata } from './${TM_FILENAME_BASE/\\..*$//}.controller.metadata'",
+			"",
+			"@injectable()",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Controller extends ZodController(${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/camelcase}/}ControllerMetadata) {}"
+		]
+	},
+
+	"Entity": {
+		"prefix": "_ENTITY",
+		"body": [
+			"import z from 'zod'",
+			"import { Identifier } from '@/utils/entities/identifier'",
+			"",
+			"export type ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Model = z.infer<typeof ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}.schema>",
+			"",
+			"export class ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/} {",
+			"\tstatic schema = z.object({",
+			"\t\tid: Identifier.schema,",
+			"\t\t$1",
+			"\t})",
+			"\t",
+			"\tprivate constructor(private readonly data: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Model) {}",
+			"\t",
+			"\tstatic create = (data: ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Model) => {",
+			"\t\tconst parsedModel = ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}.schema.parse(data)",
+			"\t\treturn new ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}(parsedModel)",
+			"\t}",
+			"\t",
+			"\tget model(): ${TM_FILENAME/(^[^.]+).*?([a-zA-Z0-9]*)$/${1:/pascalcase}/}Model {",
+			"\t\treturn this.data",
+			"\t}",
+			"}"
+		]
+	}
+}

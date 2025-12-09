@@ -30,16 +30,19 @@ model User {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
-  stripeCustomer           StripeCustomer?
-  emailVerificationTokens  EmailVerificationToken[]
-  passwordResetTokens      PasswordResetToken[]
-  accounts                 Account[]
-  usageAggregates          UsageAggregate[]
-  userPlan                 UserPlan[]
-  photoFileId              String?
-  birthDate                DateTime?
-  syndicationRequestDrafts SyndicationRequestDrafts[]
-  syndicationRequests      SyndicationRequests[]
+  stripeCustomer               StripeCustomer?
+  emailVerificationTokens      EmailVerificationToken[]
+  passwordResetTokens          PasswordResetToken[]
+  accounts                     Account[]
+  usageAggregates              UsageAggregate[]
+  userPlan                     UserPlan[]
+  photoFileId                  String?
+  birthDate                    DateTime?
+  syndicationRequestDrafts     SyndicationRequestDrafts[]
+  syndicationRequests          SyndicationRequests[]
+  notifications                Notification[]
+  userSyndicationRequests      UserSyndicationRequest[]
+  userSyndicationRequestDrafts UserSyndicationRequestDraft[]
 }
 
 model Account {
@@ -349,7 +352,7 @@ model StripeEvent {
   rawPayload Json
   processed  Boolean  @default(false)
   attempts   Int      @default(1)
-  createdAt  DateTime @default(now()) 
+  createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
 
@@ -403,43 +406,96 @@ model PlanPrice {
 }
 
 model SyndicationRequestDrafts {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
+  userId    String
+  vin       String?
+  make      String?
+  model     String?
+  mileage   Int?
+  price     Int?
+  year      Int?
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  vin   String?
-  make  String?
-  model String?
-
-  mileage Int?
-  price   Int?
-  year    Int?
-
+  user     User     @relation(fields: [userId], references: [id])
   photoIds String[] @default([])
 
   @@index([model, make])
 }
 
 model SyndicationRequests {
-  id String @id @default(uuid())
+  id               String   @id @default(uuid())
+  status           String
+  make             String
+  model            String
+  vin              String
+  mileage          Int
+  price            Int
+  year             Int
+  photoIds         String[]
+  marketplaceLinks String[] @default([])
+  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  status String
-  make   String
-  model  String
-  vin    String
+  @@index([model, make])
+}
 
-  mileage Int
-  price   Int
-  year    Int
+model UserSyndicationRequest {
+  id                 String   @id @default(uuid())
+  status             String
+  make               String
+  model              String
+  vin                String
+  mileage            Int
+  price              Int
+  year               Int
+  mainPhotoId        String
+  additionalPhotoIds String[]
+  marketplaceLinks   String[] @default([])
+  updatedAt          DateTime @updatedAt
+  createdAt          DateTime @default(now())
 
-  photoIds         String[]
-  marketplaceLinks String[] @default([])
-
-  createdAt       DateTime @default(now())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   @@index([model, make])
+}
+
+model UserSyndicationRequestDraft {
+  id                 String   @id @default(uuid())
+  make               String?
+  model              String?
+  vin                String?
+  mileage            Int?
+  price              Int?
+  year               Int?
+  mainPhotoId        String?
+  additionalPhotoIds String[]
+  updatedAt          DateTime @updatedAt
+  createdAt          DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@index([model, make])
+}
+
+enum NotificationLevel {
+  info
+  warning
+  error
+}
+
+model Notification {
+  id        String            @id @default(uuid())
+  level     NotificationLevel
+  seen      Boolean           @default(false)
+  title     String
+  message   String
+  createdAt DateTime          @default(now())
+  recipient User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
 }

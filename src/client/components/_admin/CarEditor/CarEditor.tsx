@@ -12,49 +12,33 @@ import {
     Text,
     TextInput,
     Title,
-    UnstyledButton,
-} from "@mantine/core";
-import styles from "./CarEditor.module.css";
-import {
-    FaCamera,
-    FaDollarSign,
-    FaIdCard,
-    FaLink,
-    FaPlus,
-    FaTrash,
-    FaXmark,
-} from "react-icons/fa6";
+    UnstyledButton
+} from '@mantine/core';
+import { useEffect, useMemo, useState } from 'react';
+import { FaSave } from 'react-icons/fa';
+import { FaCamera, FaDollarSign, FaIdCard, FaLink, FaTrash, FaXmark } from 'react-icons/fa6';
+import { z } from 'zod';
+import { downloadAllImages } from '@/client/components/_admin/CarEditor/utils';
 import {
     useAdminSyndicationRequestDetails,
-    useAdminSyndicationRequestUpdate,
-} from "@/client/queries/syndication-request-management.queries";
-import { FaSave } from "react-icons/fa";
-import { useEffect, useMemo, useState } from "react";
-import { z } from "zod";
-import {downloadAllImages} from "@/client/components/_admin/CarEditor/utils";
+    useAdminSyndicationRequestUpdate
+} from '@/client/queries/syndication-request-management.queries';
+import styles from './CarEditor.module.css';
 
 export interface CarEditorProps {
     opened: boolean;
     carId: string;
-    userId: string;
     onClose: () => void;
 }
 
-export const CarEditor: React.FC<CarEditorProps> = ({
-    onClose,
-    opened,
-    carId,
-    userId,
-}) => {
-    const [status, setStatus] = useState<
-        "pending publisher" | "active" | "pending sales" | "sold" | null
-    >(null);
+export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) => {
+    const [status, setStatus] = useState<'pending publisher' | 'active' | 'pending sales' | 'sold' | null>(null);
     const [marketplaceLinks, setMarketplaceLinks] = useState<string[]>([]);
     const [addLinkModalOpened, setAddLinkModalOpened] = useState(false);
     const [newLinkError, setNewLinkError] = useState<string | null>(null);
-    const [newLinkValue, setNewLinkValue] = useState("");
+    const [newLinkValue, setNewLinkValue] = useState('');
 
-    const { data: car } = useAdminSyndicationRequestDetails({ id: carId, userId });
+    const { data: car } = useAdminSyndicationRequestDetails({ id: carId });
     const { mutateAsync: updateCar } = useAdminSyndicationRequestUpdate();
 
     useEffect(() => {
@@ -66,10 +50,10 @@ export const CarEditor: React.FC<CarEditorProps> = ({
 
     const statusOptions = useMemo(() => {
         return [
-            { label: "Pending publisher", value: "pending publisher" },
-            { label: "Active", value: "active" },
-            { label: "Pending sales", value: "pending sales" },
-            { label: "Sold", value: "sold" },
+            { label: 'Pending publisher', value: 'pending publisher' },
+            { label: 'Active', value: 'active' },
+            { label: 'Pending sales', value: 'pending sales' },
+            { label: 'Sold', value: 'sold' }
         ];
     }, []);
 
@@ -82,47 +66,52 @@ export const CarEditor: React.FC<CarEditorProps> = ({
 
         const parsed = z.url().safeParse(newLinkValue?.trim());
         if (!parsed.success) {
-            setNewLinkError("Please enter a valid URL.");
+            setNewLinkError('Please enter a valid URL.');
             return;
         }
 
         setMarketplaceLinks((prev) => [...prev, parsed.data]);
-        setNewLinkValue("");
+        setNewLinkValue('');
         setAddLinkModalOpened(false);
     };
 
     const handleSave = async () => {
         await updateCar({
-            body: { marketplaceLinks: marketplaceLinks, status: status! },
-            query: { id: carId, userId },
+            body: {
+                id: carId,
+                marketplaceLinks: marketplaceLinks.length ? marketplaceLinks : undefined,
+                status: status ?? undefined
+            }
         });
 
         onClose();
     };
 
+    const photoLinks = [car?.mainPhotoLink, ...(car?.additionalPhotoLinks ?? [])].filter((x) => typeof x === 'string');
+
     return (
         <>
             <Modal
-                opened={opened}
-                onClose={onClose}
-                size="70%"
-                radius="lg"
                 centered
                 classNames={{
                     content: styles.modalContent,
                     body: styles.modalBody,
-                    header: styles.modalHeader,
+                    header: styles.modalHeader
                 }}
+                closeButtonProps={{ icon: <FaXmark /> }}
+                onClose={onClose}
+                opened={opened}
+                overlayProps={{ backgroundOpacity: 0.55, blur: 2 }}
+                radius="lg"
+                size="70%"
                 title={
                     <div>
                         <Title order={2}>Edit Car</Title>
-                        <Text size="sm" c="dimmed">
+                        <Text c="dimmed" size="sm">
                             Fill in the details to list your car for sale
                         </Text>
                     </div>
                 }
-                closeButtonProps={{ icon: <FaXmark /> }}
-                overlayProps={{ backgroundOpacity: 0.55, blur: 2 }}
             >
                 <Stack gap="lg">
                     <div>
@@ -134,59 +123,59 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                         <Grid>
                             <Grid.Col span={12}>
                                 <TextInput
+                                    classNames={{
+                                        input: `${styles.input} ${styles.readonlyInput}`
+                                    }}
                                     label="VIN Number *"
-                                    placeholder="Enter 17-character VIN"
                                     maxLength={17}
+                                    placeholder="Enter 17-character VIN"
+                                    readOnly
                                     value={car?.vin}
-                                    classNames={{
-                                        input: `${styles.input} ${styles.readonlyInput}`,
-                                    }}
-                                    readOnly
                                 />
                             </Grid.Col>
 
                             <Grid.Col span={{ base: 12, sm: 6 }}>
                                 <TextInput
+                                    classNames={{
+                                        input: `${styles.input} ${styles.readonlyInput}`
+                                    }}
                                     label="Make"
-                                    value={car?.make}
                                     readOnly
-                                    classNames={{
-                                        input: `${styles.input} ${styles.readonlyInput}`,
-                                    }}
+                                    value={car?.make}
                                 />
                             </Grid.Col>
                             <Grid.Col span={{ base: 12, sm: 6 }}>
                                 <TextInput
-                                    label="Model"
-                                    value={car?.model}
-                                    readOnly
                                     classNames={{
-                                        input: `${styles.input} ${styles.readonlyInput}`,
+                                        input: `${styles.input} ${styles.readonlyInput}`
                                     }}
+                                    label="Model"
+                                    readOnly
+                                    value={car?.model}
                                 />
                             </Grid.Col>
 
                             <Grid.Col span={{ base: 12, sm: 6 }}>
                                 <TextInput
+                                    classNames={{
+                                        input: `${styles.input} ${styles.readonlyInput}`
+                                    }}
                                     label="Year"
-                                    value={car?.year}
-                                    type="number"
                                     min={1}
                                     readOnly
-                                    classNames={{
-                                        input: `${styles.input} ${styles.readonlyInput}`,
-                                    }}
+                                    type="number"
+                                    value={car?.year}
                                 />
                             </Grid.Col>
                             <Grid.Col span={{ base: 12, sm: 6 }}>
                                 <NumberInput
-                                    label="Mileage *"
-                                    placeholder="0"
-                                    min={0}
-                                    value={car?.mileage}
                                     classNames={{
-                                        input: `${styles.input} ${styles.readonlyInput}`,
+                                        input: `${styles.input} ${styles.readonlyInput}`
                                     }}
+                                    label="Mileage *"
+                                    min={0}
+                                    placeholder="0"
+                                    value={car?.mileage}
                                 />
                             </Grid.Col>
                         </Grid>
@@ -203,14 +192,14 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                         <Grid mt="md">
                             <Grid.Col span={{ lg: 6, base: 12 }}>
                                 <NumberInput
-                                    label="Listing Price *"
-                                    placeholder="0.00"
-                                    min={0}
-                                    value={car?.price}
                                     classNames={{
-                                        input: `${styles.input} ${styles.readonlyInput}`,
+                                        input: `${styles.input} ${styles.readonlyInput}`
                                     }}
+                                    label="Listing Price *"
+                                    min={0}
+                                    placeholder="0.00"
                                     readOnly
+                                    value={car?.price}
                                 />
                             </Grid.Col>
                         </Grid>
@@ -223,52 +212,35 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                             <Group gap="xs">
                                 <FaCamera className={styles.iconPurple} />
                                 <Title order={4}>Photos *</Title>
-                                <Text size="sm" c="dimmed">
+                                <Text c="dimmed" size="sm">
                                     (1–30 photos)
                                 </Text>
                             </Group>
-                            <Text size="sm" c="dimmed">
-                                {car?.photoLinks.length}/30
+                            <Text c="dimmed" size="sm">
+                                {photoLinks.length}/30
                             </Text>
                         </Group>
 
-                        {car?.photoLinks?.length &&
-                            car.photoLinks.length > 0 && (
-                                <Grid mt="md">
-                                    {car.photoLinks.map((photo, idx) => (
-                                        <Grid.Col
-                                            key={idx}
-                                            span={{
-                                                base: 6,
-                                                sm: 4,
-                                                md: 3,
-                                                lg: 2,
-                                            }}
-                                        >
-                                            <Paper
-                                                withBorder
-                                                radius="md"
-                                                className={styles.photoItem}
-                                            >
-                                                <img
-                                                    src={photo}
-                                                    alt={`Photo ${idx + 1}`}
-                                                    className={
-                                                        styles.photoImage
-                                                    }
-                                                />
-                                                <div
-                                                    className={
-                                                        styles.photoIndex
-                                                    }
-                                                >
-                                                    {idx + 1}
-                                                </div>
-                                            </Paper>
-                                        </Grid.Col>
-                                    ))}
-                                </Grid>
-                            )}
+                        {photoLinks?.length && photoLinks.length > 0 && (
+                            <Grid mt="md">
+                                {photoLinks.map((photo, idx) => (
+                                    <Grid.Col
+                                        key={idx}
+                                        span={{
+                                            base: 6,
+                                            sm: 4,
+                                            md: 3,
+                                            lg: 2
+                                        }}
+                                    >
+                                        <Paper className={styles.photoItem} radius="md" withBorder>
+                                            <img alt={`Photo ${idx + 1}`} className={styles.photoImage} src={photo} />
+                                            <div className={styles.photoIndex}>{idx + 1}</div>
+                                        </Paper>
+                                    </Grid.Col>
+                                ))}
+                            </Grid>
+                        )}
                     </div>
 
                     <Divider />
@@ -278,13 +250,9 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                             <Title order={5}>Admin actions</Title>
                         </Group>
 
-                        <Group justify="space-between" mt="md" mb="sm">
+                        <Group justify="space-between" mb="sm" mt="md">
                             <Text fw={600}>Photos</Text>
-                            <Button
-                                variant="light"
-                                color="blue"
-                                onClick={() => downloadAllImages(car?.photoLinks || [])}
-                            >
+                            <Button color="blue" onClick={() => downloadAllImages(photoLinks || [])} variant="light">
                                 Car Photos (.zip)
                             </Button>
                         </Group>
@@ -292,31 +260,27 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                         <Grid mt="md">
                             <Grid.Col span={{ lg: 6, base: 12 }}>
                                 <Select
-                                    label="Status"
                                     data={statusOptions}
-                                    placeholder="Select status"
-                                    value={status}
-                                    // @ts-ignore
+                                    label="Status"
+                                    // @ts-expect-error
                                     onChange={setStatus}
+                                    placeholder="Select status"
                                     styles={{
-                                        input: { minWidth: 220 },
+                                        input: { minWidth: 220 }
                                     }}
+                                    value={status}
                                 />
                             </Grid.Col>
                             <Grid.Col span={{ lg: 6, base: 12 }}>
                                 <Text mb={4} size="md">
                                     Marketplace links
                                 </Text>
-                                <Button
-                                    variant="outline"
-                                    size="xs"
-                                    onClick={() => setAddLinkModalOpened(true)}
-                                >
+                                <Button onClick={() => setAddLinkModalOpened(true)} size="xs" variant="outline">
                                     Add new marketplace link
                                 </Button>
 
                                 {marketplaceLinks.length === 0 ? (
-                                    <Text size="sm" c="dimmed" mt={6}>
+                                    <Text c="dimmed" mt={6} size="sm">
                                         No marketplace links added yet.
                                     </Text>
                                 ) : (
@@ -325,21 +289,19 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                                             <Group
                                                 key={`${lnk}-${idx}`}
                                                 style={{
-                                                    background: "#fafafa",
+                                                    background: '#fafafa',
                                                     padding: 8,
                                                     borderRadius: 8,
-                                                    border: "1px solid rgba(0,0,0,0.04)",
+                                                    border: '1px solid rgba(0,0,0,0.04)'
                                                 }}
                                             >
                                                 <Text
                                                     size="sm"
                                                     style={{
-                                                        overflow: "hidden",
-                                                        textOverflow:
-                                                            "ellipsis",
-                                                        whiteSpace: "nowrap",
-                                                        maxWidth:
-                                                            "calc(100% - 40px)",
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        maxWidth: 'calc(100% - 40px)'
                                                     }}
                                                     title={lnk}
                                                 >
@@ -347,30 +309,22 @@ export const CarEditor: React.FC<CarEditorProps> = ({
                                                 </Text>
                                                 <Group>
                                                     <ActionIcon
-                                                        variant="light"
-                                                        size="sm"
+                                                        aria-label="Open marketplace link"
                                                         onClick={() => {
                                                             // открыть ссылку в новой вкладке
-                                                            window.open(
-                                                                lnk,
-                                                                "_blank",
-                                                                "noopener"
-                                                            );
+                                                            window.open(lnk, '_blank', 'noopener');
                                                         }}
-                                                        aria-label="Open marketplace link"
+                                                        size="sm"
+                                                        variant="light"
                                                     >
                                                         <FaLink />
                                                     </ActionIcon>
                                                     <ActionIcon
-                                                        color="red"
-                                                        variant="light"
-                                                        size="sm"
-                                                        onClick={() =>
-                                                            handleDeleteLink(
-                                                                idx
-                                                            )
-                                                        }
                                                         aria-label="Delete marketplace link"
+                                                        color="red"
+                                                        onClick={() => handleDeleteLink(idx)}
+                                                        size="sm"
+                                                        variant="light"
                                                     >
                                                         <FaTrash />
                                                     </ActionIcon>
@@ -388,11 +342,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({
 
                 <Group mt="lg">
                     <Group>
-                        <Button
-                            variant="outline"
-                            leftSection={<FaSave />}
-                            onClick={handleSave}
-                        >
+                        <Button leftSection={<FaSave />} onClick={handleSave} variant="outline">
                             Save
                         </Button>
                     </Group>
@@ -400,50 +350,48 @@ export const CarEditor: React.FC<CarEditorProps> = ({
             </Modal>
 
             <Modal
-                opened={addLinkModalOpened}
+                centered
                 onClose={() => {
                     setAddLinkModalOpened(false);
                     setNewLinkError(null);
-                    setNewLinkValue("");
+                    setNewLinkValue('');
                 }}
-                title="Add marketplace link"
-                centered
+                opened={addLinkModalOpened}
                 size="lg"
+                title="Add marketplace link"
             >
                 <Stack gap={6}>
                     <TextInput
-                        label="Marketplace URL"
-                        placeholder="https://example.com/your-listing"
-                        value={newLinkValue}
-                        onChange={(e) => setNewLinkValue(e.currentTarget.value)}
                         error={newLinkError ?? undefined}
+                        label="Marketplace URL"
+                        onChange={(e) => setNewLinkValue(e.currentTarget.value)}
+                        placeholder="https://example.com/your-listing"
                         rightSection={
                             <UnstyledButton
                                 onClick={() => {
                                     if (navigator.clipboard) {
-                                        navigator.clipboard
-                                            .readText()
-                                            .then((text) => {
-                                                setNewLinkValue(text);
-                                            });
+                                        navigator.clipboard.readText().then((text) => {
+                                            setNewLinkValue(text);
+                                        });
                                     }
                                 }}
-                                title="Paste from clipboard"
                                 style={{ padding: 6 }}
+                                title="Paste from clipboard"
                             >
                                 <FaLink />
                             </UnstyledButton>
                         }
+                        value={newLinkValue}
                     />
 
                     <Group>
                         <Button
-                            variant="outline"
                             onClick={() => {
                                 setAddLinkModalOpened(false);
                                 setNewLinkError(null);
-                                setNewLinkValue("");
+                                setNewLinkValue('');
                             }}
+                            variant="outline"
                         >
                             Cancel
                         </Button>

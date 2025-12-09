@@ -1,4 +1,0 @@
-{
-  "pattern": "^(issue/\\d+|hotfix/\\s+|hotfix/[a-zA-Z-]+)$",
-  "errorMsg": "Incorrect branch name. Must be 'issue/{issue_number} (for example issue/54), 'hotfix/whatever-we-fix'."
-}

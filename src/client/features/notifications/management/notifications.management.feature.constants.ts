@@ -1,0 +1,1 @@
+export const allNotificationsListQueryKey = ['notifications-management', 'list']
