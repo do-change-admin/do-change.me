@@ -46,6 +46,7 @@ textarea,
 select {
   background-color: white;
   color: black;
+  font-size: 16px !important;
 }
 
 #crisp-chatbox .cc-1kr6o .cc-18ov6 {
