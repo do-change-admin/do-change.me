@@ -218,6 +218,9 @@ const CarSyndicationSection: FC = () => {
                                             color={color}
                                             fullWidth
                                             key={link}
+                                            component="a"
+                                            target="_blank"
+                                            href={link}
                                             rightSection={<FaLink />}
                                             styles={{
                                                 root: {
