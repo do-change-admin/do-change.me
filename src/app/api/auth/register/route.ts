@@ -1,12 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import z from 'zod';
-import { DIContainer } from '@/backend/di-containers';
-import { verificationEmail } from '@/backend/infrastructure/email/templates/verification-email';
 import { prismaClient } from '@/backend/infrastructure/prisma/client';
 import { businessError, serverError, validationError } from '@/lib-deprecated/errors';
 import { generatePasswordHash } from '@/lib-deprecated/password';
-import { EmailMessage } from '@/value-objects/email-message.value-object';
-import { Token } from '@/value-objects/token.vo';
 import { RegistreUser } from './models';
 
 export async function POST(req: NextRequest) {
@@ -35,28 +31,31 @@ export async function POST(req: NextRequest) {
 
         const hashedPassword = await generatePasswordHash(password);
 
-        const user = await prismaClient.user.create({
+        await prismaClient.user.create({
             data: {
                 email: email.toLocaleLowerCase(),
                 password: hashedPassword,
                 firstName,
-                lastName
+                lastName,
+                emailVerifiedAt: new Date()
             }
         });
 
-        const token = Token.withTimeToLive(Number(process.env.TOKEN_TTL_MS));
+        // const token = Token.withTimeToLive(Number(process.env.TOKEN_TTL_MS));
 
-        await prismaClient.emailVerificationToken.create({
-            data: {
-                expiresAt: token.expiresAt,
-                tokenHash: token.hash,
-                userId: user.id
-            }
-        });
+        // await prismaClient.emailVerificationToken.create({
+        //     data: {
+        //         expiresAt: token.expiresAt,
+        //         tokenHash: token.hash,
+        //         userId: user.id
+        //     }
+        // });
 
-        const mailerProvider = DIContainer().MailerProvider();
-        const emailMessage = EmailMessage.create(verificationEmail(user, token.raw));
-        await mailerProvider.send(emailMessage);
+        // after(() => {
+        //     const emailService = DIContainer()._EmailService();
+        //     const email = verificationEmail(user, token.raw);
+        //     emailService.sendEmail(email);
+        // });
 
         return NextResponse.json({ message: 'User created' }, { status: 201 });
     } catch (err: any) {
