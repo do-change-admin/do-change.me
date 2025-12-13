@@ -1,29 +1,26 @@
-import React from 'react';
-import styles from "./VinSearch.module.css";
-import { motion } from "framer-motion";
-import {FaSearch, FaTimes} from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { ActionIcon } from '@mantine/core';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { FaSearch, FaTimes } from 'react-icons/fa';
+import { useShallow } from 'zustand/react/shallow';
 import { Input } from '@/client/components/_ui';
-import Image from "next/image";
-import { useProfile } from "@/client/hooks";
+import { useProfile } from '@/client/hooks';
 import { useScannerState } from '@/client/states/scanner.state';
 import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
-import { useShallow } from 'zustand/react/shallow'
 import { VIN } from '@/value-objects/vin.value-object';
-import {ActionIcon} from "@mantine/core";
+import styles from './VinSearch.module.css';
 
 export const VinSearch = ({ openSubscription }: { openSubscription?: () => void }) => {
     const router = useRouter();
     const { data } = useProfile();
 
-    const { setVIN, vin } = useVINAnalysisState(
-        useShallow(({ setVIN, vin }) => ({ vin, setVIN }))
-    )
-    const start = useScannerState(x => x.start);
+    const { setVIN, vin } = useVINAnalysisState(useShallow(({ setVIN, vin }) => ({ vin, setVIN })));
+    const start = useScannerState((x) => x.start);
 
     const handleSearch = () => {
         if (openSubscription && !data?.subscription) {
-            openSubscription()
+            openSubscription();
             return;
         }
         if (!VIN.schema.safeParse(vin).success) {
@@ -34,50 +31,54 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
 
     const handleStartScanner = () => {
         if (openSubscription && !data?.subscription) {
-            openSubscription()
+            openSubscription();
             return;
         }
-        start()
-    }
+        start();
+    };
 
     return (
         <div className={styles.searchPanel}>
             <div className={styles.grid}>
                 <Input
-                    onChange={(e) => setVIN(e.target.value)}
-                    type="text"
-                    placeholder={vin || 'Enter VIN (e.g. 1C6RD6FT1CS310366)'}
-                    maxLength={17}
-                    value={vin || ""}
-                    icon={<>
-                        {vin && (
-                            <ActionIcon
-                                variant="outline"
-                                onClick={() => setVIN('')}
+                    icon={
+                        <>
+                            {vin && (
+                                <ActionIcon onClick={() => setVIN('')} variant="outline">
+                                    <FaTimes className={styles.icon} />
+                                </ActionIcon>
+                            )}
+                            <motion.button
+                                className={styles.analyzeBtn}
+                                onClick={handleSearch}
+                                whileHover={{ scale: 1.05 }}
                             >
-                                <FaTimes className={styles.icon} />
-                            </ActionIcon>
-                        )}
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            className={styles.analyzeBtn}
-                            onClick={handleSearch}
-                        >
-                            <FaSearch className={styles.icon} /> <span>Analyze</span>
-                        </motion.button>
-                        <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            className={styles.scanBox}
-                            onClick={handleStartScanner}
-                        >
-                            <div className={styles.qrBox}>
-                                <Image className={styles.qrIcon} src="/scanIcon.png" alt='' width={25} height={25} />
-                            </div>
-                        </motion.div>
-                    </>}
+                                <FaSearch className={styles.icon} /> <span>Analyze</span>
+                            </motion.button>
+                            <motion.div
+                                className={styles.scanBox}
+                                onClick={handleStartScanner}
+                                whileHover={{ scale: 1.05 }}
+                            >
+                                <div className={styles.qrBox}>
+                                    <Image
+                                        alt=""
+                                        className={styles.qrIcon}
+                                        height={25}
+                                        src="/scanIcon.png"
+                                        width={25}
+                                    />
+                                </div>
+                            </motion.div>
+                        </>
+                    }
+                    maxLength={17}
+                    onChange={(e) => setVIN(e.target.value)}
+                    placeholder={vin || 'Enter VIN (e.g. 1C6RD6FT1CS310366)'}
+                    type="text"
+                    value={vin || ''}
                 />
-
             </div>
         </div>
     );
-}
+};

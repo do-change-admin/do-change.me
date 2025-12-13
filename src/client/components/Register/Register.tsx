@@ -2,7 +2,6 @@
 
 import { Image } from '@mantine/core';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import type React from 'react';
 import { useState } from 'react';
@@ -32,7 +31,6 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export const Register = () => {
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
     const [firstName, setFirstName] = useState('');

@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { useRecognize } from "./query";
-import { useShallow } from 'zustand/react/shallow'
-import styles from "./Scanner.module.css";
-import { IoClose } from "react-icons/io5";
-import { useRouter } from "next/navigation";
-import { useScannerState } from "@/client/states/scanner.state";
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { useShallow } from 'zustand/react/shallow';
+import { useScannerState } from '@/client/states/scanner.state';
+import { VIN } from '@/value-objects/vin.value-object';
+import { useRecognize } from './query';
+import styles from './Scanner.module.css';
 
 export const Scanner = () => {
     const { open, stop, setResult } = useScannerState(
@@ -24,7 +25,7 @@ export const Scanner = () => {
         if (!open) return;
         const startCamera = async () => {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: "environment" },
+                video: { facingMode: 'environment' }
             });
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
@@ -45,7 +46,7 @@ export const Scanner = () => {
         if (!videoRef.current || !canvasRef.current || recognize.isPending) return;
 
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
         canvas.width = 640;
@@ -56,8 +57,7 @@ export const Scanner = () => {
             if (!blob) return;
             try {
                 const data = await recognize.mutateAsync(blob);
-                if (data?.status === "SUCCESS" && data?.vin_captured) {
-                    // может что-то отъебнёт, но лучше бы не отъебнуло, конечно =)
+                if (data?.status === 'SUCCESS' && data?.vin_captured && VIN.schema.safeParse(data?.vin_captured)) {
                     setResult(data?.vin_captured);
                     setScanning(false);
                     router.push(`/?vin=${encodeURIComponent(data?.vin_captured)}`);
@@ -65,25 +65,28 @@ export const Scanner = () => {
                     stop();
                 }
             } catch (e) {
-                console.error("Ошибка:", e);
+                console.error('Ошибка:', e);
             }
-        }, "image/jpeg");
+        }, 'image/jpeg');
     };
 
     const stopCamera = () => {
         const tracks = (videoRef.current?.srcObject as MediaStream)?.getTracks();
-        tracks?.forEach((t) => t.stop());
+        tracks?.forEach((t) => {
+            t.stop();
+        });
     };
 
     if (!open) return null;
 
     return (
         <div className={styles.wrapper}>
-            <video ref={videoRef} autoPlay playsInline className={styles.webcam} />
+            {/** biome-ignore lint/a11y/useMediaCaption: supress */}
+            <video autoPlay className={styles.webcam} playsInline ref={videoRef} />
             <div className={styles.vinFrame}>
                 <span className={styles.vinLabel}>Align VIN here</span>
             </div>
-            <canvas ref={canvasRef} className={styles.canvas} />
+            <canvas className={styles.canvas} ref={canvasRef} />
             <button
                 className={styles.closeButton}
                 onClick={() => {
@@ -91,6 +94,7 @@ export const Scanner = () => {
                     stop();
                     stopCamera();
                 }}
+                type="button"
             >
                 <IoClose size={24} />
             </button>
