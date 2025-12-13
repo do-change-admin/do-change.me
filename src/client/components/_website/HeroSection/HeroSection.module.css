@@ -1,8 +1,9 @@
 .heroSection {
     position: relative;
     min-height: 900px;
+    padding: 50px;
+    /* margin: 15px; */
     overflow: hidden;
-    padding: 0 1rem;
 }
 
 .backgroundGradient {
@@ -19,82 +20,82 @@
     position: relative;
     z-index: 10;
     max-width: 1280px;
-    margin: 0 auto;
     padding: 5rem 0;
+    margin: 0 auto;
 }
 
 .grid {
     display: grid;
+    grid-template-columns: 1fr;
     gap: 4rem;
     align-items: center;
-    grid-template-columns: 1fr;
 }
 
-@media(min-width: 1024px) {
+@media (min-width: 1024px) {
     .grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 .heroContent {
-    color: white;
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    color: white;
 }
 
 .trustedBadge {
     display: inline-flex;
     align-items: center;
     padding: 0.5rem 1rem;
-    background:  var(--text-texas-blue);
-    border-radius: 9999px;
-    border: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(5px);
     font-size: 0.875rem;
+    background: var(--text-texas-blue);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    backdrop-filter: blur(5px);
 }
 
 .starIcon {
-    color: #facc15;
     margin-right: 0.5rem;
+    color: #facc15;
 }
 
 .heroTitle {
+    margin-top: 1rem;
     font-size: 3rem;
     font-weight: 700;
     line-height: 1.1;
-    margin-top: 1rem;
     color: var(--texas-blue);
 }
 
-@media(min-width: 1024px) {
+@media (min-width: 1024px) {
     .heroTitle {
         font-size: 4rem;
     }
 }
 
 .gradientText {
+    -webkit-text-fill-color: transparent;
     background: linear-gradient(to right, #facc15, #f97316);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .heroSubtitle {
+    max-width: 28rem;
+    margin-top: 1rem;
     font-size: 1.25rem;
     line-height: 1.75rem;
     color: var(--texas-blue);
-    max-width: 28rem;
-    margin-top: 1rem;
 }
 
 .featuresGrid {
     display: grid;
-    gap: 1rem;
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
     margin-top: 2rem;
 }
 
-@media(min-width: 1024px) {
+@media (min-width: 1024px) {
     .featuresGrid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -103,11 +104,11 @@
 .featureCard {
     display: flex;
     gap: 0.75rem;
-    background: rgba(195, 189, 189, 0.1);
+    align-items: center;
     padding: 1.5rem;
+    background: rgba(195, 189, 189, 0.1);
     border-radius: 0.75rem;
     backdrop-filter: blur(5px);
-    align-items: center;
 }
 
 @media (max-width: 700px) {
@@ -117,14 +118,14 @@
 }
 
 .featureIcon {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
     color: white;
     background: var(--texas-blue);
+    border-radius: 0.5rem;
 }
 
 .featureTitle {
@@ -145,40 +146,40 @@
     padding-top: 1.5rem;
 }
 
-@media(min-width: 640px) {
+@media (min-width: 640px) {
     .ctaButtons {
         flex-direction: row;
     }
 }
 
 .getPlanButton {
-    background: linear-gradient(to right, #facc15, #f97316);
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 1rem;
-    font-weight: 700;
-    font-size: 1.125rem;
     display: flex;
-    align-items: center;
     gap: 0.5rem;
-    box-shadow: 0 10px 15px rgba(0,0,0,0.2);
-    border: none;
+    align-items: center;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: white;
     cursor: pointer;
+    background: linear-gradient(to right, #facc15, #f97316);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
 }
 
 .learnMoreButton {
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(5px);
-    color: var(--text-texas-blue);
-    padding: 1rem 2rem;
-    border-radius: 1rem;
-    font-weight: 600;
-    font-size: 1.125rem;
     display: flex;
-    align-items: center;
     gap: 0.5rem;
-    border: 1px solid var(--text-texas-blue);
+    align-items: center;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-texas-blue);
     cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--text-texas-blue);
+    border-radius: 1rem;
+    backdrop-filter: blur(5px);
 }
 
 .buttonIcon {
@@ -194,10 +195,11 @@
     height: auto;
     object-fit: contain;
     border-radius: 1.5rem;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
 }
 
 .floating {
+    padding: 10px;
     animation: float 3s ease-in-out infinite;
 }
 
@@ -210,33 +212,40 @@
 }
 
 .carIcon {
-    top: -1.5rem;
-    right: -1.5rem;
-    width: 6rem;
-    height: 6rem;
-    background: linear-gradient(to bottom right, #facc15, #f97316);
+    bottom: -1.5rem;
+    left: -1.5rem;
+
+    width: 4rem;
+    height: 4rem;
     color: #111827;
+    background: linear-gradient(to bottom right, #facc15, #f97316);
 }
 
 .databaseIcon {
-    bottom: -1.5rem;
-    left: -1.5rem;
-    width: 8rem;
-    height: 8rem;
-    background: linear-gradient(to bottom right, #3b82f6, #8b5cf6);
+    top: -1.5rem;
+    right: -1.5rem;
+
+    width: 4rem;
+    height: 4rem;
     color: white;
+    background: linear-gradient(to bottom right, #3b82f6, #8b5cf6);
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .bottomGradient {
     position: absolute;
+    right: 0;
     bottom: 0;
     left: 0;
-    right: 0;
     height: 8rem;
     background: linear-gradient(to top, white, transparent);
 }

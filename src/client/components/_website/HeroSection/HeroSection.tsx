@@ -1,37 +1,26 @@
-'use client'
+'use client';
 
-import styles from './HeroSection.module.css';
-import {
-    FaChartLine,
-    FaHeadset,
-    FaFileAlt,
-    FaGavel,
-    FaExclamationTriangle,
-    FaRocket,
-    FaInfoCircle,
-    FaCar,
-    FaDatabase,
-    FaBarcode
-} from 'react-icons/fa';
+import { Image } from '@mantine/core';
 import { motion } from 'framer-motion';
-import {useRouter} from "next/navigation";
-import {Image} from "@mantine/core";
+import { useRouter } from 'next/navigation';
+import { FaCar, FaDatabase, FaInfoCircle, FaRocket } from 'react-icons/fa';
+import styles from './HeroSection.module.css';
 
-const features = [
-    { icon: <FaChartLine />, title: 'Market Value', subtitle: 'Unlimited Access' },
-    { icon: <FaBarcode />, title: 'VIN Scanner', subtitle: 'Quick & Accurate' },
-    { icon: <FaHeadset />, title: '24/7 Support', subtitle: 'Always Available' },
-    { icon: <FaFileAlt />, title: 'Vehicle History Reports', subtitle: '' },
-    { icon: <FaGavel />, title: 'Auction Access', subtitle: 'Professional Tools' },
-    { icon: <FaExclamationTriangle />, title: 'Total Loss Check', subtitle: '' },
-];
+// // const features = [
+// //     { icon: <FaChartLine />, title: 'Market Value', subtitle: 'Unlimited Access' },
+// //     { icon: <FaBarcode />, title: 'VIN Scanner', subtitle: 'Quick & Accurate' },
+// //     { icon: <FaHeadset />, title: '24/7 Support', subtitle: 'Always Available' },
+// //     { icon: <FaFileAlt />, title: 'Vehicle History Reports', subtitle: '' },
+// //     { icon: <FaGavel />, title: 'Auction Access', subtitle: 'Professional Tools' },
+// //     { icon: <FaExclamationTriangle />, title: 'Total Loss Check', subtitle: '' }
+// // ];
 
-export const HeroSection = ()=> {
+export const HeroSection = () => {
     const router = useRouter();
     const handleClick = () => router.push('/auth/login');
 
     return (
-        <section id="hero-section" className={styles.heroSection}>
+        <section className={styles.heroSection} id="hero-section">
             <div className={styles.backgroundGradient}></div>
             <div className={styles.overlayGradient}></div>
 
@@ -45,28 +34,29 @@ export const HeroSection = ()=> {
                             {/*    <span>Trusted by Professionals</span>*/}
                             {/*</div>*/}
                             <h1 className={styles.heroTitle}>
-                                Car Flipping Made Easy.{' '}
-                                <span className={styles.gradientText}>Buy & Sell</span>
+                                Car Flipping Made Easy. <span className={styles.gradientText}>Buy & Sell</span>
                             </h1>
                             <p className={styles.heroSubtitle}>
-                                Get all the tools you need to buy, verify, and sell vehicles with confidence. Access dealer auctions, real-time market data, and detailed vehicle reports — <strong>all without a dealer license.</strong>
+                                Get all the tools you need to buy, verify, and sell vehicles with confidence. Access
+                                dealer auctions, real-time market data, and detailed vehicle reports —{' '}
+                                <strong>all without a dealer license.</strong>
                             </p>
                         </div>
 
                         {/* CTA Buttons */}
                         <div className={styles.ctaButtons}>
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
                                 className={styles.getPlanButton}
                                 onClick={handleClick}
+                                whileHover={{ scale: 1.05 }}
                             >
                                 <FaRocket className={styles.buttonIcon} />
                                 Get Plan
                             </motion.button>
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
                                 className={styles.learnMoreButton}
                                 onClick={handleClick}
+                                whileHover={{ scale: 1.05 }}
                             >
                                 <FaInfoCircle className={styles.buttonIcon} />
                                 Learn More
@@ -77,36 +67,31 @@ export const HeroSection = ()=> {
                     {/* Hero Visual */}
                     <div className={styles.heroVisual}>
                         <motion.div
-                            className={styles.floating}
                             animate={{ y: [0, -10, 0] }}
+                            className={`${styles.floating} ${styles.mainImage}`}
                             transition={{ duration: 3, repeat: Infinity }}
                         >
-                            <Image
-                                className={styles.heroImage}
-                                radius="lg"
-                                src="/images/heroImage.png"
-                                alt=""
-                            />
+                            <Image alt="" className={styles.heroImage} radius="lg" src="/images/heroImage.png" />
                         </motion.div>
 
                         <motion.div
-                            className={`${styles.floatingIcon} ${styles.carIcon}`}
                             animate={{ y: [0, -10, 0] }}
+                            className={`${styles.floatingIcon} ${styles.carIcon}`}
                             transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
                         >
-                            <FaCar />
+                            <FaCar size={'50%'} />
                         </motion.div>
 
                         <motion.div
-                            className={`${styles.floatingIcon} ${styles.databaseIcon}`}
                             animate={{ y: [0, -10, 0] }}
+                            className={`${styles.floatingIcon} ${styles.databaseIcon}`}
                             transition={{ duration: 3, repeat: Infinity, delay: 1 }}
                         >
-                            <FaDatabase />
+                            <FaDatabase size={'50%'} />
                         </motion.div>
                     </div>
                 </div>
             </div>
         </section>
     );
-}
+};
