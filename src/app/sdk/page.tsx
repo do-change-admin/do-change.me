@@ -74,20 +74,6 @@ const CarSyndicationSection: FC = () => {
         );
     }
 
-    // //todo: убрать после полного тестирования
-    // if (!subscriptionInfo?.isAdmin) {
-    //     return (
-    //         <div className={styles.dashboard}>
-    //             <div className={styles.container}>
-    //                 <PlaceholderSDK
-    //                     description="This page is currently unavailable. Please try again later."
-    //                     title="Page Temporarily Unavailable"
-    //                 />
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
     return (
         <div className={styles.dashboard}>
             <div className={styles.container}>
