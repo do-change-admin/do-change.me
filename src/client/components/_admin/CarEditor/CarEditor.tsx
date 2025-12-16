@@ -4,6 +4,7 @@ import {
     Divider,
     Grid,
     Group,
+    Image,
     Modal,
     NumberInput,
     Paper,
@@ -234,7 +235,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                         }}
                                     >
                                         <Paper className={styles.photoItem} radius="md" withBorder>
-                                            <img alt={`Photo ${idx + 1}`} className={styles.photoImage} src={photo} />
+                                            <Image alt={`Photo ${idx + 1}`} className={styles.photoImage} src={photo} />
                                             <div className={styles.photoIndex}>{idx + 1}</div>
                                         </Paper>
                                     </Grid.Col>
