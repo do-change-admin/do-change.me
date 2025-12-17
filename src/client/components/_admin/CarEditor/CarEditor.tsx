@@ -1,7 +1,6 @@
 import {
     ActionIcon,
-    Button,
-    CopyButton,
+    Button, CopyButton,
     Divider,
     Grid,
     Group,
@@ -16,11 +15,11 @@ import {
     Title,
     UnstyledButton
 } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
-import { FaSave } from 'react-icons/fa';
-import { FaCamera, FaDollarSign, FaIdCard, FaLink, FaTrash, FaXmark } from 'react-icons/fa6';
-import { z } from 'zod';
-import { downloadAllImages } from '@/client/components/_admin/CarEditor/utils';
+import {useEffect, useMemo, useState} from 'react';
+import {FaSave} from 'react-icons/fa';
+import {FaCamera, FaDollarSign, FaIdCard, FaLink, FaTrash, FaXmark} from 'react-icons/fa6';
+import {z} from 'zod';
+import {downloadAllImages} from '@/client/components/_admin/CarEditor/utils';
 import {
     useAdminSyndicationRequestDetails,
     useAdminSyndicationRequestUpdate
@@ -33,15 +32,15 @@ export interface CarEditorProps {
     onClose: () => void;
 }
 
-export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) => {
+export const CarEditor: React.FC<CarEditorProps> = ({onClose, opened, carId}) => {
     const [status, setStatus] = useState<'pending publisher' | 'active' | 'pending sales' | 'sold' | null>(null);
     const [marketplaceLinks, setMarketplaceLinks] = useState<string[]>([]);
     const [addLinkModalOpened, setAddLinkModalOpened] = useState(false);
     const [newLinkError, setNewLinkError] = useState<string | null>(null);
     const [newLinkValue, setNewLinkValue] = useState('');
 
-    const { data: car } = useAdminSyndicationRequestDetails({ id: carId });
-    const { mutateAsync: updateCar } = useAdminSyndicationRequestUpdate();
+    const {data: car} = useAdminSyndicationRequestDetails({id: carId});
+    const {mutateAsync: updateCar} = useAdminSyndicationRequestUpdate();
 
     useEffect(() => {
         if (car) {
@@ -52,10 +51,10 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
 
     const statusOptions = useMemo(() => {
         return [
-            { label: 'Pending publisher', value: 'pending publisher' },
-            { label: 'Active', value: 'active' },
-            { label: 'Pending sales', value: 'pending sales' },
-            { label: 'Sold', value: 'sold' }
+            {label: 'Pending publisher', value: 'pending publisher'},
+            {label: 'Active', value: 'active'},
+            {label: 'Pending sales', value: 'pending sales'},
+            {label: 'Sold', value: 'sold'}
         ];
     }, []);
 
@@ -100,10 +99,10 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                     body: styles.modalBody,
                     header: styles.modalHeader
                 }}
-                closeButtonProps={{ icon: <FaXmark /> }}
+                closeButtonProps={{icon: <FaXmark/>}}
                 onClose={onClose}
                 opened={opened}
-                overlayProps={{ backgroundOpacity: 0.55, blur: 2 }}
+                overlayProps={{backgroundOpacity: 0.55, blur: 2}}
                 radius="lg"
                 size="70%"
                 title={
@@ -118,7 +117,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                 <Stack gap="lg">
                     <div>
                         <Group gap="xs">
-                            <FaIdCard className={styles.iconBlue} />
+                            <FaIdCard className={styles.iconBlue}/>
                             <Title order={4}>Vehicle Information</Title>
                             <CopyButton value={car?.userMail || ''}>
                                 {({ copied, copy }) => (
@@ -146,7 +145,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                 />
                             </Grid.Col>
 
-                            <Grid.Col span={{ base: 12, sm: 6 }}>
+                            <Grid.Col span={{base: 12, sm: 6}}>
                                 <TextInput
                                     classNames={{
                                         input: `${styles.input} ${styles.readonlyInput}`
@@ -156,7 +155,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                     value={car?.make}
                                 />
                             </Grid.Col>
-                            <Grid.Col span={{ base: 12, sm: 6 }}>
+                            <Grid.Col span={{base: 12, sm: 6}}>
                                 <TextInput
                                     classNames={{
                                         input: `${styles.input} ${styles.readonlyInput}`
@@ -167,7 +166,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                 />
                             </Grid.Col>
 
-                            <Grid.Col span={{ base: 12, sm: 6 }}>
+                            <Grid.Col span={{base: 12, sm: 6}}>
                                 <TextInput
                                     classNames={{
                                         input: `${styles.input} ${styles.readonlyInput}`
@@ -179,7 +178,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                     value={car?.year}
                                 />
                             </Grid.Col>
-                            <Grid.Col span={{ base: 12, sm: 6 }}>
+                            <Grid.Col span={{base: 12, sm: 6}}>
                                 <NumberInput
                                     classNames={{
                                         input: `${styles.input} ${styles.readonlyInput}`
@@ -193,16 +192,16 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                         </Grid>
                     </div>
 
-                    <Divider />
+                    <Divider/>
 
                     <div>
                         <Group gap="xs">
-                            <FaDollarSign className={styles.iconGreen} />
+                            <FaDollarSign className={styles.iconGreen}/>
                             <Title order={4}>Pricing</Title>
                         </Group>
 
                         <Grid mt="md">
-                            <Grid.Col span={{ lg: 6, base: 12 }}>
+                            <Grid.Col span={{lg: 6, base: 12}}>
                                 <NumberInput
                                     classNames={{
                                         input: `${styles.input} ${styles.readonlyInput}`
@@ -217,12 +216,12 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                         </Grid>
                     </div>
 
-                    <Divider />
+                    <Divider/>
 
                     <div>
                         <Group>
                             <Group gap="xs">
-                                <FaCamera className={styles.iconPurple} />
+                                <FaCamera className={styles.iconPurple}/>
                                 <Title order={4}>Photos *</Title>
                                 <Text c="dimmed" size="sm">
                                     (1–30 photos)
@@ -255,7 +254,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                         )}
                     </div>
 
-                    <Divider />
+                    <Divider/>
 
                     <div>
                         <Group gap="xs">
@@ -270,7 +269,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                         </Group>
 
                         <Grid mt="md">
-                            <Grid.Col span={{ lg: 6, base: 12 }}>
+                            <Grid.Col span={{lg: 6, base: 12}}>
                                 <Select
                                     data={statusOptions}
                                     label="Status"
@@ -278,12 +277,12 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                     onChange={setStatus}
                                     placeholder="Select status"
                                     styles={{
-                                        input: { minWidth: 220 }
+                                        input: {minWidth: 220}
                                     }}
                                     value={status}
                                 />
                             </Grid.Col>
-                            <Grid.Col span={{ lg: 6, base: 12 }}>
+                            <Grid.Col span={{lg: 6, base: 12}}>
                                 <Text mb={4} size="md">
                                     Marketplace links
                                 </Text>
@@ -329,7 +328,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                                         size="sm"
                                                         variant="light"
                                                     >
-                                                        <FaLink />
+                                                        <FaLink/>
                                                     </ActionIcon>
                                                     <ActionIcon
                                                         aria-label="Delete marketplace link"
@@ -338,7 +337,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                                         size="sm"
                                                         variant="light"
                                                     >
-                                                        <FaTrash />
+                                                        <FaTrash/>
                                                     </ActionIcon>
                                                 </Group>
                                             </Group>
@@ -350,11 +349,11 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                     </div>
                 </Stack>
 
-                <Divider mt="lg" />
+                <Divider mt="lg"/>
 
                 <Group mt="lg">
                     <Group>
-                        <Button leftSection={<FaSave />} onClick={handleSave} variant="outline">
+                        <Button leftSection={<FaSave/>} onClick={handleSave} variant="outline">
                             Save
                         </Button>
                     </Group>
@@ -387,10 +386,10 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                                         });
                                     }
                                 }}
-                                style={{ padding: 6 }}
+                                style={{padding: 6}}
                                 title="Paste from clipboard"
                             >
-                                <FaLink />
+                                <FaLink/>
                             </UnstyledButton>
                         }
                         value={newLinkValue}
