@@ -21,7 +21,7 @@ export const ReportsProvider: FC<ReportsProviderProps> = ({ openSubscription }) 
     const { data } = useProfile();
     const { mutate: getReport, isPending } = useReport();
     const handleGetReport = () => {
-        if (!data?.subscription && openSubscription) {
+        if (data && !data?.subscription && openSubscription) {
             openSubscription();
             return;
         }

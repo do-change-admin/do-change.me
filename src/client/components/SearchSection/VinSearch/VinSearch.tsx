@@ -18,7 +18,7 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
     const { data } = useProfile();
 
     useEffect(() => {
-        if (!data?.subscription && openSubscription) {
+        if (data && !data?.subscription && openSubscription) {
             openSubscription();
             return;
         }
@@ -28,7 +28,7 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
     const start = useScannerState((x) => x.start);
 
     const handleSearch = () => {
-        if (openSubscription && !data?.subscription) {
+        if (data && openSubscription && !data?.subscription) {
             openSubscription();
             return;
         }
