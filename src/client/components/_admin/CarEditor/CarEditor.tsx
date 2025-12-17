@@ -1,6 +1,7 @@
 import {
     ActionIcon,
     Button,
+    CopyButton,
     Divider,
     Grid,
     Group,
@@ -119,6 +120,16 @@ export const CarEditor: React.FC<CarEditorProps> = ({ onClose, opened, carId }) 
                         <Group gap="xs">
                             <FaIdCard className={styles.iconBlue} />
                             <Title order={4}>Vehicle Information</Title>
+                            <CopyButton value={car?.userMail || ''}>
+                                {({ copied, copy }) => (
+                                    <span
+                                        onClick={copy}
+                                        style={{ cursor: 'pointer', color: copied ? 'green' : 'blue' }}
+                                    >
+                                        user: {car?.userMail}
+                                    </span>
+                                )}
+                            </CopyButton>
                         </Group>
 
                         <Grid>
