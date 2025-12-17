@@ -1,12 +1,11 @@
 'use client';
 
-import { Badge, Button, Card, Group, Select, Stack, Tabs, Text, TextInput } from '@mantine/core';
+import { Badge, Button, Card, Group, Image, Select, Stack, Tabs, Text, TextInput } from '@mantine/core';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 import { FaChevronDown, FaLink } from 'react-icons/fa6';
 import { getColorByCarSaleStatus, getVisualDataByCarSaleMarketplaceLink } from '@/app/sdk/sdk.utils';
-import { CardSlider } from '@/client/components';
 import { CarEditor } from '@/client/components/_admin/CarEditor/CarEditor';
 import {
     useAdminSyndicationRequestFilters,
@@ -22,7 +21,7 @@ export default function VehiclesPage() {
     const [debouncedVin] = useDebouncedValue(vin, 500);
     const [make, setMake] = useState<null | string>(null);
     const [model, setModel] = useState<null | string>(null);
-    const [activeTab, setActiveTab] = useState<SyndicationRequestStatus>('active');
+    const [activeTab, setActiveTab] = useState<SyndicationRequestStatus>('pending publisher');
 
     const { data } = useAdminSyndicationRequests({
         make: make ?? '',
@@ -119,7 +118,6 @@ export default function VehiclesPage() {
 
             <div className={styles.vehicleGrid}>
                 {vehicles.map((v) => {
-                    const photoLinks = [v.mainPhotoLink, ...v.additionalPhotoLinks];
                     return (
                         <Card
                             className={styles.vehicleCard}
@@ -129,7 +127,8 @@ export default function VehiclesPage() {
                             withBorder
                         >
                             <Card.Section style={{ position: 'relative' }}>
-                                {<CardSlider images={photoLinks} />}
+                                <Image src={v.mainPhotoLink} />
+                                {/* {<CardSlider images={photoLinks} />} */}
                                 <Badge className={styles.statusBadge} color={getColorByCarSaleStatus(v.status)}>
                                     {v.status}
                                 </Badge>

@@ -1,46 +1,47 @@
-'use client'
+'use client';
 
-import styles from "./SampleResults.module.css";
-import React, { FC, useEffect, useState } from "react";
-import { useMileagePriceQuery, useOdometer } from "@/client/hooks";
-import { DistributionChart } from "@/client/components/DistributionChart/DistributionChart";
-import { ReportsProvider } from "@/client/components/ReportsProvider/ReportsProvider";
-import { CarInfo } from "@/client/components/SearchSection/CarInfo/CarInfo";
-import { VehicleBaseInfoDTO } from "@/app/api/vin/base-info/models";
-import { formatDate, Odometer } from "@/client/components/SearchSection/Odometer/Odometer";
-import { Badge, Group, Paper, Skeleton, Slider, Text, Title } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
-import { useVINAnalysisState } from "@/client/states/vin-analysis.state";
+import { Badge, Group, Paper, Skeleton, Slider, Text } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
+import { type FC, useEffect, useState } from 'react';
+import type { VehicleBaseInfoDTO } from '@/app/api/vin/base-info/models';
+import { DistributionChart } from '@/client/components/DistributionChart/DistributionChart';
+import { ReportsProvider } from '@/client/components/ReportsProvider/ReportsProvider';
+import { CarInfo } from '@/client/components/SearchSection/CarInfo/CarInfo';
+import { formatDate, Odometer } from '@/client/components/SearchSection/Odometer/Odometer';
+import { useMileagePriceQuery, useOdometer } from '@/client/hooks';
+import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
+import styles from './SampleResults.module.css';
 
 export interface ISampleResults {
-    reportsLeft: number,
-    baseInfo: VehicleBaseInfoDTO | undefined
+    reportsLeft: number;
+    baseInfo: VehicleBaseInfoDTO | undefined;
+    openSubscription?: Function;
 }
 
 const formatNumber = (num: number) => {
     const intPart = Math.floor(num);
-    return intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+    return intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
 
-export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
-    const requestVIN = useVINAnalysisState(x => x.requestVIN)
+export const SampleResults: FC<ISampleResults> = ({ baseInfo, openSubscription }) => {
+    const requestVIN = useVINAnalysisState((x) => x.requestVIN);
 
     const { data: odometerData, isLoading, isFetched } = useOdometer(requestVIN);
     const lastMileageRecord = odometerData?.at()?.miles;
-    const [miles, setMiles] = useState<number>(0)
-    const [debouncedMiles] = useDebouncedValue(miles, 1500)
+    const [miles, setMiles] = useState<number>(0);
+    const [debouncedMiles] = useDebouncedValue(miles, 1500);
     const { data: mileageData, isLoading: isLoadingMileage } = useMileagePriceQuery(requestVIN, debouncedMiles);
 
     useEffect(() => {
         if (!!lastMileageRecord && !isLoadingMileage && !miles) {
             setMiles(lastMileageRecord);
-            return
+            return;
         }
 
         if (isFetched && !miles && !lastMileageRecord) {
-            setMiles(1)
+            setMiles(1);
         }
-    }, [lastMileageRecord, isLoadingMileage, isFetched])
+    }, [lastMileageRecord, isLoadingMileage, isFetched]);
 
     return (
         <section className={styles.sampleResults}>
@@ -49,38 +50,39 @@ export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
                     <div className={styles.valuationInfo}>
                         <div className={styles.infoCard}>
                             {/*<h3>Market Valuation</h3>*/}
-                            {isLoading ? <Skeleton mb="md" h={50} w="100%" radius="lg" /> : (
-                                <Paper p="xs" radius="lg" mb="md">
+                            {isLoading ? (
+                                <Skeleton h={50} mb="md" radius="lg" w="100%" />
+                            ) : (
+                                <Paper mb="md" p="xs" radius="lg">
                                     <Group mb="xs">
-                                        <Text size="sm" fw={500}>
+                                        <Text fw={500} size="sm">
                                             {miles?.toLocaleString()} miles
                                         </Text>
                                         {miles === lastMileageRecord && (
                                             <>
-                                                <Badge variant="light" size="xs" c="gray">
+                                                <Badge c="gray" size="xs" variant="light">
                                                     Latest Record
                                                 </Badge>
-                                                <Badge variant="light" size="xs" c="gray">
+                                                <Badge c="gray" size="xs" variant="light">
                                                     {formatDate(odometerData[0].last_seen_at_date)}
                                                 </Badge>
                                             </>
-
                                         )}
                                     </Group>
                                     <Slider
-                                        value={miles}
-                                        onChange={setMiles}
-                                        min={0}
-                                        max={300000}
-                                        step={1000}
                                         label={(val) => val.toLocaleString()}
+                                        max={300000}
+                                        min={0}
+                                        onChange={setMiles}
+                                        step={1000}
                                         styles={{
-                                            label: { fontSize: 12 },
+                                            label: { fontSize: 12 }
                                         }}
+                                        value={miles}
                                     />
                                 </Paper>
                             )}
-                            {(isLoadingMileage || isLoading) ? (
+                            {isLoadingMileage || isLoading ? (
                                 <div className={styles.valuationContent}>
                                     <div className={styles.estimatedValue}>
                                         <div className={styles.skeleton} />
@@ -121,9 +123,8 @@ export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
                 </div>
                 <Odometer records={odometerData} />
                 {baseInfo ? <CarInfo {...baseInfo} /> : <>Loading...</>}
-                <ReportsProvider />
+                <ReportsProvider openSubscription={openSubscription} />
             </div>
         </section>
     );
-}
-
+};

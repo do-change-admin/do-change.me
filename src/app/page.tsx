@@ -1,16 +1,15 @@
-'use client'
+'use client';
 
-import React from "react";
-import styles from "./page.module.css";
-import { SearchSection, SubscriptionPlans } from "@/client/components";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure } from '@mantine/hooks';
+import { SearchSection, SubscriptionPlans } from '@/client/components';
+import styles from './page.module.css';
 
 export default function Reports() {
     const [opened, { open, close }] = useDisclosure(false);
     return (
-        <div id="main-content" className={styles.main}>
-            <SubscriptionPlans opened={opened} close={close} />
+        <div className={styles.main} id="main-content">
+            <SubscriptionPlans close={close} opened={opened} />
             <SearchSection openSubscription={open} />
         </div>
     );
-};
+}

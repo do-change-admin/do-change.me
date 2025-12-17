@@ -4,6 +4,7 @@ import {
     FileButton,
     Grid,
     Group,
+    Image,
     Modal,
     NumberInput,
     Paper,
@@ -12,7 +13,7 @@ import {
     Title
 } from '@mantine/core';
 import type React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaSave } from 'react-icons/fa';
 import { FaCamera, FaDollarSign, FaIdCard, FaPaperPlane, FaUpload } from 'react-icons/fa6';
 import { LoadingMinute } from '@/client/components';
@@ -114,6 +115,43 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
 
         onSubmitForSyndication({ make, mileage, model, photos, price, year });
     };
+
+    const pics = useMemo(() => {
+        return (
+            photos.length > 0 &&
+            !isPending && (
+                <Grid mt="md">
+                    {photos.map((photo, idx) => (
+                        <Grid.Col key={idx} span={{ base: 6, sm: 4, md: 3, lg: 2 }}>
+                            <Paper className={styles.photoItem} radius="md" withBorder>
+                                <Image
+                                    alt={`Photo ${idx + 1}`}
+                                    className={styles.photoImage}
+                                    height={'100'}
+                                    src={photo.type === 'local' ? URL.createObjectURL(photo.file) : photo.url}
+                                    width={'100'}
+                                />
+                                <div className={styles.photoIndex}>{idx + 1}</div>
+                                <Button
+                                    color="red"
+                                    onClick={() => handleRemovePhoto(idx)}
+                                    size="xs"
+                                    style={{
+                                        position: 'absolute',
+                                        top: 4,
+                                        right: 4
+                                    }}
+                                    variant="filled"
+                                >
+                                    X
+                                </Button>
+                            </Paper>
+                        </Grid.Col>
+                    ))}
+                </Grid>
+            )
+        );
+    }, [photos, isPending]);
 
     const isFormValidForSyndication =
         vin?.length === 17 &&
@@ -267,35 +305,7 @@ export const CarFormAdder: React.FC<CarFormAdderProps> = ({
                     </FileButton>
                 </Paper>
 
-                {photos.length > 0 && !isPending && (
-                    <Grid mt="md">
-                        {photos.map((photo, idx) => (
-                            <Grid.Col key={idx} span={{ base: 6, sm: 4, md: 3, lg: 2 }}>
-                                <Paper className={styles.photoItem} radius="md" withBorder>
-                                    <img
-                                        alt={`Photo ${idx + 1}`}
-                                        className={styles.photoImage}
-                                        src={photo.type === 'local' ? URL.createObjectURL(photo.file) : photo.url}
-                                    />
-                                    <div className={styles.photoIndex}>{idx + 1}</div>
-                                    <Button
-                                        color="red"
-                                        onClick={() => handleRemovePhoto(idx)}
-                                        size="xs"
-                                        style={{
-                                            position: 'absolute',
-                                            top: 4,
-                                            right: 4
-                                        }}
-                                        variant="filled"
-                                    >
-                                        X
-                                    </Button>
-                                </Paper>
-                            </Grid.Col>
-                        ))}
-                    </Grid>
-                )}
+                {pics}
             </div>
 
             <Divider mt="lg" />
