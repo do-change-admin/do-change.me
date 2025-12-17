@@ -12,7 +12,7 @@ export const Header = () => {
                 src="/logo/logo.png"
                 alt="DoChange logo"
                 w="auto"
-                h={40}
+                h={35}
             />
             <div className={styles.right}>
                 <UserListWidget />
