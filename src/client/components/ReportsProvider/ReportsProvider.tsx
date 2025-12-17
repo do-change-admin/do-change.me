@@ -7,15 +7,24 @@ import type { FC } from 'react';
 import { FaCheckCircle, FaRegFileAlt } from 'react-icons/fa';
 import { FiRefreshCw } from 'react-icons/fi';
 import { LoadingMinute } from '@/client/components';
-import { useReport } from '@/client/hooks';
+import { useProfile, useReport } from '@/client/hooks';
 import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import { VIN } from '@/value-objects/vin.value-object';
 import styles from './ReportsProvider.module.css';
 
-export const ReportsProvider: FC = () => {
+export type ReportsProviderProps = {
+    openSubscription?: Function;
+};
+
+export const ReportsProvider: FC<ReportsProviderProps> = ({ openSubscription }) => {
     const vin = useVINAnalysisState((x) => x.vin);
+    const { data } = useProfile();
     const { mutate: getReport, isPending } = useReport();
     const handleGetReport = () => {
+        if (!data?.subscription && openSubscription) {
+            openSubscription();
+            return;
+        }
         if (!vin) {
             notifications.show({
                 message: 'No VIN was selected',
@@ -24,7 +33,7 @@ export const ReportsProvider: FC = () => {
             });
             return;
         }
-        if (!VIN.schema.safeParse(vin)) {
+        if (!VIN.schema.safeParse(vin).success) {
             notifications.show({
                 message: 'Requested VIN is invalid',
                 title: 'Error',

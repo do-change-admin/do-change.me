@@ -1,7 +1,9 @@
 import { ActionIcon } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 import { useShallow } from 'zustand/react/shallow';
 import { Input } from '@/client/components/_ui';
@@ -15,6 +17,13 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
     const router = useRouter();
     const { data } = useProfile();
 
+    useEffect(() => {
+        if (!data?.subscription && openSubscription) {
+            openSubscription();
+            return;
+        }
+    }, [data?.subscription]);
+
     const { setVIN, vin } = useVINAnalysisState(useShallow(({ setVIN, vin }) => ({ vin, setVIN })));
     const start = useScannerState((x) => x.start);
 
@@ -24,6 +33,11 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
             return;
         }
         if (!VIN.schema.safeParse(vin).success) {
+            notifications.show({
+                message: 'Invalid VIN',
+                title: 'Error',
+                color: 'red'
+            });
             return;
         }
         router.push(`/?vin=${encodeURIComponent(vin!)}`);
