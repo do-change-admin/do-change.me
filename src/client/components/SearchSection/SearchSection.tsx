@@ -68,7 +68,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                             </div>
                         </div>
                     </div>
-                    <VinSearch openSubscription={openSubscription} />
+                    <VinSearch />
                 </div>
                 <SampleResults
                     baseInfo={baseInfo}
