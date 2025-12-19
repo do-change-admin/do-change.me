@@ -22,10 +22,6 @@ export const MobileBottomNav = () => {
     const [opened, { open, close }] = useDisclosure(false);
 
     const scannerOnClick = () => {
-        if (!data?.subscription) {
-            open()
-            return;
-        }
         start()
     }
 
