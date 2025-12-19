@@ -2,7 +2,7 @@
 
 import { Image } from '@mantine/core';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import type React from 'react';
 import { useState } from 'react';
 import Alert from '@/client/components/Alert/Alert';
@@ -31,7 +31,6 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export const Register = () => {
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
     const [firstName, setFirstName] = useState('');
@@ -74,7 +73,22 @@ export const Register = () => {
                 })
             });
 
-            router.push('/auth/check-email');
+            const result = await signIn('credentials', {
+                email,
+                password,
+                redirect: false
+            });
+
+            if (result?.ok) {
+                window.location.reload();
+                return;
+            }
+
+            if (!result || !result.ok) {
+                throw result?.error || 'Error while logging in';
+            }
+
+            // router.push("/auth/check-email")
         } catch (err) {
             if ((err as AppError).error) {
                 const message = handleApiError(err as AppError);

@@ -1,39 +1,17 @@
-'use client'
+'use client';
 
-import styles from './HeroSection.module.css';
-import {
-    FaChartLine,
-    FaHeadset,
-    FaFileAlt,
-    FaGavel,
-    FaExclamationTriangle,
-    FaRocket,
-    FaInfoCircle,
-    FaCar,
-    FaDatabase,
-    FaBarcode
-} from 'react-icons/fa';
+import { Image } from '@mantine/core';
 import { motion } from 'framer-motion';
-import {useRouter} from "next/navigation";
-import {Image} from "@mantine/core";
+import { useRouter } from 'next/navigation';
+import {FaArrowRight, FaCar, FaDatabase, FaInfoCircle, FaRocket} from 'react-icons/fa';
+import styles from './HeroSection.module.css';
 
-const features = [
-    { icon: <FaChartLine />, title: 'Market Value', subtitle: 'Unlimited Access' },
-    { icon: <FaBarcode />, title: 'VIN Scanner', subtitle: 'Quick & Accurate' },
-    { icon: <FaHeadset />, title: '24/7 Support', subtitle: 'Always Available' },
-    { icon: <FaFileAlt />, title: 'Vehicle History Reports', subtitle: '' },
-    { icon: <FaGavel />, title: 'Auction Access', subtitle: 'Professional Tools' },
-    { icon: <FaExclamationTriangle />, title: 'Total Loss Check', subtitle: '' },
-];
-
-export const HeroSection = ()=> {
+export const HeroSection = () => {
     const router = useRouter();
     const handleClick = () => router.push('/auth/login');
 
     return (
-        <section id="hero-section" className={styles.heroSection}>
-            <div className={styles.backgroundGradient}></div>
-            <div className={styles.overlayGradient}></div>
+        <section className={styles.heroSection} id="hero-section">
 
             <div className={styles.contentWrapper}>
                 <div className={styles.grid}>
@@ -45,68 +23,98 @@ export const HeroSection = ()=> {
                             {/*    <span>Trusted by Professionals</span>*/}
                             {/*</div>*/}
                             <h1 className={styles.heroTitle}>
-                                Car Flipping Made Easy.{' '}
-                                <span className={styles.gradientText}>Buy & Sell</span>
+                                Car Flipping Made Easy. <span className={styles.gradientText}>Buy & Sell</span>
                             </h1>
                             <p className={styles.heroSubtitle}>
-                                Get all the tools you need to buy, verify, and sell vehicles with confidence. Access dealer auctions, real-time market data, and detailed vehicle reports — <strong>all without a dealer license.</strong>
+                                Get all the tools you need to buy, verify, and sell vehicles with confidence. Access
+                                dealer auctions, real-time market data, and detailed vehicle reports —{' '}
+                                <strong>all without a dealer license.</strong>
                             </p>
                         </div>
 
                         {/* CTA Buttons */}
                         <div className={styles.ctaButtons}>
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                className={styles.getPlanButton}
                                 onClick={handleClick}
+                                initial={{ scale: 1 }}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                className={styles.ctaButton}
                             >
-                                <FaRocket className={styles.buttonIcon} />
-                                Get Plan
-                            </motion.button>
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                className={styles.learnMoreButton}
-                                onClick={handleClick}
-                            >
-                                <FaInfoCircle className={styles.buttonIcon} />
-                                Learn More
+                                <span>Start 2-Day Free Trial</span>
+                                <motion.span
+                                    className={styles.ctaIconWrapper}
+                                    animate={{ x: [0, 5, 0] }}
+                                    transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+                                >
+                                    <FaArrowRight className={styles.ctaIcon} />
+                                </motion.span>
                             </motion.button>
                         </div>
                     </div>
 
                     {/* Hero Visual */}
-                    <div className={styles.heroVisual}>
+                    <div className={styles.heroVisuals}>
                         <motion.div
-                            className={styles.floating}
-                            animate={{ y: [0, -10, 0] }}
-                            transition={{ duration: 3, repeat: Infinity }}
+                            initial={{ rotate: 2 }}
+                            whileHover={{ rotate: 0 }}
+                            className={styles.mainCard}
+                        >
+                            <div className={styles.imageWrapper}>
+                                <img
+                                    src="/images/heroImage.png"
+                                    alt="Dashboard"
+                                    className={styles.mainImage}
+                                />
+                            </div>
+                        </motion.div>
+
+                        {/* Дополнительные карточки */}
+                        <motion.div
+                            initial={{ rotate: -6 }}
+                            whileHover={{ rotate: 0 }}
+                            className={styles.smallCard}
+                            style={{ top: '2rem', right: '-1rem' }}
                         >
                             <Image
-                                className={styles.heroImage}
-                                radius="lg"
-                                src="/images/heroImage.png"
-                                alt=""
+                                height={300}
+                                width={100}
+                                src="/images/carfaxScreen.png"
+                                alt="Dashboard"
                             />
                         </motion.div>
 
                         <motion.div
-                            className={`${styles.floatingIcon} ${styles.carIcon}`}
-                            animate={{ y: [0, -10, 0] }}
-                            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+                            initial={{ rotate: 6 }}
+                            whileHover={{ rotate: 0 }}
+                            className={styles.smallCard}
+                            style={{ bottom: '-1rem', left: '1rem' }}
                         >
-                            <FaCar />
+                            <Image
+                                height={300}
+                                width={100}
+                                src="/images/marketValue.png"
+                                alt="Dashboard"
+                            />
                         </motion.div>
 
                         <motion.div
-                            className={`${styles.floatingIcon} ${styles.databaseIcon}`}
-                            animate={{ y: [0, -10, 0] }}
-                            transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                            initial={{ rotate: -12 }}
+                            whileHover={{ rotate: 0 }}
+                            className={styles.smallCard}
+                            style={{ top: '5rem', left: '-2rem' }}
                         >
-                            <FaDatabase />
+                            <Image
+                                height={300}
+                                width={100}
+                                src="/images/seller.png"
+                                alt="Dashboard"
+                            />
                         </motion.div>
+                        <div className={styles.bgBlur}></div>
                     </div>
                 </div>
             </div>
         </section>
     );
-}
+};
