@@ -94,7 +94,7 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
                         <div className={styles.feature}>
                             <FaCheck className={styles.checkGreen} />
                             <div>
-                                <strong>Unlimited Salvage Checks</strong>
+                                <strong>Unlimited Total Loss Checks</strong>
                                 <p className={styles.featureNote}>Verify if vehicle was declared a total loss</p>
                             </div>
                         </div>
@@ -181,7 +181,7 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
                         <div className={styles.feature}>
                             <FaCheck className={styles.checkGreen} />
                             <div>
-                                <strong>Unlimited Salvage Checks</strong>
+                                <strong>Unlimited Total Loss Checks</strong>
                                 <p className={styles.featureNote}>Verify if vehicle was declared a total loss</p>
                             </div>
                         </div>
