@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { FC, useRef, useState } from "react";
-import { Carousel } from "@mantine/carousel";
-import { Image, Box } from "@mantine/core";
-import Autoplay from "embla-carousel-autoplay";
-import styles from "./CardSlider.module.css";
+import { Carousel } from '@mantine/carousel';
+import { Box, Image } from '@mantine/core';
+import Autoplay from 'embla-carousel-autoplay';
+import { type FC, useRef, useState } from 'react';
+import styles from './CardSlider.module.css';
 
 interface CardSliderProps {
     images: string[];
@@ -16,39 +16,29 @@ export const CardSlider: FC<CardSliderProps> = ({ images }) => {
 
     const autoplayConf = loop
         ? {
-            plugins: [autoplay.current],
-            onMouseEnter: autoplay.current.stop,
-            onMouseLeave: autoplay.current.reset,
-        }
+              plugins: [autoplay.current],
+              onMouseEnter: autoplay.current.stop,
+              onMouseLeave: autoplay.current.reset
+          }
         : {};
 
     return (
-        <Box
-            onMouseEnter={() => setLoop(true)}
-            onMouseLeave={() => setLoop(false)}
-            className={styles.wrapper}
-        >
+        <Box className={styles.wrapper} onMouseEnter={() => setLoop(true)} onMouseLeave={() => setLoop(false)}>
             <Carousel
                 {...autoplayConf}
-                withControls={false}
-                withIndicators
-                controlSize={0}
                 classNames={{
                     root: styles.carouselRoot,
                     indicators: styles.indicators,
-                    indicator: styles.indicator,
+                    indicator: styles.indicator
                 }}
+                controlSize={0}
                 height="100%"
+                withControls={false}
+                withIndicators
             >
                 {images?.map((src, index) => (
                     <Carousel.Slide key={index}>
-                        <Image
-                            src={src}
-                            alt={`Slide ${index + 1}`}
-                            fit="cover"
-                            width="100%"
-                            height="100%"
-                        />
+                        <Image alt={`Slide ${index + 1}`} height={'100'} src={src} width={'100'} />
                     </Carousel.Slide>
                 ))}
             </Carousel>

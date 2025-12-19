@@ -15,6 +15,7 @@ import styles from './SampleResults.module.css';
 export interface ISampleResults {
     reportsLeft: number;
     baseInfo: VehicleBaseInfoDTO | undefined;
+    openSubscription?: Function;
 }
 
 const formatNumber = (num: number) => {
@@ -22,7 +23,7 @@ const formatNumber = (num: number) => {
     return intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
+export const SampleResults: FC<ISampleResults> = ({ baseInfo, openSubscription }) => {
     const requestVIN = useVINAnalysisState((x) => x.requestVIN);
 
     const { data: odometerData, isLoading, isFetched } = useOdometer(requestVIN);
@@ -122,7 +123,7 @@ export const SampleResults: FC<ISampleResults> = ({ baseInfo }) => {
                 </div>
                 <Odometer records={odometerData} />
                 {baseInfo ? <CarInfo {...baseInfo} /> : <>Loading...</>}
-                <ReportsProvider />
+                <ReportsProvider openSubscription={openSubscription} />
             </div>
         </section>
     );

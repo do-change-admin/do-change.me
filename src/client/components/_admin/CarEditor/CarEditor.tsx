@@ -4,6 +4,7 @@ import {
     Divider,
     Grid,
     Group,
+    Image,
     Modal,
     NumberInput,
     Paper,
@@ -119,10 +120,10 @@ export const CarEditor: React.FC<CarEditorProps> = ({onClose, opened, carId}) =>
                             <FaIdCard className={styles.iconBlue}/>
                             <Title order={4}>Vehicle Information</Title>
                             <CopyButton value={car?.userMail || ''}>
-                                {({copied, copy}) => (
+                                {({ copied, copy }) => (
                                     <span
                                         onClick={copy}
-                                        style={{cursor: 'pointer', color: copied ? 'green' : 'blue'}}
+                                        style={{ cursor: 'pointer', color: copied ? 'green' : 'blue' }}
                                     >
                                         user: {car?.userMail}
                                     </span>
@@ -244,7 +245,7 @@ export const CarEditor: React.FC<CarEditorProps> = ({onClose, opened, carId}) =>
                                         }}
                                     >
                                         <Paper className={styles.photoItem} radius="md" withBorder>
-                                            <img alt={`Photo ${idx + 1}`} className={styles.photoImage} src={photo}/>
+                                            <Image alt={`Photo ${idx + 1}`} className={styles.photoImage} src={photo} />
                                             <div className={styles.photoIndex}>{idx + 1}</div>
                                         </Paper>
                                     </Grid.Col>

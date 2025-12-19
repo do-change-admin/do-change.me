@@ -68,9 +68,13 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                             </div>
                         </div>
                     </div>
-                    <VinSearch openSubscription={openSubscription} />
+                    <VinSearch />
                 </div>
-                <SampleResults baseInfo={baseInfo} reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0} />
+                <SampleResults
+                    baseInfo={baseInfo}
+                    openSubscription={openSubscription}
+                    reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0}
+                />
                 <SearchHistory isLoading={isFetching} searches={actionsHistory} />
             </div>
         </section>
@@ -89,6 +93,7 @@ function Tabs({
             <button
                 className={`${styles.tabButton} ${activeTab === 'vin' ? styles.active : ''}`}
                 onClick={() => setActiveTab('vin')}
+                type="button"
             >
                 <FaHashtag className={styles.icon} /> VIN Number
             </button>

@@ -57,7 +57,11 @@ export const Scanner = () => {
             if (!blob) return;
             try {
                 const data = await recognize.mutateAsync(blob);
-                if (data?.status === 'SUCCESS' && data?.vin_captured && VIN.schema.safeParse(data?.vin_captured)) {
+                if (
+                    data?.status === 'SUCCESS' &&
+                    data?.vin_captured &&
+                    VIN.schema.safeParse(data?.vin_captured).success
+                ) {
                     setResult(data?.vin_captured);
                     setScanning(false);
                     router.push(`/?vin=${encodeURIComponent(data?.vin_captured)}`);
