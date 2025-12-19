@@ -18,7 +18,7 @@ export const PricingSection = () => {
 
                 {/* Pricing Cards */}
                 <div className={styles.cards}>
-                    <Plans isHome />
+                    <Plans isHome/>
                 </div>
 
                 {/* FooterWeb */}

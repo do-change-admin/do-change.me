@@ -1,5 +1,4 @@
 import z from 'zod';
-import { noSubscriptionGuard } from '@/backend/api-guards/no-subscription.api-guard';
 import { prismaClient } from '@/backend/infrastructure';
 import { ActionsHistoryService } from '@/backend/services';
 import { businessError } from '@/lib-deprecated/errors';
@@ -76,7 +75,5 @@ export const method = zodApiMethod(schemas, {
                 payload: { vin: requestPayload.vin, result: result.salvageWasFound }
             });
         }
-    },
-    beforehandler: noSubscriptionGuard,
-    ignoreBeforeHandler: isDemoVin
+    }
 });

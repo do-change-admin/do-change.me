@@ -10,10 +10,10 @@ export default function Home() {
     <>
       <HeaderWeb />
       <HeroSection />
+      <PricingSection />
       <HowItWorksSection />
       <DesktopAppSection />
       <MobileAppSection />
-      <PricingSection />
       <FooterWeb />
     </>
   );

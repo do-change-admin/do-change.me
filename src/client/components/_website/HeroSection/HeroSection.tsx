@@ -3,17 +3,8 @@
 import { Image } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { FaCar, FaDatabase, FaInfoCircle, FaRocket } from 'react-icons/fa';
+import {FaArrowRight, FaCar, FaDatabase, FaInfoCircle, FaRocket} from 'react-icons/fa';
 import styles from './HeroSection.module.css';
-
-// // const features = [
-// //     { icon: <FaChartLine />, title: 'Market Value', subtitle: 'Unlimited Access' },
-// //     { icon: <FaBarcode />, title: 'VIN Scanner', subtitle: 'Quick & Accurate' },
-// //     { icon: <FaHeadset />, title: '24/7 Support', subtitle: 'Always Available' },
-// //     { icon: <FaFileAlt />, title: 'Vehicle History Reports', subtitle: '' },
-// //     { icon: <FaGavel />, title: 'Auction Access', subtitle: 'Professional Tools' },
-// //     { icon: <FaExclamationTriangle />, title: 'Total Loss Check', subtitle: '' }
-// // ];
 
 export const HeroSection = () => {
     const router = useRouter();
@@ -21,8 +12,6 @@ export const HeroSection = () => {
 
     return (
         <section className={styles.heroSection} id="hero-section">
-            <div className={styles.backgroundGradient}></div>
-            <div className={styles.overlayGradient}></div>
 
             <div className={styles.contentWrapper}>
                 <div className={styles.grid}>
@@ -46,49 +35,83 @@ export const HeroSection = () => {
                         {/* CTA Buttons */}
                         <div className={styles.ctaButtons}>
                             <motion.button
-                                className={styles.getPlanButton}
                                 onClick={handleClick}
-                                whileHover={{ scale: 1.05 }}
+                                initial={{ scale: 1 }}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                className={styles.ctaButton}
                             >
-                                <FaRocket className={styles.buttonIcon} />
-                                Get Plan
-                            </motion.button>
-                            <motion.button
-                                className={styles.learnMoreButton}
-                                onClick={handleClick}
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                <FaInfoCircle className={styles.buttonIcon} />
-                                Learn More
+                                <span>Start Free</span>
+                                <motion.span
+                                    className={styles.ctaIconWrapper}
+                                    animate={{ x: [0, 5, 0] }}
+                                    transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+                                >
+                                    <FaArrowRight className={styles.ctaIcon} />
+                                </motion.span>
                             </motion.button>
                         </div>
                     </div>
 
                     {/* Hero Visual */}
-                    <div className={styles.heroVisual}>
+                    <div className={styles.heroVisuals}>
                         <motion.div
-                            animate={{ y: [0, -10, 0] }}
-                            className={`${styles.floating} ${styles.mainImage}`}
-                            transition={{ duration: 3, repeat: Infinity }}
+                            initial={{ rotate: 2 }}
+                            whileHover={{ rotate: 0 }}
+                            className={styles.mainCard}
                         >
-                            <Image alt="" className={styles.heroImage} radius="lg" src="/images/heroImage.png" />
+                            <div className={styles.imageWrapper}>
+                                <img
+                                    src="/images/heroImage.png"
+                                    alt="Dashboard"
+                                    className={styles.mainImage}
+                                />
+                            </div>
+                        </motion.div>
+
+                        {/* Дополнительные карточки */}
+                        <motion.div
+                            initial={{ rotate: -6 }}
+                            whileHover={{ rotate: 0 }}
+                            className={styles.smallCard}
+                            style={{ top: '2rem', right: '-1rem' }}
+                        >
+                            <Image
+                                height={300}
+                                width={100}
+                                src="/images/carfaxScreen.png"
+                                alt="Dashboard"
+                            />
                         </motion.div>
 
                         <motion.div
-                            animate={{ y: [0, -10, 0] }}
-                            className={`${styles.floatingIcon} ${styles.carIcon}`}
-                            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+                            initial={{ rotate: 6 }}
+                            whileHover={{ rotate: 0 }}
+                            className={styles.smallCard}
+                            style={{ bottom: '-1rem', left: '1rem' }}
                         >
-                            <FaCar size={'50%'} />
+                            <Image
+                                height={300}
+                                width={100}
+                                src="/images/marketValue.png"
+                                alt="Dashboard"
+                            />
                         </motion.div>
 
                         <motion.div
-                            animate={{ y: [0, -10, 0] }}
-                            className={`${styles.floatingIcon} ${styles.databaseIcon}`}
-                            transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                            initial={{ rotate: -12 }}
+                            whileHover={{ rotate: 0 }}
+                            className={styles.smallCard}
+                            style={{ top: '5rem', left: '-2rem' }}
                         >
-                            <FaDatabase size={'50%'} />
+                            <Image
+                                height={300}
+                                width={100}
+                                src="/images/seller.png"
+                                alt="Dashboard"
+                            />
                         </motion.div>
+                        <div className={styles.bgBlur}></div>
                     </div>
                 </div>
             </div>

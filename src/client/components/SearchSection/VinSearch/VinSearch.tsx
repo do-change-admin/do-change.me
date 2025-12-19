@@ -3,35 +3,21 @@ import { notifications } from '@mantine/notifications';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 import { useShallow } from 'zustand/react/shallow';
 import { Input } from '@/client/components/_ui';
-import { useProfile } from '@/client/hooks';
 import { useScannerState } from '@/client/states/scanner.state';
 import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import { VIN } from '@/value-objects/vin.value-object';
 import styles from './VinSearch.module.css';
 
-export const VinSearch = ({ openSubscription }: { openSubscription?: () => void }) => {
+export const VinSearch = () => {
     const router = useRouter();
-    const { data } = useProfile();
-
-    useEffect(() => {
-        if (data && !data?.subscription && openSubscription) {
-            openSubscription();
-            return;
-        }
-    }, [data?.subscription]);
 
     const { setVIN, vin } = useVINAnalysisState(useShallow(({ setVIN, vin }) => ({ vin, setVIN })));
     const start = useScannerState((x) => x.start);
 
     const handleSearch = () => {
-        if (data && openSubscription && !data?.subscription) {
-            openSubscription();
-            return;
-        }
         if (!VIN.schema.safeParse(vin).success) {
             notifications.show({
                 message: 'Invalid VIN',
@@ -44,10 +30,6 @@ export const VinSearch = ({ openSubscription }: { openSubscription?: () => void 
     };
 
     const handleStartScanner = () => {
-        if (openSubscription && !data?.subscription) {
-            openSubscription();
-            return;
-        }
         start();
     };
 

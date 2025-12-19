@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { AiOutlineLogin } from 'react-icons/ai';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import styles from './HeaderWeb.module.css';
+import {motion} from "framer-motion";
 
 export const HeaderWeb = () => {
     const router = useRouter();
@@ -59,9 +60,23 @@ export const HeaderWeb = () => {
                             Contact
                         </Link>
                     </nav>
-                    <button className={styles.button} onClick={() => router.push('/auth/login')} type="button">
-                        <AiOutlineLogin color="white" size={30} />
-                    </button>
+                    <div className={styles.ctaButtons}>
+                        <motion.button
+                            onClick={() => router.push('/auth/login')}
+                                initial={{ scale: 1 }}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                className={styles.ctaButton}
+                                >
+                                <span>Start Free</span>
+                                <motion.span
+                                className={styles.ctaIconWrapper}
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+                        >
+                        </motion.span>
+                    </motion.button>
+                </div>
                 </div>
             </div>
         </header>
