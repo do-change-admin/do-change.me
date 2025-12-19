@@ -68,7 +68,7 @@ export const HeaderWeb = () => {
                                 whileTap={{ scale: 0.95 }}
                                 className={styles.ctaButton}
                                 >
-                                <span>Start Free</span>
+                                <span>Start For Free</span>
                                 <motion.span
                                 className={styles.ctaIconWrapper}
                             animate={{ x: [0, 5, 0] }}
