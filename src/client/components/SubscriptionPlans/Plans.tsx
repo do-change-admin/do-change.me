@@ -9,11 +9,13 @@ import {
     FaCrown,
     FaFileAlt,
     FaGavel,
-    FaHeadset, FaInfoCircle,
+    FaHeadset,
+    FaInfoCircle,
     FaRocket,
     FaShareAlt,
     FaShieldAlt,
-    FaStar, FaUnlock
+    FaStar,
+    FaUnlock
 } from "react-icons/fa";
 import { Alert, Anchor, Badge, Group, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
@@ -23,17 +25,30 @@ import { usePlans, useSubscriptionCreation } from "@/client/hooks";
 interface IPlanProps {
     isHome?: boolean;
 }
-export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
-    const router = useRouter()
-    const { data: plans } = usePlans()
-    const { mutateAsync: subscribe } = useSubscriptionCreation()
 
-    const onlyReportsPlan = plans?.basic
-    const auctionAccessPlan = plans?.auctionAccess
+export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
+    const router = useRouter();
+    const { data: plans } = usePlans();
+    const { mutateAsync: subscribe } = useSubscriptionCreation();
+
+    const onlyReportsPlan = plans?.basic;
+    const auctionAccessPlan = plans?.auctionAccess;
+
+    const handleSubscribe = async (planId?: string, priceId?: string) => {
+        if (isHome) {
+            router.push('/auth/login')
+            return
+        }
+        if (!planId || !priceId) return;
+        const { url } = await subscribe({
+            body: { planId, priceId }
+        });
+        if (url) router.push(url);
+    };
 
     return (
         <div className={styles.grid}>
-            {/* Basic Plan */}
+            {/* Free Plan */}
             <motion.div
                 whileHover={{ y: -8 }}
                 transition={{ duration: 0.3 }}
@@ -42,11 +57,77 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
                 <div className={styles.cardContent}>
                     <div className={styles.cardHeader}>
                         <div>
+                            <h3 className={styles.cardTitle}>Free Plan</h3>
+                            <p className={styles.cardText}>No credit card required</p>
+                        </div>
+                    </div>
+
+                    <div className={styles.priceBlock}>
+                        <div className={styles.priceRow}>
+                            <span className={styles.price}>$0</span>
+                            <Text>/month</Text>
+                        </div>
+                    </div>
+
+                    <div className={styles.features}>
+                        <div className={styles.feature}>
+                            <FaCheck className={styles.checkGreen} />
+                            <div>
+                                <strong>Market Value Analytics</strong>
+                                <p className={styles.featureNote}>Number of active listings, price charts, history</p>
+                            </div>
+                        </div>
+                        <div className={styles.feature}>
+                            <FaCheck className={styles.checkGreen}/>
+                            <div>
+                                <strong>Price & Odometer Records</strong>
+                                <p className={styles.featureNote}>Track historical pricing and mileage</p>
+                            </div>
+                        </div>
+                        <div className={styles.feature}>
+                            <FaCheck className={styles.checkGreen} />
+                            <div>
+                                <strong>Seller History</strong>
+                                <p className={styles.featureNote}>Who sold, price, listing snapshot, dealer address</p>
+                            </div>
+                        </div>
+                        <div className={styles.feature}>
+                            <FaCheck className={styles.checkGreen} />
+                            <div>
+                                <strong>Unlimited Salvage Checks</strong>
+                                <p className={styles.featureNote}>Verify if vehicle was declared a total loss</p>
+                            </div>
+                        </div>
+                        <div className={styles.feature}>
+                            <FaCheck className={styles.checkGreen} />
+                            <div>
+                                <strong>VIN Scanner</strong>
+                                <p className={styles.featureNote}>Smart and fast VIN scanning for any vehicle</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => handleSubscribe(onlyReportsPlan?.prices?.[0]?.planId?.toString(), onlyReportsPlan?.prices?.[0]?.stripePriceId)}
+                        className={styles.buttonBlue}
+                    >
+                        <FaRocket /> Use for Free
+                    </button>
+                </div>
+            </motion.div>
+
+            {/* Basic Plan */}
+            <motion.div
+                whileHover={{ y: -8 }}
+                transition={{ duration: 0.3 }}
+                className={styles.cardPremium}
+            >
+                <div className={styles.ribbon}>MOST POPULAR</div>
+                <div className={styles.cardContent}>
+                    <div className={styles.cardHeader}>
+                        <div>
                             <h3 className={styles.cardTitle}>Basic Plan</h3>
                             <p className={styles.cardText}>Perfect for individual users</p>
-                        </div>
-                        <div className={styles.iconBlue}>
-                            <FaCar />
                         </div>
                     </div>
 
@@ -60,66 +141,65 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
                     </div>
 
                     <div className={styles.features}>
+                        <motion.div
+                            className={styles.featureCarfax}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            whileHover={{ scale: 1.02 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, ease: "easeOut" }}
+                        >
+                            <div className={styles.featureIconWrapper}>
+                                <FaCheck className={styles.checkGreen} />
+                            </div>
+                            <div className={styles.featureContent}>
+                                <strong>Unlimited CarFax Reports</strong>
+                                <p className={styles.featureCarfaxNote}>Full vehicle history reports included</p>
+                            </div>
+                        </motion.div>
                         <div className={styles.feature}>
                             <FaCheck className={styles.checkGreen} />
                             <div>
-                                <strong>Market Value</strong> — <Badge size="lg"
-                                    variant="light">Unlimited</Badge>
-                                <p className={styles.featureNote}>Get accurate market pricing for any
-                                    vehicle</p>
+                                <strong>Market Value Analytics</strong>
+                                <p className={styles.featureNote}>Number of active listings, price charts, history</p>
+                            </div>
+                        </div>
+                        <div className={styles.feature}>
+                            <FaCheck className={styles.checkGreen}/>
+                            <div>
+                                <strong>Price & Odometer Records</strong>
+                                <p className={styles.featureNote}>Track historical pricing and mileage</p>
                             </div>
                         </div>
                         <div className={styles.feature}>
                             <FaCheck className={styles.checkGreen} />
                             <div>
-                                <strong>Total Loss Check</strong> — <Badge size="lg"
-                                    variant="light">Unlimited</Badge>
-                                <p className={styles.featureNote}>Verify if vehicle was declared a total
-                                    loss</p>
+                                <strong>Seller History</strong>
+                                <p className={styles.featureNote}>Who sold, price, listing snapshot, dealer address</p>
                             </div>
                         </div>
                         <div className={styles.feature}>
-                            <FaFileAlt className={styles.iconBlue} />
+                            <FaCheck className={styles.checkGreen} />
                             <div>
-                                <strong>Vehicle History Reports</strong> — <Badge size="lg"
-                                    variant="light">Unlimited</Badge>
-                                <p className={styles.featureNote}>The best report options.</p>
-                                {/*<p className={styles.featureNote}>Additional reports: $0.95 each</p>*/}
+                                <strong>Unlimited Salvage Checks</strong>
+                                <p className={styles.featureNote}>Verify if vehicle was declared a total loss</p>
                             </div>
                         </div>
                         <div className={styles.feature}>
-                            <FaShieldAlt className={styles.iconPurple} />
+                            <FaCheck className={styles.checkGreen} />
                             <div>
-                                <strong>Fraud Protection</strong>
-                                <p className={styles.featureNote}>Advanced algorithms to detect potential
-                                    fraud</p>
-                            </div>
-                        </div>
-                        <div className={styles.feature}>
-                            <FaHeadset className={styles.iconOrange} />
-                            <div>
-                                <strong>24/7 Customer Support</strong>
-                                <p className={styles.featureNote}>Get help whenever you need it</p>
+                                <strong>VIN Scanner</strong>
+                                <p className={styles.featureNote}>Smart and fast VIN scanning for any vehicle</p>
                             </div>
                         </div>
                     </div>
-                    {!isHome && (
-                        <button
-                            onClick={async () => {
-                                const { url } = await subscribe({
-                                    body: {
-                                        planId: onlyReportsPlan?.prices?.[0]?.planId?.toString() ?? "",
-                                        priceId: onlyReportsPlan?.prices?.[0].stripePriceId ?? ""
-                                    }
-                                })
-                                if (url) {
-                                    router.push(url)
-                                }
-                            }}
-                            className={styles.buttonBlue}>
-                            <FaRocket /> Get Plan
-                        </button>
-                    )}
+
+                    <button
+                        onClick={() => handleSubscribe(onlyReportsPlan?.prices?.[0]?.planId?.toString(), onlyReportsPlan?.prices?.[0]?.stripePriceId)}
+                        className={styles.buttonBlue}
+                    >
+                        <FaRocket /> Get Plan
+                    </button>
                 </div>
             </motion.div>
 
@@ -127,14 +207,13 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
             <motion.div
                 whileHover={{ y: -8 }}
                 transition={{ duration: 0.3 }}
-                className={styles.cardPremium}
+                className={styles.card}
             >
-                <div className={styles.ribbon}>MOST POPULAR</div>
                 <div className={styles.cardContent}>
                     <div className={styles.cardHeader}>
                         <div>
-                            <h3 className={styles.cardTitle}>Premium Plan</h3>
-                            <p className={styles.cardText}>For professionals</p>
+                            <h3 className={styles.cardTitle}>Pro Plan</h3>
+                            <p className={styles.cardText}>For dealers and high-volume sellers</p>
                         </div>
                         <div className={styles.iconPurpleBg}>
                             <FaCrown />
@@ -143,41 +222,27 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
 
                     <div className={styles.priceBlock}>
                         <div className={styles.priceRow}>
-                            <span className={styles.price}>$100</span>
+                            <span className={styles.price}>$150</span>
                             <Text>/month</Text>
-                            <span className={styles.oldPrice}>$200</span>
-
                         </div>
-                        <div className={styles.discountPurple}>Save 50%</div>
                     </div>
 
                     <div className={styles.features}>
                         <p className={styles.extraNote}>
-                            <FaStar className={styles.iconYellow} /> Everything in Basic Plan, plus:
+                            <FaStar className={styles.iconYellow} /> Everything in Free and Basic Plan, plus:
                         </p>
                         <div className={styles.feature}>
                             <FaGavel className={styles.iconPurple} />
                             <div>
                                 <strong>Auction Access</strong>
-                                <p className={styles.featureNote}>Access to exclusive dealer auctions
-                                    nationwide</p>
+                                <p className={styles.featureNote}>Access to exclusive dealer auctions nationwide</p>
                             </div>
                         </div>
                         <div className={styles.feature}>
                             <FaShareAlt className={styles.iconPink} />
                             <div>
-                                <strong>Syndication</strong>
-                                <p className={styles.featureNote}>Distribute your inventory across multiple
-                                    platforms</p>
-                            </div>
-                        </div>
-                        <div className={styles.feature}>
-                            <FaFileAlt className={styles.iconBlue} />
-                            <div>
-                                <strong>Vehicle History Reports</strong> — <Badge size="lg"
-                                    variant="light">Unlimited</Badge>
-                                <p className={styles.featureNote}>The best report options.</p>
-                                {/*<p className={styles.featureNote}>Additional reports: $0.95 each</p>*/}
+                                <strong>Multi-Platform Listing</strong>
+                                <p className={styles.featureNote}>List vehicles on multiple marketplaces from one dashboard</p>
                             </div>
                         </div>
                     </div>
@@ -193,50 +258,13 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
                             Access is approved.
                         </p>
                     </div>
-                    {!isHome && (
-                        <>
-                            <button className={styles.buttonPurple} onClick={() => {
-                                if (isHome) {
-                                    router.push("/auth/login");
-                                    return
-                                }
-                                router.push('/auctions/dealer')
-                            }}>
-                                <FaUnlock /> Get Access
-                            </button>
-                            <Alert
-                                icon={<AiOutlineInfoCircle size={18} />}
-                                color="blue"
-                                radius="lg"
-                                variant="light"
-                                mt="lg"
-                            >
-                                <Group gap="xs">
-                                    <Text size="sm">
-                                        If you already have <b>Auction Access</b>, you can get or subscribe to this plan
-                                    </Text>
-                                    <Anchor
-                                        size="sm"
-                                        fw={500}
-                                        underline="always"
-                                        onClick={async () => {
-                                            const { url } = await subscribe({
-                                                body: {
-                                                    planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? "",
-                                                    priceId: auctionAccessPlan?.prices?.[0].stripePriceId ?? ""
-                                                }
-                                            })
-                                            if (url) {
-                                                router.push(url)
-                                            }
-                                        }}
-                                    >
-                                        here.
-                                    </Anchor>
-                                </Group>
-                            </Alert>
-                        </>
-                    )}
+
+                    <button
+                        className={styles.buttonPurple}
+                        onClick={() =>isHome ? router.push('/auth/login') : router.push('/auctions/dealer')}
+                    >
+                        <FaUnlock /> Get Access
+                    </button>
                 </div>
             </motion.div>
         </div>

@@ -41,7 +41,7 @@ export const HeroSection = () => {
                                 whileTap={{ scale: 0.95 }}
                                 className={styles.ctaButton}
                             >
-                                <span>Start 2-Day Free Trial</span>
+                                <span>Start Free</span>
                                 <motion.span
                                     className={styles.ctaIconWrapper}
                                     animate={{ x: [0, 5, 0] }}
