@@ -49,72 +49,74 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
     return (
         <div className={styles.grid}>
             {/* Free Plan */}
-            <motion.div
-                whileHover={{ y: -8 }}
-                transition={{ duration: 0.3 }}
-                className={styles.card}
-            >
-                <div className={styles.cardContent}>
-                    <div className={styles.cardHeader}>
-                        <div>
-                            <h3 className={styles.cardTitle}>Free Plan</h3>
-                            <p className={styles.cardText}>No credit card required</p>
+            {isHome && (
+                <motion.div
+                    whileHover={{ y: -8 }}
+                    transition={{ duration: 0.3 }}
+                    className={styles.card}
+                >
+                    <div className={styles.cardContent}>
+                        <div className={styles.cardHeader}>
+                            <div>
+                                <h3 className={styles.cardTitle}>Free Plan</h3>
+                                <p className={styles.cardText}>No credit card required</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={styles.priceBlock}>
-                        <div className={styles.priceRow}>
-                            <span className={styles.price}>$0</span>
-                            <Text>/month</Text>
+                        <div className={styles.priceBlock}>
+                            <div className={styles.priceRow}>
+                                <span className={styles.price}>$0</span>
+                                <Text>/month</Text>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={styles.features}>
-                        <div className={styles.feature}>
-                            <FaCheck className={styles.checkGreen} />
-                            <div>
-                                <strong>Market Value Analytics</strong>
-                                <p className={styles.featureNote}>Number of active listings, price charts, history</p>
+                        <div className={styles.features}>
+                            <div className={styles.feature}>
+                                <FaCheck className={styles.checkGreen} />
+                                <div>
+                                    <strong>Market Value Analytics</strong>
+                                    <p className={styles.featureNote}>Number of active listings, price charts, history</p>
+                                </div>
+                            </div>
+                            <div className={styles.feature}>
+                                <FaCheck className={styles.checkGreen}/>
+                                <div>
+                                    <strong>Price & Odometer Records</strong>
+                                    <p className={styles.featureNote}>Track historical pricing and mileage</p>
+                                </div>
+                            </div>
+                            <div className={styles.feature}>
+                                <FaCheck className={styles.checkGreen} />
+                                <div>
+                                    <strong>Seller History</strong>
+                                    <p className={styles.featureNote}>Who sold, price, listing snapshot, dealer address</p>
+                                </div>
+                            </div>
+                            <div className={styles.feature}>
+                                <FaCheck className={styles.checkGreen} />
+                                <div>
+                                    <strong>Unlimited Total Loss Checks</strong>
+                                    <p className={styles.featureNote}>Verify if vehicle was declared a total loss</p>
+                                </div>
+                            </div>
+                            <div className={styles.feature}>
+                                <FaCheck className={styles.checkGreen} />
+                                <div>
+                                    <strong>VIN Scanner</strong>
+                                    <p className={styles.featureNote}>Smart and fast VIN scanning for any vehicle</p>
+                                </div>
                             </div>
                         </div>
-                        <div className={styles.feature}>
-                            <FaCheck className={styles.checkGreen}/>
-                            <div>
-                                <strong>Price & Odometer Records</strong>
-                                <p className={styles.featureNote}>Track historical pricing and mileage</p>
-                            </div>
-                        </div>
-                        <div className={styles.feature}>
-                            <FaCheck className={styles.checkGreen} />
-                            <div>
-                                <strong>Seller History</strong>
-                                <p className={styles.featureNote}>Who sold, price, listing snapshot, dealer address</p>
-                            </div>
-                        </div>
-                        <div className={styles.feature}>
-                            <FaCheck className={styles.checkGreen} />
-                            <div>
-                                <strong>Unlimited Total Loss Checks</strong>
-                                <p className={styles.featureNote}>Verify if vehicle was declared a total loss</p>
-                            </div>
-                        </div>
-                        <div className={styles.feature}>
-                            <FaCheck className={styles.checkGreen} />
-                            <div>
-                                <strong>VIN Scanner</strong>
-                                <p className={styles.featureNote}>Smart and fast VIN scanning for any vehicle</p>
-                            </div>
-                        </div>
-                    </div>
 
-                    <button
-                        onClick={() => handleSubscribe(onlyReportsPlan?.prices?.[0]?.planId?.toString(), onlyReportsPlan?.prices?.[0]?.stripePriceId)}
-                        className={styles.buttonBlue}
-                    >
-                        <FaRocket /> Use for Free
-                    </button>
-                </div>
-            </motion.div>
+                        <button
+                            onClick={() => router.push('/auth/login')}
+                            className={styles.buttonBlue}
+                        >
+                            <FaRocket /> Use for Free
+                        </button>
+                    </div>
+                </motion.div>
+            )}
 
             {/* Basic Plan */}
             <motion.div
@@ -222,7 +224,7 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
 
                     <div className={styles.priceBlock}>
                         <div className={styles.priceRow}>
-                            <span className={styles.price}>$150</span>
+                            <span className={styles.price}>$100</span>
                             <Text>/month</Text>
                         </div>
                     </div>
@@ -265,6 +267,39 @@ export const Plans: FC<IPlanProps> = ({ isHome = false }) => {
                     >
                         <FaUnlock /> Get Access
                     </button>
+                    {!isHome && (
+                        <Alert
+                            icon={<AiOutlineInfoCircle size={18} />}
+                            color="blue"
+                            radius="lg"
+                            variant="light"
+                            mt="lg"
+                        >
+                            <Group gap="xs">
+                                <Text size="sm">
+                                    If you already have <b>Auction Access</b>, you can get or subscribe to this plan
+                                </Text>
+                                <Anchor
+                                    size="sm"
+                                    fw={500}
+                                    underline="always"
+                                    onClick={async () => {
+                                        const { url } = await subscribe({
+                                            body: {
+                                                planId: auctionAccessPlan?.prices?.[0]?.planId?.toString() ?? "",
+                                                priceId: auctionAccessPlan?.prices?.[0].stripePriceId ?? ""
+                                            }
+                                        })
+                                        if (url) {
+                                            router.push(url)
+                                        }
+                                    }}
+                                >
+                                    here.
+                                </Anchor>
+                            </Group>
+                        </Alert>
+                    )}
                 </div>
             </motion.div>
         </div>
