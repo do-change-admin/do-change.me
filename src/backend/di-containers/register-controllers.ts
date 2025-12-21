@@ -1,11 +1,11 @@
 import type { Container } from 'inversify';
 import { RemotePicturesController } from '../controllers/remote-pictures';
 import { SubscriptionsController } from '../controllers/subscriptions.controller';
+import { SyndicationRequestsManagementController } from '../controllers/syndication-requests/management';
+import { UserSyndicationRequestsController } from '../controllers/syndication-requests/user';
+import { UserSyndicationRequestDraftsController } from '../controllers/syndication-requests/user-drafts';
 import { UserNotificationsController } from '../controllers/user-notifications.controller';
 import { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller';
-import { UserSyndicationRequestDraftsController } from '../controllers/user-syndication-request-drafts';
-import { UserSyndicationRequestsController } from '../controllers/user-syndication-requests';
-import { UserSyndicationRequestsManagementController } from '../controllers/user-syndication-requests-management';
 import { ControllerTokens } from './tokens.di-container';
 
 export const registerControllers = (container: Container) => {
@@ -16,8 +16,8 @@ export const registerControllers = (container: Container) => {
         .bind<UserSyndicationRequestDraftsController>(ControllerTokens.syndicationRequestDrafts)
         .to(UserSyndicationRequestDraftsController);
     container
-        .bind<UserSyndicationRequestsManagementController>(ControllerTokens.syndicationRequestManagement)
-        .to(UserSyndicationRequestsManagementController);
+        .bind<SyndicationRequestsManagementController>(ControllerTokens.syndicationRequestManagement)
+        .to(SyndicationRequestsManagementController);
     container.bind<UserNotificationsController>(ControllerTokens.userNotifications).to(UserNotificationsController);
     container
         .bind<UserNotificationsManagementController>(ControllerTokens.userNotificationsManagement)

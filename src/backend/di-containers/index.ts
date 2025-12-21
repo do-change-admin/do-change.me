@@ -4,11 +4,11 @@ import 'reflect-metadata';
 // import type { SyndicationRequestManagementController } from '@/backend/controllers/syndication-request-management.controller';
 import type { RemotePicturesController } from '../controllers/remote-pictures';
 import type { SubscriptionsController } from '../controllers/subscriptions.controller';
+import type { SyndicationRequestsManagementController } from '../controllers/syndication-requests/management';
+import type { UserSyndicationRequestsController } from '../controllers/syndication-requests/user';
+import type { UserSyndicationRequestDraftsController } from '../controllers/syndication-requests/user-drafts';
 import type { UserNotificationsController } from '../controllers/user-notifications.controller';
 import type { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller';
-import type { UserSyndicationRequestDraftsController } from '../controllers/user-syndication-request-drafts';
-import type { UserSyndicationRequestsController } from '../controllers/user-syndication-requests';
-import type { UserSyndicationRequestsManagementController } from '../controllers/user-syndication-requests-management';
 import type { IMailerProvider } from '../providers/mailer/mailer.provider';
 import { devContainer } from './dev.di-container';
 import { stageContainer } from './stage.di-container';
@@ -46,7 +46,7 @@ export const DIContainer = () => {
             return container.get<UserSyndicationRequestsController>(ControllerTokens.syndicationRequests);
         },
         UserSyndicationRequestManagementController: () => {
-            return container.get<UserSyndicationRequestsManagementController>(
+            return container.get<SyndicationRequestsManagementController>(
                 ControllerTokens.syndicationRequestManagement
             );
         },

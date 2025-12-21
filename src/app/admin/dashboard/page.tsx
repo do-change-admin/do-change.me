@@ -1,18 +1,9 @@
-"use client";
+'use client';
 
-import styles from "./page.module.css";
-import { FaIdCard, FaEnvelope, FaDownload } from "react-icons/fa";
-import {
-    Progress,
-    Badge,
-    Card,
-    Stack,
-    Group,
-    Text,
-    Title,
-} from "@mantine/core";
-import { useAdminUsersInfo } from "@/client/hooks/_admin-users.hooks";
-import { useStats } from "@/client/hooks";
+import { Badge, Progress } from '@mantine/core';
+import { FaDownload, FaEnvelope, FaIdCard } from 'react-icons/fa';
+import { useAdminUsersInfo } from '@/client/hooks/_admin-users.hooks';
+import styles from './page.module.css';
 
 const MAX_REPORTS = 100;
 
@@ -106,6 +97,12 @@ export default function UsersTable() {
                                         <span>Reports Downloaded</span>
                                     </div>
                                 </th>
+                                <th>
+                                    <div className={styles.flexRow}>
+                                        <FaDownload color="#06b6d4" />
+                                        <span>Base info requests</span>
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
 
@@ -129,20 +126,25 @@ export default function UsersTable() {
                                             <td>
                                                 <div className={styles.flexRow}>
                                                     <Badge
-                                                        color={isHigh ? "red" : "green"}
-                                                        variant="filled"
                                                         className={styles.badge}
+                                                        color={isHigh ? 'red' : 'green'}
+                                                        variant="filled"
                                                     >
                                                         {user.downloadedReports}
                                                     </Badge>
                                                     <Progress
+                                                        color={isHigh ? 'red' : 'green'}
+                                                        style={{ flex: 1 }}
                                                         value={Math.min(
                                                             (user.downloadedReports / MAX_REPORTS) * 100,
                                                             100
                                                         )}
-                                                        color={isHigh ? "red" : "green"}
-                                                        style={{ flex: 1 }}
                                                     />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className={styles.flexRow} style={{ justifyContent: 'center' }}>
+                                                    <span>{user.baseInfoRequests}</span>
                                                 </div>
                                             </td>
                                         </tr>

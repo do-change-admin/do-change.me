@@ -6,13 +6,15 @@ export const DIStores = {
     syndicationRequests: Symbol.for('SYNDICATION-REQUESTS-DATA-PROVIDER'),
     syndicationRequestDrafts: Symbol.for('SYNDICATION-REQUEST-DRAFTS'),
     notifications: Symbol.for('NOTIFICATIONS-DATA-PROVIDER'),
-    remotePictures: Symbol()
+    remotePictures: Symbol(),
+    featureUsage: Symbol()
 };
 
 export const DIProviders = {
     mailer: Symbol.for('MAILER-FUNCTIONAL-PROVIDER'),
     logger: Symbol.for('LOGGER-FUNCTIONAL-PROVIDER'),
-    s3Client: Symbol()
+    s3Client: Symbol(),
+    activeUserInfo: Symbol()
 };
 
 export const DIServices = {
@@ -20,9 +22,13 @@ export const DIServices = {
 
     userSyndicationRequests: Symbol(),
     userSyndicationRequestDrafts: Symbol(),
+    userSyndicationRequestManagement: Symbol(),
 
     userNotificationsFactory: Symbol.for('USER-NOTIFICATIONS-SERVICE'),
-    userNotificationsManagementFactory: Symbol.for('USER-NOTIFICATIONS-MANAGEMENT-SERVICE')
+    userNotificationsManagementFactory: Symbol.for('USER-NOTIFICATIONS-MANAGEMENT-SERVICE'),
+
+    userFeatureUsageMetering: Symbol(),
+    featureUsageManagement: Symbol()
 };
 
 export const ControllerTokens = {

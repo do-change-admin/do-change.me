@@ -1,8 +1,11 @@
 import type { Container } from 'inversify';
+import { FeatureUsageManagementService } from '../services/feature-usage/management';
+import { UserFeatureUsageMeteringService } from '../services/feature-usage/user-metering';
+import { SyndicationRequestsManagementService } from '../services/syndication-requests/management';
+import { UserSyndicationRequestsService } from '../services/syndication-requests/user';
+import { UserSyndicationRequestDraftsService } from '../services/syndication-requests/user-drafts';
 import { UserNotificationsService } from '../services/user-notifications.service';
 import { UserNotificationsManagementService } from '../services/user-notifications-management.service';
-import { UserSyndicationRequestDraftsService } from '../services/user-syndication-request-drafts';
-import { UserSyndicationRequestsService } from '../services/user-syndication-requests';
 import type { NotificationStore } from '../stores/notification/notification.store';
 import { DIServices, DIStores } from './tokens.di-container';
 
@@ -33,4 +36,14 @@ export const registerServices = (container: Container) => {
                 return new UserNotificationsManagementService(notifications, userId);
             };
         });
+
+    container
+        .bind<SyndicationRequestsManagementService>(DIServices.userSyndicationRequestManagement)
+        .to(SyndicationRequestsManagementService);
+
+    container
+        .bind<UserFeatureUsageMeteringService>(DIServices.userFeatureUsageMetering)
+        .to(UserFeatureUsageMeteringService);
+
+    container.bind<FeatureUsageManagementService>(DIServices.featureUsageManagement).to(FeatureUsageManagementService);
 };
