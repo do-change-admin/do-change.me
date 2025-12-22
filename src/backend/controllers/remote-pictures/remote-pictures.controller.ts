@@ -10,7 +10,5 @@ export class RemotePicturesController extends ZodController(remotePicturesContro
         super();
     }
 
-    POST = this.loggedEndpoint('POST', {
-        handler: () => this.remotePictures.uploadLink()
-    });
+    POST = this.endpointWithAuth('POST', this.remotePictures.uploadLink);
 }

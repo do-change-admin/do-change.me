@@ -43,6 +43,7 @@ model User {
   notifications                Notification[]
   userSyndicationRequests      UserSyndicationRequest[]
   userSyndicationRequestDrafts UserSyndicationRequestDraft[]
+  featureUsages                FeatureUsage[]
 }
 
 model Account {
@@ -498,4 +499,13 @@ model Notification {
   createdAt DateTime          @default(now())
   recipient User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
+}
+
+model FeatureUsage {
+  id String @id @default(uuid())
+
+  feature      String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  registeredAt DateTime @default(now())
+  userId       String
 }

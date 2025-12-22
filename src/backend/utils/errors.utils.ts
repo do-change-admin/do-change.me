@@ -102,7 +102,10 @@ export class ErrorFactory {
         return {
             inMethod: (methodName: string) => {
                 return {
-                    newError: (payload: ErrorBaseCreatingPayload & { statusCode: number }, cause?: unknown): ControllerErrorModel => {
+                    newError: (
+                        payload: ErrorBaseCreatingPayload & { statusCode: number },
+                        cause?: unknown
+                    ): ControllerErrorModel => {
                         const errorBase = ErrorFactory.base(payload);
                         return {
                             ...errorBase,

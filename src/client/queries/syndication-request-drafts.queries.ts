@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { UserSyndicationRequestDraftsAPI } from '@/backend/controllers/user-syndication-request-drafts';
+import type { UserSyndicationRequestDraftsAPI } from '@/backend/controllers/syndication-requests/user-drafts';
 import { apiRequest } from '@/client/utils/api-request.utils';
 
 type API = UserSyndicationRequestDraftsAPI['endpoints'];

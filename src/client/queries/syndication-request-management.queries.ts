@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { UserSyndicationRequestsManagementAPI } from '@/backend/controllers/user-syndication-requests-management';
+import type { SyndicationRequestsManagementAPI } from '@/backend/controllers/syndication-requests/management';
 import { apiRequest } from '@/client/utils/api-request.utils';
 
-type API = UserSyndicationRequestsManagementAPI['endpoints'];
+type API = SyndicationRequestsManagementAPI['endpoints'];
 const apiURL = '/api/user-syndication-requests/management';
 
 export const useAdminSyndicationRequests = (query: API['GET']['payload']['query']) => {
