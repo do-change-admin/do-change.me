@@ -41,14 +41,16 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
             <div className={styles.container}>
                 <div
                     className={cn(styles.glass, {
-                        [styles.bgClean]: !salvageInfo?.salvageWasFound,
-                        [styles.bgSalvage]: salvageInfo?.salvageWasFound
+                        [styles.bgClean]: true,
+                        //TODO: раскомментировать
+                        // [styles.bgSalvage]: salvageInfo?.salvageWasFound
                     })}
                 >
                     <div className={styles.searchSectionHeader}>
                         <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
                     </div>
-                    <Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />
+                    {/*//TODO: раскомментировать*/}
+                    {/*<Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />*/}
                     {(isLoading || salvageIsLoading || isFetching) && <LoadingMinute label="" />}
                     <div className={styles.searchSectionHeader}>
                         <div className={styles.header}>
