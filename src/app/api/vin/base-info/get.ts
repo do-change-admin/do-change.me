@@ -1,6 +1,9 @@
 import z from 'zod';
+import { DIContainer } from '@/backend/di-containers';
+import { DIServices } from '@/backend/di-containers/tokens.di-container';
 import { prismaClient } from '@/backend/infrastructure';
 import { ActionsHistoryService } from '@/backend/services';
+import type { UserFeatureUsageMeteringService } from '@/backend/services/feature-usage/user-metering';
 import { businessError } from '@/lib-deprecated/errors';
 import { VIN } from '@/value-objects/vin.value-object';
 import {
@@ -42,6 +45,10 @@ export const method = zodApiMethod(schemas, {
         return json?.Results?.[0];
     },
     onSuccess: async ({ result, requestPayload, flags }) => {
+        const userFeatureUsageMeteringService = DIContainer()._context.get<UserFeatureUsageMeteringService>(
+            DIServices.userFeatureUsageMetering
+        );
+
         if (!flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE]) {
             (await prismaClient.vinCheckResult.create({ data: result })) ?? [];
         }
@@ -51,6 +58,8 @@ export const method = zodApiMethod(schemas, {
                 target: 'base info',
                 payload: { vin: requestPayload.vin, result }
             });
+
+            await userFeatureUsageMeteringService.increment({ featureName: 'base info' });
         }
     }
 });

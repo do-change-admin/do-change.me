@@ -5,10 +5,12 @@ import {
     type FunctionProviders,
     FunctionProvidersImplementations
 } from '@/backend/providers';
+import { type ActiveUserInfoProvider, MockActiveUserInfoProvider } from '../providers/active-user-info';
 import { ConsoleMailerProvider } from '../providers/mailer/console-mailer/console-mailer.provider';
 import type { IMailerProvider } from '../providers/mailer/mailer.provider';
 import type { S3Client } from '../providers/s3-client/s3-client.provider';
 import { S3ClientAWSSDK } from '../providers/s3-client/s3-client.provider.aws-sdk';
+import { FeatureUsageRAMStore, type FeatureUsageStore } from '../stores/feature-usage';
 import { NotificationRAMStore } from '../stores/notification/notification.ram.store';
 import type { NotificationStore } from '../stores/notification/notification.store';
 import type { RemotePicturesStore } from '../stores/remote-pictures/remote-pictures.store';
@@ -50,6 +52,7 @@ const registerDataProviders = () => {
     container.bind<RemotePicturesStore>(DIStores.remotePictures).to(RemotePicturesS3ClientStore);
 
     container.bind<NotificationStore>(DIStores.notifications).to(NotificationRAMStore).inSingletonScope();
+    container.bind<FeatureUsageStore>(DIStores.featureUsage).to(FeatureUsageRAMStore);
 };
 
 const registerFunctionProviders = () => {
@@ -60,6 +63,7 @@ const registerFunctionProviders = () => {
         .to(FunctionProvidersImplementations.Mock.Logger);
 
     container.bind<S3Client>(DIProviders.s3Client).to(S3ClientAWSSDK);
+    container.bind<ActiveUserInfoProvider>(DIProviders.activeUserInfo).to(MockActiveUserInfoProvider);
 };
 
 registerDataProviders();

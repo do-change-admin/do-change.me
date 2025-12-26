@@ -1,5 +1,8 @@
 import z from 'zod';
+import { DIContainer } from '@/backend/di-containers';
+import { DIServices } from '@/backend/di-containers/tokens.di-container';
 import { prismaClient } from '@/backend/infrastructure';
+import type { FeatureUsageManagementService } from '@/backend/services/feature-usage/management';
 import { FeatureKey } from '@/value-objects/feature-key.vo';
 import {
     type ZodAPIMethod,
@@ -21,7 +24,8 @@ const schemas = {
                         type: z.enum(['auction access', 'basic']),
                         isActive: z.boolean()
                     })
-                    .nullable()
+                    .nullable(),
+                baseInfoRequests: z.number()
             })
         )
     })
@@ -36,6 +40,19 @@ export const method = zodApiMethod(schemas, {
             where: { featureKey: FeatureKey.Report },
             include: { user: true }
         });
+
+        const featureUsageManagementService = DIContainer()._context.get<FeatureUsageManagementService>(
+            DIServices.featureUsageManagement
+        );
+
+        const baseInfoData: Record<string, number> = {};
+
+        for (const user of allUsers) {
+            const baseInfoRequests = await featureUsageManagementService.getForUser({ userId: user.id });
+            if (baseInfoRequests['base info']) {
+                baseInfoData[user.id] = baseInfoRequests['base info'];
+            }
+        }
 
         const usageData = data.reduce(
             (acc, current) => {
@@ -61,7 +78,8 @@ export const method = zodApiMethod(schemas, {
                               isActive: x.userPlan?.[0].status === 'active',
                               type: x.userPlan?.[0].plan.slug as any
                           }
-                        : null
+                        : null,
+                    baseInfoRequests: baseInfoData[x.id] ?? 0
                 };
             })
         };

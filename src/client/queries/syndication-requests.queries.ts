@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { UserSyndicationRequestDraftsAPI } from '@/backend/controllers/user-syndication-request-drafts';
-import type { UserSyndicationRequestsAPI } from '@/backend/controllers/user-syndication-requests';
+import type { UserSyndicationRequestsAPI } from '@/backend/controllers/syndication-requests/user';
+import type { UserSyndicationRequestDraftsAPI } from '@/backend/controllers/syndication-requests/user-drafts';
 import { apiRequest } from '@/client/utils/api-request.utils';
 import type { SyndicationRequestStatus } from '@/entities/syndication-request';
 
@@ -127,11 +127,15 @@ export const useSyndicationRequestPostingFromDraft = () => {
     });
 };
 
-export const useSyndicationRequestFilters = () => {
+export const useSyndicationRequestFilters = (inDrafts: boolean) => {
     return useQuery<API['Filters_GET']['response'], API['Filters_GET']['error']>({
-        queryKey: ['syndication-requests', 'filters'],
+        queryKey: ['syndication-requests', 'filters', inDrafts ? 'drafts' : 'active'],
         queryFn: () => {
-            return apiRequest(`${apiURL}/filters`, 'GET')({});
+            if (!inDrafts) {
+                return apiRequest(`${apiURL}/filters`, 'GET')({});
+            }
+
+            return apiRequest(`${apiURL}/drafts/filters`, 'GET')({});
         }
     });
 };
