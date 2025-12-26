@@ -6,8 +6,6 @@ export const remotePicturesControllerMetadata = {
     name: 'RemotePictures',
     schemas: {
         POST: {
-            query: undefined,
-            body: undefined,
             response: z.object({ id: Identifier.schema, uploadLink: z.url() })
         }
     }

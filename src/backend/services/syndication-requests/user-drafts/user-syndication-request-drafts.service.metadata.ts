@@ -13,32 +13,55 @@ const serviceItemSchema = UserSyndicationRequestDraft.schema.omit({ additionalPh
     )
 });
 
+/**
+ * Логика черновиков заявок на синдикацию текущего пользователя.
+ */
 export const userSyndicationRequestDraftsServiceMetadata = {
     name: 'UserSyndicationRequestDrafts',
     schemas: {
+        /**
+         * Получение списка черновиков заявок на синдикацию для текущего пользователя.
+         */
         list: {
-            payload: userSyndicationRequestDraftStoreSchemas.searchPayload.list,
+            payload: userSyndicationRequestDraftStoreSchemas.searchPayload.list.omit({ userId: true }),
             response: z.object({
                 items: z.array(serviceItemSchema)
             })
         },
 
+        /**
+         * Получение детальной информации о черновике заявки на синдикацию текущего пользователя.
+         */
         details: {
             payload: userSyndicationRequestDraftStoreSchemas.searchPayload.specific,
             response: serviceItemSchema
         },
 
+        /**
+         * Публикация нового черновика заявки на синдикацию для текущего пользователя.
+         */
         post: {
-            payload: userSyndicationRequestDraftStoreSchemas.actionsPayload.create,
+            payload: userSyndicationRequestDraftStoreSchemas.actionsPayload.create.omit({ userId: true }),
             response: z.object({ id: Identifier.schema })
         },
 
+        /**
+         * Обновление черновика заявки на синдикацию для текущего пользователя.
+         */
         update: {
             payload: userSyndicationRequestDraftStoreSchemas.actionsPayload.update.extend({
                 photoIdsToBeRemoved: z.array(Identifier.schema),
                 id: Identifier.schema
             }),
             response: z.object({})
+        },
+
+        /**
+         * Получение данных для фильтров для черновиков заявок на синдикацию текущего пользователя.
+         */
+        filters: {
+            payload: z.object({}),
+            response: userSyndicationRequestDraftStoreSchemas.customOperations.filtersData.response
         }
     }
 } satisfies ZodServiceMetadata;

@@ -1,24 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import z, { type ZodObject } from 'zod';
-import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
 import { type ControllerErrorModel, type ErrorBaseCreatingPayload, ErrorFactory } from '@/backend/utils/errors.utils';
 import { DIContainer } from '../di-containers';
 import { DIProviders } from '../di-containers/tokens.di-container';
-import type { FunctionProviders } from '../providers';
-
-async function getCurrentUser() {
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user) {
-        return null;
-    }
-
-    return {
-        id: session.user.id,
-        email: session.user.email
-    };
-}
+import type { ActiveUserInfoProvider } from '../providers/active-user-info';
+import type { Logger } from '../providers/function/contracts';
 
 type ZodAPIPayload<QueryParams, BodyParams> = (QueryParams extends undefined
     ? {}
@@ -34,109 +20,126 @@ type ZodAPIPayload<QueryParams, BodyParams> = (QueryParams extends undefined
 type SuccessResponse<ResponseZodSchema> = ResponseZodSchema extends undefined ? {} : z.infer<ResponseZodSchema>;
 
 type ZodAPISchemas = {
-    body: ZodObject | undefined;
-    query: ZodObject | undefined;
-    response: ZodObject | undefined;
+    body?: ZodObject;
+    query?: ZodObject;
+    response?: ZodObject;
 };
 
 type ErrorResponse = {
     message: string;
+    code?: string;
     details?: any;
 };
-
-type Id = { id: string };
 
 type ZodAPIMethod<Schemas extends { body: unknown; query: unknown; response: unknown }> = {
     payload: ZodAPIPayload<Schemas['query'], Schemas['body']>;
     response: SuccessResponse<Schemas['response']>;
-    error: Pick<ControllerErrorModel, 'message' | 'details'>;
-};
-
-const getUserId = async () => {
-    const user = await getCurrentUser();
-    if (!user) {
-        return undefined;
-    }
-    return user.id;
+    error: ErrorResponse;
 };
 
 type Codes = 'Request parsing' | 'Response parsing';
 
-type EndpointLogic<T extends ZodAPISchemas> = {
-    handler: (request: {
-        payload: (T['query'] extends ZodObject ? z.infer<T['query']> : {}) &
-            (T['body'] extends ZodObject ? z.infer<T['body']> : {});
-        activeUser: Id;
-        req: NextRequest;
-        flags: Record<string, boolean>;
-        endpointError: (
-            payload: ErrorBaseCreatingPayload & { statusCode: number },
-            cause?: unknown
-        ) => ControllerErrorModel;
-    }) => Promise<T['response'] extends ZodObject ? z.infer<T['response']> : void>;
+type EndpointErrorGenerator = (
+    payload: string | ErrorBaseCreatingPayload,
+    cause?: unknown,
+    errorStatus?: number
+) => ControllerErrorModel;
 
-    beforehandler?: (request: {
+type EndpointLogic<T extends ZodAPISchemas> = {
+    handler: (
         payload: (T['query'] extends ZodObject ? z.infer<T['query']> : {}) &
-            (T['body'] extends ZodObject ? z.infer<T['body']> : {});
-        activeUser: Id;
-        req: NextRequest;
-        endpointError: (
-            payload: ErrorBaseCreatingPayload & { statusCode: number },
-            cause?: unknown
-        ) => ControllerErrorModel;
-    }) => Promise<void>;
+            (T['body'] extends ZodObject ? z.infer<T['body']> : {}),
+        request: {
+            request: NextRequest;
+            flags: Record<string, boolean>;
+            endpointError: EndpointErrorGenerator;
+        }
+    ) => Promise<T['response'] extends ZodObject ? z.infer<T['response']> : void>;
+
+    beforehandler?: (payload: { request: NextRequest; endpointError: EndpointErrorGenerator }) => Promise<void>;
+
+    customReturnValue?: (
+        req: NextRequest,
+        response: T['response'] extends undefined ? undefined : z.infer<T['response']>
+    ) => NextResponse;
 
     onSuccess?: (data: {
         requestPayload: (T['query'] extends ZodObject ? z.infer<T['query']> : {}) &
             (T['body'] extends ZodObject ? z.infer<T['body']> : {});
-        activeUser: Id;
-        req: NextRequest;
+        request: NextRequest;
         result: T['response'] extends ZodObject ? z.infer<T['response']> : undefined;
         flags: Record<string, boolean>;
     }) => Promise<void>;
 
-    onError?: (request: { error: ControllerErrorModel; req: NextRequest }) => Promise<void>;
-
-    ignoreBeforeHandler?: (request: {
-        payload: (T['query'] extends ZodObject ? z.infer<T['query']> : {}) &
-            (T['body'] extends ZodObject ? z.infer<T['body']> : {});
-        activeUser: Id;
-        req: NextRequest;
-    }) => Promise<boolean>;
-
-    passUnathorized?: boolean;
+    onError?: (error: ControllerErrorModel, req: NextRequest) => Promise<{ message: string; status: number } | void>;
 };
 
 const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
-    schemas: T,
-    controller: string,
-    sharedOnError?: (request: { error: ControllerErrorModel; req: NextRequest }) => Promise<void>
+    metadata: { schemas: T; name: string },
+    sharedOnError?: (error: ControllerErrorModel, req: NextRequest) => Promise<void>,
+    sharedBeforeHandler?: EndpointLogic<T>['beforehandler']
 ) => {
-    const endpointLogic = <Method extends keyof T>(method: Method, logic: EndpointLogic<T[Method]>) => {
-        return async (request: NextRequest) => {
-            const errorFactory = ErrorFactory.forController(controller).inMethod(method as string);
-            let currentUserId = 'NOT PROVIDED';
+    const endpointLogic = <Method extends keyof T>(
+        method: Method,
+        handler: EndpointLogic<T[Method]>['handler'],
+        configuration: Omit<EndpointLogic<T[Method]>, 'handler'> = {}
+    ) => {
+        return async (request: NextRequest /*context?: { params: Record<string, any> }*/) => {
+            // if (context) {
+            //     console.log(context.params.hello, 'yo ni');
+            //     console.log(context, 'afsaf');
+            // }
+            const errorFactory = ErrorFactory.forController(metadata.name).inMethod(method as string);
             try {
-                const endpointSchemas = schemas[method]!;
+                if (sharedBeforeHandler) {
+                    await sharedBeforeHandler({
+                        request,
+                        endpointError: (payload, cause, errorStatus) => {
+                            if (typeof payload === 'string') {
+                                return errorFactory.newError(
+                                    {
+                                        statusCode: errorStatus ?? 500,
+                                        code: payload,
+                                        error: payload,
+                                        details: requestPayload
+                                    },
+                                    cause
+                                );
+                            }
+
+                            return errorFactory.newError({ ...payload, statusCode: errorStatus ?? 500 }, cause);
+                        }
+                    });
+                }
+                if (configuration.beforehandler) {
+                    await configuration.beforehandler({
+                        request,
+                        endpointError: (payload, cause, errorStatus) => {
+                            if (typeof payload === 'string') {
+                                return errorFactory.newError(
+                                    {
+                                        statusCode: errorStatus ?? 500,
+                                        code: payload,
+                                        error: payload,
+                                        details: requestPayload
+                                    },
+                                    cause
+                                );
+                            }
+
+                            return errorFactory.newError({ ...payload, statusCode: errorStatus ?? 500 }, cause);
+                        }
+                    });
+                }
+
+                const endpointSchemas = metadata.schemas[method]!;
 
                 if (!endpointSchemas) {
                     throw errorFactory.newError({
-                        error: 'No schemas were found for the endpoint',
+                        error: 'No schemas were found for the endpoind',
                         statusCode: 500
                     });
                 }
-
-                const userId = await getUserId();
-                if (!userId && !logic.passUnathorized) {
-                    throw errorFactory.newError({
-                        error: 'No authenticated error was found',
-                        statusCode: 401
-                    });
-                }
-                if (userId) {
-                    currentUserId = userId;
-                }
-                const activeUser: Id = { id: userId || '' };
 
                 let requestPayload = {};
 
@@ -171,33 +174,26 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
                     requestPayload = { ...requestPayload, ...bodyParsed.data };
                 }
 
-                if (logic.beforehandler) {
-                    let ignoreBeforeHandler = false;
-                    if (logic.ignoreBeforeHandler) {
-                        ignoreBeforeHandler = await logic.ignoreBeforeHandler({
-                            activeUser,
-                            payload: requestPayload as any,
-                            req: request
-                        });
-                    }
-                    if (!ignoreBeforeHandler) {
-                        await logic.beforehandler({
-                            activeUser,
-                            payload: requestPayload as any,
-                            req: request,
-                            endpointError: errorFactory.newError
-                        });
-                    }
-                }
-
                 const flags: Record<string, boolean> = {};
 
-                const result = await logic.handler({
-                    activeUser,
-                    payload: requestPayload as any,
-                    req: request,
+                const result = await handler(requestPayload as any, {
+                    request,
                     flags,
-                    endpointError: errorFactory.newError
+                    endpointError: (payload, cause, errorStatus) => {
+                        if (typeof payload === 'string') {
+                            return errorFactory.newError(
+                                {
+                                    statusCode: errorStatus ?? 500,
+                                    code: payload,
+                                    error: payload,
+                                    details: requestPayload
+                                },
+                                cause
+                            );
+                        }
+
+                        return errorFactory.newError({ ...payload, statusCode: errorStatus ?? 500 }, cause);
+                    }
                 });
 
                 if (endpointSchemas.response) {
@@ -210,29 +206,33 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
                             details: z.treeifyError(resultParsed.error)
                         });
                     }
-                    if (logic.onSuccess) {
-                        logic.onSuccess({
-                            activeUser,
-                            req: request,
+                    if (configuration.onSuccess) {
+                        configuration.onSuccess({
+                            request,
                             result: resultParsed.data as any,
                             requestPayload: requestPayload as any,
                             flags
                         });
                     }
-                    return NextResponse.json<SuccessResponse<unknown>>(resultParsed.data, { status: 200 });
+                    return configuration.customReturnValue
+                        ? // @ts-expect-error
+                          configuration.customReturnValue(request, resultParsed.data)
+                        : NextResponse.json<SuccessResponse<unknown>>(resultParsed.data, { status: 200 });
                 }
 
-                if (logic.onSuccess) {
-                    logic.onSuccess({
-                        activeUser,
-                        req: request,
+                if (configuration.onSuccess) {
+                    configuration.onSuccess({
+                        request,
                         result: undefined as any,
                         requestPayload: requestPayload as any,
                         flags
                     });
                 }
 
-                return NextResponse.json<SuccessResponse<undefined>>({}, { status: 200 });
+                return configuration.customReturnValue
+                    ? // @ts-expect-error
+                      configuration.customReturnValue(request, {})
+                    : NextResponse.json<SuccessResponse<undefined>>({}, { status: 200 });
             } catch (e) {
                 let controllerError: ControllerErrorModel = e as ControllerErrorModel;
 
@@ -240,8 +240,7 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
                     controllerError = errorFactory.newError(
                         {
                             error: 'Internal error',
-                            statusCode: 500,
-                            details: { userId: currentUserId }
+                            statusCode: 500
                         },
                         e
                     );
@@ -251,17 +250,13 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
                     controllerError.details = {};
                 }
 
-                controllerError.details = {
-                    ...controllerError.details,
-                    userId: currentUserId
-                };
-
-                if (logic.onError) {
+                if (configuration.onError) {
                     try {
-                        await logic.onError({
-                            error: controllerError,
-                            req: request
-                        });
+                        const data = await configuration.onError(controllerError, request);
+
+                        if (data) {
+                            return NextResponse.json<ErrorResponse>({ message: data.message }, { status: data.status });
+                        }
                     } catch (errorFromOnErrorHandler) {
                         controllerError = errorFactory.newError(
                             {
@@ -273,12 +268,15 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
                     }
                 }
 
-                // const errorsWithSharedDetails: Codes[] = ['Request parsing', 'Response parsing'];
+                const errorsWithSharedDetails: Codes[] = ['Request parsing', 'Response parsing'];
 
                 return NextResponse.json<ErrorResponse>(
                     {
                         message: controllerError.message,
-                        details: controllerError.details
+                        details: errorsWithSharedDetails.includes(controllerError.code as Codes)
+                            ? controllerError.details
+                            : undefined,
+                        code: controllerError.code
                     },
                     { status: controllerError.statusCode }
                 );
@@ -286,20 +284,20 @@ const zodAPIEndpointFactory = <T extends ZodControllerSchemas>(
         };
     };
 
-    const preparedEndpoint: typeof endpointLogic = (method, payload) => {
-        const payloadWithSharedOnError = payload;
-        const { onError } = payload;
+    const preparedEndpoint: typeof endpointLogic = (method, handler, config = {}) => {
+        const payloadWithSharedOnError = config;
+        const { onError } = config;
 
-        payloadWithSharedOnError.onError = async ({ error, req }) => {
+        payloadWithSharedOnError.onError = async (error, req) => {
             if (sharedOnError) {
-                await sharedOnError({ error, req });
+                await sharedOnError(error, req);
             }
             if (onError) {
-                await onError({ error, req });
+                await onError(error, req);
             }
         };
 
-        return endpointLogic(method, payloadWithSharedOnError);
+        return endpointLogic(method, handler, payloadWithSharedOnError);
     };
 
     return preparedEndpoint;
@@ -312,16 +310,50 @@ export type ZodControllerMetadata<T = ZodControllerSchemas> = {
     schemas: T;
 };
 
+type Flatten<T extends Record<string, object>> = {
+    [K in keyof T]: T[K];
+}[keyof T];
+type OnlyObject<T> = T extends object ? T : never;
+
+type SchemaShape = {
+    body?: unknown;
+    query?: unknown;
+    response?: unknown;
+};
+
+type NormalizeSchema<T extends SchemaShape> = {
+    body: T extends { body: infer B } ? B : undefined;
+    query: T extends { query: infer Q } ? Q : undefined;
+    response: T extends { response: infer R } ? R : undefined;
+};
+
+type RequestPayload<T extends SchemaShape> = Flatten<{
+    [K in Exclude<keyof NormalizeSchema<T>, 'response'> as OnlyObject<NormalizeSchema<T>[K]> extends never
+        ? never
+        : K]: z.infer<OnlyObject<NormalizeSchema<T>[K]>>;
+}>;
+
+type ResponsePayload<T extends SchemaShape> = T extends { response: infer R } ? z.infer<R> : never;
+
 export type ZodControllerAPI<
     Metadata extends {
-        schemas: Record<string, { body: unknown; query: unknown; response: unknown }>;
+        schemas: Record<string, SchemaShape>;
     },
-    ClientModels extends Record<string, unknown> | undefined = undefined
+    CustomModels extends Record<string, unknown> | undefined = undefined
 > = {
     endpoints: {
-        [k in keyof Metadata['schemas']]: ZodAPIMethod<Metadata['schemas'][k]>;
+        [K in keyof Metadata['schemas']]: ZodAPIMethod<NormalizeSchema<Metadata['schemas'][K]>>;
     };
-    ClientDTOs: ClientModels extends undefined ? {} : ClientModels;
+
+    customModels: CustomModels extends undefined ? {} : CustomModels;
+
+    requestDTOs: {
+        [K in keyof Metadata['schemas']]: RequestPayload<Metadata['schemas'][K]>;
+    };
+
+    responseDTOs: {
+        [K in keyof Metadata['schemas']]: ResponsePayload<Metadata['schemas'][K]>;
+    };
 };
 
 export function ZodController<T extends ZodControllerSchemas>(metadata: ZodControllerMetadata<T>) {
@@ -331,13 +363,20 @@ export function ZodController<T extends ZodControllerSchemas>(metadata: ZodContr
             protected readonly schemas: T
         ) {}
 
-        protected logger = DIContainer()._context.get<FunctionProviders.Logger.Interface>(DIProviders.logger);
+        protected logger = DIContainer()._context.get<Logger.Interface>(DIProviders.logger);
+        protected activeUserInfo = DIContainer()._context.get<ActiveUserInfoProvider>(DIProviders.activeUserInfo);
 
-        protected loggedEndpoint = zodAPIEndpointFactory(this.schemas, this.name, async ({ error }) => {
-            await this.logger.error(error);
-        });
+        private onlyLoggedUsers: EndpointLogic<T>['beforehandler'] = async ({ endpointError }) => {
+            const isLogged = await this.activeUserInfo.isLoggedIn();
 
-        protected endpoint = zodAPIEndpointFactory(this.schemas, this.name);
+            if (!isLogged) {
+                throw endpointError('User is not logged in');
+            }
+        };
+
+        protected endpointWithAuth = zodAPIEndpointFactory(metadata, this.logger.error, this.onlyLoggedUsers);
+
+        protected endpoint = zodAPIEndpointFactory(metadata, this.logger.error);
     }
 
     return class extends ZODController<T> {

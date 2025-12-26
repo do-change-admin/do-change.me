@@ -36,7 +36,7 @@ const CarSyndicationSection: FC = () => {
         status: activeTab,
         vin: debouncedVin
     });
-    const { data: filters, isLoading: isLoadingFilters } = useSyndicationRequestFilters();
+    const { data: filters, isLoading: isLoadingFilters } = useSyndicationRequestFilters(activeTab === 'draft');
 
     const vehicles = data?.items ?? [];
 
@@ -202,17 +202,17 @@ const CarSyndicationSection: FC = () => {
                                     return (
                                         <Button
                                             color={color}
-                                            fullWidth
-                                            key={link}
                                             component="a"
-                                            target="_blank"
+                                            fullWidth
                                             href={link}
+                                            key={link}
                                             rightSection={<FaLink />}
                                             styles={{
                                                 root: {
                                                     justifyContent: 'space-between'
                                                 }
                                             }}
+                                            target="_blank"
                                             variant="light"
                                         >
                                             {label}
