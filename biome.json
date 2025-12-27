@@ -32,6 +32,9 @@
             "performance": {
                 "noImgElement": "off"
             },
+            "complexity": {
+                "noBannedTypes": "off"
+            },
             "correctness": {
                 "useImportExtensions": "off",
                 "noEmptyPattern": "off",

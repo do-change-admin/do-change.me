@@ -310,9 +310,9 @@ export type ZodControllerMetadata<T = ZodControllerSchemas> = {
     schemas: T;
 };
 
-type Flatten<T extends Record<string, object>> = {
-    [K in keyof T]: T[K];
-}[keyof T];
+type Flatten<T extends Record<string, Record<string, any>>> = {
+    [K in keyof T as keyof T[K]]: T[K][keyof T[K]];
+};
 type OnlyObject<T> = T extends object ? T : never;
 
 type SchemaShape = {
