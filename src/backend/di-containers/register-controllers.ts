@@ -4,6 +4,7 @@ import { SubscriptionsController } from '../controllers/subscriptions.controller
 import { SyndicationRequestsManagementController } from '../controllers/syndication-requests/management';
 import { UserSyndicationRequestsController } from '../controllers/syndication-requests/user';
 import { UserSyndicationRequestDraftsController } from '../controllers/syndication-requests/user-drafts';
+import { UserIdentifyController } from '../controllers/user-identify';
 import { UserNotificationsController } from '../controllers/user-notifications.controller';
 import { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller';
 import { ControllerTokens } from './tokens.di-container';
@@ -24,4 +25,5 @@ export const registerControllers = (container: Container) => {
         .to(UserNotificationsManagementController);
     container.bind<SubscriptionsController>(ControllerTokens.subscriptions).to(SubscriptionsController);
     container.bind<RemotePicturesController>(ControllerTokens.remotePictures).to(RemotePicturesController);
+    container.bind<UserIdentifyController>(ControllerTokens.userIdentify).to(UserIdentifyController);
 };

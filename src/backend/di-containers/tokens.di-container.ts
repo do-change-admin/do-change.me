@@ -7,7 +7,8 @@ export const DIStores = {
     syndicationRequestDrafts: Symbol.for('SYNDICATION-REQUEST-DRAFTS'),
     notifications: Symbol.for('NOTIFICATIONS-DATA-PROVIDER'),
     remotePictures: Symbol(),
-    featureUsage: Symbol()
+    featureUsage: Symbol(),
+    users: Symbol.for('USERS_DATA_STORE')
 };
 
 export const DIProviders = {
@@ -28,7 +29,9 @@ export const DIServices = {
     userNotificationsManagementFactory: Symbol.for('USER-NOTIFICATIONS-MANAGEMENT-SERVICE'),
 
     userFeatureUsageMetering: Symbol(),
-    featureUsageManagement: Symbol()
+    featureUsageManagement: Symbol(),
+
+    userIdentity: Symbol.for('USER-IDENTIFY-SERVICE')
 };
 
 export const ControllerTokens = {
@@ -38,5 +41,6 @@ export const ControllerTokens = {
     userNotifications: Symbol.for('USER-NOTIFICATIONS-CONTROLLER'),
     userNotificationsManagement: Symbol.for('USER-NOTIFICATIONS-MANAGEMENT-CONTROLLER'),
     subscriptions: Symbol(),
-    remotePictures: Symbol()
+    remotePictures: Symbol(),
+    userIdentify: Symbol.for('USER-IDENTIFY-CONTROLLER')
 };

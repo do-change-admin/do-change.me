@@ -35,6 +35,7 @@ export type Method = ZodAPIMethod<typeof schemas>;
 
 export const method = zodApiMethod(schemas, {
     handler: async () => {
+        // TODO: Обсудить, в списке мы хотим получить данные из связанных таблиц
         const allUsers = await prismaClient.user.findMany({ include: { userPlan: { include: { plan: true } } } });
         const data = await prismaClient.usageAggregate.findMany({
             where: { featureKey: FeatureKey.Report },

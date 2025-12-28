@@ -15,6 +15,7 @@ import { NotificationRAMStore } from '../stores/notification/notification.ram.st
 import type { NotificationStore } from '../stores/notification/notification.store';
 import type { RemotePicturesStore } from '../stores/remote-pictures/remote-pictures.store';
 import { RemotePicturesS3ClientStore } from '../stores/remote-pictures/remote-pictures.store.s3-client';
+import { UserRAMStore, type UserStore } from '../stores/user';
 import { UserSyndicationRequestRAMStore, type UserSyndicationRequestStore } from '../stores/user-syndication-request';
 import {
     UserSyndicationRequestDraftRAMStore,
@@ -35,6 +36,7 @@ const registerDataProviders = () => {
         .bind<UserSyndicationRequestDraftStore>(DIStores.syndicationRequestDrafts)
         .to(UserSyndicationRequestDraftRAMStore)
         .inSingletonScope();
+    container.bind<UserStore>(DIStores.users).to(UserRAMStore).inSingletonScope();
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DIStores.vehicleHistoryReports)
         .to(DataProvidersImplemetations.Mock.VehicleHistoryReports);
