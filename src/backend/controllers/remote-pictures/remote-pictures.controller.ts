@@ -42,8 +42,7 @@ export class RemotePicturesController extends ZodController(remotePicturesContro
             const rapidApiKey = 'f83a8c6d84msh27789c1167c85b6p1eec1ajsn9b2abef80aca';
             const rapidApiHost = 'cars-image-background-removal.p.rapidapi.com';
 
-            const backroundImageURL =
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ64wczMGBKRKHJAw_TU4sfaElwJtW6gb1sMQ&s';
+            const backroundImageURL = '/bgcarmax.png';
 
             if (backgroundImageId) {
                 const { downloadLink } = await this.remotePictures.downloadLink({ id: backgroundImageId });
