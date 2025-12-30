@@ -33,24 +33,16 @@ async function addWhiteBackgroundToImage(
 
     // 3️⃣ Экспорт
     return new Promise<Blob>((resolve) => {
-        canvas.toBlob(
-            (result) => resolve(result!),
-            outputType,
-            0.95
-        );
+        canvas.toBlob((result) => resolve(result!), outputType, 0.95);
     });
 }
 
-
-export async function downloadAllImages(
-    photoLinks: string[],
-    fileNames?: string[]
-) {
+export async function downloadAllImages(photoLinks: string[], fileNames?: string[]) {
     const zip = new JSZip();
     const folder = zip.folder('photos')!;
 
     for (let i = 0; i < photoLinks.length; i++) {
-        const response = await fetch(photoLinks[i]);
+        const response = await fetch(photoLinks[i], { cache: 'no-store' });
         const blob = await response.blob();
 
         // 🔥 добавляем белый фон
@@ -59,8 +51,7 @@ export async function downloadAllImages(
             'image/jpeg' // ← можно 'image/png'
         );
 
-        const name =
-            (fileNames?.[i] ?? `photo_${i + 1}`) + '.jpg';
+        const name = (fileNames?.[i] ?? `photo_${i + 1}`) + '.jpg';
 
         folder.file(name, processedBlob);
     }
