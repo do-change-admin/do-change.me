@@ -56,7 +56,7 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                             leftSection={<FaHashtag size={10} />}
                             radius="lg"
                             size="xs"
-                            onClick={() => isAdmin ? route.push('/capture') : null}
+                            onClick={() => route.push('/capture')}
                         >
                             VIN Number
                         </Button>
