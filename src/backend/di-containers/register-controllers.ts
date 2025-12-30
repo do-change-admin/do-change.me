@@ -25,5 +25,5 @@ export const registerControllers = (container: Container) => {
         .to(UserNotificationsManagementController);
     container.bind<SubscriptionsController>(ControllerTokens.subscriptions).to(SubscriptionsController);
     container.bind<RemotePicturesController>(ControllerTokens.remotePictures).to(RemotePicturesController);
-    container.bind<UserIdentityController>(ControllerTokens.userIdentify).to(UserIdentityController);
+    container.bind<UserIdentityController>(ControllerTokens.userIdentity).to(UserIdentityController);
 };

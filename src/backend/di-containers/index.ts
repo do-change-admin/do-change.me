@@ -75,7 +75,7 @@ export const DIContainer = () => {
             return container.get<UserIdentityService>(DIServices.userIdentity);
         },
         UserIdentityController: () => {
-            return container.get<UserIdentityController>(ControllerTokens.userIdentify);
+            return container.get<UserIdentityController>(ControllerTokens.userIdentity);
         },
         Logger: () => {
             return container.get<FunctionProviders.Logger.Interface>(DIProviders.logger);

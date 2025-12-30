@@ -8,7 +8,7 @@ export const DIStores = {
     notifications: Symbol.for('NOTIFICATIONS-DATA-PROVIDER'),
     remotePictures: Symbol(),
     featureUsage: Symbol(),
-    users: Symbol.for('USERS_DATA_STORE')
+    users: Symbol()
 };
 
 export const DIProviders = {
@@ -31,7 +31,7 @@ export const DIServices = {
     userFeatureUsageMetering: Symbol(),
     featureUsageManagement: Symbol(),
 
-    userIdentity: Symbol.for('USER-IDENTIFY-SERVICE')
+    userIdentity: Symbol()
 };
 
 export const ControllerTokens = {
@@ -42,5 +42,5 @@ export const ControllerTokens = {
     userNotificationsManagement: Symbol.for('USER-NOTIFICATIONS-MANAGEMENT-CONTROLLER'),
     subscriptions: Symbol(),
     remotePictures: Symbol(),
-    userIdentify: Symbol.for('USER-IDENTIFY-CONTROLLER')
+    userIdentity: Symbol()
 };
