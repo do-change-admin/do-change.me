@@ -4,6 +4,38 @@ import { Identifier } from '@/utils/entities/identifier';
 
 export type UserModel = z.infer<typeof User.schema>;
 
+const PlanPriceSchema = z.object({
+    id: z.number(),
+    planId: z.number(),
+    stripePriceId: Identifier.schema,
+    slug: z.string().nonempty(),
+    interval: z.string().nonempty(),
+    amount: z.number(),
+    currency: z.string().nonempty()
+});
+
+const PlanSchema = z.object({
+    id: z.number(),
+    slug: z.string().nonempty(),
+    name: z.string().nonempty(),
+    stripeProductId: Identifier.schema,
+    description: z.string().nonempty().optional(),
+    active: z.boolean(),
+    reportsCount: z.number()
+});
+
+const UserPlanSchema = z.object({
+    id: z.number(),
+    status: z.string().nonempty(),
+    canceledAt: z.date().optional(),
+    cancelAtPeriodEnd: z.boolean(),
+    currentPeriodStart: z.date(),
+    currentPeriodEnd: z.date(),
+    stripeSubscriptionId: Identifier.schema,
+    plan: PlanSchema,
+    planPrice: PlanPriceSchema
+});
+
 export class User {
     static schema = z.object({
         id: Identifier.schema,
@@ -22,35 +54,7 @@ export class User {
         auctionAccessQRFileId: z.string().nonempty().optional(),
         photoFileId: z.string().nonempty().optional(),
         birthDate: z.date().optional(),
-        userPlan: z.array(
-            z.object({
-                id: z.number(),
-                status: z.string().nonempty(),
-                canceledAt: z.date().optional(),
-                cancelAtPeriodEnd: z.boolean(),
-                currentPeriodStart: z.date(),
-                currentPeriodEnd: z.date(),
-                stripeSubscriptionId: Identifier.schema,
-                plan: z.object({
-                    id: z.number(),
-                    slug: z.string().nonempty(),
-                    name: z.string().nonempty(),
-                    stripeProductId: Identifier.schema,
-                    description: z.string().nonempty().optional(),
-                    active: z.boolean(),
-                    reportsCount: z.number()
-                }),
-                planPrice: z.object({
-                    id: z.number(),
-                    planId: z.number(),
-                    stripePriceId: Identifier.schema,
-                    slug: z.string().nonempty(),
-                    interval: z.string().nonempty(),
-                    amount: z.number(),
-                    currency: z.string().nonempty()
-                })
-            })
-        )
+        userPlan: z.array(UserPlanSchema).default([])
     });
 
     private constructor(private readonly data: UserModel) {}
@@ -60,7 +64,23 @@ export class User {
         return new User(parsedModel);
     };
 
+    get id() {
+        return this.data.id;
+    }
+
+    get email() {
+        return this.data.email;
+    }
+
     get model(): UserModel {
         return this.data;
+    }
+
+    public hasActivePlan(): boolean {
+        return this.data.userPlan.some((p) => p.status === 'active');
+    }
+
+    public isEmailVerified(): boolean {
+        return !!this.data.emailVerifiedAt;
     }
 }
