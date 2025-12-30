@@ -59,12 +59,12 @@ export class RemotePicturesController extends ZodController(remotePicturesContro
 
                 formData.append('url', downloadLink);
 
-                if (backroundImageURL) {
-                    formData.append('url-bg', backroundImageURL);
-                }
+                // if (backroundImageURL) {
+                //     formData.append('url-bg', backroundImageURL);
+                // }
 
                 const response = await fetch(
-                    'https://cars-image-background-removal.p.rapidapi.com/v1/results?mode=fg-image-shadow',
+                    'https://cars-image-background-removal.p.rapidapi.com/v1/results?mode=fg-image',
                     {
                         method: 'POST',
                         headers: {

@@ -57,18 +57,6 @@ export default function VehicleCameraMask() {
     const { mutateAsync: upload, isPending: isUploadPending } = useFilesUploading();
     const { mutateAsync: removeBg, isPending: isRemoveBgPending } = usePictureBackgroundRemoving();
 
-
-    //закомментировал, потому что он падал нахрен, потом разберёмся
-    // const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
-
-    // useLayoutEffect(() => {
-    //     const handleResize = () => {
-    //         setIsLandscape(window.innerWidth > window.innerHeight);
-    //     };
-    //     window.addEventListener('resize', handleResize);
-    //     return () => window.removeEventListener('resize', handleResize);
-    // }, []);
-
     const capture = async () => {
         if (!webcamRef.current) return;
 
@@ -76,9 +64,10 @@ export default function VehicleCameraMask() {
 
         if (!image) return;
         const { uploadedFileIds } = await upload([base64ToFile(image, `${STEPS[step]}.png`)]);
+        console.log('uploadedFileIds', uploadedFileIds)
         const { imagesWithoutBackground } = await removeBg({ body: { pictureIds: uploadedFileIds } });
         setPhotoLinks((prev) => prev.concat(imagesWithoutBackground));
-        setFiles((x) => x.concat(base64ToFile(image, `${STEPS[step]}.png`)));
+        // setFiles((x) => x.concat(base64ToFile(image, `${STEPS[step]}.png`)));
 
         setStep((prev) => prev + 1);
     };
@@ -143,10 +132,10 @@ export default function VehicleCameraMask() {
         );
     }
 
-    if (step === 2) {
+    if (step === 8) {
         return (
             <Box style={{ width: '100vw', height: '100vh', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
-                {/* Первая фотография как затемнённый фон */}
+
                 {photoLinks[0] && (
                     <Box
                         style={{
@@ -194,7 +183,7 @@ export default function VehicleCameraMask() {
                         </Button>
                     </Group>
 
-                    <Group gap="sm" justify="center" style={{ marginTop: 20 }}>
+                    <Group gap="sm" justify="center" style={{ marginTop: 20, marginBottom: 500 }}>
                         {photoLinks.map((img, i) => (
                             <Card key={i} p={0} radius="lg">
                                 <Image alt={STEPS[i]} height={110} radius="lg" src={img} width={150} />
