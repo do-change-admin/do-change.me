@@ -7,7 +7,7 @@ import type { SubscriptionsController } from '../controllers/subscriptions.contr
 import type { SyndicationRequestsManagementController } from '../controllers/syndication-requests/management';
 import type { UserSyndicationRequestsController } from '../controllers/syndication-requests/user';
 import type { UserSyndicationRequestDraftsController } from '../controllers/syndication-requests/user-drafts';
-import type { UserIdentifyController } from '../controllers/user-identify';
+import type { UserIdentityController } from '../controllers/user-identity';
 import type { UserNotificationsController } from '../controllers/user-notifications.controller';
 import type { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller';
 import type { FunctionProviders } from '../providers';
@@ -75,7 +75,7 @@ export const DIContainer = () => {
             return container.get<UserIdentityService>(DIServices.userIdentity);
         },
         UserIdentityController: () => {
-            return container.get<UserIdentifyController>(ControllerTokens.userIdentify);
+            return container.get<UserIdentityController>(ControllerTokens.userIdentify);
         },
         Logger: () => {
             return container.get<FunctionProviders.Logger.Interface>(DIProviders.logger);
