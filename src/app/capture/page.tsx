@@ -243,12 +243,13 @@ export default function VehicleCameraMask() {
                     position: 'absolute',
                     top: 5,
                     width: '100%',
-                    right: '0.5rem'
+                    right: '0.5rem',
+                    zIndex: 22
                 }}
             >
                 <Button pos="absolute" radius="lg" variant="outline"  right={8} top={8} color="var(--cl-primary)" onClick={() => {
-                    setPhotos([])
                     setStarted(false)
+                    setPhotos([])
                     setStep(0)
                 }}>X</Button>
             </Group>
