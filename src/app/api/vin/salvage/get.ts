@@ -24,16 +24,16 @@ export type Method = ZodAPIMethod<typeof schemas>;
 
 export const method = zodApiMethod(schemas, {
     handler: async ({ payload, flags }) => {
-        const cachedData = await prismaClient.salvageInfo.findFirst({
-            where: {
-                vin: payload.vin
-            }
-        });
+        // const cachedData = await prismaClient.salvageInfo.findFirst({
+        //     where: {
+        //         vin: payload.vin
+        //     }
+        // });
 
-        if (cachedData) {
-            flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE] = true;
-            return { salvageWasFound: cachedData.salvageWasFound };
-        }
+        // if (cachedData) {
+        //     flags[VinAPIFlags.DATA_WAS_TAKEN_FROM_CACHE] = true;
+        //     return { salvageWasFound: cachedData.salvageWasFound };
+        // }
 
         const response = await fetch(`${process.env.SALVAGE_ENDPOINT!}?vin=${payload.vin}`, {
             method: 'GET',
@@ -54,10 +54,11 @@ export const method = zodApiMethod(schemas, {
         try {
             const result = await response.json();
             salvageWasFound = !!result;
-        } catch {
+        } catch (e) {
+            console.log(e, 'error');
             // We arrive here when undefined is returned from 3rd party API and
-            // it can't be used as JSON. We assume it's salvage or total loss case.
-            salvageWasFound = true;
+            // it can't be used as JSON. We assume no salvage or total loss was found.
+            salvageWasFound = false;
         }
 
         return { salvageWasFound };

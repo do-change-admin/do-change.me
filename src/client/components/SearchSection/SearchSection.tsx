@@ -1,7 +1,7 @@
 'use client';
 
 import cn from 'classnames';
-import { useSearchParams } from 'next/navigation';
+import {useRouter, useSearchParams} from 'next/navigation';
 import { type FC, useEffect, useState } from 'react';
 import { FaHashtag } from 'react-icons/fa';
 import { LoadingMinute, Salvage } from '@/client/components';
@@ -11,6 +11,9 @@ import { SampleResults } from './SampleResults/SampleResults';
 import { SearchHistory } from './SearchHistory/SearchHistory';
 import styles from './SearchSection.module.css';
 import { VinSearch } from './VinSearch/VinSearch';
+import {Button} from "@mantine/core";
+import {FiImage} from "react-icons/fi";
+import {HashMap} from "effect/Schema";
 
 interface SearchSectionProps {
     openSubscription?: () => void;
@@ -35,6 +38,8 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const [activeTab, setActiveTab] = useState<'vin' | 'plate'>('vin');
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(requestVIN);
     const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(requestVIN);
+    const isAdmin = (process.env.ADMIN_EMAILS?.split(',') ?? []).includes(profileData?.email ?? '');
+    const route = useRouter()
 
     return (
         <section className={styles.searchSection}>
@@ -47,7 +52,14 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
                     })}
                 >
                     <div className={styles.searchSectionHeader}>
-                        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <Button
+                            leftSection={<FaHashtag size={10} />}
+                            radius="lg"
+                            size="xs"
+                            onClick={() => route.push('/capture')}
+                        >
+                            VIN Number
+                        </Button>
                     </div>
                     {/*//TODO: раскомментировать*/}
                     {/*<Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />*/}

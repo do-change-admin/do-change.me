@@ -1,0 +1,11 @@
+.card {
+    transition: transform 0.2s ease, border 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.active {
+    border-color: var(--cl-fio) !important;
+}

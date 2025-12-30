@@ -20,7 +20,7 @@ export const Salvage: FC<ISalvage> = ({hasSalvage, isPending}) => {
                 [styles.green]: !hasSalvage,
             })}>
                     <span className={styles.text}>
-                        {hasSalvage ? "Total Loss" : "Clean VIN"}
+                        {hasSalvage ? "Total Loss" : "No Total Loss"}
                     </span>
                 <span className={styles.icon}>
           </span>
