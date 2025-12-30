@@ -8,7 +8,7 @@ export const userIdentityServiceMetadata = {
     schemas: {
         register: {
             payload: userStoreSchemas.actionsPayload.create
-                .required({ password: true, firstName: true, lastName: true })
+                .required({ password: true })
                 .omit({ emailVerifiedAt: true, image: true }),
             response: User.schema.pick({ id: true })
         },

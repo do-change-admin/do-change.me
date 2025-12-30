@@ -8,8 +8,8 @@ export class User {
     static schema = z.object({
         id: Identifier.schema,
         email: EMailAddress.schema,
-        firstName: z.string().nonempty().optional(),
-        lastName: z.string().nonempty().optional(),
+        firstName: z.string().nonempty(),
+        lastName: z.string().nonempty(),
         password: z.string().min(8).optional(),
         image: z.string().nonempty().optional(),
         emailVerifiedAt: z.date().optional(),
