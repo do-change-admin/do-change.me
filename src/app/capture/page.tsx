@@ -60,15 +60,30 @@ export default function VehicleCameraMask() {
     const capture = async () => {
         if (!webcamRef.current) return;
 
-        const image = webcamRef.current.getScreenshot();
+        const video = webcamRef.current.video;
+        if (!video) return;
 
-        if (!image) return;
+        // Создаём canvas с разрешением видео
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Рисуем видео на canvas
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Экспортируем как base64 высокого качества
+        const image = canvas.toDataURL('image/png', 1); // 1 = максимальное качество
+
         const { uploadedFileIds } = await upload([base64ToFile(image, `${STEPS[step]}.png`)]);
         const { imagesWithoutBackground } = await removeBg({ body: { pictureIds: uploadedFileIds } });
-        setPhotoLinks((prev) => prev.concat(imagesWithoutBackground));
 
+        setPhotoLinks((prev) => prev.concat(imagesWithoutBackground));
         setStep((prev) => prev + 1);
     };
+
 
     const retakeAll = () => {
         setPhotos([]);
@@ -250,7 +265,7 @@ export default function VehicleCameraMask() {
             >
                 <Text size="lg">{STEPS[step]}</Text>
                 <Text opacity={0.8} size="sm">
-                    Step {step} / {STEPS.length}
+                    Step {step} / {STEPS.length-1}
                 </Text>
             </Box>
         </Box>

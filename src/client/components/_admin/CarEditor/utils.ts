@@ -1,6 +1,7 @@
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 
+
 async function addWhiteBackgroundToImage(
     blob: Blob,
     outputType: 'image/jpeg' | 'image/png' = 'image/jpeg'
@@ -61,44 +62,25 @@ async function addWhiteBackgroundToImage(
     });
 }
 
+export async function downloadAllImages(photoLinks: string[], fileNames?: string[]) {
+    const zip = new JSZip();
+    const folder = zip.folder('photos')!;
 
-function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function downloadBlob(blob: Blob, fileName: string) {
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-
-export async function downloadAllImages(
-    photoLinks: string[],
-    fileNames?: string[]
-) {
     for (let i = 0; i < photoLinks.length; i++) {
         const response = await fetch(photoLinks[i], { cache: 'no-store' });
         const blob = await response.blob();
 
-        // добавляем белый фон
+        // 🔥 добавляем белый фон
         const processedBlob = await addWhiteBackgroundToImage(
             blob,
-            'image/jpeg'
+            'image/jpeg' // ← можно 'image/png'
         );
 
-        const name = (fileNames?.[i+1] ?? `photo_${i + 1}`) + '.jpg';
+        const name = (fileNames?.[i] ?? `photo_${i + 1}`) + '.jpg';
 
-        downloadBlob(processedBlob, name);
-
-        // ⚠️ важно: небольшая задержка
-        await delay(400);
+        folder.file(name, processedBlob);
     }
+
+    const content = await zip.generateAsync({ type: 'blob' });
+    saveAs(content, 'photos.zip');
 }
