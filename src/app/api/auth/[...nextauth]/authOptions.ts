@@ -1,105 +1,65 @@
-import { compare } from "bcryptjs";
-import { AuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import { businessError } from "@/lib-deprecated/errors";
-import { prismaClient } from "@/backend/infrastructure/prisma/client";
+import type { AuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+import { DIContainer } from '@/backend/di-containers';
+import type { ServiceErrorModel } from '@/backend/utils/errors.utils';
+import { businessError } from '@/lib-deprecated/errors';
+import { CommonErrorCodes } from '@/utils/error-codes';
 
 export const authOptions: AuthOptions = {
     providers: [
         CredentialsProvider({
-            name: "Credentials",
+            name: 'Credentials',
             credentials: { email: {}, password: {} },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
-                    throw new Error(
-                        JSON.stringify(businessError("Email and password are required"))
-                    );
+                    throw new Error(JSON.stringify(businessError('Email and password are required')));
                 }
 
-                const user = await prismaClient.user.findUnique({
-                    where: { email: credentials.email.toLowerCase() },
-                    include: { accounts: true },
-                });
+                const userIdentityService = DIContainer().UserIdentityService();
+                const logger = DIContainer().Logger();
 
-                if (!user || !user.password) {
-                    throw new Error(
-                        JSON.stringify(businessError("Email or password is incorrect"))
-                    );
+                try {
+                    return await userIdentityService.authorize(credentials);
+                } catch (err: any) {
+                    const _err = err as ServiceErrorModel;
+
+                    logger.error(_err);
+
+                    if (_err.code === CommonErrorCodes.INVALID_CREDENTIALS) {
+                        throw new Error(JSON.stringify(businessError('Email and password are required')));
+                    }
+
+                    if (_err.code === CommonErrorCodes.EMAIL_NOT_VERIFIED) {
+                        throw new Error(JSON.stringify(businessError('Email not verified', _err.code)));
+                    }
+
+                    throw new Error(JSON.stringify(err));
                 }
-
-                if (!user.emailVerifiedAt) {
-                    throw new Error(
-                        JSON.stringify(
-                            businessError(
-                                "Email not verified",
-                                "EMAIL_NOT_VERIFIED"
-                            )
-                        )
-                    );
-                }
-
-                const valid = await compare(credentials.password, user.password);
-
-                if (!valid) {
-                    throw new Error(
-                        JSON.stringify(businessError("Email or password is incorrect"))
-                    );
-                }
-
-                return { id: user.id, email: user.email };
-            },
+            }
         }),
 
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        }),
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+        })
     ],
 
-    session: { strategy: "jwt" },
+    session: { strategy: 'jwt' },
 
     callbacks: {
         async signIn({ user, account }) {
-            let dbUser = await prismaClient.user.findUnique({
-                where: { email: user.email?.toLowerCase()! },
-                include: { accounts: true },
+            if (!user.email || !account) return false;
+
+            const userIdentityService = DIContainer().UserIdentityService();
+
+            await userIdentityService.oAuthSignIn({
+                email: user.email,
+                name: user.name ?? undefined,
+                image: user.image ?? undefined,
+                provider: account.provider,
+                providerAccountId: account.providerAccountId
             });
-
-            if (!dbUser) {
-                const [firstName, ...rest] = user.name?.split(" ") ?? [];
-                const lastName = rest.join(" ");
-
-                dbUser = await prismaClient.user.create({
-                    data: {
-                        email: user.email!,
-                        emailVerifiedAt: new Date(),
-                        firstName,
-                        lastName,
-                        image: user.image || undefined,
-                    },
-                    include: { accounts: true },
-                });
-            }
-
-            const existingAccount = await prismaClient.account.findUnique({
-                where: {
-                    provider_providerAccountId: {
-                        provider: account!.provider,
-                        providerAccountId: account!.providerAccountId!,
-                    },
-                },
-            });
-
-            if (!existingAccount) {
-                await prismaClient.account.create({
-                    data: {
-                        userId: dbUser.id,
-                        provider: account!.provider,
-                        providerAccountId: account!.providerAccountId!,
-                    },
-                });
-            }
 
             return true;
         },
@@ -121,19 +81,19 @@ export const authOptions: AuthOptions = {
         // ✅ Новый callback: куда перенаправлять после логина
         async redirect({ url, baseUrl }) {
             // После авторизации или регистрации → на главную (/)
-            if (url.startsWith("/auth/login") || url.startsWith("/auth/register")) {
+            if (url.startsWith('/auth/login') || url.startsWith('/auth/register')) {
                 return baseUrl;
             }
 
             // Если задан внутренний путь — вернуть туда
-            if (url.startsWith("/")) return `${baseUrl}${url}`;
+            if (url.startsWith('/')) return `${baseUrl}${url}`;
 
             // Иначе — на корень
             return baseUrl;
-        },
+        }
     },
 
     pages: {
-        signIn: "/auth/login",
-    },
+        signIn: '/auth/login'
+    }
 };

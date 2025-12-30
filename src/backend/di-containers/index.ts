@@ -7,13 +7,16 @@ import type { SubscriptionsController } from '../controllers/subscriptions.contr
 import type { SyndicationRequestsManagementController } from '../controllers/syndication-requests/management';
 import type { UserSyndicationRequestsController } from '../controllers/syndication-requests/user';
 import type { UserSyndicationRequestDraftsController } from '../controllers/syndication-requests/user-drafts';
+import type { UserIdentityController } from '../controllers/user-identity';
 import type { UserNotificationsController } from '../controllers/user-notifications.controller';
 import type { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller';
+import type { FunctionProviders } from '../providers';
 import type { IMailerProvider } from '../providers/mailer/mailer.provider';
+import type { UserIdentityService } from '../services/user-identity/user-identity.service';
 import { devContainer } from './dev.di-container';
 import { stageContainer } from './stage.di-container';
 import { testContainer } from './test.di-container';
-import { ControllerTokens, DIProviders } from './tokens.di-container';
+import { ControllerTokens, DIProviders, DIServices } from './tokens.di-container';
 
 const getDIContainer = () => {
     if (process.env.IN_TEST) {
@@ -67,6 +70,15 @@ export const DIContainer = () => {
         },
         RemotePicturesController: () => {
             return container.get<RemotePicturesController>(ControllerTokens.remotePictures);
+        },
+        UserIdentityService: () => {
+            return container.get<UserIdentityService>(DIServices.userIdentity);
+        },
+        UserIdentityController: () => {
+            return container.get<UserIdentityController>(ControllerTokens.userIdentity);
+        },
+        Logger: () => {
+            return container.get<FunctionProviders.Logger.Interface>(DIProviders.logger);
         }
     };
 };
