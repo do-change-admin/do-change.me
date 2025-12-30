@@ -15,7 +15,5 @@ export class UserIdentityController extends ZodController(userIdentityController
 
     POST = this.endpoint('POST', async (payload) => {
         await this.userIdentityService.register(payload);
-
-        return { message: 'User created' };
     });
 }
