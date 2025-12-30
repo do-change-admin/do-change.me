@@ -26,6 +26,8 @@ function base64ToFile(base64: string, filename: string, mimeType = 'image/png') 
 
 // Шаги фотографирования
 const STEPS = [
+    '',
+    'Front Right Angle',
     'Front',
     'Front Left Angle',
     'Left Side',
@@ -33,7 +35,6 @@ const STEPS = [
     'Rear',
     'Rear Right Angle',
     'Right Side',
-    'Front Right Angle'
 ];
 
 export type CarMask = 'sedan' | 'suv' | 'truck';
@@ -43,7 +44,6 @@ export default function VehicleCameraMask() {
     const [step, setStep] = useState(0);
     const [photos, setPhotos] = useState<string[]>([]);
     const [started, setStarted] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);
     const [photoLinks, setPhotoLinks] = useState<string[]>([]);
     const [selectedMask, setSelectedMask] = useState<CarMask>("sedan");
     const masks: { type: CarMask; label: string; image: string }[] = [
@@ -64,10 +64,8 @@ export default function VehicleCameraMask() {
 
         if (!image) return;
         const { uploadedFileIds } = await upload([base64ToFile(image, `${STEPS[step]}.png`)]);
-        console.log('uploadedFileIds', uploadedFileIds)
         const { imagesWithoutBackground } = await removeBg({ body: { pictureIds: uploadedFileIds } });
         setPhotoLinks((prev) => prev.concat(imagesWithoutBackground));
-        // setFiles((x) => x.concat(base64ToFile(image, `${STEPS[step]}.png`)));
 
         setStep((prev) => prev + 1);
     };
@@ -76,6 +74,7 @@ export default function VehicleCameraMask() {
         setPhotos([]);
         setStep(0);
         setStarted(false);
+        setPhotoLinks([]);
     };
     const downloadAll = async () => {
         await downloadAllImages(photoLinks, STEPS);
@@ -132,7 +131,7 @@ export default function VehicleCameraMask() {
         );
     }
 
-    if (step === 8) {
+    if (step === 9) {
         return (
             <Box style={{ width: '100vw', height: '100vh', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
@@ -144,9 +143,9 @@ export default function VehicleCameraMask() {
                             backgroundImage: `url(${photoLinks[0]})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                            filter: 'brightness(90%) blur(20px)',
+                            filter: 'brightness(99%) blur(5px)',
                             position: 'absolute',
-                            top: 0,
+                            top: -200,
                             left: 0,
                             zIndex: 0
                         }}
@@ -157,9 +156,10 @@ export default function VehicleCameraMask() {
                     align="center"
                     gap="md"
                     justify="center"
-                    style={{ width: '100%', position: 'relative', zIndex: 1, height: '100%', paddingTop: 300 }}
+                    mt={300}
+                    style={{ width: '100%', position: 'relative', zIndex: 1, height: '100%'}}
                 >
-                    <Text c="white" size="xl">
+                    <Text size="xl" c="var(--cl-fio)">
                         All photos
                     </Text>
 
@@ -248,7 +248,7 @@ export default function VehicleCameraMask() {
                     color: '#fff'
                 }}
             >
-                {/*<Text size="lg">{STEPS[step]}</Text>*/}
+                <Text size="lg">{STEPS[step]}</Text>
                 <Text opacity={0.8} size="sm">
                     Step {step} / {STEPS.length}
                 </Text>
