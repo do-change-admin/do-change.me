@@ -9,10 +9,14 @@ import {FaBarcode, FaQrcode } from 'react-icons/fa';
 import { useDisclosure } from '@mantine/hooks';
 import { useScannerState } from '@/client/states/scanner.state';
 import { MdScanner } from 'react-icons/md';
+import {Button} from "@mantine/core";
+import {HiOutlineScissors} from "react-icons/hi";
+import {HiSparkles} from "react-icons/hi2";
+import {useRouter} from "next/navigation";
 
 export const MobileBottomNav = () => {
     const start = useScannerState(x => x.start);
-    const { data } = useProfile()
+    const router = useRouter();
     const { openMenu } = useSlideMenu();
 
     const handleOpenMenu = () => {
@@ -34,7 +38,17 @@ export const MobileBottomNav = () => {
     return (
         <footer className={styles.footer}>
             <SubscriptionPlans opened={opened} close={close} />
-
+            <Button
+                pos="absolute"
+                radius="lg"
+                bottom="6rem"
+                left="1rem"
+                leftSection={<HiSparkles size={18} />}
+                color="var(--cl-fio)"
+                onClick={() => router.push('/capture/1')}
+            >
+                Remove BG
+            </Button>
             <div className={styles.container}>
                 <div className={styles.buttonsWrapper}>
                     {firstHalf.map((nav) => (

@@ -3,17 +3,18 @@
 import React from "react";
 import cn from "classnames";
 import styles from "./Sidebar.module.css";
-import { usePathname } from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import { AuctionAccess, AuctionsServicesCards } from "@/client/components";
 import { useSlideMenu } from "@/client/contexts";
 import { useNavMenu, useProfile } from "@/client/hooks";
 import { ActionIcon, Avatar, Image } from "@mantine/core";
+import {HiSparkles} from "react-icons/hi2";
 
 
 export const Sidebar = () => {
     const { openMenu, isOpen, closeMenu } = useSlideMenu();
     const { data: profileData } = useProfile()
-
+    const router = useRouter();
     const handleOpenMenu = () => {
         openMenu(<AuctionsServicesCards />);
     };
@@ -69,6 +70,15 @@ export const Sidebar = () => {
                             {link.label}
                         </div>
                     ))}
+                    <div
+                        onClick={() => router.push('/capture/1')}
+                        role="button"
+                        tabIndex={0}
+                        className={styles.link}
+                    >
+                        <HiSparkles size={18} />
+                        Remove BG
+                    </div>
                 </div>
 
                 {/* FooterWeb */}

@@ -40,18 +40,10 @@ async function addWhiteBackgroundToImage(
         height
     );
     darkGradient.addColorStop(0, 'rgba(0,0,0,0)');
-    darkGradient.addColorStop(1, 'rgba(0,0,0,0.25)');
 
     ctx.fillStyle = darkGradient;
     ctx.fillRect(0, height * 0.65, width, height * 0.35);
 
-    /* 4️⃣ Глянцевый блик сверху */
-    const glossGradient = ctx.createLinearGradient(0, 0, 0, height * 0.4);
-    glossGradient.addColorStop(0, 'rgba(255,255,255,0.45)');
-    glossGradient.addColorStop(0.4, 'rgba(255,255,255,0.15)');
-    glossGradient.addColorStop(1, 'rgba(255,255,255,0)');
-
-    ctx.fillStyle = glossGradient;
     ctx.fillRect(0, 0, width, height * 0.4);
 
     URL.revokeObjectURL(url);
@@ -60,6 +52,24 @@ async function addWhiteBackgroundToImage(
     return new Promise<Blob>((resolve) => {
         canvas.toBlob((result) => resolve(result!), outputType, 0.95);
     });
+}
+
+export async function downloadSingleImage(
+    photoLink: string,
+    fileName = 'photo.jpg'
+) {
+    // 1️⃣ загружаем изображение
+    const response = await fetch(photoLink, { cache: 'no-store' });
+    const blob = await response.blob();
+
+    // 2️⃣ добавляем белый фон
+    const processedBlob = await addWhiteBackgroundToImage(
+        blob,
+        'image/jpeg'
+    );
+
+    // 3️⃣ скачиваем файл
+    saveAs(processedBlob, fileName);
 }
 
 export async function downloadAllImages(photoLinks: string[], fileNames?: string[]) {
