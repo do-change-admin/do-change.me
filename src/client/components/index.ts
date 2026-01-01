@@ -21,5 +21,7 @@ export * from './AuctionAccess/AuctionAccess';
 export * from './Chat/Chat';
 export * from './PlaceholderSDK/PlaceholderSDK';
 export * from './InstallPWAButton/InstallPWAButton';
+export * from './ImageBox/ImageBox';
+
 
 

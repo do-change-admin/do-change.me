@@ -1,11 +1,10 @@
 import React from 'react';
 import {ImageBox} from "@/client/components";
-import ImageBoxPro from '@/client/components/ImageBoxPro/ImageBoxPro';
 
 const Page = () => {
     return (
         <div>
-           <ImageBoxPro/>
+           <ImageBox/>
         </div>
     );
 };
