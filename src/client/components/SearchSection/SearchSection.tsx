@@ -168,7 +168,6 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
         }
     }, [initialVIN]);
 
-    const [activeTab, setActiveTab] = useState<'vin' | 'plate'>('vin');
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(requestVIN);
     const { data: odometerData, isFetching: isoOometerDataLoading } = useOdometer(requestVIN);
     const lastMileageRecord = odometerData?.at()?.miles;
@@ -182,8 +181,6 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const isAdmin = (process.env.ADMIN_EMAILS?.split(',') ?? []).includes(profileData?.email ?? '');
     const route = useRouter()
 
-    console.log('lastMileageRecord', lastMileageRecord)
-
     useEffect(() => {
         if (!!lastMileageRecord && !isMarketDataLoading && !miles) {
             setMiles(lastMileageRecord);
@@ -193,12 +190,12 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
 
     return (
         <section className={styles.searchSection}>
-            {(isLoading || isActionsHistoryLoading || isMarketDataLoading || isoOometerDataLoading) && <LoadingMinute />}
+            {( isLoading || isActionsHistoryLoading || isoOometerDataLoading) && <LoadingMinute />}
             <div className={styles.container}>
                 <div className={styles.glass}>
                     <VinSearch />
                 </div>
-                <MarketAnalytics miles={miles} setMiles={setMiles} data={marketData}/>
+                <MarketAnalytics isLoading={isMarketDataLoading} miles={miles} setMiles={setMiles} data={marketData}/>
                 {odometerData && <Odometer records={odometerData}/>}
                 {baseInfo && <CarInfo {...baseInfo} />}
                 <ReportsProvider openSubscription={openSubscription} />
