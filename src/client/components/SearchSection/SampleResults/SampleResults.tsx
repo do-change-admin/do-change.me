@@ -37,90 +37,86 @@ export const SampleResults: FC<ISampleResults> = ({ baseInfo, openSubscription }
             setMiles(lastMileageRecord);
             return;
         }
-
-        if (isFetched && !miles && !lastMileageRecord) {
-            setMiles(1);
-        }
     }, [lastMileageRecord, isLoadingMileage, isFetched]);
 
     return (
         <section className={styles.sampleResults}>
             <div className={styles.card}>
-                <div className={styles.grid}>
-                    <div className={styles.valuationInfo}>
-                        <div className={styles.infoCard}>
-                            {/*<h3>Market Valuation</h3>*/}
-                            {isLoading ? (
-                                <Skeleton h={50} mb="md" radius="lg" w="100%" />
-                            ) : (
-                                <Paper mb="md" p="xs" radius="lg">
-                                    <Group mb="xs">
-                                        <Text fw={500} size="sm">
-                                            {miles?.toLocaleString()} miles
-                                        </Text>
-                                        {miles === lastMileageRecord && (
-                                            <>
-                                                <Badge c="gray" size="xs" variant="light">
-                                                    Latest Record
-                                                </Badge>
-                                                <Badge c="gray" size="xs" variant="light">
-                                                    {formatDate(odometerData[0].last_seen_at_date)}
-                                                </Badge>
-                                            </>
-                                        )}
-                                    </Group>
-                                    <Slider
-                                        label={(val) => val.toLocaleString()}
-                                        max={300000}
-                                        min={0}
-                                        onChange={setMiles}
-                                        step={1000}
-                                        styles={{
-                                            label: { fontSize: 12 }
-                                        }}
-                                        value={miles}
-                                    />
-                                </Paper>
-                            )}
-                            {isLoadingMileage || isLoading ? (
-                                <div className={styles.valuationContent}>
-                                    <div className={styles.estimatedValue}>
-                                        <div className={styles.skeleton} />
-                                        <div className={styles.skeletonText}>Estimated Market Value</div>
-                                    </div>
-                                    <div className={styles.rangeGrid}>
-                                        <div className={styles.rangeBox}>
-                                            <div className={styles.skeleton} />
-                                            <div className={styles.skeletonText}>Low</div>
-                                        </div>
-                                        <div className={styles.rangeBox}>
-                                            <div className={styles.skeleton} />
-                                            <div className={styles.skeletonText}>High</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className={styles.valuationContent}>
-                                    <div className={styles.estimatedValue}>
-                                        <div>${formatNumber(mileageData?.market_prices?.average || 0)}</div>
-                                        <div>Estimated Market Value</div>
-                                    </div>
-                                    <div className={styles.rangeGrid}>
-                                        <div className={styles.rangeBox}>
-                                            <div>${formatNumber(mileageData?.market_prices?.below || 0)}</div>
-                                            <div>Low</div>
-                                        </div>
-                                        <div className={styles.rangeBox}>
-                                            <div>${formatNumber(mileageData?.market_prices?.above || 0)}</div>
-                                            <div>High</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <DistributionChart distribution={mileageData?.market_prices?.distribution ?? []} />
-                </div>
+                {/*<div className={styles.grid}>*/}
+                {/*    <div className={styles.valuationInfo}>*/}
+                {/*        <div className={styles.infoCard}>*/}
+                {/*            /!*<h3>Market Valuation</h3>*!/*/}
+                {/*            {isLoading ? (*/}
+                {/*                <Skeleton h={50} mb="md" radius="lg" w="100%" />*/}
+                {/*            ) : (*/}
+                {/*                <Paper mb="md" p="xs" radius="lg">*/}
+                {/*                    <Group mb="xs">*/}
+                {/*                        <Text fw={500} size="sm">*/}
+                {/*                            {miles?.toLocaleString()} miles*/}
+                {/*                        </Text>*/}
+                {/*                        {miles === lastMileageRecord && (*/}
+                {/*                            <>*/}
+                {/*                                <Badge c="gray" size="xs" variant="light">*/}
+                {/*                                    Latest Record*/}
+                {/*                                </Badge>*/}
+                {/*                                <Badge c="gray" size="xs" variant="light">*/}
+                {/*                                    {formatDate(odometerData[0].last_seen_at_date)}*/}
+                {/*                                </Badge>*/}
+                {/*                            </>*/}
+                {/*                        )}*/}
+                {/*                    </Group>*/}
+                {/*                    <Slider*/}
+                {/*                        label={(val) => val.toLocaleString()}*/}
+                {/*                        max={300000}*/}
+                {/*                        min={0}*/}
+                {/*                        onChange={setMiles}*/}
+                {/*                        step={1000}*/}
+                {/*                        styles={{*/}
+                {/*                            label: { fontSize: 12 }*/}
+                {/*                        }}*/}
+                {/*                        value={miles}*/}
+                {/*                    />*/}
+                {/*                </Paper>*/}
+                {/*            )}*/}
+                {/*            {isLoadingMileage || isLoading ? (*/}
+                {/*                <div className={styles.valuationContent}>*/}
+                {/*                    <div className={styles.estimatedValue}>*/}
+                {/*                        <div className={styles.skeleton} />*/}
+                {/*                        <div className={styles.skeletonText}>Estimated Market Value</div>*/}
+                {/*                    </div>*/}
+                {/*                    <div className={styles.rangeGrid}>*/}
+                {/*                        <div className={styles.rangeBox}>*/}
+                {/*                            <div className={styles.skeleton} />*/}
+                {/*                            <div className={styles.skeletonText}>Low</div>*/}
+                {/*                        </div>*/}
+                {/*                        <div className={styles.rangeBox}>*/}
+                {/*                            <div className={styles.skeleton} />*/}
+                {/*                            <div className={styles.skeletonText}>High</div>*/}
+                {/*                        </div>*/}
+                {/*                    </div>*/}
+                {/*                </div>*/}
+                {/*            ) : (*/}
+                {/*                <div className={styles.valuationContent}>*/}
+                {/*                    <div className={styles.estimatedValue}>*/}
+                {/*                        <div>${formatNumber(mileageData?.market_prices?.average || 0)}</div>*/}
+                {/*                        <div>Estimated Market Value</div>*/}
+                {/*                    </div>*/}
+                {/*                    <div className={styles.rangeGrid}>*/}
+                {/*                        <div className={styles.rangeBox}>*/}
+                {/*                            <div>${formatNumber(mileageData?.market_prices?.below || 0)}</div>*/}
+                {/*                            <div>Low</div>*/}
+                {/*                        </div>*/}
+                {/*                        <div className={styles.rangeBox}>*/}
+                {/*                            <div>${formatNumber(mileageData?.market_prices?.above || 0)}</div>*/}
+                {/*                            <div>High</div>*/}
+                {/*                        </div>*/}
+                {/*                    </div>*/}
+                {/*                </div>*/}
+                {/*            )}*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*    <DistributionChart distribution={mileageData?.market_prices?.distribution ?? []} />*/}
+                {/*</div>*/}
                 <Odometer records={odometerData} />
                 {baseInfo ? <CarInfo {...baseInfo} /> : <>Loading...</>}
                 <ReportsProvider openSubscription={openSubscription} />

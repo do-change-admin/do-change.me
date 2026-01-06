@@ -15,7 +15,7 @@ export const UserListWidget: FC<UserListWidgetProps> = () => {
     const [opened, { open, close }] = useDisclosure(false);
     
     return <> 
-        <Indicator 
+        <Indicator
             inline 
             size={16} 
             offset={7}
@@ -24,10 +24,11 @@ export const UserListWidget: FC<UserListWidgetProps> = () => {
             withBorder 
             processing={isFetching}  
             label={isFetching ? undefined : count}
+            disabled={!count}
         >
             <ActionIcon
-                variant="light"
-                color="blue"
+                variant="transparent"
+                color="var(--cl-fio)"
                 radius="xl"
                 size="xl"
                 onClick={open}

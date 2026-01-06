@@ -23,7 +23,7 @@ interface RecordCardProps {
 
 export const RecordCard = ({ record, isLatest }: RecordCardProps) => {
     return (
-        <Card shadow="lg" radius="xl" p="lg" className={cn(styles.card, {
+        <Card shadow="lg" radius="lg" p="lg" className={cn(styles.card, {
             [styles.current]: isLatest
         })}>
             {isLatest && (

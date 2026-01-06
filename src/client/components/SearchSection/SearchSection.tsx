@@ -4,27 +4,160 @@ import cn from 'classnames';
 import {useRouter, useSearchParams} from 'next/navigation';
 import { type FC, useEffect, useState } from 'react';
 import { FaHashtag } from 'react-icons/fa';
-import { LoadingMinute, Salvage } from '@/client/components';
-import { useActionsHistory, useBaseInfoByVIN, useProfile, useSalvageCheck } from '@/client/hooks';
+import {LoadingMinute, MarketAnalytics, Salvage} from '@/client/components';
+import {useActionsHistory, useBaseInfoByVIN, useOdometer, useProfile, useSalvageCheck} from '@/client/hooks';
 import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import { SampleResults } from './SampleResults/SampleResults';
 import { SearchHistory } from './SearchHistory/SearchHistory';
 import styles from './SearchSection.module.css';
 import { VinSearch } from './VinSearch/VinSearch';
-import {Button} from "@mantine/core";
-import {FiImage} from "react-icons/fi";
-import {HashMap} from "effect/Schema";
+import {useVehiclePriceQuery} from "@/client/components/MarketAnalytics/useVehiclePriceQuery";
+import {Odometer} from "@/client/components/SearchSection/Odometer/Odometer";
+import {CarInfo} from "@/client/components/SearchSection/CarInfo/CarInfo";
+import {ReportsProvider} from "@/client/components/ReportsProvider/ReportsProvider";
+import {useDebouncedValue} from "@mantine/hooks";
 
 interface SearchSectionProps {
     openSubscription?: () => void;
 }
 
+const MOCK_DATA = {
+    "status": true,
+    "code": 200,
+    "data": {
+        "vin": "SCBFR7ZA5CC072256",
+        "success": true,
+        "id": "2012_bentley_continental-gt_",
+        "vehicle": "2012 Bentley Continental  GT ",
+        "mean": 38059.99,
+        "stdev": 10641,
+        "count": 59,
+        "mileage": 100000,
+        "certainty": 99,
+        "period": [
+            "2025-08-18",
+            "2026-01-04"
+        ],
+        "prices": {
+            "above": 47081.26,
+            "average": 38059.99,
+            "below": 29038.72,
+            "distribution": [
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 33886,
+                        "min": 28821
+                    }
+                },
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 36368,
+                        "min": 33886
+                    }
+                },
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 38646,
+                        "min": 36368
+                    }
+                },
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 41531,
+                        "min": 38646
+                    }
+                },
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 42385,
+                        "min": 41531
+                    }
+                },
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 46456,
+                        "min": 42385
+                    }
+                },
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 50012,
+                        "min": 46456
+                    }
+                },
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 50860,
+                        "min": 50012
+                    }
+                },
+                {
+                    "group": {
+                        "count": 6,
+                        "max": 59341,
+                        "min": 50860
+                    }
+                },
+                {
+                    "group": {
+                        "count": 5,
+                        "max": 63580,
+                        "min": 59341
+                    }
+                }
+            ]
+        },
+        "adjustments": {
+            "mileage": {
+                "adjustment": -8037,
+                "average": 46418.53,
+                "input": 100000
+            },
+            "history": {
+                "records": [
+                    {
+                        "type": "accident",
+                        "date": "2012-05-19"
+                    },
+                    {
+                        "type": "accident",
+                        "date": "2016-01-03"
+                    },
+                    {
+                        "type": "salvage",
+                        "date": "2019-09-27"
+                    }
+                ],
+                "adjustment": -6836
+            },
+            "condition": {
+                "input": null,
+                "adjustment": 0
+            },
+            "known_damage": {
+                "input": null,
+                "adjustment": 0
+            }
+        },
+        "type": "retail"
+    },
+    "message": "Data Fetched Successfully!"
+}
+
 export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const searchParams = useSearchParams();
     const { data: profileData } = useProfile();
-    const { data: actionsHistory, isFetching } = useActionsHistory();
+    const { data: actionsHistory, isLoading: isActionsHistoryLoading } = useActionsHistory();
     const lastCarVin = Object.keys(actionsHistory || {})?.[0];
-    const initialVIN = searchParams.get('vin') || (isFetching ? null : lastCarVin || '1C6RD6FT1CS310366');
+    const initialVIN = searchParams.get('vin') || (isActionsHistoryLoading ? null : lastCarVin || '1C6RD6FT1CS310366');
 
     const setRequestVIN = useVINAnalysisState((x) => x.setRequestVIN);
     const requestVIN = useVINAnalysisState((x) => x.requestVIN);
@@ -35,88 +168,39 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
         }
     }, [initialVIN]);
 
-    const [activeTab, setActiveTab] = useState<'vin' | 'plate'>('vin');
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(requestVIN);
-    const { data: salvageInfo, isLoading: salvageIsLoading } = useSalvageCheck(requestVIN);
+    const { data: odometerData, isFetching: isoOometerDataLoading } = useOdometer(requestVIN);
+    const lastMileageRecord = odometerData?.at()?.miles;
+    const [miles, setMiles] = useState<string>('');
+    const [debouncedMiles] = useDebouncedValue(miles, 1500);
+    const { data: marketData, isLoading: isMarketDataLoading } = useVehiclePriceQuery({
+        vin: requestVIN || '',
+        mileage: debouncedMiles,
+    })
+
     const isAdmin = (process.env.ADMIN_EMAILS?.split(',') ?? []).includes(profileData?.email ?? '');
     const route = useRouter()
 
+    useEffect(() => {
+        if (!!lastMileageRecord && !isMarketDataLoading && !miles) {
+            setMiles(lastMileageRecord);
+            return;
+        }
+    }, [lastMileageRecord, isMarketDataLoading, isoOometerDataLoading]);
+
     return (
         <section className={styles.searchSection}>
+            {( isLoading || isActionsHistoryLoading || isoOometerDataLoading) && <LoadingMinute />}
             <div className={styles.container}>
-                <div
-                    className={cn(styles.glass, {
-                        [styles.bgClean]: true,
-                        //TODO: раскомментировать
-                        // [styles.bgSalvage]: salvageInfo?.salvageWasFound
-                    })}
-                >
-                    <div className={styles.searchSectionHeader}>
-                        <Button
-                            leftSection={<FaHashtag size={10} />}
-                            radius="lg"
-                            size="xs"
-                            onClick={() => route.push('/capture')}
-                        >
-                            VIN Number
-                        </Button>
-                    </div>
-                    {/*//TODO: раскомментировать*/}
-                    {/*<Salvage hasSalvage={salvageInfo?.salvageWasFound ?? false} isPending={salvageIsLoading} />*/}
-                    {(isLoading || salvageIsLoading || isFetching) && <LoadingMinute label="" />}
-                    <div className={styles.searchSectionHeader}>
-                        <div className={styles.header}>
-                            <div className={styles.headerFlex}>
-                                <div>
-                                    <h1 className={styles.title}>
-                                        {baseInfo?.Make} {baseInfo?.Model} {baseInfo?.Trim}
-                                    </h1>
-                                    <p className={styles.subtitle}>
-                                        {baseInfo?.BodyClass} {baseInfo?.ModelYear}
-                                    </p>
-                                </div>
-                                <div className={styles.textRight}>
-                                    <div className={styles.vin}>VIN: {baseInfo?.VIN}</div>
-                                    <div className={styles.country}>Made in {baseInfo?.PlantCountry}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div className={styles.glass}>
                     <VinSearch />
                 </div>
-                <SampleResults
-                    baseInfo={baseInfo}
-                    openSubscription={openSubscription}
-                    reportsLeft={profileData?.subscriptionDetails.reportsLeft ?? 0}
-                />
-                <SearchHistory isLoading={isFetching} searches={actionsHistory} />
+                <MarketAnalytics isLoading={isMarketDataLoading} miles={miles} setMiles={setMiles} data={marketData}/>
+                {odometerData && <Odometer records={odometerData}/>}
+                {baseInfo && <CarInfo {...baseInfo} />}
+                <ReportsProvider openSubscription={openSubscription} />
+                <SearchHistory isLoading={isActionsHistoryLoading} searches={actionsHistory} />
             </div>
         </section>
     );
 };
-
-function Tabs({
-    activeTab,
-    setActiveTab
-}: {
-    activeTab: 'vin' | 'plate';
-    setActiveTab: (tab: 'vin' | 'plate') => void;
-}) {
-    return (
-        <div className={styles.tabs}>
-            <button
-                className={`${styles.tabButton} ${activeTab === 'vin' ? styles.active : ''}`}
-                onClick={() => setActiveTab('vin')}
-                type="button"
-            >
-                <FaHashtag className={styles.icon} /> VIN Number
-            </button>
-            {/*<button*/}
-            {/*    className={`${styles.tabButton} ${activeTab === "plate" ? styles.active : ""}`}*/}
-            {/*    onClick={() => setActiveTab("plate")}*/}
-            {/*>*/}
-            {/*    <FaCar className={styles.icon} /> License Plate*/}
-            {/*</button>*/}
-        </div>
-    );
-}
