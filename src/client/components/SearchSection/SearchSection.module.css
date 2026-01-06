@@ -1,7 +1,8 @@
 .searchSection {
     width: 100%;
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 0 1rem;
+
 }
 
 @media (max-width: 700px) {
@@ -117,10 +118,9 @@
 
 .glass {
     position: relative;
-    border-radius: 2rem;
-    padding: 2rem;
-    background: var(--text-texas-blue);
+    border-radius: 1rem;
     overflow: hidden;
+    margin-bottom: 1rem;
 }
 
 .bgSalvage {
@@ -272,7 +272,7 @@
     }
 
     .searchSection {
-        margin: 1.5rem 0;
+        margin: 1rem 0;
     }
 
     .scanBox {
@@ -284,7 +284,7 @@
     }
 
     .glass {
-        padding: 1rem;
+        border-radius: 1rem 1rem 0 0;
     }
 
     .tabs {

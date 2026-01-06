@@ -22,6 +22,8 @@ export * from './Chat/Chat';
 export * from './PlaceholderSDK/PlaceholderSDK';
 export * from './InstallPWAButton/InstallPWAButton';
 export * from './ImageBox/ImageBox';
+export * from './MarketAnalytics/MarketAnalytics';
+export * from './VehicleHistoryCard/VehicleHistoryCard';
 
 
 

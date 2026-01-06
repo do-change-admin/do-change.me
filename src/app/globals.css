@@ -1,5 +1,6 @@
 :root {
   --background: #f9fafb;
+  --dark-background: linear-gradient(135deg, #0A2342 0%, #1a3a5f 100%);;
   --foreground: #171717;
 
   --cl-gray-light: #ccc8c8;

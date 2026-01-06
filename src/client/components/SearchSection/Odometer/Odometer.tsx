@@ -39,10 +39,6 @@ export const Odometer = ({ records }: OdometerProps) => {
         )
         : [];
 
-    if (!sortedRecords.length) {
-        return <p>No vehicle records available</p>;
-    }
-
     const chartData = sortedRecords.map(record => ({
         ...record,
         first_seen_at_date: formatDateChart(record.first_seen_at_date),

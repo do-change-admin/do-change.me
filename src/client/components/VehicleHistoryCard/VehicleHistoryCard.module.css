@@ -1,0 +1,126 @@
+.card {
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.titleRow {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.titleRow h3{
+    font-size: 1rem;
+}
+
+.vin {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+.body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.period {
+    font-size: 13px;
+    color: #666;
+}
+
+.rowSuccess,
+.rowWarning,
+.rowDanger,
+.rowInfo {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.rowSuccess {
+    background: #eafaf1;
+    color: #1e8e5a;
+}
+
+.rowWarning {
+    background: #fff5e6;
+    color: #b45309;
+}
+
+.rowDanger {
+    background: #fdecea;
+    color: #b42318;
+}
+
+.rowInfo {
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.sub {
+    font-size: 12px;
+    opacity: 0.75;
+}
+
+.footer {
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #eee;
+}
+
+/* STATUS COLORS */
+.clean .header {
+    background: #2563eb;
+}
+
+.excellent .header {
+    background: #059669;
+}
+
+.minor .header {
+    background: #7c3aed;
+}
+
+.damaged .header {
+    background: #ea580c;
+}
+
+.multiple .header {
+    background: #f97316;
+}
+
+.total .header {
+    background: var(--cl-primary);
+}
+
+@media (max-width: 700px) {
+
+    .header {
+        padding: 1rem;
+    }
+}
