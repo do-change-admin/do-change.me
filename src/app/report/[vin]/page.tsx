@@ -10,7 +10,7 @@ import styles from './page.module.css';
 export default function ReportPage() {
     const [reportHtml, setReportHtml] = useState<string | null>(null);
     const router = useRouter();
-    const source = sessionStorage.getItem('source');
+    const source = 'stable';
 
     useEffect(() => {
         const html = sessionStorage.getItem('report');
@@ -36,7 +36,12 @@ export default function ReportPage() {
             </Group>
 
             {source === 'stable' ? (
-                <iframe srcDoc={reportHtml} style={{ width: '100%', minHeight: '100vh' }} title="Carfax Report" />
+                <iframe
+                    id="print-area"
+                    srcDoc={reportHtml}
+                    style={{ width: '100%', minHeight: '100vh' }}
+                    title="Carfax Report"
+                />
             ) : (
                 <div className={styles.container} dangerouslySetInnerHTML={{ __html: reportHtml! }} />
             )}
