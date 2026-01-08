@@ -98,5 +98,6 @@ export function useVehiclePriceQuery(params: FetchVehiclePriceParams) {
         queryKey: ['vehicle-price', params.vin, params.mileage],
         queryFn: () => fetchVehiclePrice(params),
         enabled: Boolean(params.vin && params.mileage),
+        refetchOnWindowFocus: false,
     })
 }

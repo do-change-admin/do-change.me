@@ -170,9 +170,9 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
 
     const { data: baseInfo, isLoading } = useBaseInfoByVIN(requestVIN);
     const { data: odometerData, isFetching: isoOometerDataLoading } = useOdometer(requestVIN);
-    const lastMileageRecord = odometerData?.at()?.miles;
-    const [miles, setMiles] = useState<string>('');
-    const [debouncedMiles] = useDebouncedValue(miles, 1500);
+    const lastMileageRecord = odometerData && odometerData[odometerData?.length-1];
+    const [miles, setMiles] = useState<string>('1');
+    const [debouncedMiles] = useDebouncedValue(miles, 500);
     const { data: marketData, isLoading: isMarketDataLoading } = useVehiclePriceQuery({
         vin: requestVIN || '',
         mileage: debouncedMiles,
@@ -182,8 +182,8 @@ export const SearchSection: FC<SearchSectionProps> = ({ openSubscription }) => {
     const route = useRouter()
 
     useEffect(() => {
-        if (!!lastMileageRecord && !isMarketDataLoading && !miles) {
-            setMiles(lastMileageRecord);
+        if (!!lastMileageRecord) {
+            setMiles(lastMileageRecord.miles);
             return;
         }
     }, [lastMileageRecord, isMarketDataLoading, isoOometerDataLoading]);
