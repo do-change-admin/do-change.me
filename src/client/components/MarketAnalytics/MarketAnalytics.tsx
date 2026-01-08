@@ -94,7 +94,7 @@ export const MarketAnalytics:FC<MarketAnalyticsProps> = ({data, miles, setMiles,
                             {isLoading ? (
                                 <Skeleton h={40}/>
                             ): (
-                                <input onChange={handleChange} value={miles} autoFocus type="number" placeholder="Enter mileage" className={styles.mileageInput}/>
+                                <input onChange={handleChange} value={miles} type="number" placeholder="Enter mileage" className={styles.mileageInput}/>
                             )}
 
                         </div>
