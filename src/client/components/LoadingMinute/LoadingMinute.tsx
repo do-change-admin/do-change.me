@@ -48,10 +48,10 @@ export const LoadingMinute: FC<LoadingMinuteProps> = ({
     return (
         <div className={styles.overlay}>
             <div className={styles.wrapper}>
-                <div className={styles.ad}>
-                    <span>🚀 Pro tip</span>
-                    <strong>Remove car backgrounds in seconds with AI</strong>
-                </div>
+                {/*<div className={styles.ad}>*/}
+                {/*    <span>🚀 Pro tip</span>*/}
+                {/*    <strong>Remove car backgrounds in seconds with AI</strong>*/}
+                {/*</div>*/}
 
                 <div className={styles.labelWrapper}>
                     <span
