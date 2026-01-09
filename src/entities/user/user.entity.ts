@@ -64,23 +64,7 @@ export class User {
         return new User(parsedModel);
     };
 
-    get id() {
-        return this.data.id;
-    }
-
-    get email() {
-        return this.data.email;
-    }
-
     get model(): UserModel {
         return this.data;
-    }
-
-    public hasActivePlan(): boolean {
-        return this.data.userPlan.some((p) => p.status === 'active');
-    }
-
-    public isEmailVerified(): boolean {
-        return !!this.data.emailVerifiedAt;
     }
 }
