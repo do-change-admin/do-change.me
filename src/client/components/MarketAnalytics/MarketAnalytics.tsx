@@ -7,7 +7,7 @@ import {
 } from "react-icons/fa6";
 import {VehicleHistoryCard} from "@/client/components";
 import {IVehiclePriceResponse} from "@/client/components/MarketAnalytics/useVehiclePriceQuery";
-import {Stack, Title, Text, Skeleton} from "@mantine/core";
+import {Stack, Title, Text, Skeleton, Card} from "@mantine/core";
 
 export interface MarketAnalyticsProps {
     data?: IVehiclePriceResponse;
@@ -17,22 +17,25 @@ export interface MarketAnalyticsProps {
 }
 
 export const MarketAnalytics:FC<MarketAnalyticsProps> = ({data, miles, setMiles, isLoading}) => {
-    const recordType = data?.data.adjustments.history.records?.at(-1)?.type
+    const recordType = data?.data?.adjustments?.history.records?.at(-1)?.type
     const status = recordType === "accident" ? "accident" : recordType === "salvage" ? "total" : "clean"
 
     const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
         setMiles(e.target.value);
     }
 
+    if (!data?.data || !data?.data.period || !data?.data?.adjustments?.history) {
+        return <Card p={20} mb="lg" radius="lg" color="red">There is no data available for this VIN number.</Card>
+    }
     return (
         <div className={styles.container}>
             <div className={styles.content}>
                     <VehicleHistoryCard
                         title={data?.data.vehicle}
                         vin={data?.data.vin}
-                        yearRange={`${data?.data.period[0]} - ${data?.data.period[1]}`}
+                        yearRange={`${data?.data?.period ? data?.data?.period[0] : "-"} - ${data?.data?.period ? data?.data?.period[1] : "-"}`}
                         status={status}
-                        accidents={data?.data.adjustments.history.records}
+                        accidents={data?.data?.adjustments?.history.records}
                         lossStatus="repaired"
                         lastUpdated={data?.data.period[1]}
                     />
