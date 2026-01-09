@@ -36,7 +36,7 @@ export const InstallPWAButton: React.FC = () => {
             const isHome = window.location.pathname.toLowerCase().includes('/home');
             const isInPWA = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
 
-            setShowButton(!isInPWA && isMobile && !isHome);
+            setShowButton(!isInPWA);
         };
 
         checkShowButton();
