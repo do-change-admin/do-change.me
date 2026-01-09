@@ -11,6 +11,8 @@ import {
     FaUserCog, FaCarSide, FaGavel
 } from 'react-icons/fa';
 import {Image} from "@mantine/core";
+import {InstallPWAButton} from "@/client/components";
+import React from "react";
 
 export const MobileAppSection = ()=> {
     return (
@@ -131,14 +133,7 @@ export const MobileAppSection = ()=> {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <button className={styles.downloadButton}>
-                        <FaApple size={24} />
-                        <div className={styles.downloadText}>App Store</div>
-                    </button>
-                    <button className={styles.downloadButton}>
-                        <FaGooglePlay size={24} />
-                        <div className={styles.downloadText}>Google Play</div>
-                    </button>
+                    <InstallPWAButton />
                 </motion.div>
             </div>
         </section>
