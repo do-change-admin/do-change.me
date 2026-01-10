@@ -16,6 +16,7 @@ import { NotificationPrismaStore } from '../stores/notification/notification.pri
 import type { NotificationStore } from '../stores/notification/notification.store';
 import type { RemotePicturesStore } from '../stores/remote-pictures/remote-pictures.store';
 import { RemotePicturesS3ClientStore } from '../stores/remote-pictures/remote-pictures.store.s3-client';
+import { UserPrismaStore, type UserStore } from '../stores/user';
 import {
     UserSyndicationRequestPrismaStore,
     type UserSyndicationRequestStore
@@ -35,6 +36,7 @@ const registerDataProviders = () => {
     container
         .bind<UserSyndicationRequestDraftStore>(DIStores.syndicationRequestDrafts)
         .to(UserSyndicationRequestDraftPrismaStore);
+    container.bind<UserStore>(DIStores.users).to(UserPrismaStore);
     container
         .bind<DataProviders.VehicleHistoryReports.Interface>(DIStores.vehicleHistoryReports)
         .to(DataProvidersImplemetations.Mock.VehicleHistoryReports);

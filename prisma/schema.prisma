@@ -14,9 +14,9 @@ enum ReportSource {
 
 model User {
   id                    String    @id @default(uuid())
+  email                 String    @unique
   firstName             String?
   lastName              String?
-  email                 String    @unique
   password              String?
   image                 String?
   emailVerifiedAt       DateTime?
@@ -27,6 +27,8 @@ model User {
   zipCode               String?
   auctionAccessNumber   String?
   auctionAccessQRFileId String?
+  photoFileId           String?
+  birthDate             DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
@@ -36,8 +38,6 @@ model User {
   accounts                     Account[]
   usageAggregates              UsageAggregate[]
   userPlan                     UserPlan[]
-  photoFileId                  String?
-  birthDate                    DateTime?
   syndicationRequestDrafts     SyndicationRequestDrafts[]
   syndicationRequests          SyndicationRequests[]
   notifications                Notification[]

@@ -7,8 +7,13 @@ export type CRUDStore<
 > = {
     list: (searchPayload: SearchPayload['list'], pagination: PaginationModel) => Promise<Models['list'][]>;
     details: (searchPayload: SearchPayload['specific']) => Promise<Models['detail'] | null>;
+    // TODO: хочется получать полный объект в ответе а не только id
     create: (creationPayload: ActionsPayload['create']) => Promise<{ id: string }>;
-    updateOne: (searchPayload: SearchPayload['specific'], updatePayload: ActionsPayload['update']) => Promise<{ success: boolean }>;
+    // TODO: хочется получать полный объект в ответе а не только success
+    updateOne: (
+        searchPayload: SearchPayload['specific'],
+        updatePayload: ActionsPayload['update']
+    ) => Promise<{ success: boolean }>;
     deleteOne: (payload: SearchPayload['specific']) => Promise<{ success: boolean }>;
 };
 
