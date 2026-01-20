@@ -1,0 +1,55 @@
+{
+  "format_on_save": "on",
+  "languages": {
+    "JavaScript": {
+      "formatter": {
+        "language_server": {
+          "name": "biome",
+        },
+      },
+    },
+    "TypeScript": {
+      "formatter": {
+        "language_server": {
+          "name": "biome",
+        },
+      },
+    },
+    "JSON": {
+      "formatter": {
+        "language_server": {
+          "name": "biome",
+        },
+      },
+    },
+    "Prisma": {
+      "formatter": {
+        "language_server": {
+          "name": "prisma-language-server",
+        },
+      },
+    },
+    "TSX": {
+      "formatter": {
+        "language_server": {
+          "name": "biome",
+        },
+      },
+    },
+  },
+  "lsp": {
+    "biome": {
+      "initialization_options": {
+        "config_path": "/biome.json",
+        "requireConfiguration": true,
+      },
+    },
+    "prisma-language-server": {
+      "settings": {
+        "prisma": {
+          "pinToPrisma6": true,
+        },
+      },
+    },
+  },
+}

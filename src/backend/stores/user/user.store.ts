@@ -5,9 +5,9 @@ import { User } from '@/entities/user';
 const userWithMetaData = User.schema.extend({
     createdAt: z.date(),
     updatedAt: z.date(),
-    userPlan: User.schema.shape.userPlan.element
+    userPlan: User.schema.shape.userPlan.def.innerType.element
         .extend({
-            plan: User.schema.shape.userPlan.element.shape.plan.extend({
+            plan: User.schema.shape.userPlan.def.innerType.element.shape.plan.extend({
                 createdAt: z.date(),
                 updatedAt: z.date()
             }),
