@@ -1,5 +1,5 @@
-import { EmailMessage } from "@/value-objects/email-message.value-object";
+import type { EmailMessage } from '@/value-objects/email-message.value-object';
 
-export interface IMailerProvider {
+export interface MailerProvider {
     send(emailMessage: EmailMessage): Promise<void>;
 }

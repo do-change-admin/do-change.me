@@ -7,9 +7,10 @@ import {
 } from '@/backend/providers';
 import { type ActiveUserInfoProvider, MockActiveUserInfoProvider } from '../providers/active-user-info';
 import { ConsoleMailerProvider } from '../providers/mailer/console-mailer/console-mailer.provider';
-import type { IMailerProvider } from '../providers/mailer/mailer.provider';
+import type { MailerProvider } from '../providers/mailer/mailer.provider';
 import type { S3Client } from '../providers/s3-client/s3-client.provider';
 import { S3ClientAWSSDK } from '../providers/s3-client/s3-client.provider.aws-sdk';
+import { EmailVerificationTokenRAMStore, type EmailVerificationTokenStore } from '../stores/email-verification-token';
 import { FeatureUsageRAMStore, type FeatureUsageStore } from '../stores/feature-usage';
 import { NotificationRAMStore } from '../stores/notification/notification.ram.store';
 import type { NotificationStore } from '../stores/notification/notification.store';
@@ -55,10 +56,11 @@ const registerDataProviders = () => {
 
     container.bind<NotificationStore>(DIStores.notifications).to(NotificationRAMStore).inSingletonScope();
     container.bind<FeatureUsageStore>(DIStores.featureUsage).to(FeatureUsageRAMStore);
+    container.bind<EmailVerificationTokenStore>(DIStores.emailVerificationToken).to(EmailVerificationTokenRAMStore);
 };
 
 const registerFunctionProviders = () => {
-    container.bind<IMailerProvider>(DIProviders.mailer).to(ConsoleMailerProvider);
+    container.bind<MailerProvider>(DIProviders.mailer).to(ConsoleMailerProvider);
 
     container
         .bind<FunctionProviders.Logger.Interface>(DIProviders.logger)

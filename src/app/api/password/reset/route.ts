@@ -3,8 +3,8 @@ import z from 'zod';
 import { prismaClient } from '@/backend/infrastructure/prisma/client';
 import { businessError, serverError, validationError } from '@/lib-deprecated/errors';
 import { generatePasswordHash } from '@/lib-deprecated/password';
-import { VO } from '@/value-objects';
-import { Token } from '@/value-objects/token.vo';
+import { StringHash } from '@/utils/entities/string-hash';
+import { Token } from '@/utils/entities/token';
 import { ResetPassword } from './models';
 
 export async function POST(req: NextRequest) {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const { password, token: rawToken } = data;
-        const tokenHash = new VO.StringHash.Instance(rawToken).value();
+        const tokenHash = StringHash.create(rawToken).hashValue;
 
         const record = await prismaClient.passwordResetToken.findUnique({
             where: { tokenHash }
@@ -30,9 +30,9 @@ export async function POST(req: NextRequest) {
             return NextResponse.json(businessError('Token is invalid', 'INVALID_TOKEN'), { status: 400 });
         }
 
-        const token = Token.rehydrate(rawToken, record.tokenHash, record.expiresAt);
+        const token = Token.rehydrate({ expiresAt: record.expiresAt, hash: record.tokenHash, raw: rawToken });
 
-        if (token.isExpired()) {
+        if (token.isExpired) {
             return NextResponse.json(businessError('Token is expired', 'TOKEN_EXPIRED'), { status: 400 });
         }
 

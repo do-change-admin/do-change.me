@@ -1,14 +1,18 @@
-import { redirect } from "next/navigation";
-import { after, NextRequest, NextResponse } from "next/server";
-import z from "zod";
-import { VerifyEmail } from "./models";
-import { serverError, validationError } from "@/lib-deprecated/errors";
-import { verificationEmail } from "@/backend/infrastructure/email/templates/verification-email";
-import { prismaClient } from "@/backend/infrastructure/prisma/client";
-import { Token } from "@/value-objects/token.vo";
-import { VO } from "@/value-objects";
-import { DIContainer } from "@/backend/di-containers";
-import { EmailMessage } from "@/value-objects/email-message.value-object";
+import { redirect } from 'next/navigation';
+import { type NextRequest, NextResponse } from 'next/server';
+import z from 'zod';
+import { DIContainer } from '@/backend/di-containers';
+import { DIStores } from '@/backend/di-containers/tokens.di-container';
+import { verificationEmail } from '@/backend/infrastructure/email/templates/verification-email';
+import { prismaClient } from '@/backend/infrastructure/prisma/client';
+import type { UserStore } from '@/backend/stores/user';
+import { User } from '@/entities/user';
+import { serverError, validationError } from '@/lib-deprecated/errors';
+import { EMailAddress } from '@/utils/entities/email-address';
+import { StringHash } from '@/utils/entities/string-hash';
+import { Token } from '@/utils/entities/token';
+import { EmailMessage } from '@/value-objects/email-message.value-object';
+import { VerifyEmail } from './models';
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -17,78 +21,78 @@ export async function POST(req: NextRequest) {
 
     if (!success) {
         return NextResponse.json(validationError(z.treeifyError(error)), {
-            status: 400,
+            status: 400
         });
     }
 
     try {
-        const { email } = data;
+        const { email: rawEmail } = data;
 
-        const user = await prismaClient.user.findUnique({
-            where: { email: email.toLowerCase() },
-        });
+        const email = EMailAddress.create(rawEmail);
 
-        if (!user || user.emailVerifiedAt) {
-            return NextResponse.json({ message: "Verification email sent" });
+        const userStore = DIContainer()._context.get<UserStore>(DIStores.users);
+
+        const userModel = await userStore.details({ email: email.model });
+
+        if (!userModel || userModel.emailVerifiedAt) {
+            return NextResponse.json({ message: 'Verification email sent' });
         }
 
         await prismaClient.emailVerificationToken.deleteMany({
-            where: { userId: user.id },
+            where: { userId: userModel.id }
         });
 
         const token = Token.withTimeToLive(Number(process.env.TOKEN_TTL_MS));
 
         await prismaClient.emailVerificationToken.create({
             data: {
-                expiresAt: token.expiresAt,
-                tokenHash: token.hash,
-                userId: user.id,
-            },
+                expiresAt: token.model.expiresAt,
+                tokenHash: token.model.hash,
+                userId: userModel.id
+            }
         });
 
         const mailerProvider = DIContainer().MailerProvider();
-        const emailMessage = EmailMessage.create(
-            verificationEmail(user, token.raw)
-        );
-        await mailerProvider.send(emailMessage);
+        const emailMessage = EmailMessage.create(verificationEmail(User.create(userModel), token.model.raw));
+        mailerProvider.send(emailMessage);
 
-        return NextResponse.json({ message: "Verification email sent" });
-    } catch (err) {
+        return NextResponse.json({ message: 'Verification email sent' });
+    } catch {
         return NextResponse.json(serverError(), { status: 500 });
     }
 }
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-    const rawToken = searchParams.get("token");
+    const rawToken = searchParams.get('token');
 
     if (!rawToken) {
-        return redirect("/auth/login?error=INVALID_TOKEN");
+        return redirect('/auth/login?error=INVALID_TOKEN');
     }
 
-    const tokenHash = new VO.StringHash.Instance(rawToken).value();
+    const tokenHash = StringHash.create(rawToken).hashValue;
 
     const tokenEntity = await prismaClient.emailVerificationToken.findUnique({
-        where: { tokenHash },
+        where: { tokenHash }
     });
 
     if (!tokenEntity) {
-        return redirect("/auth/login?error=INVALID_TOKEN");
+        return redirect('/auth/login?error=INVALID_TOKEN');
     }
 
-    const token = Token.rehydrate(rawToken, tokenHash, tokenEntity.expiresAt);
+    const token = Token.rehydrate({ expiresAt: tokenEntity.expiresAt, hash: tokenHash, raw: rawToken });
 
-    if (token.isExpired()) {
-        return redirect("/auth/login?error=TOKEN_EXPIRED");
+    if (token.isExpired) {
+        return redirect('/auth/login?error=TOKEN_EXPIRED');
     }
 
     await prismaClient.user.update({
         where: { id: tokenEntity.userId },
-        data: { emailVerifiedAt: new Date() },
+        data: { emailVerifiedAt: new Date() }
     });
     await prismaClient.emailVerificationToken.delete({
-        where: { id: tokenEntity.id },
+        where: { id: tokenEntity.id }
     });
 
-    return redirect("/auth/login?verified=1");
+    return redirect('/auth/login?verified=1');
 }
