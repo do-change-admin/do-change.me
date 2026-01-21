@@ -8,7 +8,8 @@ export const DIStores = {
     notifications: Symbol.for('NOTIFICATIONS-DATA-PROVIDER'),
     remotePictures: Symbol(),
     featureUsage: Symbol(),
-    users: Symbol()
+    users: Symbol(),
+    emailVerificationToken: Symbol()
 };
 
 export const DIProviders = {

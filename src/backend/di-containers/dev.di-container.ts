@@ -7,10 +7,14 @@ import {
 } from '@/backend/providers';
 import { type ActiveUserInfoProvider, NextAuthActiveUserInfoProvider } from '../providers/active-user-info';
 import { PicturesS3DataProvider } from '../providers/data/implemetations/api/pictures.s3-data-provider';
-import type { IMailerProvider } from '../providers/mailer/mailer.provider';
+import type { MailerProvider } from '../providers/mailer/mailer.provider';
 import { ResendMailerProvider } from '../providers/mailer/resend-mailer/resend-mailer.provider';
 import type { S3Client } from '../providers/s3-client/s3-client.provider';
 import { S3ClientAWSSDK } from '../providers/s3-client/s3-client.provider.aws-sdk';
+import {
+    EmailVerificationTokenPrismaStore,
+    type EmailVerificationTokenStore
+} from '../stores/email-verification-token';
 import { FeatureUsagePrismaStore, type FeatureUsageStore } from '../stores/feature-usage';
 import { NotificationPrismaStore } from '../stores/notification/notification.prisma.store';
 import type { NotificationStore } from '../stores/notification/notification.store';
@@ -51,10 +55,11 @@ const registerDataProviders = () => {
 
     container.bind<RemotePicturesStore>(DIStores.remotePictures).to(RemotePicturesS3ClientStore);
     container.bind<FeatureUsageStore>(DIStores.featureUsage).to(FeatureUsagePrismaStore);
+    container.bind<EmailVerificationTokenStore>(DIStores.emailVerificationToken).to(EmailVerificationTokenPrismaStore);
 };
 
 const registerFunctionProviders = () => {
-    container.bind<IMailerProvider>(DIProviders.mailer).to(ResendMailerProvider);
+    container.bind<MailerProvider>(DIProviders.mailer).to(ResendMailerProvider);
 
     container
         .bind<FunctionProviders.Logger.Interface>(DIProviders.logger)

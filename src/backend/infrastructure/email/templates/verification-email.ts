@@ -1,4 +1,4 @@
-import type { User } from '@prisma/client';
+import type { User } from '@/entities/user';
 import type { EmailMessageSchema } from '@/value-objects/email-message.value-object';
 
 export function verificationEmail(user: User, tokenRow: string) {
@@ -6,7 +6,7 @@ export function verificationEmail(user: User, tokenRow: string) {
 
     return {
         from: 'info@do-change.com',
-        to: user.email,
+        to: user.model.email,
         subject: 'Confirm your email',
         content: `
               <p>Hello,</p>

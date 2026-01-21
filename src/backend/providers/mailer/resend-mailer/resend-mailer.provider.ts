@@ -1,10 +1,10 @@
 import { injectable } from 'inversify';
 import { Resend as ResendSender } from 'resend';
 import type { EmailMessage } from '@/value-objects/email-message.value-object';
-import type { IMailerProvider } from '../mailer.provider';
+import type { MailerProvider } from '../mailer.provider';
 
 @injectable()
-export class ResendMailerProvider implements IMailerProvider {
+export class ResendMailerProvider implements MailerProvider {
     private sender!: ResendSender;
 
     constructor() {

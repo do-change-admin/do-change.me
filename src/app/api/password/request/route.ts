@@ -4,8 +4,8 @@ import { DIContainer } from '@/backend/di-containers';
 import { passwordReset } from '@/backend/infrastructure/email/templates/password-reset';
 import { prismaClient } from '@/backend/infrastructure/prisma/client';
 import { serverError, validationError } from '@/lib-deprecated/errors';
+import { Token } from '@/utils/entities/token';
 import { EmailMessage } from '@/value-objects/email-message.value-object';
-import { Token } from '@/value-objects/token.vo';
 import { RequestPassword } from './models';
 
 export async function POST(req: NextRequest) {
@@ -38,14 +38,14 @@ export async function POST(req: NextRequest) {
 
         await prismaClient.passwordResetToken.create({
             data: {
-                tokenHash: token.hash,
+                tokenHash: token.model.hash,
                 userId: user.id,
-                expiresAt: token.expiresAt
+                expiresAt: token.model.expiresAt
             }
         });
 
         const emailService = DIContainer().MailerProvider();
-        const resetEmail = EmailMessage.create(passwordReset(user, token.raw));
+        const resetEmail = EmailMessage.create(passwordReset(user, token.model.raw));
         emailService.send(resetEmail);
 
         return NextResponse.json({ message: "If that email exists, we'll send instructions." }, { status: 200 });

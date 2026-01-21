@@ -11,7 +11,7 @@ import type { UserIdentityController } from '../controllers/user-identity';
 import type { UserNotificationsController } from '../controllers/user-notifications.controller';
 import type { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller';
 import type { FunctionProviders } from '../providers';
-import type { IMailerProvider } from '../providers/mailer/mailer.provider';
+import type { MailerProvider } from '../providers/mailer/mailer.provider';
 import type { UserIdentityService } from '../services/user-identity/user-identity.service';
 import { devContainer } from './dev.di-container';
 import { stageContainer } from './stage.di-container';
@@ -66,7 +66,7 @@ export const DIContainer = () => {
             return container.get<SubscriptionsController>(ControllerTokens.subscriptions);
         },
         MailerProvider: () => {
-            return container.get<IMailerProvider>(DIProviders.mailer);
+            return container.get<MailerProvider>(DIProviders.mailer);
         },
         RemotePicturesController: () => {
             return container.get<RemotePicturesController>(ControllerTokens.remotePictures);
