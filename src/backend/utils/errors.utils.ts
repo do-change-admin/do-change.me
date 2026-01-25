@@ -66,8 +66,7 @@ export class ErrorFactory {
         }
 
         if (typeof error === 'object' && error !== null) {
-            const jsonRepresentation = JSON.stringify(error);
-            err = new Error(jsonRepresentation);
+            err = err instanceof Error ? err : new Error(JSON.stringify(error));
         }
 
         return {

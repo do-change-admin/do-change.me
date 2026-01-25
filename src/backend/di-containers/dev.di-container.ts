@@ -6,6 +6,7 @@ import {
     FunctionProvidersImplementations
 } from '@/backend/providers';
 import { type ActiveUserInfoProvider, NextAuthActiveUserInfoProvider } from '../providers/active-user-info';
+import { CarStickerAPIProvider, type CarStickerProvider } from '../providers/car-sticker';
 import { PicturesS3DataProvider } from '../providers/data/implemetations/api/pictures.s3-data-provider';
 import type { IMailerProvider } from '../providers/mailer/mailer.provider';
 import { ResendMailerProvider } from '../providers/mailer/resend-mailer/resend-mailer.provider';
@@ -62,6 +63,7 @@ const registerFunctionProviders = () => {
 
     container.bind<S3Client>(DIProviders.s3Client).to(S3ClientAWSSDK);
     container.bind<ActiveUserInfoProvider>(DIProviders.activeUserInfo).to(NextAuthActiveUserInfoProvider);
+    container.bind<CarStickerProvider>(DIProviders.carSticker).to(CarStickerAPIProvider);
 };
 
 registerDataProviders();

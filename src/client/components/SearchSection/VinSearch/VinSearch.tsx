@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 import { useShallow } from 'zustand/react/shallow';
 import { Input } from '@/client/components/_ui';
+import { VehicleSticker } from '@/client/features/vehicle-info/sticker';
 import { useScannerState } from '@/client/states/scanner.state';
 import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import { VIN } from '@/value-objects/vin.value-object';
@@ -44,6 +45,23 @@ export const VinSearch = () => {
                                     <FaTimes className={styles.icon} />
                                 </ActionIcon>
                             )}
+                            <VehicleSticker
+                                views={{
+                                    Layout: ({ downloadSticker }) => {
+                                        return (
+                                            <button
+                                                onClick={() => {
+                                                    downloadSticker();
+                                                }}
+                                                type="button"
+                                            >
+                                                DOWNLOAD
+                                            </button>
+                                        );
+                                    }
+                                }}
+                                vin={vin ?? ''}
+                            />
                             <motion.button
                                 className={styles.analyzeBtn}
                                 onClick={handleSearch}

@@ -7,6 +7,7 @@ import { UserSyndicationRequestDraftsService } from '../services/syndication-req
 import { UserIdentityService } from '../services/user-identity';
 import { UserNotificationsService } from '../services/user-notifications.service';
 import { UserNotificationsManagementService } from '../services/user-notifications-management.service';
+import { VehicleInfoService } from '../services/vehicle-info';
 import type { NotificationStore } from '../stores/notification/notification.store';
 import { DIServices, DIStores } from './tokens.di-container';
 
@@ -49,4 +50,5 @@ export const registerServices = (container: Container) => {
     container.bind<FeatureUsageManagementService>(DIServices.featureUsageManagement).to(FeatureUsageManagementService);
 
     container.bind<UserIdentityService>(DIServices.userIdentity).to(UserIdentityService);
+    container.bind<VehicleInfoService>(DIServices.vehicleInfo).to(VehicleInfoService);
 };

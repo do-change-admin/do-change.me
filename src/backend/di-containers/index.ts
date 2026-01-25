@@ -10,6 +10,7 @@ import type { UserSyndicationRequestDraftsController } from '../controllers/synd
 import type { UserIdentityController } from '../controllers/user-identity';
 import type { UserNotificationsController } from '../controllers/user-notifications.controller';
 import type { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller';
+import type { VehicleInfoController } from '../controllers/vehicle-info';
 import type { FunctionProviders } from '../providers';
 import type { IMailerProvider } from '../providers/mailer/mailer.provider';
 import type { UserIdentityService } from '../services/user-identity/user-identity.service';
@@ -76,6 +77,9 @@ export const DIContainer = () => {
         },
         UserIdentityController: () => {
             return container.get<UserIdentityController>(ControllerTokens.userIdentity);
+        },
+        VehicleInfoController: () => {
+            return container.get<VehicleInfoController>(ControllerTokens.vehicleInfo);
         },
         Logger: () => {
             return container.get<FunctionProviders.Logger.Interface>(DIProviders.logger);

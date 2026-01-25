@@ -6,6 +6,7 @@ import {
     FunctionProvidersImplementations
 } from '@/backend/providers';
 import { type ActiveUserInfoProvider, MockActiveUserInfoProvider } from '../providers/active-user-info';
+import { CarStickerAPIProvider, type CarStickerProvider } from '../providers/car-sticker';
 import { ConsoleMailerProvider } from '../providers/mailer/console-mailer/console-mailer.provider';
 import type { IMailerProvider } from '../providers/mailer/mailer.provider';
 import type { S3Client } from '../providers/s3-client/s3-client.provider';
@@ -66,6 +67,7 @@ const registerFunctionProviders = () => {
 
     container.bind<S3Client>(DIProviders.s3Client).to(S3ClientAWSSDK);
     container.bind<ActiveUserInfoProvider>(DIProviders.activeUserInfo).to(MockActiveUserInfoProvider);
+    container.bind<CarStickerProvider>(DIProviders.carSticker).to(CarStickerAPIProvider);
 };
 
 registerDataProviders();

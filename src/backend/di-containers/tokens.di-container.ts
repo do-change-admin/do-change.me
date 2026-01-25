@@ -15,7 +15,8 @@ export const DIProviders = {
     mailer: Symbol.for('MAILER-FUNCTIONAL-PROVIDER'),
     logger: Symbol.for('LOGGER-FUNCTIONAL-PROVIDER'),
     s3Client: Symbol(),
-    activeUserInfo: Symbol()
+    activeUserInfo: Symbol(),
+    carSticker: Symbol()
 };
 
 export const DIServices = {
@@ -31,7 +32,8 @@ export const DIServices = {
     userFeatureUsageMetering: Symbol(),
     featureUsageManagement: Symbol(),
 
-    userIdentity: Symbol()
+    userIdentity: Symbol(),
+    vehicleInfo: Symbol()
 };
 
 export const ControllerTokens = {
@@ -42,5 +44,6 @@ export const ControllerTokens = {
     userNotificationsManagement: Symbol.for('USER-NOTIFICATIONS-MANAGEMENT-CONTROLLER'),
     subscriptions: Symbol(),
     remotePictures: Symbol(),
-    userIdentity: Symbol()
+    userIdentity: Symbol(),
+    vehicleInfo: Symbol()
 };

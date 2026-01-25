@@ -7,6 +7,7 @@ import { UserSyndicationRequestDraftsController } from '../controllers/syndicati
 import { UserIdentityController } from '../controllers/user-identity';
 import { UserNotificationsController } from '../controllers/user-notifications.controller';
 import { UserNotificationsManagementController } from '../controllers/user-notifications-management.controller';
+import { VehicleInfoController } from '../controllers/vehicle-info';
 import { ControllerTokens } from './tokens.di-container';
 
 export const registerControllers = (container: Container) => {
@@ -26,4 +27,5 @@ export const registerControllers = (container: Container) => {
     container.bind<SubscriptionsController>(ControllerTokens.subscriptions).to(SubscriptionsController);
     container.bind<RemotePicturesController>(ControllerTokens.remotePictures).to(RemotePicturesController);
     container.bind<UserIdentityController>(ControllerTokens.userIdentity).to(UserIdentityController);
+    container.bind<VehicleInfoController>(ControllerTokens.vehicleInfo).to(VehicleInfoController);
 };
