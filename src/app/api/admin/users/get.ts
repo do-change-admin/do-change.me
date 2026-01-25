@@ -27,7 +27,8 @@ const schemas = {
                     .nullable(),
                 baseInfoRequests: z.number()
             })
-        )
+        ),
+        usage: z.record(z.string(), z.array(z.object({ from: z.date(), to: z.date(), usage: z.number() }))) //Record<string, { from: Date; to: Date; usage: number }[]>
     })
 } satisfies ZodAPISchemas;
 
@@ -41,6 +42,36 @@ export const method = zodApiMethod(schemas, {
             where: { featureKey: FeatureKey.Report },
             include: { user: true }
         });
+
+        const usage = data
+            .map((x) => {
+                return {
+                    from: x.periodStart,
+                    to: x.periodEnd,
+                    usage: x.usageCount,
+                    userMail: x.user.email,
+                    userName: `${x.user.firstName ?? ''} ${x.user.lastName ?? ''}`
+                };
+            })
+            .reduce(
+                (acc, current) => {
+                    if (!acc[current.userMail]) {
+                        acc[current.userMail] = [];
+                    }
+
+                    acc[current.userMail] = [
+                        ...acc[current.userMail],
+                        {
+                            from: current.from,
+                            to: current.to,
+                            usage: current.usage
+                        }
+                    ];
+
+                    return acc;
+                },
+                {} as Record<string, { from: Date; to: Date; usage: number }[]>
+            );
 
         const featureUsageManagementService = DIContainer()._context.get<FeatureUsageManagementService>(
             DIServices.featureUsageManagement
@@ -82,7 +113,8 @@ export const method = zodApiMethod(schemas, {
                         : null,
                     baseInfoRequests: baseInfoData[x.id] ?? 0
                 };
-            })
+            }),
+            usage
         };
     }
 });
