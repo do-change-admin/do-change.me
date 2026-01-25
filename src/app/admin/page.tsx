@@ -1,14 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { Tabs, Button, Group, Badge } from "@mantine/core";
-import styles from "./layout.module.css";
-import { UserTable } from "@/client/components";
-import {
-    useAdminAuctionAccessCount,
-    useAdminAuctionAccessRequests,
-} from "@/client/hooks";
-import type { AuctionAccessRequestStatus } from "@/backend/services/auction-access-requests";
+import { Button, Group, Tabs } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import type { AuctionAccessRequestStatus } from '@/backend/services/auction-access-requests';
+import { UserTable } from '@/client/components';
+import { useAdminAuctionAccessRequests } from '@/client/hooks';
+import styles from './layout.module.css';
 
 type Tab = {
     label: string;
@@ -17,60 +14,55 @@ type Tab = {
 };
 
 const mainTabs: Tab[] = [
-    { label: "Review", count: 12, status: "review" },
-    { label: "Scheduling", count: 5, status: "awaiting user confirmation" },
-    { label: "Onboarding", count: 3, status: "awaiting documents upload" },
-    { label: "Approved", count: 0, status: "approved" },
-    { label: "Rejected", count: 0, status: "rejected" },
+    { label: 'Review', count: 12, status: 'review' },
+    { label: 'Scheduling', count: 5, status: 'awaiting user confirmation' },
+    { label: 'Onboarding', count: 3, status: 'awaiting documents upload' },
+    { label: 'Approved', count: 0, status: 'approved' },
+    { label: 'Rejected', count: 0, status: 'rejected' }
 ];
 
 const subTabs: Tab[] = [
     {
-        status: "awaiting user confirmation",
-        label: "Awaiting User Confirmation",
+        status: 'awaiting user confirmation',
+        label: 'Awaiting User Confirmation'
     },
     {
-        label: "Scheduling",
-        status: "call scheduling",
+        label: 'Scheduling',
+        status: 'call scheduling'
     },
     {
-        label: "Call Completed - Awaiting Decision",
-        status: "call completed",
-    },
+        label: 'Call Completed - Awaiting Decision',
+        status: 'call completed'
+    }
 ];
 
 const subOnboardingTabs: Tab[] = [
     {
-        label: "Awaiting Documents Upload",
-        status: "awaiting documents upload",
+        label: 'Awaiting Documents Upload',
+        status: 'awaiting documents upload'
     },
     {
-        label: "Documents Under Review",
-        status: "documents under review",
+        label: 'Documents Under Review',
+        status: 'documents under review'
     },
     {
-        label: "Corrections Required",
-        status: "corrections required",
+        label: 'Corrections Required',
+        status: 'corrections required'
     },
     {
-        label: "Ready for Auction Access",
-        status: "ready for auction access",
-    },
+        label: 'Ready for Auction Access',
+        status: 'ready for auction access'
+    }
 ];
 
 export default function AuctionAccessPage() {
-    const [status, setStatus] = useState<AuctionAccessRequestStatus>(
-        mainTabs[0].status
+    const [status, setStatus] = useState<AuctionAccessRequestStatus>(mainTabs[0].status);
+
+    const [activeStatus, setActiveStatus] = useState<AuctionAccessRequestStatus>(mainTabs[0].status);
+    const [activeSubTab, setActiveSubTab] = useState<AuctionAccessRequestStatus>(subTabs[0].status);
+    const [activeOnboardingTab, setActiveOnboardingTabsTab] = useState<AuctionAccessRequestStatus>(
+        subOnboardingTabs[0].status
     );
-
-    const [activeStatus, setActiveStatus] =
-        useState<AuctionAccessRequestStatus>(mainTabs[0].status);
-    const [activeSubTab, setActiveSubTab] =
-        useState<AuctionAccessRequestStatus>(subTabs[0].status);
-    const [activeOnboardingTab, setActiveOnboardingTabsTab] =
-        useState<AuctionAccessRequestStatus>(subOnboardingTabs[0].status);
-
-    const { data: groupedCount } = useAdminAuctionAccessCount();
 
     useEffect(() => {
         setStatus(activeSubTab);
@@ -81,30 +73,22 @@ export default function AuctionAccessPage() {
     }, [activeOnboardingTab]);
 
     useEffect(() => {
-        setStatus(activeStatus)
-    }, [activeStatus])
+        setStatus(activeStatus);
+    }, [activeStatus]);
 
-
-    const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({ status })
-
+    const { data: auctionAccessRequests } = useAdminAuctionAccessRequests({ status });
 
     return (
         <div className={styles.container}>
             {/* Main Tabs */}
             <Tabs
+                onChange={(val) => val && setActiveStatus(val as AuctionAccessRequestStatus)}
                 value={activeStatus}
-                onChange={(val) =>
-                    val && setActiveStatus(val as AuctionAccessRequestStatus)
-                }
                 variant="outline"
             >
                 <Tabs.List>
                     {mainTabs.map((tab) => (
-                        <Tabs.Tab
-                            value={tab.status}
-                            key={tab.label}
-                            className={styles.tabWithBadge}
-                        >
+                        <Tabs.Tab className={styles.tabWithBadge} key={tab.label} value={tab.status}>
                             {tab.label}
                             {/*{!!groupedCount[tab?.label?.toLowerCase()] && (*/}
                             {/*    <Badge color="pink" size="sm" className={styles.tabBadge}>*/}
@@ -116,39 +100,29 @@ export default function AuctionAccessPage() {
                 </Tabs.List>
 
                 {mainTabs.map((tab) => (
-                    <Tabs.Panel value={tab.status} key={tab.label} pt="md">
-                        {tab.label === "Scheduling" && (
+                    <Tabs.Panel key={tab.label} pt="md" value={tab.status}>
+                        {tab.label === 'Scheduling' && (
                             <Group gap="sm" m="lg">
                                 {subTabs.map(({ label, status }) => (
                                     <Button
                                         key={status}
-                                        variant={
-                                            activeSubTab === status
-                                                ? "filled"
-                                                : "outline"
-                                        }
                                         onClick={() => setActiveSubTab(status)}
                                         size="xs"
+                                        variant={activeSubTab === status ? 'filled' : 'outline'}
                                     >
                                         {label}
                                     </Button>
                                 ))}
                             </Group>
                         )}
-                        {tab.label === "Onboarding" && (
+                        {tab.label === 'Onboarding' && (
                             <Group gap="sm" m="lg">
                                 {subOnboardingTabs.map(({ label, status }) => (
                                     <Button
                                         key={status}
-                                        variant={
-                                            activeOnboardingTab === status
-                                                ? "filled"
-                                                : "outline"
-                                        }
-                                        onClick={() =>
-                                            setActiveOnboardingTabsTab(status)
-                                        }
+                                        onClick={() => setActiveOnboardingTabsTab(status)}
                                         size="xs"
+                                        variant={activeOnboardingTab === status ? 'filled' : 'outline'}
                                     >
                                         {label}
                                     </Button>

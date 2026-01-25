@@ -12,7 +12,11 @@ export default function UsersTable() {
     // const { data: stats, isLoading, error } = useStats();
 
     if (isFetching) return <>Loading...</>;
-    if (!data?.users?.length) return <>No reports usage was detected</>;
+    if (!data?.users?.length && !Object.keys(data?.usage ?? {}).length) return <>No reports usage was detected</>;
+
+    if (!data) {
+        return <div>No data was fetched</div>;
+    }
     //
     // const rateLimits = stats?.rate_limits;
     // const usageStats = stats?.usage_statistics;
@@ -152,6 +156,36 @@ export default function UsersTable() {
                                 })}
                         </tbody>
                     </table>
+                    <div>
+                        <h2>Detailed reports count</h2>
+                        {Object.entries(data.usage ?? {}).map(([mail, usage]) => {
+                            return (
+                                <>
+                                    <h3>User {mail}</h3>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <td>Period start</td>
+                                                <td>Period end</td>
+                                                <td>Reports usage</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {usage.map((x) => {
+                                                return (
+                                                    <tr>
+                                                        <td>{new Date(x.from).toLocaleDateString('ru-RU')}</td>
+                                                        <td>{new Date(x.to).toLocaleDateString('ru-RU')}</td>
+                                                        <td>{x.usage}</td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </>
