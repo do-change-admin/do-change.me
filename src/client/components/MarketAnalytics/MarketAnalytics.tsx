@@ -1,9 +1,11 @@
 'use client';
-import { Skeleton, Stack, Text, Title } from '@mantine/core';
+import { Card, Skeleton, Stack, Text, Title } from '@mantine/core';
 import type { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
 import { FaArrowTrendDown, FaArrowTrendUp, FaChartLine } from 'react-icons/fa6';
 import { VehicleHistoryCard } from '@/client/components';
 import type { IVehiclePriceResponse } from '@/client/components/MarketAnalytics/useVehiclePriceQuery';
+import { useBaseInfoByVIN } from '@/client/hooks';
+import { useVINAnalysisState } from '@/client/states/vin-analysis.state';
 import styles from './MarketAnalytics.module.css';
 
 export interface MarketAnalyticsProps {
@@ -21,11 +23,23 @@ export const MarketAnalytics: FC<MarketAnalyticsProps> = ({ data, miles, setMile
         setMiles(e.target.value);
     };
 
+    const requestVIN = useVINAnalysisState((x) => x.requestVIN);
+    const baseInfoQuery = useBaseInfoByVIN(requestVIN);
+
+    const baseData = baseInfoQuery.data ? (
+        <Card color="red" mb="lg" p={20} radius="lg">
+            <Title size={'m'}>
+                {baseInfoQuery.data.Make} {baseInfoQuery.data.Model} ({baseInfoQuery.data.ModelYear})
+            </Title>
+        </Card>
+    ) : undefined;
+
     if (!data?.data || !data?.data.period || !data?.data?.adjustments?.history) {
-        return undefined; //<Card p={20} mb="lg" radius="lg" color="red">There is no data available for this VIN number.</Card>
+        return baseData; //<Card p={20} mb="lg" radius="lg" color="red">There is no data available for this VIN number.</Card>
     }
     return (
         <div className={styles.container}>
+            {baseData}
             <div className={styles.content}>
                 <VehicleHistoryCard
                     accidents={data?.data?.adjustments?.history.records}
