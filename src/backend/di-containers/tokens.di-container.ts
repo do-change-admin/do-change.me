@@ -31,7 +31,8 @@ export const DIServices = {
     userFeatureUsageMetering: Symbol(),
     featureUsageManagement: Symbol(),
 
-    userIdentity: Symbol()
+    userIdentity: Symbol(),
+    userSubscription: Symbol()
 };
 
 export const ControllerTokens = {

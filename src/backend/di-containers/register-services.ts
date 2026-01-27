@@ -4,7 +4,8 @@ import { UserFeatureUsageMeteringService } from '../services/feature-usage/user-
 import { SyndicationRequestsManagementService } from '../services/syndication-requests/management';
 import { UserSyndicationRequestsService } from '../services/syndication-requests/user';
 import { UserSyndicationRequestDraftsService } from '../services/syndication-requests/user-drafts';
-import { UserIdentityService } from '../services/user-identity';
+import { UserIdentityService } from '../services/user/identity';
+import { UserSubscriptionService } from '../services/user/subscription';
 import { UserNotificationsService } from '../services/user-notifications.service';
 import { UserNotificationsManagementService } from '../services/user-notifications-management.service';
 import type { NotificationStore } from '../stores/notification/notification.store';
@@ -49,4 +50,5 @@ export const registerServices = (container: Container) => {
     container.bind<FeatureUsageManagementService>(DIServices.featureUsageManagement).to(FeatureUsageManagementService);
 
     container.bind<UserIdentityService>(DIServices.userIdentity).to(UserIdentityService);
+    container.bind<UserSubscriptionService>(DIServices.userSubscription).to(UserSubscriptionService);
 };
