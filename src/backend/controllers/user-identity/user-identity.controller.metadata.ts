@@ -1,4 +1,4 @@
-import { userIdentityServiceMetadata } from '@/backend/services/user-identity';
+import { userIdentityServiceMetadata } from '@/backend/services/user/identity';
 import type { ZodControllerAPI, ZodControllerMetadata } from '@/backend/utils/zod-controller.utils';
 
 export const userIdentityControllerMetadata = {
